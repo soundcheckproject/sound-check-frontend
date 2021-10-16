@@ -1,9 +1,15 @@
 <script>
 	import { page } from '$app/stores';
-	console.log($page.path);
+	import RoleLayer from '../../components/RoleLayer.svelte';
+	import AuthLayer from '../../components/AuthLayer.svelte';
+	// console.log($page.path);
 </script>
 
-<h1>Staff pages</h1>
-<p>Current path: {$page.path}</p>
+<AuthLayer>
+	<RoleLayer allowedFromRole={2}>
+		<h1>Staff pages</h1>
+		<p>Current path: {$page.path}</p>
 
-<slot />
+		<slot />
+	</RoleLayer>
+</AuthLayer>
