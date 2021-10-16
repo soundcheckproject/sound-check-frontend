@@ -1,4 +1,4 @@
-<div class="font-roboto">
+<div class="c-app">
 	<slot />
 </div>
 
@@ -9,4 +9,11 @@
 	@tailwind base;
 	@tailwind components;
 	@tailwind utilities;
+
+	.c-app {
+		@apply font-roboto;
+		@apply bg-gray-50;
+		@apply w-screen;
+		@apply h-screen;
+	}
 </style>

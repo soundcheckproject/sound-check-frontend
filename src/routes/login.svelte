@@ -1,8 +1,6 @@
 <script>
 	import Navigation from '../components/Navigation.svelte';
-	import { generalStore } from '../stores/stores';
-	generalStore.set({ Name: 'yo' });
 </script>
 
-login
 <Navigation />
+login
