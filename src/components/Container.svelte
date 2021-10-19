@@ -1,3 +1,7 @@
-<div class="min-w-max sm:w-2/3 px-6 mx-auto">
+<script>
+	export let className = '';
+</script>
+
+<div class="sm:w-4/5 md:w-3/4 px-6 mx-auto {className}">
 	<slot />
 </div>

@@ -13,6 +13,6 @@
 
 	.c-app {
 		/* background: red; */
-		/* @apply bg-gray-50; */
+		@apply bg-gray-50;
 	}
 </style>
