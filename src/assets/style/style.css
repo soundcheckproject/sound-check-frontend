@@ -32,5 +32,5 @@ section {
 .input:hover,
 .input:focus,
 .input:active {
-	@apply border-blue-300;
+	@apply border-blue-800;
 }

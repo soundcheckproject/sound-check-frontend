@@ -6,13 +6,14 @@
 
 <div class="inline">
 	<div
-		class="relative mshadow-md bg-white bg-opacity-25 rounded-full  {size == 'md'
+		class="relative mshadow-md bg-white bg-opacity-25 rounded-full group {size == 'md'
 			? 'text-md'
 			: 'text-sm'} {className} {size != 'xs' ? 'pr-5' : ''}"
 	>
 		<!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
-		<div class="peer cursor-pointer flex items-center">
+		<div class="cursor-pointer flex items-center">
 			<img
+				alt="Artist {artist}"
 				src="https://partyflock.nl/images/artist/61243_1080x1080_585775/Martin-Garrix.webp"
 				class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs' ? 'mr-3' : ''} {size == 'md'
 					? ' w-12 h-12'
@@ -21,7 +22,7 @@
 			{#if size != 'xs'}<slot />{/if}
 		</div>
 		<div
-			class="hidden z-10 peer-hover:grid absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
+			class="hidden z-10 group-hover:grid absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
 		>
 			{#if size == 'xs'}{artist}
 				<hr class="w-full border-gray-100 mb-2 mt-1" />{/if}

@@ -1,11 +1,11 @@
-<div class=" relative flex justify-center items-center cursor-pointer flex-none">
+<div class=" relative flex justify-center items-center cursor-pointer flex-none group">
 	<img
 		alt="Trackname"
-		class="peer h-48 w-48 rounded-md mshadow-sm outline-none object-cover"
+		class=" h-48 w-48 rounded-md mshadow-sm outline-none object-cover"
 		src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flinkstorage.linkfire.com%2Fmedialinks%2Fimages%2Fab15a68d-ef47-4a99-9a25-cd88c7663985%2Fartwork-440x440.jpg&f=1&nofb=1"
 	/>
 	<div
-		class="hidden peer-hover:flex absolute justify-center items-center bg-gray-800 bg-opacity-25 backdrop-filter backdrop-blur-sm rounded-md h-48 w-48 text-white flex-col"
+		class="hidden group-hover:flex absolute justify-center items-center bg-gray-800 bg-opacity-25 backdrop-filter backdrop-blur-sm rounded-md h-48 w-48 text-white flex-col"
 	>
 		<div class="mb-4 grid grid-flow-col items-center gap-2">
 			<svg
