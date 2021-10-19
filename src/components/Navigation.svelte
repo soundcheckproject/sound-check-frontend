@@ -2,10 +2,10 @@
 	import { generalStore } from '../stores/stores';
 </script>
 
-<div class="flex p-4 flex-col">
+<nav class="flex p-4 flex-col">
 	<div>{$generalStore.Name} :)</div>
 	<a href="/">/index</a>
 	<a href="/login">/login</a>
 	<a href="/register">/register</a>
 	<a href="/artist">/artist</a>
-</div>
+</nav>
