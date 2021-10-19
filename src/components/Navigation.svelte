@@ -2,10 +2,14 @@
 	import { generalStore } from '../stores/stores';
 </script>
 
-<nav class="flex p-4 flex-col">
+<nav class="flex py-8 flex-row justify-between items-center">
 	<div>{$generalStore.Name} :)</div>
-	<a href="/">/index</a>
-	<a href="/login">/login</a>
-	<a href="/register">/register</a>
-	<a href="/artist">/artist</a>
+	<div class="grid gap-6 grid-flow-col uppercase text-sm text-white text-opacity-75">
+		<a href="/">Home</a>
+		<a href="#releases">releases</a>
+		<a href="/register">artists</a>
+		<a href="/info">info</a>
+		<a href="/contact">contact</a>
+		<a href="/portal">portal</a>
+	</div>
 </nav>
