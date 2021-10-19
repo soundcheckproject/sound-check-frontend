@@ -1,11 +1,11 @@
 .mshadow-sm {
-	box-shadow: 0 0 6rem rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
 }
 .mshadow-md {
-	box-shadow: 0 0 7rem rgba(0, 0, 0, 0.15);
+	box-shadow: 0 0 4rem rgba(0, 0, 0, 0.15);
 }
 .mshadow-xl {
-	box-shadow: 0 0 8rem rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 6rem rgba(0, 0, 0, 0.2);
 }
 
 article {
@@ -15,4 +15,5 @@ article {
 }
 section {
 	@apply py-6;
+	@apply mb-8;
 }
