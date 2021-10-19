@@ -10,11 +10,11 @@
 
 <div
 	on:click={onClick}
-	class="hover:bg-opacity-30 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 cursor-pointer
+	class=" transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 cursor-pointer
 	{rounded == 'default' ? ' rounded-md' : rounded == 'full' ? ' rounded-full' : 'rounded-sm'}
 	{state == 'active' ? '' : ''}
-	 {color != 'default' ? color : ''}
-	 {type == 'glass' ? ' bg-opacity-25 text-white' : ''}
+	 {color != 'default' ? `${color} text-white` : ''}
+	 {type == 'glass' ? ' bg-opacity-25 text-white hover:bg-opacity-10' : ''}
 	 {size == 'sm'
 		? ' px-4 py-2 text-sm'
 		: size == 'md'

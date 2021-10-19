@@ -17,3 +17,20 @@ section {
 	@apply py-6;
 	@apply mb-8;
 }
+
+.input {
+	@apply rounded-sm;
+	@apply mt-2;
+	@apply w-full;
+	@apply border-2;
+	@apply border-gray-200;
+	@apply px-4;
+	@apply py-3;
+	@apply outline-none;
+	@apply transition-colors;
+}
+.input:hover,
+.input:focus,
+.input:active {
+	@apply border-blue-300;
+}

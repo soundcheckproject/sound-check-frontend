@@ -59,7 +59,7 @@
 		<section>
 			<article>
 				<Title className="">Latest releases</Title>
-				<div class="sm:grid-cols-3 gap-4 flex overflow-x-scroll">
+				<div class="sm:grid-cols-3 gap-4 flex overflow-x-scroll mt-2  sm:-mx-6 ">
 					<Track />
 					<Track />
 					<Track />
@@ -99,9 +99,9 @@
 					</div>
 					<div class=" sm:w-1/2  lg:w-1/3">
 						<img
+							alt="A photo of Martin Garrix"
 							src="https://dynamicmedia.livenationinternational.com/Media/n/r/c/ad6a5ff7-fb0a-4e3f-a5fa-fb26381f186f.jpg"
 							class="object-contain sm:object-cover h-64 sm:h-64 box-border w-full rounded-sm "
-							alt="A photo of Martin Garrix"
 						/>
 					</div>
 
@@ -112,12 +112,35 @@
 		<section>
 			<article>
 				<Title>What is label?</Title>
-				<p>smth</p>
+				<SubTitle>🚨 Letsgo!</SubTitle>
+				<p>
+					Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece
+					of classical Latin literature from 45 BC, making it over 2000 years old. Richard
+					McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the
+					more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the
+					cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum
+					comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
+					of Good and Evil) by Cicero, written in 45 BC.$
+				</p>
+				<SubTitle>🧠 How did it start</SubTitle>
+				<p>
+					This book is a treatise on the theory of ethics, very popular during the Renaissance. The
+					first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
+					1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for
+					those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by
+					Cicero are also reproduced in their exact original form, accompanied by English versions
+					from the 1914 translation by H. Rackham.
+				</p>
 			</article>
 		</section>
-		<section>
-			<article>
+		<section class="even:bg-gray-100 px-6 -mx-6 sm:px-12 sm:-mx-12 rounded-md ">
+			<article class="">
 				<Title>Contact</Title>
+				<form class="grid gap-4 sm:w-3/5 lg:w-2/5">
+					<label>Ask our team!<input class="input" placeholder="PPPP" /></label>
+					<label>Ask our team!<input class="input" placeholder="PPPP" /></label>
+					<Button onClick={() => count++} rounded="none" color="bg-blue-900">Learn more!</Button>
+				</form>
 			</article>
 		</section>
 	</div>
