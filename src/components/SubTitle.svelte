@@ -1,10 +1,10 @@
 <script lang="ts">
-	export let className = '';
-	export let theme: 'dark' | 'light' | 'color' = 'dark';
+	export let className = ''
+	export let theme: 'dark' | 'light' | 'color' = 'dark'
 </script>
 
 <h2
-	class="text-md font-medium uppercase flex items-center {theme == 'color'
+	class="text-md font-medium  flex items-center {theme == 'color'
 		? 'text-blue-900 '
 		: theme == 'dark'
 		? 'text-gray-700'

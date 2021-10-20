@@ -1,18 +1,17 @@
 <script>
-	import Navigation from '../components/Navigation.svelte';
-	import Container from '../components/Container.svelte';
-	import Button from '../components/Button.svelte';
-	import Header from '../components/Header.svelte';
-	import Footer from '../components/Footer.svelte';
-	import Title from '../components/Title.svelte';
-	import SubTitle from '../components/SubTitle.svelte';
-	import Artist from '../components/Artist.svelte';
-	import Track from '../components/Track.svelte';
-	let count = 1;
+	import Navigation from '../components/Navigation.svelte'
+	import Container from '../components/Container.svelte'
+	import Button from '../components/Button.svelte'
+	import Header from '../components/Header.svelte'
+	import Footer from '../components/Footer.svelte'
+	import Title from '../components/Title.svelte'
+	import SubTitle from '../components/SubTitle.svelte'
+	import Artist from '../components/Artist.svelte'
+	import Track from '../components/Track.svelte'
+	let count = 1
 </script>
 
 <Header>
-	<Navigation />
 	<article
 		class="max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between "
 	>
@@ -129,17 +128,24 @@
 				</p>
 			</article>
 		</section>
-		<section class="even:bg-gray-100 px-6 -mx-6 sm:px-12 sm:-mx-12 rounded-md ">
-			<article class="">
-				<Title>Contact</Title>
-				<form class="grid gap-4 sm:w-3/5 lg:w-2/5">
-					<label>Ask our team!<input class="input" placeholder="PPPP" /></label>
-					<label>Ask our team!<input class="input " placeholder="PPPP" /></label>
+		<Title>Contact</Title>
+		<section class="md:flex items-center">
+			<article
+				class="bg-gray-100 px-6 -mx-6 md:-ml-12 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+			>
+				<form class="grid gap-4 ">
+					<label>Topic<input class="input" placeholder="Royalties, demo, promo, .." /></label>
+					<label
+						>What's your question?<textarea
+							class="input "
+							placeholder="For example: I'm interested to know how.."
+						/></label
+					>
 					<!-- svelte-ignore a11y-label-has-associated-control -->
 					<label>
-						Emoji!
+						Attachment
 						<div class="relative flex items-center justify-end group">
-							<input class="input peer " placeholder="PPPP" /><svg
+							<input class="input peer " placeholder="Drag & drop!" /><svg
 								class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -161,6 +167,21 @@
 					</label>
 					<Button onClick={() => count++} color="bg-blue-900" size="md">Learn more!</Button>
 				</form>
+			</article>
+			<article class="py-12 md:w-1/2 lg:w-3/5 lg:left">
+				<SubTitle>📩 Get in touch with us!</SubTitle>
+				<p>
+					This book is a treatise on the theory of ethics, very popular during the Renaissance. The
+					first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section
+					1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for
+					those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by
+					Cicero are also reproduced in their exact original form, accompanied by English versions
+					from the 1914 translation by H. Rackham.
+				</p>
+				<p>demo@jajarecords.com</p>
+				<p>promo@jajarecords.com</p>
+				<p>invoice@jajarecords.com</p>
+				<p>demo@jajarecords.com</p>
 			</article>
 		</section>
 	</div>
