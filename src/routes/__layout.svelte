@@ -14,5 +14,6 @@
 	.c-app {
 		/* background: red; */
 		@apply bg-gray-50;
+		overflow-x: hidden;
 	}
 </style>

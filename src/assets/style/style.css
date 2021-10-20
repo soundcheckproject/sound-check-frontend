@@ -28,9 +28,28 @@ section {
 	@apply py-3;
 	@apply outline-none;
 	@apply transition-colors;
+	@apply bg-gray-50;
 }
 .input:hover,
 .input:focus,
 .input:active {
 	@apply border-blue-800;
+}
+
+.input.glass {
+	@apply border-gray-200;
+	@apply bg-opacity-20;
+	@apply border-opacity-20;
+	@apply placeholder-gray-100;
+	@apply placeholder-opacity-50;
+}
+
+.input.glass:hover,
+.input.glass:focus,
+.input.glass:active {
+	@apply border-opacity-100;
+}
+
+.appHeaderGrid {
+	grid-template-rows: min-content auto;
 }

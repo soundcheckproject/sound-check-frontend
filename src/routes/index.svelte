@@ -12,47 +12,43 @@
 </script>
 
 <Header>
-	<Container className="sm:w-full">
-		<div class="grid w-full h-screen items-center appHeaderGrid ">
-			<Navigation />
-			<article
-				class="max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between "
-			>
-				<div class="sm:w-2/3  grid gap-4">
-					<div>
-						<h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold">Release spotlight title</h1>
-						<h3 class="text-white text-opacity-50 text-sm sm:text-md">by xxx and xxx</h3>
-					</div>
-					<p class="hidden sm:inline lg:text-md ">
-						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-						has been the industry's standard dummy text ever since the 1500s, when an unknown
-						printer took a galley of type and scrambled it to make a type specimen book. It has
-						survived not only five centuries,
-					</p>
-					<div class=" mb-2 flex justify-start items-end space-x-2">
-						<!-- <Artist size="md">Artist</Artist>
+	<Navigation />
+	<article
+		class="max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between "
+	>
+		<div class="sm:w-2/3  grid gap-4">
+			<div>
+				<h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold">Release spotlight title</h1>
+				<h3 class="text-white text-opacity-50 text-sm sm:text-md">by xxx and xxx</h3>
+			</div>
+			<p class="hidden sm:inline lg:text-md ">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+				been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+				galley of type and scrambled it to make a type specimen book. It has survived not only five
+				centuries,
+			</p>
+			<div class=" mb-2 flex justify-start items-end space-x-2">
+				<!-- <Artist size="md">Artist</Artist>
 					<Artist size="sm">Artist</Artist> -->
-						<Artist size="xs">Artist</Artist>
-						<Artist size="xs">Artist</Artist>
-						<Artist size="xs">Artist</Artist>
-						<Artist size="xs">Artist</Artist>
-					</div>
-					<div class="flex">
-						<Button onClick={() => count++} type="glass" rounded="none">Learn more!</Button>
-					</div>
-				</div>
-				<div class="sm:w-1/3  px-6 flex justify-end">
-					<img
-						class="rounded-sm mshadow-lg sm:max-h-96  h-full max-w-xs w-full object-cover "
-						src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-						alt="Artwork"
-					/>
-				</div>
-
-				<!-- <Button type="glass" rounded="default" size="md">Learn more{count}</Button> -->
-			</article>
+				<Artist size="xs">Artist</Artist>
+				<Artist size="xs">Artist</Artist>
+				<Artist size="xs">Artist</Artist>
+				<Artist size="xs">Artist</Artist>
+			</div>
+			<div class="flex">
+				<Button onClick={() => count++} type="glass" rounded="none">Learn more!</Button>
+			</div>
 		</div>
-	</Container>
+		<div class="sm:w-1/3  px-6 flex justify-end">
+			<img
+				class="rounded-sm mshadow-lg sm:max-h-96  h-full max-w-xs w-full object-cover "
+				src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
+				alt="Artwork"
+			/>
+		</div>
+
+		<!-- <Button type="glass" rounded="default" size="md">Learn more{count}</Button> -->
+	</article>
 </Header>
 <Container>
 	<div class="py-6">
@@ -163,16 +159,14 @@
 							</svg>
 						</div>
 					</label>
-					<Button onClick={() => count++} rounded="none" color="bg-blue-900">Learn more!</Button>
+					<Button onClick={() => count++} color="bg-blue-900" size="md">Learn more!</Button>
 				</form>
 			</article>
 		</section>
 	</div>
 </Container>
+
 <Footer />
 
 <style>
-	.appHeaderGrid {
-		grid-template-rows: min-content auto;
-	}
 </style>
