@@ -3,9 +3,6 @@
 	export let theme: 'dark' | 'light' | 'color' | 'error' = 'dark'
 </script>
 
-<!-- in:fly={{ y: theme == 'error' ? -20 : 0 }}
-	out:fade={false} -->
-
 <h2
 	class="relative text-md font-medium justify-items-stretch flex items-center normal-case {theme ==
 	'error'
@@ -14,7 +11,7 @@
 		? 'text-blue-900 '
 		: theme == 'dark'
 		? 'text-gray-700'
-		: 'text-white text-opacity-90'} {className}"
+		: 'text-white text-opacity-90'} pr-8 {className}"
 >
 	<div
 		class="w-1 h-5 {theme == 'error'
@@ -24,7 +21,7 @@
 			: ' bg-gray-300 '} mr-2 rounded-sm"
 	/>
 	<slot />
-	{#if theme == 'error'}
+	{#if theme === 'error'}
 		<div class="absolute right-3 cursor-pointer ">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

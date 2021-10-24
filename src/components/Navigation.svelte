@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { generalStore } from '../stores/stores'
 </script>
 

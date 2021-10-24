@@ -51,18 +51,10 @@
 				{
 					display: true,
 					errorName: errorName,
-					message: `${capitalize(typeName)} should be more than 8 characters.`
+					message: `${capitalize(typeName)} should maintain more than 8 characters.`
 				}
 			]
 		}
-	}
-
-	$: {
-		// let errorName = 'isNotEmptyValidation'
-		// console.log(user)
-		// isNotEmptyValidation(user.email, formError)
-		// isNotEmptyValidation(user.password, formError)
-		// console.log(formErrors)
 	}
 </script>
 

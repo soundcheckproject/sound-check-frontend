@@ -8,7 +8,7 @@
 <div
 	class="w-screen {type == 'full'
 		? ' h-full sm:h-screen'
-		: ''}  bg-gradient-to-r from-indigo-800 to-teal-900 text-white"
+		: ''}  bg-gradient-to-r from-teal-600 to-teal-700 text-white"
 >
 	<Container className="sm:w-full">
 		<div class="grid w-full {type == 'full' ? ' h-screen' : ''} items-center appHeaderGrid ">

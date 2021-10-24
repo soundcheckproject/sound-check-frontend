@@ -28,7 +28,7 @@
 			<div class=" mb-2 flex justify-start items-end space-x-2">
 				<!-- <Artist size="md">Artist</Artist>
 					<Artist size="sm">Artist</Artist> -->
-				<Artist size="xs">Artist</Artist>
+				<Artist size="md">Artist</Artist>
 				<Artist size="xs">Artist</Artist>
 				<Artist size="xs">Artist</Artist>
 				<Artist size="xs">Artist</Artist>
@@ -92,15 +92,12 @@
 						</div>
 					</div>
 					<div class=" sm:w-1/2  lg:w-1/3">
-						<!-- svelte-ignore a11y-img-redundant-alt -->
 						<img
 							alt="A photo of Martin Garrix"
 							src="https://dynamicmedia.livenationinternational.com/Media/n/r/c/ad6a5ff7-fb0a-4e3f-a5fa-fb26381f186f.jpg"
 							class="object-contain sm:object-cover h-64 sm:h-64 box-border w-full rounded-sm "
 						/>
 					</div>
-
-					<!-- svelte-ignore a11y-img-redundant-alt -->
 				</div>
 			</article>
 		</section>
@@ -142,18 +139,21 @@
 							placeholder="For example: I'm interested to know how.."
 						/></label
 					>
-					<!-- svelte-ignore a11y-label-has-associated-control -->
+
 					<label for="file">
 						Attachment
 						<div class="relative flex items-center justify-end group">
 							<div class="input peer text-gray-500">Drag & drop your file!</div>
-							<input
+							<!-- 
+								
+								<input
 								id="file"
 								type="file"
 								value="Drag & drop!"
 								class="hidden"
 								placeholder="Drag & drop!"
-							/><svg
+							/> -->
+							<svg
 								class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"
@@ -173,7 +173,7 @@
 							</svg>
 						</div>
 					</label>
-					<Button onClick={() => count++} color="bg-blue-900" size="md">Learn more!</Button>
+					<Button color="bg-blue-900" size="md">Learn more!</Button>
 				</form>
 			</article>
 			<article class="py-12 md:w-1/2 lg:w-3/5 lg:left">
