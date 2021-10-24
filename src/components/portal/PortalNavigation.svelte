@@ -1,7 +1,18 @@
-<aside class="w-auto bg-gray-900 p-12 text-white mshadow-md">
-	<div class="flex gap-6 flex-col justify-between h-full ">
+<script>
+	import { fade, fly } from 'svelte/transition'
+	import { page } from '$app/stores'
+	import NavLink from './NavLink.svelte'
+	import SubLink from './SubLink.svelte'
+	$: isActive = $page.path === $$props.href
+</script>
+
+<aside
+	in:fly={{ x: -300, duration: 200 }}
+	class="w-auto bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal"
+>
+	<div class="flex flex-col justify-between h-full space-y-12 ">
 		<div class="flex gap-6 flex-col items-start ">
-			<h1 class="text-3xl font-bold -mt-2 relative flex items-center group">
+			<h1 class="text-3xl font-bold -mt-2 relative flex items-center ">
 				<div class="opacity-25 ">SoundCheck</div>
 				<div
 					class="transition-opacity opacity-0 group-hover:opacity-100 cursor-pointer bg-gray-700 backdrop-blur-sm absolute -right-16 p-2 rounded-full"
@@ -29,12 +40,13 @@
 					alt="Artist"
 					src="https://partyflock.nl/images/artist/61243_1080x1080_585775/Martin-Garrix.webp"
 					class=" w-12 h-12 bg-gray-300  rounded-full mshadow-sm"
-				/><b>Alex Silves</b>
+				/>
+				<p class="font-semibold">Alex Silves</p>
 			</div>
 			<hr />
 			<div class="text-sm grid gap-4 w-full">
-				<a href="" class="">
-					<svg
+				<NavLink href="/portal/artist" name="Overview"
+					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -48,11 +60,10 @@
 						<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
 						<polyline points="9 22 9 12 15 12 15 22" />
 					</svg>
-					<p>Overview</p>
-				</a>
+				</NavLink>
 
-				<a href="" class="">
-					<svg
+				<NavLink href="/portal/artist/demo" name="Music" sublink
+					><svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
 						height="16"
@@ -68,15 +79,17 @@
 						<path d="M23 21v-2a4 4 0 00-3-3.87" />
 						<path d="M16 3.13a4 4 0 010 7.75" />
 					</svg>
-					<p>Music</p>
-				</a>
-				<div class="-mt-1 ml-8 opacity-60 space-y-2 text-xs">
-					<a href=""><p>Submit</p></a>
-					<a href=""><p>All tracks</p></a>
-					<a href=""><p>Pending</p></a>
-					<a href=""><p>Approved</p></a>
-					<a href=""><p>Denied</p></a>
-				</div>
+				</NavLink>
+				<SubLink
+					routes={[
+						{ path: '/portal/artist/demo/submit', pathName: 'Submit' },
+						{ path: '/portal/artist/demo', pathName: 'All tracks' },
+						{ path: '/portal/artist/demo', pathName: 'Pending' },
+						{ path: '/portal/artist/demo', pathName: 'Approved' },
+						{ path: '/portal/artist/demo', pathName: 'Denied' }
+					]}
+				/>
+
 				<a href="" class="">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +130,7 @@
 		</div>
 		<a
 			href=""
-			class="flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -m-4 rounded-sm bg-opacity-10 mshadow-md"
+			class="flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-4  rounded-sm bg-opacity-10 mshadow-md"
 		>
 			<p>Logout</p>
 			<svg
@@ -155,8 +168,19 @@
 		@apply text-white;
 		@apply text-opacity-90;
 	}
+	svg {
+		@apply text-teal-300;
+	}
 	p {
 		position: relative;
+		display: flex;
+
+		@apply items-center;
+		@apply gap-1;
+	}
+	p svg {
+		@apply text-gray-100;
+		@apply opacity-50;
 	}
 	a p::before {
 		content: '';
@@ -177,8 +201,5 @@
 	a p:hover::before {
 		width: 100%;
 		opacity: 0.6;
-	}
-	svg {
-		@apply text-teal-300;
 	}
 </style>

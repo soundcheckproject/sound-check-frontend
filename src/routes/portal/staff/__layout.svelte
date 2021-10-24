@@ -1,7 +1,7 @@
 <script>
-	import { page } from '$app/stores';
-	import RoleLayer from '../../components/RoleLayer.svelte';
-	import AuthLayer from '../../components/AuthLayer.svelte';
+	import { page } from '$app/stores'
+	import RoleLayer from '../../../components/RoleLayer.svelte'
+	import AuthLayer from '../../../components/AuthLayer.svelte'
 	// console.log($page.path);
 </script>
 
