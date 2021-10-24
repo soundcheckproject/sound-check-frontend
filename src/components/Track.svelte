@@ -1,3 +1,7 @@
+<script>
+	export const track = {}
+</script>
+
 <div class=" relative flex justify-center items-center cursor-pointer flex-none group">
 	<img
 		alt="Trackname"

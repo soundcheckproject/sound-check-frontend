@@ -93,6 +93,7 @@
 						</div>
 					</div>
 					<div class=" sm:w-1/2  lg:w-1/3">
+						<!-- svelte-ignore a11y-img-redundant-alt -->
 						<img
 							alt="A photo of Martin Garrix"
 							src="https://dynamicmedia.livenationinternational.com/Media/n/r/c/ad6a5ff7-fb0a-4e3f-a5fa-fb26381f186f.jpg"
@@ -142,10 +143,17 @@
 						/></label
 					>
 					<!-- svelte-ignore a11y-label-has-associated-control -->
-					<label>
+					<label for="file">
 						Attachment
 						<div class="relative flex items-center justify-end group">
-							<input class="input peer " placeholder="Drag & drop!" /><svg
+							<div class="input peer text-gray-500">Drag & drop your file!</div>
+							<input
+								id="file"
+								type="file"
+								value="Drag & drop!"
+								class="hidden"
+								placeholder="Drag & drop!"
+							/><svg
 								class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
 								xmlns="http://www.w3.org/2000/svg"
 								width="20"

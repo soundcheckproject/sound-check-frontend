@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+	import { goto } from '$app/navigation'
 	import Navigation from '../components/Navigation.svelte'
 	import Header from '../components/Header.svelte'
 	import Title from '../components/Title.svelte'
@@ -7,7 +8,62 @@
 	import Container from '../components/Container.svelte'
 	import Footer from '../components/Footer.svelte'
 
-	let count = 1
+	import { capitalize } from '../utils/capitalize'
+	// import { isNotEmptyValidation } from '../utils/formValidation'
+	// import { formError } from '../utils/formValidation'
+	// import { formErrors } from '../stores/stores'
+
+	let user = { email: '', password: '' }
+	let userRegister = { email: '', password: '' }
+
+	interface formError {
+		[key: string]: { display?: boolean; errorName: string; message: string }[]
+	}
+
+	let formErrors: formError = {}
+	const login = () => {
+		// formErrors = [{ type: '', errors: [] }]
+		formErrors = { email: [], password: [] }
+		// console.log(user)
+		isNotEmptyValidation(user, 'email')
+		isNotEmptyValidation(user, 'password')
+		isNotStrongEnoughValidation(user, 'password')
+	}
+	const register = () => {
+		console.log()
+		goto('/register')
+	}
+
+	function isNotEmptyValidation(value: any, typeName: string) {
+		let errorName = 'isNotEmptyValidation' + typeName
+		if (value[typeName].length <= 0) {
+			formErrors[typeName] = [
+				...formErrors[typeName],
+				{ display: true, errorName: errorName, message: `${capitalize(typeName)} cannot be empty.` }
+			]
+		}
+	}
+	function isNotStrongEnoughValidation(value: any, typeName: string) {
+		let errorName = 'isNotStrongEnoughValidation' + typeName
+		if (value[typeName].length < 8) {
+			formErrors[typeName] = [
+				...formErrors[typeName],
+				{
+					display: true,
+					errorName: errorName,
+					message: `${capitalize(typeName)} should be more than 8 characters.`
+				}
+			]
+		}
+	}
+
+	$: {
+		// let errorName = 'isNotEmptyValidation'
+		// console.log(user)
+		// isNotEmptyValidation(user.email, formError)
+		// isNotEmptyValidation(user.password, formError)
+		// console.log(formErrors)
+	}
 </script>
 
 <Header type="split" />
@@ -28,7 +84,7 @@
 						<label>State<input class="input" placeholder="State.." /></label>
 						<label>City<input class="input" placeholder="City.." /></label>
 					</div>
-					<Button rounded="none" color="bg-blue-900" className="justify-self-end"
+					<Button onClick={register} rounded="none" color="bg-blue-900" className="justify-self-end"
 						>Create account!</Button
 					>
 				</div>
@@ -36,14 +92,37 @@
 					class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full lg:w-96 box-content justify-self-end"
 				>
 					<SubTitle theme="dark">⌛️ Login with account</SubTitle>
-					<label>Email addres<input class="input" placeholder="Email address." /></label>
-					<label>Password<input class="input " placeholder="Password.." /></label>
+
+					{#each Object.keys(formErrors) as errorKey}
+						{#each formErrors[errorKey] as error}
+							{#if error.display}
+								<SubTitle theme="error">{error.message}</SubTitle>
+							{/if}
+						{/each}
+					{/each}
+
+					<label
+						>Email addres<input
+							bind:value={user.email}
+							class="input"
+							placeholder="Email address."
+						/></label
+					>
+					<label
+						>Password<input
+							bind:value={user.password}
+							class="input "
+							placeholder="Password.."
+						/></label
+					>
 					<div class="flex justify-between items-center">
 						<label class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"
 							><input type="checkbox" />Remember me</label
 						>
 
-						<Button rounded="none" color="bg-blue-900" className="justify-self-end">Login</Button>
+						<Button onClick={login} rounded="none" color="bg-blue-900" className="justify-self-end"
+							>Login</Button
+						>
 					</div>
 				</div>
 

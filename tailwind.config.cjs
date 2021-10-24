@@ -1,3 +1,6 @@
+// tailwind.config.js
+const colors = require('tailwindcss/colors')
+
 module.exports = {
 	mode: 'jit',
 	purge: ['./src/**/*.svelte'],
@@ -9,6 +12,14 @@ module.exports = {
 				gotham: ['Gotham', 'sans-serif'],
 			},
 		},
+		extend: {
+			colors: {
+				gray: colors.gray,
+				teal: colors.teal
+			}
+		},
+
+
 	},
 	variants: {
 		extend: {},

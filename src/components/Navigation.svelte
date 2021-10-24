@@ -1,14 +1,12 @@
 <script>
 	import { generalStore } from '../stores/stores'
-	import Button from './Button.svelte'
-	import SubTitle from './SubTitle.svelte'
-	import Title from './Title.svelte'
 </script>
 
 <nav class="flex py-8 flex-row justify-between items-center">
 	<a href="/"> <h1 class="text-xl font-bold">{$generalStore.Name} :)</h1></a>
+
 	<div
-		class="hidden sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col  text-white text-opacity-75"
+		class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
 	>
 		<a href="/">Home</a>
 		<a href="#releases">releases</a>
@@ -26,8 +24,11 @@
 	a {
 		@apply transition-all;
 		@apply uppercase;
+		@apply text-white;
+		@apply text-opacity-75;
 	}
 	a:hover {
-		text-shadow: 1px 0 rgba(255, 255, 255, 0.75);
+		@apply text-opacity-100
+		/* text-shadow: 1px 0 rgba(255, 255, 255, 0.75); */;
 	}
 </style>
