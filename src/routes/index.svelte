@@ -1,5 +1,4 @@
-<script>
-	import Navigation from '../components/Navigation.svelte'
+<script lang="ts">
 	import Container from '../components/Container.svelte'
 	import Button from '../components/Button.svelte'
 	import Header from '../components/Header.svelte'
@@ -8,7 +7,7 @@
 	import SubTitle from '../components/SubTitle.svelte'
 	import Artist from '../components/Artist.svelte'
 	import Track from '../components/Track.svelte'
-	let count = 1
+	let count = 0
 </script>
 
 <Header>
@@ -107,6 +106,7 @@
 		</section>
 		<section>
 			<article>
+				<Title>What is label?</Title>
 				<Title>What is label?</Title>
 				<SubTitle>🚨 Letsgo!</SubTitle>
 				<p>

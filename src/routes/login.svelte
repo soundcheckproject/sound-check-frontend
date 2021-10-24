@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import Navigation from '../components/Navigation.svelte'
+
 	import Header from '../components/Header.svelte'
 	import Title from '../components/Title.svelte'
 	import SubTitle from '../components/SubTitle.svelte'

@@ -1,4 +1,4 @@
-<script context="module">
+<!-- <script context="module">
 	export async function load({ page, fetch, session, stuff }) {
 		let trackId = page.params.trackId;
 		return { props: { slug: trackId } };
@@ -9,4 +9,4 @@
 	export let slug: { trackId: any };
 </script>
 
-<h2>Demo: {slug}</h2>
+<h2>Demo: {slug}</h2> -->

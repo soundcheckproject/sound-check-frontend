@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let className = '';
-	export let artist = 'name';
-	export let size: 'xs' | 'sm' | 'md' = 'sm';
+	export let className = ''
+	export let artist = 'name'
+	export let size: 'xs' | 'sm' | 'md' = 'sm'
 </script>
 
 <div class="inline">
@@ -24,7 +24,8 @@
 		<div
 			class="hidden z-10 group-hover:grid absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
 		>
-			{#if size == 'xs'}{artist}
+			{#if size == 'xs'}
+				{artist}
 				<hr class="w-full border-gray-100 mb-2 mt-1" />{/if}
 
 			<a href="instagram.com" class="hover:underline grid grid-flow-col gap-2 items-center ">
