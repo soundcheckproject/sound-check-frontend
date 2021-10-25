@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { signInWithEmailAndPassword, getAuth } from 'firebase/auth'
 	import { goto } from '$app/navigation'
 
 	import Header from '../components/Header.svelte'
@@ -9,9 +10,7 @@
 	import Footer from '../components/Footer.svelte'
 
 	import { capitalize } from '../utils/capitalize'
-	// import { isNotEmptyValidation } from '../utils/formValidation'
-	// import { formError } from '../utils/formValidation'
-	// import { formErrors } from '../stores/stores'
+	import authStore from '../stores/authStore'
 
 	let user = { email: '', password: '' }
 	let userRegister = { email: '', password: '' }
@@ -22,16 +21,57 @@
 
 	let formErrors: formError = {}
 	const login = () => {
-		// formErrors = [{ type: '', errors: [] }]
 		formErrors = { email: [], password: [] }
-		// console.log(user)
+
 		isNotEmptyValidation(user, 'email')
 		isNotEmptyValidation(user, 'password')
 		isNotStrongEnoughValidation(user, 'password')
+
+		const fName = 'Firebase Tester'
+		const lName = 'Onderbeke'
+		const email = `niels.onderbeke@howest.be`
+		const password = 'P@ssw0rd'
+
+		const auth = getAuth()
+
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				// Signed in
+				console.log({ userCredential })
+				const user = userCredential.user
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code
+				const errorMessage = error.message
+			})
 	}
 	const register = () => {
 		console.log()
 		goto('/register')
+
+		// createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
+		// 	console.log(user)
+		// 	user.getIdToken().then(async (idToken) => {
+		// 		// const NewUser = {
+		// 		//   firstName: fName,
+		// 		//   surName: lName,
+		// 		//   birthdate: new Date(),
+		// 		//   email: user.email,
+		// 		//   logo: "https://scontent-bru2-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/240726764_1011824582982127_5018893984198193250_n.jpg?_nc_ht=scontent-bru2-1.cdninstagram.com&_nc_cat=107&_nc_ohc=ltTxuMJpjqsAX9APOZ9&tn=g2QdEPrLsfvunxHW&edm=AABBvjUBAAAA&ccb=7-4&oh=1441ac692e6f4441ddb772ab9eef515f&oe=617146B7&_nc_sid=83d603",
+		// 		//   role: "fe249973-d1f4-4552-b687-4f7ae938405a",
+		// 		// };
+		// 		// const response = await fetch("http://localhost:3000/users", {
+		// 		//   method: "POST",
+		// 		//   body: JSON.stringify(NewUser),
+		// 		//   headers: {
+		// 		//     ContentType: "application/json",
+		// 		//     Accept: "application/json",
+		// 		//     Authorization: `Bearer ${idToken}`,
+		// 		//   },
+		// 		// });
+		// 	})
+		// })
 	}
 
 	function isNotEmptyValidation(value: any, typeName: string) {
@@ -56,6 +96,12 @@
 			]
 		}
 	}
+
+	authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
+		if (isLoggedIn && firebaseControlled) {
+			await goto('/portal')
+		}
+	})
 </script>
 
 <Header type="split" />

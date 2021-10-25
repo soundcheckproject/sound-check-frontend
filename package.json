@@ -28,5 +28,7 @@
     "typescript": "^4.4.4"
   },
   "type": "module",
-  "dependencies": {}
+  "dependencies": {
+    "firebase": "^9.1.3"
+  }
 }

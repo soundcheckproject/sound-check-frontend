@@ -1,3 +1,29 @@
+<script>
+	import { initializeApp } from 'firebase/app'
+
+	import { getAuth } from 'firebase/auth'
+	import { onMount } from 'svelte'
+
+	import authStore from '../stores/authStore'
+
+	onMount(() => {
+		const firebaseConfig = {
+			apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
+			authDomain: 'sound-check-cccba.firebaseapp.com',
+			projectId: 'sound-check-cccba',
+			storageBucket: 'sound-check-cccba.appspot.com',
+			messagingSenderId: '357132427436',
+			appId: '1:357132427436:web:eca118cfb03620924dbf09',
+			measurementId: 'G-QLH9WHRQJE'
+		}
+
+		initializeApp(firebaseConfig)
+		getAuth().onAuthStateChanged((user) => {
+			authStore.set({ isLoggedIn: user !== null, user, firebaseControlled: true })
+		})
+	})
+</script>
+
 <div class="font-roboto c-app">
 	<slot />
 </div>

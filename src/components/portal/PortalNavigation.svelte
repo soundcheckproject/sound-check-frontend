@@ -3,7 +3,15 @@
 	import { page } from '$app/stores'
 	import NavLink from './NavLink.svelte'
 	import SubLink from './SubLink.svelte'
-	$: isActive = $page.path === $$props.href
+	import authStore from '../../stores/authStore'
+	import { goto } from '$app/navigation'
+
+	import { getAuth } from 'firebase/auth'
+	async function logout() {
+		await getAuth().signOut()
+		goto('/login')
+		console.log('Signout')
+	}
 </script>
 
 <aside
@@ -42,6 +50,7 @@
 					class=" w-12 h-12 bg-gray-300  rounded-full mshadow-sm"
 				/>
 				<p class="font-semibold">Alex Silves</p>
+				<!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
 			</div>
 			<hr />
 			<div class="text-sm grid gap-4 w-full">
@@ -90,7 +99,7 @@
 					]}
 				/>
 
-				<a href="" class="">
+				<a href="/" class="">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
@@ -108,7 +117,7 @@
 					</svg>
 					<p>Royalties</p>
 				</a>
-				<a href="" class="">
+				<a href="/" class="">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
@@ -128,9 +137,9 @@
 			</div>
 			<!-- <hr /> -->
 		</div>
-		<a
-			href=""
-			class="flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-4  rounded-sm bg-opacity-10 mshadow-md"
+		<div
+			on:click={logout}
+			class="flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-4  rounded-sm bg-opacity-10 mshadow-md cursor-pointer"
 		>
 			<p>Logout</p>
 			<svg
@@ -149,7 +158,7 @@
 				<polyline points="16 17 21 12 16 7" />
 				<line x1="21" y1="12" x2="9" y2="12" />
 			</svg>
-		</a>
+		</div>
 	</div>
 </aside>
 
@@ -178,10 +187,7 @@
 		@apply items-center;
 		@apply gap-1;
 	}
-	p svg {
-		@apply text-gray-100;
-		@apply opacity-50;
-	}
+
 	a p::before {
 		content: '';
 		position: absolute;
