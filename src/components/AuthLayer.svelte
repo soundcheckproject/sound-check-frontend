@@ -2,11 +2,16 @@
 	import authStore from '../stores/authStore'
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
+	import { roleStore } from '../stores/stores'
 
 	onMount(() => {
-		authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
+		authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
 			if (!isLoggedIn && firebaseControlled) {
 				await goto('/login')
+			} else {
+				const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
+				const roleName = roleObject.roles[0]
+				roleStore.set(roleName)
 			}
 		})
 	})
@@ -16,5 +21,5 @@
 	<!-- Authenticated -->
 	<slot />
 {:else}
-	Not authenticated
+	<!-- Checking for authentication -->
 {/if}

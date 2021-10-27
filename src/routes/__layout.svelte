@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { initializeApp } from 'firebase/app'
 
-	import { getAuth } from 'firebase/auth'
+	import { getAuth, User } from 'firebase/auth'
 	import { onMount } from 'svelte'
 
 	import authStore from '../stores/authStore'
@@ -18,8 +18,12 @@
 		}
 
 		initializeApp(firebaseConfig)
-		getAuth().onAuthStateChanged((user) => {
-			authStore.set({ isLoggedIn: user !== null, user, firebaseControlled: true })
+		getAuth().onAuthStateChanged((user: User) => {
+			authStore.set({
+				isLoggedIn: user !== null,
+				user,
+				firebaseControlled: true
+			})
 		})
 	})
 </script>

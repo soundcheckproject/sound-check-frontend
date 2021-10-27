@@ -5,4 +5,5 @@ export const generalStore = writable({
 export const userRole = writable(2)
 export const userAuth = writable(true)
 
+export const roleStore = writable('member')
 // generalStore.set({ Name: 'yo' });

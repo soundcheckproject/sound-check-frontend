@@ -12,7 +12,7 @@
 	import { capitalize } from '../utils/capitalize'
 	import authStore from '../stores/authStore'
 
-	let user = { email: '', password: '' }
+	let user = { email: 'niels.onderbeke@howest.be', password: 'P@ssw0rd' }
 	let userRegister = { email: '', password: '' }
 
 	interface formError {
@@ -29,12 +29,10 @@
 
 		const fName = 'Firebase Tester'
 		const lName = 'Onderbeke'
-		const email = `niels.onderbeke@howest.be`
-		const password = 'P@ssw0rd'
 
 		const auth = getAuth()
 
-		signInWithEmailAndPassword(auth, email, password)
+		signInWithEmailAndPassword(auth, user.email, user.password)
 			.then((userCredential) => {
 				// Signed in
 				console.log({ userCredential })
@@ -44,6 +42,7 @@
 			.catch((error) => {
 				const errorCode = error.code
 				const errorMessage = error.message
+				console.erro(error)
 			})
 	}
 	const register = () => {

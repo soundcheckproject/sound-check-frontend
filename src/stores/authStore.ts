@@ -5,9 +5,11 @@ const authStore = writable<{
 	isLoggedIn: boolean
 	user?: any
 	firebaseControlled: boolean
+	role?: string
 }>({
 	isLoggedIn: false,
-	firebaseControlled: false
+	firebaseControlled: false,
+	role: 'artist'
 })
 
 export default {

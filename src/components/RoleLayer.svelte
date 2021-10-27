@@ -1,11 +1,12 @@
-<script>
-	import { userRole } from '../stores/stores';
-	export let allowedFromRole = 0;
+<script lang="ts">
+	import { roleStore } from '../stores/stores'
+	export let allowedForRoles: string[] = ['member']
+	export let popup: boolean = false
 </script>
 
-{#if $userRole >= allowedFromRole}
-	<!-- Authenticated -->
+{#if allowedForRoles.includes($roleStore)}
+	<!-- Allowed for access -->
 	<slot />
-{:else}
-	No permission
+{:else if popup}
+	No access
 {/if}
