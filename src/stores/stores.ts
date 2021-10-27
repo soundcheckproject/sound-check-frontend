@@ -7,3 +7,5 @@ export const userAuth = writable(true)
 
 export const roleStore = writable('member')
 // generalStore.set({ Name: 'yo' });
+
+export const menuState = writable(false)

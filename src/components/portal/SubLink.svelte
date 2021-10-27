@@ -2,7 +2,7 @@
 	import { page } from '$app/stores'
 </script>
 
-<div {...$$props}>
+<div>
 	{#each $$props.routes as route}
 		<a class:active={$page.path === route.path} href={route.path}>{route.pathName}</a>
 	{/each}

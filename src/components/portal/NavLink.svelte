@@ -1,30 +1,66 @@
 <!-- src/lib/components/NavLink.svelte -->
 <script>
 	import { page } from '$app/stores'
-	$: isActive = $page.path === $$props.href
+	import { menuState } from '../../stores/stores'
+	import { fade, fly, slide } from 'svelte/transition'
+
+	import SubLink from './SubLink.svelte'
+
 	export let sublink = false
+
+	let isActive = false
+
+	// let hrefSplit = $$props.href.split('/')
+	// let hrefSlice = hrefSplit.slice(1, hrefSplit.length)
+	// let lastSlice = hrefSlice[hrefSlice.length - 1]
+
+	// let pageActive =
+	// 	$$props.href.split('/').includes(hrefSlice[hrefSlice.length - 1]) &&
+	// 	$$props.href.split('/').includes(hrefSlice[hrefSlice.length - 2])
+
+	// $: isActive = $page.path === $$props.href
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
-<a {...$$props} class:active={isActive}>
-	<slot />
-	<p class="ml-4">{$$props.name}</p>
-	{#if sublink}
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="16"
-			height="16"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="3"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-		>
-			<polyline points="6 9 12 15 18 9" />
-		</svg>
+<a
+	href={$$props.routes ? '#' : $$props.href}
+	class:active={$page.path === $$props.href}
+	on:click={() => {
+		isActive = !isActive
+	}}
+	class="h-4"
+>
+	<div>
+		<slot />
+	</div>
+	{#if !$menuState}
+		<p class="ml-4" in:fly={{ x: -50, opacity: 0, duration: 200, delay: 200 }} out:fade>
+			{$$props.name}
+		</p>
+
+		{#if $$props.routes}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="3"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<polyline points="6 9 12 15 18 9" />
+			</svg>
+		{/if}
 	{/if}
 </a>
+{#if $$props.routes && isActive && !$menuState}
+	<!-- <div in:fly={{ y: 200, duration: 200 }} out:fade> -->
+	<div transition:slide>
+		<SubLink routes={$$props.routes} />
+	</div>
+{/if}
 
 <style>
 	svg {

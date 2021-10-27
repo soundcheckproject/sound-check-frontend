@@ -9,6 +9,7 @@
 			if (!isLoggedIn && firebaseControlled) {
 				await goto('/login')
 			} else {
+				// console.log(user)
 				const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
 				const roleName = roleObject.roles[0]
 				roleStore.set(roleName)
