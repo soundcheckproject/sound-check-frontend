@@ -4,6 +4,8 @@
 	import { getAuth, User } from 'firebase/auth'
 	import { onMount } from 'svelte'
 
+	import 'animate.css'
+
 	import authStore from '../stores/authStore'
 
 	onMount(() => {
@@ -37,6 +39,7 @@
 	@import url('../assets/fonts/gotham/style.css');
 
 	@import url('../assets/style/style.css');
+
 	@tailwind base;
 	@tailwind components;
 	@tailwind utilities;

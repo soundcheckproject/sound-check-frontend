@@ -56,3 +56,22 @@ section {
 .appHeaderGrid {
 	grid-template-rows: min-content auto;
 }
+
+label.portal {
+	@apply text-sm;
+	@apply text-gray-700;
+}
+
+.input.portal {
+	@apply text-xs;
+	@apply text-gray-700;
+	@apply border-2;
+	@apply bg-gray-100;
+	@apply border-gray-100;
+}
+
+.input.portal:hover,
+.input.portal:focus,
+.input.portal:active {
+	@apply border-gray-300;
+}

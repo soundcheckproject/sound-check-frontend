@@ -27,7 +27,7 @@
 <AuthLayer>
 	<div class="c-portal">
 		<PortalNavigation />
-		<div class="p-8 py-12  bg-gray-100">
+		<div class="p-8 py-12 bg-gray-100">
 			<p class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center">
 				{#each pageBread as bread, index}
 					{#if index != 0}
@@ -49,7 +49,7 @@
 					<a in:fly={{ x: -50, duration: 200 }} out:fade={{ duration: 200 }} href={``}>{bread}</a>
 				{/each}
 			</p>
-			<slot />
+			<div class=""><slot /></div>
 		</div>
 	</div>
 </AuthLayer>

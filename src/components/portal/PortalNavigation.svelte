@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition'
-	import { page } from '$app/stores'
+
 	import NavLink from './NavLink.svelte'
-	import SubLink from './SubLink.svelte'
-	import authStore from '../../stores/authStore'
+
 	import { goto } from '$app/navigation'
 
 	import { getAuth } from 'firebase/auth'
@@ -18,6 +17,7 @@
 
 <aside
 	in:fly={{ x: -300, duration: 200 }}
+	out:fade
 	class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 ${
 		$menuState ? ' w-24 px-6' : 'w-72'
 	}`}
@@ -52,11 +52,11 @@
 			</h1>
 
 			<hr />
-			<div class="text-lg flex space-x-4 items-center h-12">
+			<a href="/portal/profile" class="text-lg flex space-x-4 items-center h-12 cursor-pointer">
 				<img
 					alt="Artist"
 					src="https://partyflock.nl/images/artist/61243_1080x1080_585775/Martin-Garrix.webp"
-					class=" w-12 h-12 bg-gray-300  rounded-full mshadow-sm"
+					class=" w-12 h-12 bg-gray-300  rounded-full mshadow-sm "
 				/>
 				{#if !$menuState}
 					<p
@@ -68,7 +68,7 @@
 					</p>
 				{/if}
 				<!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
-			</div>
+			</a>
 			<hr />
 			<div
 				class={`text-sm grid gap-4 w-full transition-all delay-200 ${$menuState ? ' ml-4' : ''}`}
@@ -268,26 +268,5 @@
 
 		@apply items-center;
 		@apply gap-1;
-	}
-
-	a p::before {
-		content: '';
-		position: absolute;
-		bottom: -4px;
-
-		height: 2px;
-
-		opacity: 0;
-		border-radius: 1px;
-
-		@apply bg-white;
-		width: 25%;
-
-		transition: width 0.2s ease-out, opacity 0.2s ease-out;
-		will-change: width, opacity;
-	}
-	a p:hover::before {
-		width: 100%;
-		opacity: 0.6;
 	}
 </style>

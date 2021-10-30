@@ -28,8 +28,8 @@
 			<div class=" mb-2 flex justify-start items-end space-x-2">
 				<!-- <Artist size="md">Artist</Artist>
 					<Artist size="sm">Artist</Artist> -->
-				<Artist size="md">Artist</Artist>
-				<Artist size="xs">Artist</Artist>
+				<Artist size="md" socials>Artist</Artist>
+				<Artist size="xs" socials>Artist</Artist>
 				<Artist size="xs">Artist</Artist>
 				<Artist size="xs">Artist</Artist>
 			</div>
@@ -92,6 +92,7 @@
 						</div>
 					</div>
 					<div class=" sm:w-1/2  lg:w-1/3">
+						<!-- svelte-ignore a11y-img-redundant-alt -->
 						<img
 							alt="A photo of Martin Garrix"
 							src="https://dynamicmedia.livenationinternational.com/Media/n/r/c/ad6a5ff7-fb0a-4e3f-a5fa-fb26381f186f.jpg"
