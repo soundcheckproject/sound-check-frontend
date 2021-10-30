@@ -16,7 +16,7 @@
 	on:mouseleave={() => (hover = false)}
 >
 	<div
-		class="relative mshadow-sm bg-white bg-opacity-25 rounded-full group {size == 'md'
+		class="relative mshadow-xs bg-white bg-opacity-25 rounded-full group {size == 'md'
 			? 'text-md'
 			: 'text-sm'} {className} {size == 'md' ? 'pr-5' : size == 'sm' ? 'pr-3' : ''}"
 	>

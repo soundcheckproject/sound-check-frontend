@@ -6,7 +6,7 @@
 <h2
 	class="relative text-md font-medium justify-items-stretch flex items-center normal-case {theme ==
 	'error'
-		? 'text-red-400 bg-red-100 text-sm rounded-sm p-3 -mx-3'
+		? 'text-red-400 bg-red-100 text-sm rounded-sm p-3 '
 		: theme == 'color'
 		? 'text-blue-900 '
 		: theme == 'dark'

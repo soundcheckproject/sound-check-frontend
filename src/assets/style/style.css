@@ -1,77 +1,81 @@
+.mshadow-xs {
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+}
 .mshadow-sm {
-	box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
 }
 .mshadow-md {
-	box-shadow: 0 0 4rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.15);
 }
 .mshadow-lg {
-	box-shadow: 0 0 6rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6rem rgba(0, 0, 0, 0.2);
 }
 .mshadow-xl {
-	box-shadow: 0 0 8rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 8rem rgba(0, 0, 0, 0.25);
 }
 
 article {
-	@apply py-6;
-	@apply grid;
-	@apply gap-4;
+  @apply py-6;
+  @apply grid;
+  @apply gap-4;
 }
 section {
-	@apply py-6;
-	@apply mb-8;
+  @apply py-6;
+  @apply mb-8;
 }
 
 .input {
-	@apply rounded-sm;
-	@apply mt-2;
-	@apply w-full;
-	@apply border-2;
-	@apply border-gray-200;
-	@apply px-4;
-	@apply py-3;
-	@apply outline-none;
-	@apply transition-colors;
-	@apply bg-gray-50;
+  @apply rounded-sm;
+  @apply mt-2;
+  @apply w-full;
+  @apply border-2;
+  @apply border-gray-200;
+  @apply px-4;
+  @apply py-3;
+  @apply outline-none;
+  @apply transition-colors;
+  @apply bg-gray-50;
 }
 .input:hover,
 .input:focus,
 .input:active {
-	@apply border-blue-800;
+  @apply border-blue-800;
 }
 
 .input.glass {
-	@apply border-gray-200;
-	@apply bg-opacity-20;
-	@apply border-opacity-20;
-	@apply placeholder-gray-100;
-	@apply placeholder-opacity-50;
+  @apply border-gray-200;
+  @apply bg-opacity-20;
+  @apply border-opacity-20;
+  @apply placeholder-gray-100;
+  @apply placeholder-opacity-50;
 }
 
 .input.glass:hover,
 .input.glass:focus,
 .input.glass:active {
-	@apply border-opacity-100;
+  @apply border-opacity-100;
 }
 
 .appHeaderGrid {
-	grid-template-rows: min-content auto;
+  grid-template-rows: min-content auto;
 }
 
-label.portal {
-	@apply text-sm;
-	@apply text-gray-700;
+label.portal,
+.label.portal {
+  @apply text-sm;
+  @apply text-gray-700;
 }
 
 .input.portal {
-	@apply text-xs;
-	@apply text-gray-700;
-	@apply border-2;
-	@apply bg-gray-100;
-	@apply border-gray-100;
+  @apply text-xs;
+  @apply text-gray-700;
+  @apply border-2;
+  @apply bg-gray-100;
+  @apply border-gray-100;
 }
 
 .input.portal:hover,
 .input.portal:focus,
 .input.portal:active {
-	@apply border-gray-300;
+  @apply border-gray-300;
 }
