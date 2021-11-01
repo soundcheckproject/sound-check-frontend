@@ -15,39 +15,23 @@
 }
 
 article {
-  @apply py-6;
-  @apply grid;
-  @apply gap-4;
+  @apply py-6 grid gap-4;
 }
 section {
-  @apply py-6;
-  @apply mb-8;
+  @apply py-6 mb-8;
 }
 
 .input {
-  @apply rounded-sm;
-  @apply mt-2;
-  @apply w-full;
-  @apply border-2;
-  @apply border-gray-200;
-  @apply px-4;
-  @apply py-3;
-  @apply outline-none;
-  @apply transition-colors;
-  @apply bg-gray-50;
+  @apply rounded-sm mt-2 w-full border-2 border-gray-200 px-4 py-3 outline-none transition-colors bg-gray-50;
 }
 .input:hover,
 .input:focus,
 .input:active {
-  @apply border-blue-800;
+  @apply border-teal-700;
 }
 
 .input.glass {
-  @apply border-gray-200;
-  @apply bg-opacity-20;
-  @apply border-opacity-20;
-  @apply placeholder-gray-100;
-  @apply placeholder-opacity-50;
+  @apply border-gray-200 bg-opacity-20 border-opacity-20 placeholder-gray-100 placeholder-opacity-50;
 }
 
 .input.glass:hover,

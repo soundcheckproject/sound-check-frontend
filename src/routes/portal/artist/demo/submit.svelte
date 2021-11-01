@@ -1,4 +1,6 @@
 <script lang="ts">
+  //Todo: Royaltie percentage calc
+
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Track from '../../../../components/Track.svelte'
@@ -9,19 +11,38 @@
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
 
+  import type { TrackModel } from '../../../../types/Track.type'
+  import { onMount } from 'svelte'
+
   interface Artist {
-    title: string
-    genre: string
-    description: string
-    releaseDate: string
+    artistName: string
+    royaltyPercentage: number
   }
 
-  let newTrack: any = {}
-
-  let artistObj = { artistName: 'Martin garrix', royaltyPercentage: 51 }
+  let artistObj: Artist = { artistName: 'Martin garrix', royaltyPercentage: 51 }
   let artistsArray = [artistObj, artistObj]
 
   let artistSearch = { artistName: '', hover: false }
+
+  let newTrack: TrackModel = {
+    title: '',
+    description: '',
+    lyrics: '',
+    genreId: '',
+    prefferdReleaseDate: '',
+    artistIds: [''],
+    previewStart: 0,
+    previewStop: 30,
+    artworkDesigner: '',
+  }
+
+  let artworkBlob: any = '',
+    trackBlob: any = '',
+    artworkPreview: any = '',
+    trackPreview: any = ''
+
+  let trackDataClick
+  let trackData: any = { info: {}, blob: {} }
 
   const removeArtist = (removeArtistIndex: number) => {
     console.log(removeArtistIndex)
@@ -35,6 +56,7 @@
     for (let artist of artistsArray) {
       royaltyPercentage += +artist.royaltyPercentage
     }
+
     return royaltyPercentage
   }
 
@@ -45,8 +67,37 @@
     localStorage.setItem('uploadPageStatus', uploadPageStatus.toString())
   }
 
+  const previewImage = (e: any) => {
+    let image = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(image)
+    reader.onload = e => {
+      artworkPreview = e.target.result
+    }
+  }
+  const uploadTrack = (e: any) => {
+    let track = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(track)
+    reader.onload = e => {
+      trackPreview = e.target.result
+      console.log(trackPreview)
+    }
+    // trackData.info = reader
+    // trackPreview = reader.result.toString()
+  }
+
+  const postTrack = () => {
+    const dataTrack = new FormData()
+  }
+
   $: {
-    calcRoyaltyPercentageTotal()
+    // royaltyPercentageTotal = calcRoyaltyPercentageTotal()
+    // console.log(newTrack)
+    // console.log(artworkBlob)
+    // console.log(trackBlob)
+    // console.log(artworkPreview)
+    // console.log(trackData)
   }
 </script>
 
@@ -110,7 +161,7 @@
   </div>
   <Title>Submit a new track</Title>
 
-  <div class="">
+  <form on:submit={postTrack} class="">
     {#if uploadPageStatus == 1}
       <FlyBox>
         <SubTitle>📝 Information about your track</SubTitle>
@@ -120,24 +171,25 @@
             >Create a title<input
               bind:value={newTrack.title}
               class="input portal"
-              placeholder="Password.."
+              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
             /></label
           >
           <div class="grid grid-cols-2 gap-4">
             <label class="portal"
               >Pick a genre
               <select
-                bind:value={newTrack.genre}
+                bind:value={newTrack.genreId}
                 class="input portal"
                 placeholder="For example: Future House, Bass House"
-                ><option>Future House</option><option>Bass House</option><option
-                  >Pop House</option
-                ></select
+              >
+                {#each ['Future House', 'Bass House', 'Pop House', 'Dubstep'] as genre, index}
+                  <option value={genre}>{genre}</option>
+                {/each}</select
               >
             </label>
             <label class="portal"
               >Preferred release date<input
-                bind:value={newTrack.releasedate}
+                bind:value={newTrack.prefferdReleaseDate}
                 type="date"
                 class="input portal"
                 placeholder="For example: August 8th, 2021"
@@ -224,7 +276,9 @@
                   transition:fade
                 >
                   <p class="">Artist(s)</p>
-                  <p class="font-semibold text-right">Royalties</p>
+                  <p class="font-semibold text-right ">
+                    Royalties {calcRoyaltyPercentageTotal()}
+                  </p>
                 </div>
 
                 {#if calcRoyaltyPercentageTotal() != 100}
@@ -286,29 +340,35 @@
     {/if}
     {#if uploadPageStatus == 3}
       <FlyBox>
-        <div class="flex space-x-8">
+        <div class="grid gap-8 " style="grid-template-columns:min-content auto">
           <!-- <figure /> -->
           <div
-            class="bg-gray-200 rounded-sm w-64  my-2 flex items-center justify-center"
+            class="input portal bg-gray-100 rounded-md w-52 h-52 flex items-center justify-center cursor-pointer"
+            style={artworkPreview.length > 0
+              ? `background:url('${artworkPreview}') center center;background-size:cover`
+              : ''}
+            on:click={() => artworkBlob.click()}
           >
-            <svg
-              class="text-teal-700 opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
+            {#if artworkPreview.length <= 0}
+              <svg
+                class="text-teal-700 opacity-90"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+            {/if}
           </div>
-          <div class="grid gap-4 w-full">
+          <div class="grid gap-4 ">
             <SubTitle>🖼 Artwork</SubTitle>
             <label class="portal"
               >Designer of the artwork<input
@@ -317,49 +377,89 @@
                 placeholder="For example: August 8th, 2021"
               /></label
             >
-            <label class="portal"
+            <div class="label portal">
+              Upload Artwork
+              <div
+                class="input portal w-full justify-center items-center cursor-pointer"
+                on:click={() => artworkBlob.click()}
+              >
+                Click to upload or drag your artwork here..
+                <input
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  bind:this={artworkBlob}
+                  on:change={e => previewImage(e)}
+                  class="hidden"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <!-- <label class="portal"
               >Upload Artwork<input
-                bind:value={newTrack.artwork}
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                bind:this={artworkBlob}
+                on:change={e => previewImage(e)}
                 class="input portal"
                 placeholder="Click to upload or drag your artwork here.."
-              /></label
-            >
+              />
+            </label> -->
           </div>
         </div>
       </FlyBox>
     {/if}
     {#if uploadPageStatus == 4}
       <FlyBox>
-        <TrackPlayer
-          imgSrc="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-        />
+        {#if trackPreview}
+          <TrackPlayer imgSrc={artworkPreview} audioSrc={trackPreview} />
+        {/if}
         <SubTitle>💽 Upload track</SubTitle>
 
-        <div class="grid gap-4 grid-cols-3">
-          <label class="portal col-span-2"
-            >Upload track<input
-              bind:value={newTrack.releasedate}
-              class="input portal"
-              placeholder="Click to upload or drag your track here.."
-            /></label
-          >
+        <div class="grid gap-4 grid-cols-2">
+          <div class="label portal">
+            Upload track
+            <div
+              class="input portal w-full justify-center items-center cursor-pointer"
+              on:click={() => trackDataClick.click()}
+            >
+              <!-- {trackBlob ?? trackBlob[0].name ?? ''} -->
+              Click to upload or drag your track here..
+              <input
+                type="file"
+                bind:this={trackDataClick}
+                bind:files={trackData.blob}
+                on:change={e => uploadTrack(e)}
+                class="hidden"
+                placeholder=""
+              />
+            </div>
+          </div>
           <div class="label portal opacity-40">
             Preview part
             <div
               class="input portal grid gap-4 p-2 grid-flow-col grid-cols-3 w-full justify-center items-center"
               style="grid-template-columns: 1fr min-content 1fr"
             >
+              <!-- <input
+                type=number
+                class="p-1 bg-gray-100 text-center w-16"
+                value="00"
+				bind:value={newTrack.previewStart}
+                disabled={true}
+              /> -->
               <input
                 type="number"
                 class="p-1 bg-gray-100 text-center w-16"
-                value="00"
+                bind:value={newTrack.previewStart}
+                min="0"
                 disabled={true}
               />
               <div class="w-px rounded-sm h-full bg-gray-200" />
               <input
                 type="number"
                 class="p-1 bg-gray-100 text-center w-16"
-                value="00"
+                bind:value={newTrack.previewStop}
+                min="30"
                 disabled={false}
               />
             </div>
@@ -370,5 +470,5 @@
         </div>
       </FlyBox>
     {/if}
-  </div>
+  </form>
 </Box>

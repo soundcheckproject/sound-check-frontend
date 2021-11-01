@@ -8,7 +8,8 @@
   export let className: string = ''
 </script>
 
-<div
+<button
+  type="submit"
   on:click={onClick}
   class=" transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 cursor-pointer 
 	{rounded == 'default'
@@ -30,4 +31,4 @@
 	 "
 >
   <slot />
-</div>
+</button>
