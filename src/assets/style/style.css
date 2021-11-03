@@ -63,3 +63,25 @@ label.portal,
 .input.portal:active {
   @apply border-gray-300;
 }
+
+.gradientBlueGreen {
+  background: hsla(185, 40%, 20%, 1);
+
+  background: linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+}

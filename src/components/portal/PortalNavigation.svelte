@@ -8,11 +8,7 @@
   import { getAuth } from 'firebase/auth'
   import RoleLayer from '../RoleLayer.svelte'
   import { menuState } from '../../stores/stores'
-  async function logout() {
-    await getAuth().signOut()
-    goto('/login')
-    console.log('Signout')
-  }
+  import { logout } from '../../utils/useFirebase'
 </script>
 
 <aside
@@ -97,7 +93,7 @@
         </NavLink>
 
         <NavLink
-          href="#"
+          href=""
           name="Music"
           routes={[
             { path: '/portal/artist/demo/submit', pathName: 'Submit' },
@@ -124,7 +120,7 @@
         </NavLink>
 
         <RoleLayer allowedForRoles={['artist', 'labelar', 'manager']}>
-          <NavLink href="#" name="Royalties" class="">
+          <NavLink href="" name="Royalties" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -142,7 +138,7 @@
             </svg>
           </NavLink>
         </RoleLayer>
-        <NavLink href="#" name="Notifications" class="">
+        <NavLink href="" name="Notifications" class="">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -181,7 +177,7 @@
             </svg>
           </NavLink>
           <NavLink
-            href="#"
+            href=""
             name="Demos"
             routes={[
               { path: '/portal/staff/demo', pathName: 'New ' },

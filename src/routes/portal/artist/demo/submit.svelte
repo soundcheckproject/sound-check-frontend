@@ -11,20 +11,23 @@
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
 
-  import type { TrackModel } from '../../../../types/Track.type'
+  import type { TrackType } from '../../../../types/Track.type'
   import { onMount } from 'svelte'
 
-  interface Artist {
+  interface ArtistType {
     artistName: string
     royaltyPercentage: number
   }
 
-  let artistObj: Artist = { artistName: 'Martin garrix', royaltyPercentage: 51 }
+  let artistObj: ArtistType = {
+    artistName: 'Martin garrix',
+    royaltyPercentage: 51,
+  }
   let artistsArray = [artistObj, artistObj]
 
   let artistSearch = { artistName: '', hover: false }
 
-  let newTrack: TrackModel = {
+  let newTrack: TrackType = {
     title: '',
     description: '',
     lyrics: '',
@@ -124,7 +127,8 @@
         <polyline points="9 18 15 12 9 6" />
       </svg>
     </div>
-    {#each [1, 2, 3, 4] as i}
+
+    {#each [1, 2, 3, 4] as index, i}
       <div
         class={`border-2 border-opacity-0 transition-all  ${
           uploadPageStatus == i
@@ -137,27 +141,29 @@
       >
         {i}
       </div>{/each}
-    <div
-      class="cursor-pointer bg-white text-xs h-8 pl-4 pr-3 grid gap-1 grid-flow-col rounded-md shadow-sm justify-center items-center text-gray-400 "
-      on:click={() => {
-        uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
-      }}
-    >
-      Next
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+    {#if uploadPageStatus != 4}
+      <div
+        class="cursor-pointer bg-white text-xs h-8 pl-4 pr-3 grid gap-1 grid-flow-col rounded-md shadow-sm justify-center items-center text-gray-400 "
+        on:click={() => {
+          uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
+        }}
       >
-        <polyline points="9 18 15 12 9 6" />
-      </svg>
-    </div>
+        Next
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </div>
+    {/if}
   </div>
   <Title>Submit a new track</Title>
 
@@ -405,6 +411,13 @@
               />
             </label> -->
           </div>
+        </div>
+        <div class="flex justify-end">
+          <Button
+            color="bg-teal-700"
+            size="sm"
+            onClick={() => setUploadPageStatus(4)}>Next</Button
+          >
         </div>
       </FlyBox>
     {/if}

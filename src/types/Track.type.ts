@@ -1,4 +1,4 @@
-export interface TrackModel {
+export interface TrackType {
   title: string
   description?: string
   lyrics?: string
