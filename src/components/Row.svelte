@@ -9,7 +9,7 @@
   >
     <slot />
     <div class="grid grid-flow-col gap-3 items-center">
-      <div class="text-xs text-gray-400">15th of octover</div>
+      <div class="hidden sm:flex text-xs text-gray-400">15th of octover</div>
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"

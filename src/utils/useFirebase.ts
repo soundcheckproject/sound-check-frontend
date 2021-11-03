@@ -53,7 +53,7 @@ export const registerUser = (user: UserType): Promise<boolean> => {
             data: user,
           },
         )
-        console.log(response)
+
         resolve(true)
       })
       .catch(error => {

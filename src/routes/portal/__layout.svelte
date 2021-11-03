@@ -1,21 +1,8 @@
 <script lang="ts">
-  import authStore from '../../stores/authStore'
-
   import PortalNavigation from '../../components/portal/PortalNavigation.svelte'
   import { page } from '$app/stores'
   import { fade, fly } from 'svelte/transition'
   import AuthLayer from '../../components/AuthLayer.svelte'
-  import { getAuth } from 'firebase/auth'
-  // import { goto } from '$app/navigation'
-  // import { onMount } from 'svelte'
-
-  // onMount(() => {
-  // 	authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-  // 		if (!isLoggedIn && firebaseControlled) {
-  // 			await goto('/login')
-  // 		}
-  // 	})
-  // })
 
   let pageBread = []
 

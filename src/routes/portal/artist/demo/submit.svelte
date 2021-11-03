@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { GenreType } from '../../../../types/Genre.type'
+  import { getGenres, getGenres } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'
@@ -94,6 +96,19 @@
     const dataTrack = new FormData()
   }
 
+  let genres: GenreType[] = []
+
+  let getGenresGraphql = () => {
+    getGenres().then(res => {
+      console.log(res)
+      return res
+    })
+  }
+  console.log(getGenresGraphql())
+
+  //   let genres: GenreType[] = [
+  //     { uuid: 'kmkfza', name: 'faze', description: 'zejm' },
+  //   ]
   $: {
     // royaltyPercentageTotal = calcRoyaltyPercentageTotal()
     // console.log(newTrack)
@@ -183,13 +198,22 @@
           <div class="grid grid-cols-2 gap-4">
             <label class="portal"
               >Pick a genre
-              <select
+              <!-- <select
                 bind:value={newTrack.genreId}
                 class="input portal"
                 placeholder="For example: Future House, Bass House"
               >
                 {#each ['Future House', 'Bass House', 'Pop House', 'Dubstep'] as genre, index}
                   <option value={genre}>{genre}</option>
+                {/each}</select
+              > -->
+              <select
+                bind:value={newTrack.genreId}
+                class="input portal"
+                placeholder="For example: Future House, Bass House"
+              >
+                {#each genres as genre, index}
+                  <option value={genre.uuid}>{genre.name}</option>
                 {/each}</select
               >
             </label>

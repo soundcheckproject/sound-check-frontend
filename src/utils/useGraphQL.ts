@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth'
+import type { GenreType } from '../types/Genre.type'
 
 export const query = async (
   name: string,
@@ -20,4 +21,21 @@ export const query = async (
     .catch(error => console.error({ error }))
 
   return res.data[name]
+}
+
+export const getGenres = (): Promise<any> => {
+  return new Promise(async (resolve, reject) => {
+    const response = await query(
+      `getGenres`,
+      `query Query {
+        getGenres {
+          uuid
+          name
+          description
+        }
+      }`,
+    )
+
+    resolve(response)
+  })
 }
