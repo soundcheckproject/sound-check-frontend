@@ -57,7 +57,11 @@
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
       {#if $$props.imgSrc}
-        <img alt="img" src={`${$$props.imgSrc}`} class="h-full w-full " />
+        <img
+          alt="img"
+          src={`${$$props.imgSrc}`}
+          class="object-cover h-full w-full "
+        />
       {:else}
         <svg
           class="text-white opacity-90"

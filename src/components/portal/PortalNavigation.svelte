@@ -65,7 +65,6 @@
           >
             Alex Silves
           </p>
-          <p>oui</p>
         {/if}
         <!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
       </a>

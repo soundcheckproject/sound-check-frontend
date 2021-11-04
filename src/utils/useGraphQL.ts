@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth'
+import type { TrackType } from '../types/Track.type'
 import type { GenreType } from '../types/Genre.type'
 
 export const query = async (
@@ -23,6 +24,26 @@ export const query = async (
   return res.data[name]
 }
 
+export const uploadQuery = async (
+  name: string,
+  query: string,
+  variables?: Object,
+) => {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  })
+    .then(res => res.json())
+    .catch(error => console.error({ error }))
+  return res.data[name]
+}
 export const getGenres = async (): Promise<any> => {
   const response = await query(
     `getGenres`,
@@ -49,4 +70,48 @@ export const getArtistsByNickName = async (nickname: string): Promise<any> => {
     { nickname: nickname },
   )
   return response
+}
+
+// export const createTrack = async (formData: any): Promise<boolean> => {
+//   return new Promise(async (resolve, reject) => {
+//     const response = await uploadQuery(
+//       `createTrack`,
+//       `mutation CreateTrackMutation($data: CreateTrackInput!, $audioFile: Upload!) {
+//         createTrack(data: $data, audioFile: $audioFile) {
+//           uuid
+//         }
+//       }`,
+//       { data: formData },
+//     )
+//       .then(res => {
+//         console.log(res, response)
+//         resolve(true)
+//       })
+//       .catch(error => {
+//         reject(false)
+//         console.log(error)
+//       })
+//   })
+// }
+//  'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary5g0xJihuBbfw8DEp',
+export const createTrack = async (formData: any, audioFile: any) => {
+  let query =
+    "mutation createTrack($data: CreateTrackInput!, $audioFile: Upload!) {createTrack(data: $data, audioFile: $audioFile) {uuid}}'"
+  let variables = { data: formData, audioFile: audioFile }
+
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type':
+        'multipart/form-data; boundary=----WebKitFormBoundary5g0xJihuBbfw8DEp',
+      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+    },
+
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  })
+    .then(res => res.json())
+    .catch(error => console.error({ error }))
 }

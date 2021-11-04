@@ -2,6 +2,6 @@
   import RoleLayer from '../../../components/RoleLayer.svelte'
 </script>
 
-<RoleLayer allowedForRoles={['labelar', 'manager']} popup>
+<RoleLayer allowedForRoles={['label-ar', 'label-manager']} popup>
   <slot />
 </RoleLayer>

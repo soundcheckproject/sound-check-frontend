@@ -2,6 +2,14 @@
   import RoleLayer from '../../../components/RoleLayer.svelte'
 </script>
 
-<RoleLayer allowedForRoles={['artist', 'labelar', 'manager']}>
+<RoleLayer
+  allowedForRoles={[
+    'user',
+    'artist',
+    'label-artist',
+    'label-ar',
+    'label-manager',
+  ]}
+>
   <slot />
 </RoleLayer>

@@ -10,6 +10,7 @@
 
 <button
   on:click|preventDefault={onClick}
+  type="submit"
   class=" transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 cursor-pointer 
 	{rounded == 'default'
     ? ' rounded-md'

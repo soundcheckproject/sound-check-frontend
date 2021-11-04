@@ -1,6 +1,11 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import { getGenres, getArtistsByNickName } from '../../../../utils/useGraphQL'
+  import {
+    getGenres,
+    getArtistsByNickName,
+    createTrack,
+    plainQuery,
+  } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'
@@ -12,21 +17,11 @@
   import FlyBox from '../../../../components/FlyBox.svelte'
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
+  import Input from '../../../../components/Input.svelte'
 
   import type { TrackType } from '../../../../types/Track.type'
   import { onMount } from 'svelte'
-
-  interface ArtistType {
-    uuid: string
-    nickName: string
-    royaltyPercentage: number
-  }
-
-  let artistObj: ArtistType = {
-    uuid: '12',
-    nickName: 'Martin garrix',
-    royaltyPercentage: 51,
-  }
+  import type { ArtistType } from '../../../../types/User.type'
 
   let artistsArray = []
 
@@ -37,7 +32,7 @@
     description: '',
     lyrics: '',
     genreId: '',
-    prefferdReleaseDate: '',
+    prefferdReleaseDate: '2002-10-10',
     artistIds: [],
     previewStart: 0,
     previewStop: 30,
@@ -81,20 +76,37 @@
       artworkPreview = e.target.result
     }
   }
+  let trackUploadData
   const previewTrack = (e: any) => {
     let track = e.target.files[0]
+    trackUploadData = track
     let reader = new FileReader()
     reader.readAsDataURL(track)
     reader.onload = e => {
       trackPreview = e.target.result
-      console.log(trackPreview)
     }
-    // trackData.info = reader
-    // trackPreview = reader.result.toString()
   }
 
-  const postTrack = () => {
-    const dataTrack = new FormData()
+  const postTrack = async () => {
+    const formData = new FormData()
+
+    // const operations =
+    //   '"query": "mutation ($data: CreateTrackInput!, $audioFile: Upload!) {createTrack(data: $data, audioFile: $audioFile) {uuid}}","variables":{"data":null,"audioFile":null }}'
+    // formData.append('operations', operations)
+    // formData.append('data', JSON.stringify(newTrack))
+    // formData.append('audioFile', trackUploadData)
+    // formData.append('operations', operations)
+    // const map = `{"0": ["variables.file"]}`
+    // formData.append('map', map)
+    // formData.append('0', trackUploadData)
+    // // formData.append('files', trackPreview)
+    // console.log('create track', newTrack)
+
+    // console.log(formData)
+    // plainQuery(formData)
+    console.log(trackUploadData)
+    // await createTrack(formData)
+    await createTrack(newTrack, trackUploadData)
   }
 
   let genres: GenreType[] = []
@@ -180,19 +192,25 @@
   </div>
   <Title>Submit a new track</Title>
 
-  <form on:submit={postTrack} class="">
+  <form class="" enctype="multipart/form-data">
     {#if uploadPageStatus == 1}
       <FlyBox>
         <SubTitle>📝 Information about your track</SubTitle>
 
         <div class="grid lg:grid-cols-2 gap-4">
-          <label class="portal"
+          <!-- <label class="portal"
             >Create a title<input
               bind:value={newTrack.title}
               class="input portal"
               placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
             /></label
-          >
+          > -->
+          <Input
+            title="Create a title"
+            placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+            bind:value={newTrack.title}
+          />
+
           <div class="grid grid-cols-2 gap-4">
             <label class="portal"
               >Pick a genre
@@ -216,31 +234,36 @@
                 {/each}</select
               >
             </label>
-            <label class="portal"
+            <!-- <label class="portal"
               >Preferred release date<input
                 bind:value={newTrack.prefferdReleaseDate}
                 type="date"
                 class="input portal"
                 placeholder="For example: August 8th, 2021"
               /></label
-            >
+            > -->
+            <Input
+              type="date"
+              title="Preferred release date"
+              placeholder="For example: August 8th, 2021"
+              bind:value={newTrack.prefferdReleaseDate}
+            />
           </div>
-          <label class="portal"
-            >Describe your track<textarea
-              bind:value={newTrack.description}
-              rows="5"
-              class="input portal"
-              placeholder="This track is about.. It was created in .. The main theme of the track is.."
-            /></label
-          >
-          <label class="portal"
-            >Lyrics of your track<textarea
-              bind:value={newTrack.lyrics}
-              rows="5"
-              class="input portal"
-              placeholder="For example: “I’m in love with the shape of you..“"
-            /></label
-          >
+          <Input
+            textarea
+            rows="5"
+            title="Describe your track"
+            placeholder="This track is about.. It was created in .. The main theme of the track is.."
+            bind:value={newTrack.description}
+          />
+
+          <Input
+            textarea
+            rows="5"
+            title="Lyrics of your track"
+            placeholder="For example: “I’m in love with the shape of you..“"
+            bind:value={newTrack.lyrics}
+          />
         </div>
         <div class="flex justify-end">
           <Button
@@ -415,13 +438,12 @@
           </div>
           <div class="grid gap-4 ">
             <SubTitle>🖼 Artwork</SubTitle>
-            <label class="portal"
-              >Designer of the artwork<input
-                bind:value={newTrack.artworkDesigner}
-                class="input portal"
-                placeholder="For example: August 8th, 2021"
-              /></label
-            >
+
+            <Input
+              title="Artwork designer"
+              placeholder="For example: Picasso"
+              bind:value={newTrack.artworkDesigner}
+            />
             <div class="label portal">
               Upload Artwork
               <div
@@ -518,7 +540,9 @@
           </div>
         </div>
         <div class="flex justify-end">
-          <Button color="bg-teal-700" size="md">Submit track</Button>
+          <Button color="bg-teal-700" onClick={postTrack} size="md"
+            >Submit track</Button
+          >
         </div>
       </FlyBox>
     {/if}

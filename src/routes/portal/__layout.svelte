@@ -15,8 +15,8 @@
 <AuthLayer>
   <div class="c-portal">
     <PortalNavigation />
-    <div class="p-8 py-12 bg-gray-100">
-      <p
+    <div class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll">
+      <!-- <p
         class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
       >
         {#each pageBread as bread, index}
@@ -44,7 +44,7 @@
 			`}>{bread}</a
           >
         {/each}
-      </p>
+      </p> -->
       <div class=""><slot /></div>
     </div>
   </div>

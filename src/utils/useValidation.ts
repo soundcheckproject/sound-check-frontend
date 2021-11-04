@@ -1,3 +1,5 @@
+import type { UserType } from '../types/User.type'
+
 export const validate = () => {
   return false
 }
@@ -30,3 +32,9 @@ export const validate = () => {
 //     ]
 //   }
 // }
+
+
+
+export const isNickNameAvailable = (artist:UserType,nickName: string):Promise<boolean> =>{
+  return true;
+}
