@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import { getGenres, getGenres } from '../../../../utils/useGraphQL'
+  import { getGenres, getArtistsByNickName } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'
@@ -17,17 +17,20 @@
   import { onMount } from 'svelte'
 
   interface ArtistType {
-    artistName: string
+    uuid: string
+    nickName: string
     royaltyPercentage: number
   }
 
   let artistObj: ArtistType = {
-    artistName: 'Martin garrix',
+    uuid: '12',
+    nickName: 'Martin garrix',
     royaltyPercentage: 51,
   }
-  let artistsArray = [artistObj, artistObj]
 
-  let artistSearch = { artistName: '', hover: false }
+  let artistsArray = []
+
+  let artistSearch = { nickName: '', hover: false }
 
   let newTrack: TrackType = {
     title: '',
@@ -35,10 +38,15 @@
     lyrics: '',
     genreId: '',
     prefferdReleaseDate: '',
-    artistIds: [''],
+    artistIds: [],
     previewStart: 0,
     previewStop: 30,
     artworkDesigner: '',
+  }
+
+  const removeArtist = (uuid: string) => {
+    artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
+    newTrack.artistIds = newTrack.artistIds.filter(id => id != uuid)
   }
 
   let artworkBlob: any = '',
@@ -49,20 +57,13 @@
   let trackDataClick
   let trackData: any = { info: {}, blob: {} }
 
-  const removeArtist = (removeArtistIndex: number) => {
-    console.log(removeArtistIndex)
-    artistsArray.splice(removeArtistIndex + 1, 1)
-    console.log(artistsArray)
-  }
   let royaltyPercentageTotal: number = 0
-
   const calcRoyaltyPercentageTotal = () => {
-    let royaltyPercentage: number = 0
+    royaltyPercentageTotal = 0
     for (let artist of artistsArray) {
-      royaltyPercentage += +artist.royaltyPercentage
+      royaltyPercentageTotal += artist.royaltyPercentage
     }
-
-    return royaltyPercentage
+    console.log(royaltyPercentageTotal)
   }
 
   let uploadPageStatus = parseInt(localStorage.getItem('uploadPageStatus')) ?? 1
@@ -72,7 +73,7 @@
     localStorage.setItem('uploadPageStatus', uploadPageStatus.toString())
   }
 
-  const previewImage = (e: any) => {
+  const previewArtwork = (e: any) => {
     let image = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(image)
@@ -80,7 +81,7 @@
       artworkPreview = e.target.result
     }
   }
-  const uploadTrack = (e: any) => {
+  const previewTrack = (e: any) => {
     let track = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(track)
@@ -98,24 +99,21 @@
 
   let genres: GenreType[] = []
 
-  let getGenresGraphql = () => {
-    getGenres().then(res => {
-      console.log(res)
-      return res
-    })
-  }
-  console.log(getGenresGraphql())
+  let artists: ArtistType[] = []
 
-  //   let genres: GenreType[] = [
-  //     { uuid: 'kmkfza', name: 'faze', description: 'zejm' },
-  //   ]
+  const searchArtistByNickName = async () => {
+    if (artistSearch.nickName.length > 0) {
+      artists = await getArtistsByNickName(artistSearch.nickName)
+    }
+  }
+
+  onMount(async () => {
+    genres = await getGenres()
+  })
+
   $: {
-    // royaltyPercentageTotal = calcRoyaltyPercentageTotal()
-    // console.log(newTrack)
-    // console.log(artworkBlob)
-    // console.log(trackBlob)
-    // console.log(artworkPreview)
-    // console.log(trackData)
+    // console.log(artistSearch)
+    console.log(newTrack)
   }
 </script>
 
@@ -143,7 +141,7 @@
       </svg>
     </div>
 
-    {#each [1, 2, 3, 4] as index, i}
+    {#each [1, 2, 3, 4] as i}
       <div
         class={`border-2 border-opacity-0 transition-all  ${
           uploadPageStatus == i
@@ -209,9 +207,10 @@
               > -->
               <select
                 bind:value={newTrack.genreId}
-                class="input portal"
+                class="input portal text-red-300"
                 placeholder="For example: Future House, Bass House"
               >
+                <option selected disabled>Pick a genre</option>
                 {#each genres as genre, index}
                   <option value={genre.uuid}>{genre.name}</option>
                 {/each}</select
@@ -264,7 +263,8 @@
             >
               <label class="portal"
                 >Search collaborator<input
-                  bind:value={artistSearch.artistName}
+                  bind:value={artistSearch.nickName}
+                  on:input={() => searchArtistByNickName()}
                   class="input portal"
                   placeholder="Search by name.."
                 /></label
@@ -276,18 +276,30 @@
                   class="absolute left-0 right-0 w-full z-10 "
                 >
                   <div
-                    class=" mt-2 mshadow-md p-4  bg-white rounded-sm grid gap-2"
+                    class=" mt-2 mshadow-md p-4 bg-white rounded-sm grid gap-2"
                   >
                     <p class="text-xs font-semibold ">Select artist</p>
-                    {#if artistSearch.artistName.length > 0}
-                      <div class="grid gap-2 grid-cols-3 mt-1">
-                        {#each ['artist', 'artist'] as artist}<Artist
+                    {#if artistSearch.nickName.length > 0}
+                      <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
+                        {#each artists as artist}<Artist
                             onClick={() => {
+                              artist.royaltyPercentage = 0
+
                               artistsArray = [
                                 ...artistsArray,
-                                { artistName: 'ghaha', royaltyPercentage: 100 },
+                                artist,
+                                // {
+                                //   uuid: '12',
+                                //   artistName: 'ghaha',
+                                //   nickName: 'ekmaz',
+                                //   royaltyPercentage: 100,
+                                // },
                               ]
-                            }}>{artist}</Artist
+                              newTrack.artistIds = [
+                                ...newTrack.artistIds,
+                                artist.uuid,
+                              ]
+                            }}>{artist.nickName}</Artist
                           >
                         {/each}
                       </div>
@@ -301,33 +313,33 @@
             <div class="grid gap-4">
               {#if artistsArray.length > 0}
                 <div
-                  class="label portal grid grid-cols-2 gap-2 -mb-1 items-center"
-                  style="grid-template-columns:1fr 5rem"
+                  class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
                   transition:fade
                 >
                   <p class="">Artist(s)</p>
                   <p class="font-semibold text-right ">
-                    Royalties {calcRoyaltyPercentageTotal()}
+                    Royalties {royaltyPercentageTotal}%
                   </p>
                 </div>
 
-                {#if calcRoyaltyPercentageTotal() != 100}
+                {#if royaltyPercentageTotal != 100 && false}
                   <SubTitle theme="error"
-                    >Total of royalty % should be equal to 100</SubTitle
+                    >Total royalties should be equal to 100</SubTitle
                   >
                 {/if}
-              {/if}
+              {:else}<div class="label portal grid  gap-2 " transition:fade>
+                  <p class="">Add a collaborator</p>
+                </div>{/if}
               {#each artistsArray as artist, index}
                 <div
-                  class="grid grid-cols-2 gap-2 text-sm items-center"
-                  style="grid-template-columns:1fr 5rem"
+                  class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
                   transition:fade
                 >
                   <Artist
                     size="md"
                     remove={() => {
-                      removeArtist(index)
-                    }}>{artist.artistName}</Artist
+                      removeArtist(artist.uuid)
+                    }}>{artist.nickName}</Artist
                   >
                   <div class="relative flex items-center justify-end group">
                     <input
@@ -335,7 +347,10 @@
                       min="0"
                       max="100"
                       class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
-                      value={artist.royaltyPercentage}
+                      bind:value={artist.royaltyPercentage}
+                      on:input={() => {
+                        calcRoyaltyPercentageTotal()
+                      }}
                     />
                     <svg
                       class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
@@ -370,10 +385,10 @@
     {/if}
     {#if uploadPageStatus == 3}
       <FlyBox>
-        <div class="grid gap-8 " style="grid-template-columns:min-content auto">
+        <div class="grid gap-8 lg:grid-cols-min-auto ">
           <!-- <figure /> -->
           <div
-            class="input portal bg-gray-100 rounded-md w-52 h-52 flex items-center justify-center cursor-pointer"
+            class="input portal bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer"
             style={artworkPreview.length > 0
               ? `background:url('${artworkPreview}') center center;background-size:cover`
               : ''}
@@ -418,7 +433,7 @@
                   type="file"
                   accept=".jpg, .jpeg, .png"
                   bind:this={artworkBlob}
-                  on:change={e => previewImage(e)}
+                  on:change={e => previewArtwork(e)}
                   class="hidden"
                   placeholder=""
                 />
@@ -429,7 +444,7 @@
                 type="file"
                 accept=".jpg, .jpeg, .png"
                 bind:this={artworkBlob}
-                on:change={e => previewImage(e)}
+                on:change={e => previewArtwork(e)}
                 class="input portal"
                 placeholder="Click to upload or drag your artwork here.."
               />
@@ -465,7 +480,7 @@
                 type="file"
                 bind:this={trackDataClick}
                 bind:files={trackData.blob}
-                on:change={e => uploadTrack(e)}
+                on:change={e => previewTrack(e)}
                 class="hidden"
                 placeholder=""
               />

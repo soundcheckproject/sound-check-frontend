@@ -23,19 +23,30 @@ export const query = async (
   return res.data[name]
 }
 
-export const getGenres = (): Promise<any> => {
-  return new Promise(async (resolve, reject) => {
-    const response = await query(
-      `getGenres`,
-      `query Query {
+export const getGenres = async (): Promise<any> => {
+  const response = await query(
+    `getGenres`,
+    `query Query {
         getGenres {
           uuid
           name
           description
         }
       }`,
-    )
-
-    resolve(response)
-  })
+  )
+  return response
+}
+export const getArtistsByNickName = async (nickname: string): Promise<any> => {
+  const response = await query(
+    `getUsersByNickname`,
+    `query getUsersByNicknameQuery($nickname: String!) {
+      getUsersByNickname(nickname: $nickname) {
+        uuid
+        nickName
+        logo
+      }
+    }`,
+    { nickname: nickname },
+  )
+  return response
 }

@@ -11,14 +11,18 @@ module.exports = {
 				roboto: ['Roboto', 'sans-serif'],
 				gotham: ['Gotham', 'sans-serif'],
 			},
-		},
-		extend: {
+
 			colors: {
 				gray: colors.blueGray,
 				teal: colors.teal,
-				alpha: {}
+
+			},
+			gridTemplateColumns: {
+				'min-auto': "min-content auto;",
+				'1fr-auto': "1fr auto"
 			}
-		},
+
+		}
 
 
 	},
