@@ -1,3 +1,6 @@
+interface Artwork {
+  designer: string
+}
 export interface TrackType {
   title: string
   description?: string
@@ -9,7 +12,7 @@ export interface TrackType {
   isSigned?: boolean
   prefferdReleaseDate?: string
   genreId: string
-  artworkDesigner: string
+  artwork: Artwork
   label?: string
   artistIds: string[]
 }

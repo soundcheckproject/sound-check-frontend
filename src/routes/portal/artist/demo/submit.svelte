@@ -28,15 +28,17 @@
   let artistSearch = { nickName: '', hover: false }
 
   let newTrack: TrackType = {
-    title: '',
-    description: '',
-    lyrics: '',
-    genreId: '',
-    prefferdReleaseDate: '2002-10-10',
-    artistIds: [],
-    previewStart: 0,
-    previewStop: 30,
-    artworkDesigner: '',
+    title: 'Miss you so feat. Jebroer',
+    description: 'Niels his new hit song',
+    previewStart: 20,
+    previewStop: 35,
+    lyrics: 'I hate to admit it',
+    artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
+    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
+    prefferdReleaseDate: '2022-01-01',
+    artwork: {
+      designer: 'nielsonderbeke2',
+    },
   }
 
   const removeArtist = (uuid: string) => {
@@ -448,7 +450,7 @@
             <Input
               title="Artwork designer"
               placeholder="For example: Picasso"
-              bind:value={newTrack.artworkDesigner}
+              bind:value={newTrack.artwork.designer}
             />
             <div class="label portal">
               Upload Artwork
