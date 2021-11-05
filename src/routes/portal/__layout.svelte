@@ -3,7 +3,6 @@
   import { page } from '$app/stores'
   import { fade, fly } from 'svelte/transition'
   import AuthLayer from '../../components/AuthLayer.svelte'
-  import { goto } from '$app/navigation'
 
   let pageBread = []
 

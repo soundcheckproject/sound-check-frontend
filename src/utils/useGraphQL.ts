@@ -1,6 +1,4 @@
 import { getAuth } from 'firebase/auth'
-import type { TrackType } from '../types/Track.type'
-import type { GenreType } from '../types/Genre.type'
 
 export const query = async (
   name: string,

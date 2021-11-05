@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { UserType } from './../types/User.type'
-  import { getAuth, createUserWithEmailAndPassword, Auth } from 'firebase/auth'
   import { goto } from '$app/navigation'
 
   import Header from '../components/Header.svelte'

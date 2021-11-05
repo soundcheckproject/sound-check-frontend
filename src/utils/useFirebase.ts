@@ -42,7 +42,7 @@ export const registerUser = (user: UserType): Promise<boolean> => {
         user.uid = userCredential.user?.uid
         console.log(user)
 
-        const response = await query(
+        await query(
           `createArtist`,
           `mutation CreateArtistMutation($data: CreateArtistInput!) {
             createArtist(data: $data) {

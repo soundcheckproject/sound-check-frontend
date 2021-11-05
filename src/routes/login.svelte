@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { signInWithEmailAndPassword, getAuth } from 'firebase/auth'
   import { goto } from '$app/navigation'
 
   import Header from '../components/Header.svelte'
@@ -9,7 +8,6 @@
   import Container from '../components/Container.svelte'
   import Footer from '../components/Footer.svelte'
 
-  import { capitalize } from '../utils/capitalize'
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
 

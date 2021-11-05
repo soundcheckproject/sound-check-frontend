@@ -3,11 +3,7 @@
   import type { TrackType } from '../../../../types/Track.type'
   import type { ArtistType } from '../../../../types/User.type'
 
-  import {
-    getGenres,
-    getArtistsByNickName,
-    createTrack,
-  } from '../../../../utils/useGraphQL'
+  import { getGenres, getArtistsByNickName } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'

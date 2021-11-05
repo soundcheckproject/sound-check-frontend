@@ -1,22 +1,10 @@
 <script lang="ts">
-  import type { GenreType } from '../../../../types/Genre.type'
-  import {
-    getGenres,
-    getArtistsByNickName,
-    createTrack,
-  } from '../../../../utils/useGraphQL'
-  //Todo: Royaltie percentage calc
-
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
-  import Track from '../../../../components/Track.svelte'
+
   import Box from '../../../../components/Box.svelte'
   import TrackRow from '../../../../components/TrackRow.svelte'
-  import { fade, fly, slide } from 'svelte/transition'
-  import FlyBox from '../../../../components/FlyBox.svelte'
-  import Button from '../../../../components/Button.svelte'
-  import TrackPlayer from '../../../../components/TrackPlayer.svelte'
-  import Input from '../../../../components/Input.svelte'
+
   import type { TrackType } from '../../../../types/Track.type'
 
   let tracksFromStatus = 'all'

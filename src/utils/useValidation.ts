@@ -33,8 +33,9 @@ export const validate = () => {
 //   }
 // }
 
-
-
-export const isNickNameAvailable = (artist:UserType,nickName: string):Promise<boolean> =>{
-  return true;
+export const isNickNameAvailable = (
+  artist: UserType,
+  nickName: string,
+): Promise<boolean> => {
+  return new Promise<boolean>((resolve, reject) => resolve(true))
 }
