@@ -1,12 +1,9 @@
-<!-- <script context="module">
-	export async function load({ page, fetch, session, stuff }) {
-		let trackId = page.params.trackId;
-		return { props: { slug: trackId } };
-	}
+<script>
+  import { page } from '$app/stores'
+  console.log($page.path)
 </script>
 
-<script lang="ts">
-	export let slug: { trackId: any };
-</script>
+<h1>Demo Page</h1>
+<p>Displaying information about Demo: {$page.params.trackId}</p>
 
-<h2>Demo: {slug}</h2> -->
+Index demo

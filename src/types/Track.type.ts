@@ -2,6 +2,7 @@ interface Artwork {
   designer: string
 }
 export interface TrackType {
+  uuid?: string
   title: string
   description?: string
   lyrics?: string

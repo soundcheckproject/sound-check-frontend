@@ -4,7 +4,6 @@
     getGenres,
     getArtistsByNickName,
     createTrack,
-    plainQuery,
   } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
@@ -114,7 +113,7 @@
     body.append('1', trackUploadData)
     // body.append('1', trackPreview)
 
-    await createTrack(body)
+    // await createTrack(body)
   }
 
   let genres: GenreType[] = []
