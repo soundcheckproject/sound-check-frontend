@@ -3,6 +3,7 @@
   import { page } from '$app/stores'
   import { fade, fly } from 'svelte/transition'
   import AuthLayer from '../../components/AuthLayer.svelte'
+  import { goto } from '$app/navigation'
 
   let pageBread = []
 
@@ -36,6 +37,15 @@
               <polyline points="9 18 15 12 9 6" />
             </svg>
           {/if}
+          <!-- <a
+            class="hover:underline"
+            in:fly={{ x: -50, duration: 200 }}
+            out:fade={{ duration: 200 }}
+            href=""
+            on:click={() =>
+              goto(`/portal/${pageBread.slice(0, index + 1).join('/')}`)}
+            >{bread}
+          </a> -->
           <a
             class="hover:underline"
             in:fly={{ x: -50, duration: 200 }}

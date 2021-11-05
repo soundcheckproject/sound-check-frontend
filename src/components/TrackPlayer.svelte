@@ -2,6 +2,7 @@
   import SubTitle from './SubTitle.svelte'
 
   import { onMount } from 'svelte'
+
   export let theme: 'light' | 'dark' = 'dark'
 
   let playerBar
@@ -38,16 +39,18 @@
   })
 </script>
 
-<audio hidden bind:this={audio} preload="auto" controls>
-  <source src={$$props.audioSrc} type="audio/mpeg" />
-  Your browser does not support the audio element.
-</audio>
+{#if $$props.audioSrc}}
+  <audio hidden bind:this={audio} preload="auto" controls>
+    <source src={$$props.audioSrc} type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+{/if}
 <div
   class="overflow-hidden grid bg-gray-800 rounded-md backdrop-blur-sm text-gray-100"
 >
   <div
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
-    style={`background:url('${$$props.imgSrc}') center center no-repeat;background-size:cover`}
+    style={`background:url('${$$props.artworkSrc}') center center no-repeat;background-size:cover`}
   />
   <div
     class="z-10 grid grid-flow-col gap-8 justify-start p-8"
@@ -56,10 +59,10 @@
     <div
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
-      {#if $$props.imgSrc}
+      {#if $$props.artworkSrc}
         <img
           alt="img"
-          src={`${$$props.imgSrc}`}
+          src={`${$$props.artworkSrc}`}
           class="object-cover h-full w-full "
         />
       {:else}

@@ -1,5 +1,8 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
+  import type { TrackType } from '../../../../types/Track.type'
+  import type { ArtistType } from '../../../../types/User.type'
+
   import {
     getGenres,
     getArtistsByNickName,
@@ -18,9 +21,7 @@
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
 
-  import type { TrackType } from '../../../../types/Track.type'
   import { onMount } from 'svelte'
-  import type { ArtistType } from '../../../../types/User.type'
 
   let artistsArray = []
 
@@ -492,7 +493,7 @@
     {#if uploadPageStatus == 4}
       <FlyBox>
         {#if trackPreview}
-          <TrackPlayer imgSrc={artworkPreview} audioSrc={trackPreview} />
+          <TrackPlayer artworkSrc={artworkPreview} audioSrc={trackPreview} />
         {/if}
         <SubTitle>💽 Upload track</SubTitle>
 

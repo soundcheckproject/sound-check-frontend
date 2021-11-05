@@ -21,20 +21,20 @@
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <label class="portal"
-  >{$$props.title}
+  >{$$props.title ?? 'Title'}
   {#if !$$props.textarea}<input
       bind:value
       on:input
       bind:this={ref}
       class={`input portal ` + $$props.class}
-      placeholder={$$props.placeholder}
+      placeholder={$$props.placeholder ?? 'Type here..'}
     />{:else}
     <textarea
       rows={$$props.rows}
       bind:value
       on:input
       class={`input portal ` + $$props.class}
-      placeholder={$$props.placeholder}
+      placeholder={$$props.placeholder ?? 'Type here..'}
     />
   {/if}</label
 >
