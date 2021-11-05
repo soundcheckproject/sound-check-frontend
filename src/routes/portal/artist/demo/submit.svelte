@@ -88,25 +88,31 @@
   }
 
   const postTrack = async () => {
-    const formData = new FormData()
+    const body = new FormData()
 
-    // const operations =
-    //   '"query": "mutation ($data: CreateTrackInput!, $audioFile: Upload!) {createTrack(data: $data, audioFile: $audioFile) {uuid}}","variables":{"data":null,"audioFile":null }}'
-    // formData.append('operations', operations)
-    // formData.append('data', JSON.stringify(newTrack))
-    // formData.append('audioFile', trackUploadData)
-    // formData.append('operations', operations)
-    // const map = `{"0": ["variables.file"]}`
-    // formData.append('map', map)
-    // formData.append('0', trackUploadData)
-    // // formData.append('files', trackPreview)
-    // console.log('create track', newTrack)
+    body.append(
+      'operations',
+      JSON.stringify({
+        query: `mutation CreateTrackMutation($data: CreateTrackInput!, $audioFile: Upload!) {
+                  createTrack(data: $data, audioFile: $audioFile) {
+                    uuid
+                  }
+                }`,
+        variables: { data: null, audioFile: null },
+      }),
+    )
+    body.append(
+      'map',
+      JSON.stringify({
+        0: ['variables.data'],
+        1: ['variables.audioFile'],
+      }),
+    )
+    body.append('0', JSON.stringify(newTrack))
+    body.append('1', trackUploadData)
+    // body.append('1', trackPreview)
 
-    // console.log(formData)
-    // plainQuery(formData)
-    console.log(trackUploadData)
-    // await createTrack(formData)
-    await createTrack(newTrack, trackUploadData)
+    await createTrack(body)
   }
 
   let genres: GenreType[] = []

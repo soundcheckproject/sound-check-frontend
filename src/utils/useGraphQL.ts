@@ -94,24 +94,23 @@ export const getArtistsByNickName = async (nickname: string): Promise<any> => {
 //   })
 // }
 //  'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary5g0xJihuBbfw8DEp',
-export const createTrack = async (formData: any, audioFile: any) => {
-  let query =
-    "mutation createTrack($data: CreateTrackInput!, $audioFile: Upload!) {createTrack(data: $data, audioFile: $audioFile) {uuid}}'"
-  let variables = { data: formData, audioFile: audioFile }
+export const createTrack = async (body: any) => {
+  // let query =
 
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type':
-        'multipart/form-data; boundary=----WebKitFormBoundary5g0xJihuBbfw8DEp',
-      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
-    },
-
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
-    .then(res => res.json())
-    .catch(error => console.error({ error }))
+  // let variables =
+  // console.log(body)
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+      },
+      body: body,
+    })
+      .then(res => res.json())
+      .catch(error => console.error({ error }))
+    console.log(res.data)
+  } catch (e) {
+    console.log(e)
+  }
 }
