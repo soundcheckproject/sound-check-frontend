@@ -13,7 +13,6 @@
 
 <aside
   in:fly={{ x: -300, duration: 200 }}
-  out:fade
   class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 ${
     $menuState ? ' w-24 px-6' : 'w-72'
   }`}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   import { fade } from 'svelte/transition'
+  import { page } from '$app/stores'
 
   export let artworkSource = ''
   export let size: 'sm' | 'md' | 'lg' = 'sm'
@@ -17,10 +18,8 @@
   let hoverStatus = false
 </script>
 
-<div
-  on:click={() => {
-    goto('/portal/artist/demo/' + track.uuid)
-  }}
+<a
+  href={'/portal/artist/demo/' + track.uuid}
   class={`relative flex space-x-3 ${
     size == 'sm' ? 'h-12' : size == 'md' ? 'h-20' : size == 'lg' ? 'h-28' : ''
   } `}
@@ -99,4 +98,4 @@
       {/if}
     </div>
   </div>
-</div>
+</a>

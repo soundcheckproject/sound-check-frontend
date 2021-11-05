@@ -40,9 +40,9 @@
             class="hover:underline"
             in:fly={{ x: -50, duration: 200 }}
             out:fade={{ duration: 200 }}
-            href={`
-			`}>{bread}</a
-          >
+            href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
+            >{bread}
+          </a>
         {/each}
       </p>
       <div class=""><slot /></div>
