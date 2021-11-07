@@ -20,7 +20,7 @@
 </script>
 
 <!-- svelte-ignore a11y-label-has-associated-control -->
-<label class="portal"
+<label class="portal capitalize"
   >{$$props.title ?? 'Title'}
   {#if !$$props.textarea}<input
       bind:value

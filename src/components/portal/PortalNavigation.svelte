@@ -5,10 +5,10 @@
 
   import { goto } from '$app/navigation'
 
-  import { getAuth } from 'firebase/auth'
   import RoleLayer from '../RoleLayer.svelte'
   import { menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
+  import userStore from '../../stores/userStore'
 </script>
 
 <aside
@@ -62,7 +62,7 @@
             out:fade={{ duration: 200, delay: 0 }}
             class="font-semibold w-96"
           >
-            Alex Silves
+            {$userStore.nickName ?? 'Nickname'}
           </p>
         {/if}
         <!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
@@ -117,7 +117,7 @@
           </svg>
         </NavLink>
 
-        <RoleLayer allowedForRoles={['artist', 'labelar', 'manager']}>
+        <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
           <NavLink href="" name="Royalties" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +152,7 @@
             <path d="M13.73 21a2 2 0 01-3.46 0" />
           </svg>
         </NavLink>
-        <RoleLayer allowedForRoles={['artist', 'labelar', 'manager']}>
+        <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
           <NavLink href="/portal/staff/users" name="Artists" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"

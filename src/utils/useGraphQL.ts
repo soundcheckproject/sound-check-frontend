@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth'
+import type { Link, UserType } from '../types/User.type'
 
 export const query = async (
   name: string,
@@ -42,7 +43,9 @@ export const uploadQuery = async (
     .catch(error => console.error({ error }))
   return res.data[name]
 }
-export const getGenres = async (): Promise<any> => {
+export const getGenres = async (): Promise<
+  { uuid: string; name: string; description: string }[]
+> => {
   const response = await query(
     `getGenres`,
     `query Query {
@@ -55,7 +58,20 @@ export const getGenres = async (): Promise<any> => {
   )
   return response
 }
-export const getArtistsByNickName = async (nickname: string): Promise<any> => {
+export const getLinks = async (): Promise<Link[]> => {
+  const response = await query(
+    `getLinks`,
+    `query GetLinks {
+      getLinks {
+        type
+      }
+    }`,
+  )
+  return response
+}
+export const getArtistsByNickName = async (
+  nickname: string,
+): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
   const response = await query(
     `getUsersByNickname`,
     `query getUsersByNicknameQuery($nickname: String!) {
@@ -69,46 +85,70 @@ export const getArtistsByNickName = async (nickname: string): Promise<any> => {
   )
   return response
 }
+export const createTrack = async (track: any): Promise<{ uuid: string }> => {
+  const response = await query(
+    'createTrack',
+    `mutation createTrack($data: CreateTrackInput!) {
+        createTrack(data: $data) {
+          uuid
+        }
+      }`,
+    { data: track },
+  )
+  return response
+}
 
-// export const createTrack = async (formData: any): Promise<boolean> => {
-//   return new Promise(async (resolve, reject) => {
-//     const response = await uploadQuery(
-//       `createTrack`,
-//       `mutation CreateTrackMutation($data: CreateTrackInput!, $audioFile: Upload!) {
-//         createTrack(data: $data, audioFile: $audioFile) {
-//           uuid
-//         }
-//       }`,
-//       { data: formData },
-//     )
-//       .then(res => {
-//         console.log(res, response)
-//         resolve(true)
-//       })
-//       .catch(error => {
-//         reject(false)
-//         console.log(error)
-//       })
-//   })
-// }
-//  'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary5g0xJihuBbfw8DEp',
-export const createTrack = async (body: any) => {
-  // let query =
+export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
+  const response = await query(
+    `getTracksByArtist`,
+    `query GetTracksByArtist($artistId: String!) {
+      getTracksByArtist(artistId: $artistId) {
+        title
+        description
+        lyrics
+        isSigned
+        prefferdReleaseDate
+        genre {
+          name
+        }
+      }
+    }`,
+    { artistId: artistId },
+  )
+  return response
+}
 
-  // let variables =
-  // console.log(body)
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
-      },
-      body: body,
-    })
-      .then(res => res.json())
-      .catch(error => console.error({ error }))
-    console.log(res.data)
-  } catch (e) {
-    console.log(e)
-  }
+export const getUserByFirebaseId = async (
+  userId: string,
+): Promise<UserType> => {
+  const response = await query(
+    `getUserByFirebaseId`,
+    `query GetUserByFirebaseId($userId: String!) {
+      getUserByFirebaseId(userId: $userId) {
+        uuid
+        uid
+        nickName
+        firstName
+        surName
+        birthdate
+        email
+        country
+        state
+        city
+        logo
+        role {
+          name
+          slug
+        }
+        userLinks {
+          link {
+            type
+          }
+          linkAddress
+        }
+      }
+    }`,
+    { userId: userId },
+  )
+  return response
 }

@@ -11,7 +11,8 @@
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
 
-  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
   interface formError {
     [key: string]: { display?: boolean; errorName: string; message: string }[]

@@ -3,7 +3,11 @@
   import type { TrackType } from '../../../../types/Track.type'
   import type { ArtistType } from '../../../../types/User.type'
 
-  import { getGenres, getArtistsByNickName } from '../../../../utils/useGraphQL'
+  import {
+    getGenres,
+    getArtistsByNickName,
+    createTrack,
+  } from '../../../../utils/useGraphQL'
   //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'
@@ -11,13 +15,15 @@
   import Track from '../../../../components/Track.svelte'
   import Box from '../../../../components/Box.svelte'
   import Artist from '../../../../components/Artist.svelte'
-  import { fade, fly, slide } from 'svelte/transition'
+  import { fade, fly } from 'svelte/transition'
   import FlyBox from '../../../../components/FlyBox.svelte'
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
 
   import { onMount } from 'svelte'
+  import { goto } from '$app/navigation'
+  import { uploadTrack } from '../../../../utils/useRest'
 
   let artistsArray = []
 
@@ -43,7 +49,6 @@
   }
 
   let artworkBlob: any = '',
-    trackBlob: any = '',
     artworkPreview: any = '',
     trackPreview: any = ''
 
@@ -86,31 +91,30 @@
   }
 
   const postTrack = async () => {
-    const body = new FormData()
-
-    body.append(
-      'operations',
-      JSON.stringify({
-        query: `mutation CreateTrackMutation($data: CreateTrackInput!, $audioFile: Upload!) {
-                  createTrack(data: $data, audioFile: $audioFile) {
-                    uuid
-                  }
-                }`,
-        variables: { data: null, audioFile: null },
-      }),
-    )
-    body.append(
-      'map',
-      JSON.stringify({
-        0: ['variables.data'],
-        1: ['variables.audioFile'],
-      }),
-    )
-    body.append('0', JSON.stringify(newTrack))
-    body.append('1', trackUploadData)
-    // body.append('1', trackPreview)
-
-    // await createTrack(body)
+    await createTrack(newTrack)
+      .then(async resCreateTrack => {
+        console.log(resCreateTrack)
+        const uploadName = trackData.blob[0].name
+        const fileName =
+          newTrack.title
+            .replace(/ /g, '')
+            .replace(/[^a-zA-Z ]/g, '')
+            .toLowerCase() +
+          '.' +
+          uploadName
+            .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
+            .split('.')
+            .pop()
+        await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
+          .then(res => {
+            console.log(res)
+            goto('/portal/artist/demo/' + resCreateTrack.uuid)
+          })
+          .catch(error => console.log(error))
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   let genres: GenreType[] = []

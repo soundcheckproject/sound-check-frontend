@@ -32,7 +32,10 @@
     <Title
       ><div class="flex justify-between items-center">
         <div>Track title {$page.params.trackId}</div>
-        <a href={$page.path + `/edit`}>
+        <a
+          href={$page.path + `/edit`}
+          class="bg-gray-200 p-2 rounded-full mshadow-sm hover:bg-gray-300 transition-colors"
+        >
           <svg
             class="text-gray-700"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,17 +70,18 @@
       <div class="grid gap-4">
         <SubTitle>👨🏼‍🎨 Artists</SubTitle>
         <div class="flex space-x-2">
-          <Artist socials>name</Artist>
-          <Artist socials>name</Artist>
-          <Artist socials>name</Artist>
+          <Artist socials theme="dark">name</Artist>
+          <Artist socials theme="dark">name</Artist>
+          <Artist socials theme="dark">name</Artist>
         </div>
+        <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
       </div>
     </div>
   </Box>
   <Box
     ><Title>Contract</Title>
 
-    <SubTitle>📝 Contract info</SubTitle>
+    <SubTitle>📝 Manage contract</SubTitle>
     <div class="flex space-x-4">
       <Button size="sm" color="bg-teal-700">
         <div class="download">

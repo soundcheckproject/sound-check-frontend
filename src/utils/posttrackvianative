@@ -1,0 +1,22 @@
+    const body = new FormData()
+
+    body.append(
+      'operations',
+      JSON.stringify({
+        query: `mutation CreateTrackMutation($data: CreateTrackInput!, $audioFile: Upload!) {
+                  createTrack(data: $data, audioFile: $audioFile) {
+                    uuid
+                  }
+                }`,
+        variables: { data: null, audioFile: null },
+      }),
+    )
+    body.append(
+      'map',
+      JSON.stringify({
+        0: ['variables.data'],
+        1: ['variables.audioFile'],
+      }),
+    )
+    body.append('0', JSON.stringify(newTrack))
+    body.append('1', trackUploadData)

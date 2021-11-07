@@ -1,3 +1,13 @@
+import type { Role } from './Role.type'
+export interface Link {
+  type?: string
+}
+
+export interface UserLink {
+  link?: Link
+  linkAddress?: string
+}
+
 export interface UserType {
   email?: string
   password?: string
@@ -12,6 +22,8 @@ export interface UserType {
   birthdate?: string
   uid?: string
   bio?: string
+  role?: Role
+  userLinks?: UserLink[]
 }
 
 export interface ArtistType extends UserType {

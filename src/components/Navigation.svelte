@@ -17,7 +17,7 @@
       <a href="/login">portal </a>
       <div class=" absolute hidden group-hover:block pt-3">
         <div
-          class=" grid gap-2 bg-gray-200 text-xs backdrop-blur-3xl px-5 py-4 rounded-md -ml-4"
+          class=" grid gap-2 text-xs backdrop-blur-3xl px-5 py-4 rounded-md -ml-4"
         >
           <a href="/login">login</a>
           <a href="/register">register</a>

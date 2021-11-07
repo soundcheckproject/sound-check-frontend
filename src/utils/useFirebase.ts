@@ -8,8 +8,11 @@ import type { UserType } from '../types/User.type'
 import { query } from './useGraphQL'
 
 export const logout = async () => {
-  await getAuth().signOut()
-  goto('/login')
+  await getAuth()
+    .signOut()
+    .then(() => {
+      goto('/login')
+    })
 }
 
 export const loginUser = (
@@ -20,7 +23,6 @@ export const loginUser = (
     signInWithEmailAndPassword(getAuth(), email, password)
       .then(() => {
         // Signed in
-
         resolve(true)
       })
       .catch(error => {
