@@ -7,6 +7,9 @@
   import 'animate.css'
 
   import authStore from '../stores/authStore'
+  import userStore from '../stores/userStore'
+  import { getUserByFirebaseId } from '../utils/useGraphQL'
+  import { roleStore } from '../stores/stores'
 
   onMount(() => {
     const firebaseConfig = {
@@ -18,15 +21,18 @@
       appId: '1:357132427436:web:eca118cfb03620924dbf09',
       measurementId: 'G-QLH9WHRQJE',
     }
-
     initializeApp(firebaseConfig)
-    getAuth().onAuthStateChanged((user: User) => {
-      authStore.set({
+
+    getAuth().onAuthStateChanged(async (user: User | any) => {
+      // Get auth info and put in store
+      const authInfo = {
         isLoggedIn: user !== null,
         user,
         firebaseControlled: true,
-      })
-      //   console.log($authStore)
+      }
+      authStore.set(authInfo)
+      if (user) {
+      }
     })
   })
 </script>
