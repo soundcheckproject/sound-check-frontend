@@ -15,7 +15,7 @@
   </SubTitle>
   <div class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-scroll snap rounded-md">
     <Track add size="sm" />
-    {#each Array(10) as i, index}
+    {#each Array(10) as i}
       <Track size="sm" />
     {/each}
   </div>

@@ -10,7 +10,6 @@
   import Footer from '../components/Footer.svelte'
 
   import authStore from '../stores/authStore'
-  import { query } from '../utils/useGraphQL'
   import { registerUser } from '../utils/useFirebase'
 
   let userRegister: UserType = {

@@ -12,7 +12,6 @@
 
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
-  import Track from '../../../../components/Track.svelte'
   import Box from '../../../../components/Box.svelte'
   import Artist from '../../../../components/Artist.svelte'
   import { fade, fly } from 'svelte/transition'
@@ -52,7 +51,7 @@
     artworkPreview: any = '',
     trackPreview: any = ''
 
-  let trackDataClick
+  let trackDataClick: HTMLInputElement
   let trackData: any = { info: {}, blob: {} }
 
   let royaltyPercentageTotal: number = 0
@@ -79,10 +78,8 @@
       artworkPreview = e.target.result
     }
   }
-  let trackUploadData
   const previewTrack = (e: any) => {
     let track = e.target.files[0]
-    trackUploadData = track
     let reader = new FileReader()
     reader.readAsDataURL(track)
     reader.onload = e => {
@@ -237,7 +234,7 @@
                 placeholder="For example: Future House, Bass House"
               >
                 <option selected disabled>Pick a genre</option>
-                {#each genres as genre, index}
+                {#each genres as genre}
                   <option value={genre.uuid}>{genre.name}</option>
                 {/each}</select
               >
@@ -361,7 +358,7 @@
               {:else}<div class="label portal grid  gap-2 " transition:fade>
                   <p class="">Add a collaborator</p>
                 </div>{/if}
-              {#each artistsArray as artist, index}
+              {#each artistsArray as artist}
                 <div
                   class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
                   transition:fade

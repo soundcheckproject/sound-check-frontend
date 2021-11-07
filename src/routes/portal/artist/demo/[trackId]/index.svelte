@@ -6,10 +6,9 @@
   import Title from '../../../../../components/Title.svelte'
   import SubTitle from '../../../../../components/SubTitle.svelte'
   import TrackPlayer from '../../../../../components/TrackPlayer.svelte'
-  import Input from '../../../../../components/Input.svelte'
+
   import Artist from '../../../../../components/Artist.svelte'
   import Button from '../../../../../components/Button.svelte'
-  import { goto } from '$app/navigation'
 
   let track: TrackType = {
     title: 'Miss you so feat. Jebroer',

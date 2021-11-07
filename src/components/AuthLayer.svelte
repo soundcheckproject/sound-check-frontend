@@ -15,7 +15,6 @@
         const userInfo = await getUserByFirebaseId(user?.uid)
         // localStorage.setItem('userInfo', JSON.stringify(userInfo))
         userStore.set(userInfo)
-        console.log($userStore.nickName)
 
         const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
         const roleName = roleObject.roles[0]

@@ -6,8 +6,6 @@
 
   import SubLink from './SubLink.svelte'
 
-  export let sublink = false
-
   let isActive = false
 
   // let hrefSplit = $$props.href.split('/')

@@ -7,9 +7,6 @@
   import 'animate.css'
 
   import authStore from '../stores/authStore'
-  import userStore from '../stores/userStore'
-  import { getUserByFirebaseId } from '../utils/useGraphQL'
-  import { roleStore } from '../stores/stores'
 
   onMount(() => {
     const firebaseConfig = {
@@ -31,8 +28,6 @@
         firebaseControlled: true,
       }
       authStore.set(authInfo)
-      if (user) {
-      }
     })
   })
 </script>

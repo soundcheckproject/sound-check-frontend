@@ -256,12 +256,14 @@
           <SubTitle>Change password</SubTitle>
           <Input
             title="Old password"
+            type="password"
             bind:value={userPassword.old}
             on:input={() => checkIfNickNameIsAvailable()}
             placeholder="Old password.."
           />
           <Input
             title="New password"
+            type="password"
             bind:value={userPassword.new}
             on:input={() => checkIfNickNameIsAvailable()}
             placeholder="New passord.."
