@@ -9,6 +9,7 @@
     | 'date'
     | 'upload' = 'text'
   let ref: HTMLInputElement
+  export let autocomplete = 'off'
 
   onMount(() => {
     if (ref) {
@@ -28,6 +29,7 @@
       bind:this={ref}
       class={`input portal ` + $$props.class}
       placeholder={$$props.placeholder ?? 'Type here..'}
+      {autocomplete}
     />{:else}
     <textarea
       rows={$$props.rows}

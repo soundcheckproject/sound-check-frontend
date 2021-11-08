@@ -9,6 +9,7 @@
 
   import Artist from '../../../../../components/Artist.svelte'
   import Button from '../../../../../components/Button.svelte'
+  import { goto } from '$app/navigation'
 
   let track: TrackType = {
     title: 'Miss you so feat. Jebroer',
@@ -31,10 +32,14 @@
     <Title
       ><div class="flex justify-between items-center">
         <div>Track title {$page.params.trackId}</div>
+        <!-- svelte-ignore a11y-missing-attribute -->
         <a
-          href={$page.path + `/edit`}
+          on:click={() => {
+            goto($page.path + '/edit')
+          }}
           class="bg-gray-200 p-2 rounded-full mshadow-sm hover:bg-gray-300 transition-colors"
         >
+          <!-- href={$page.path + `/edit`} -->
           <svg
             class="text-gray-700"
             xmlns="http://www.w3.org/2000/svg"

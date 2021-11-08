@@ -47,8 +47,8 @@
           </a> -->
           <a
             class="hover:underline"
-            in:fly={{ x: -50, duration: 200 }}
-            out:fade={{ duration: 200 }}
+            in:fly|local={{ x: -50, duration: 200 }}
+            out:fade|local={{ duration: 200 }}
             href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
             >{bread}
           </a>

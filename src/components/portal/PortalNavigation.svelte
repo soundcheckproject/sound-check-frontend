@@ -12,7 +12,7 @@
 </script>
 
 <aside
-  in:fly={{ x: -300, duration: 200 }}
+  in:fly|local={{ x: -300, duration: 200 }}
   class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 ${
     $menuState ? ' w-24 px-6' : 'w-72'
   }`}
@@ -58,8 +58,8 @@
         />
         {#if !$menuState}
           <p
-            in:fly={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
-            out:fade={{ duration: 200, delay: 0 }}
+            in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
+            out:fade|local={{ duration: 200, delay: 0 }}
             class="font-semibold w-96"
           >
             {$userStore.nickName ?? 'Nickname'}
@@ -228,7 +228,10 @@
       class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-4  rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform"
     >
       {#if !$menuState}
-        <p in:fly={{ x: -50, opacity: 0, duration: 200, delay: 200 }} out:fade>
+        <p
+          in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
+          out:fade|local
+        >
           Logout
         </p>
       {/if}

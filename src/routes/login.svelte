@@ -79,6 +79,7 @@
               bind:value={user.password}
               class="input "
               placeholder="Password.."
+              autocomplete="current-password"
             /></label
           >
           <div class="flex justify-between items-center">

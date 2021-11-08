@@ -34,8 +34,8 @@
   {#if !$menuState}
     <p
       class="ml-4"
-      in:fly={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
-      out:fade
+      in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
+      out:fade|local
     >
       {$$props.name}
     </p>
@@ -59,7 +59,7 @@
 </a>
 {#if $$props.routes && isActive && !$menuState}
   <!-- <div in:fly={{ y: 200, duration: 200 }} out:fade> -->
-  <div transition:slide>
+  <div transition:slide|local>
     <SubLink routes={$$props.routes} />
   </div>
 {/if}
