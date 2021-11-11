@@ -10,7 +10,8 @@
   import type { Link, UserLink, UserType } from '../../types/User.type'
   import userStore from '../../stores/userStore'
   import { onMount } from 'svelte'
-  import { getLinks } from '../../utils/useGraphQL'
+  import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
+  import { getAuth } from '@firebase/auth'
 
   let artist: UserType = {
     email: $userStore.email ?? 'Email',
@@ -36,8 +37,9 @@
     console.log(links)
   })
 
-  const updateUser = () => {
+  const updateUser = async () => {
     console.log(newArtist)
+    await updateUserInfoByUserId($userStore.uuid, newArtist)
   }
   const updateUserEmail = () => {
     console.log(newArtist.email)

@@ -9,6 +9,7 @@ export interface UserLink {
 }
 
 export interface UserType {
+  uuid?: string
   email?: string
   password?: string
   nickName?: string
