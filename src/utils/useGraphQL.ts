@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth'
-import type { Link, UserType } from '../types/User.type'
+import type { Link, UserType,ArtistType } from '../types/User.type'
 
 export const query = async (
   name: string,
@@ -149,6 +149,29 @@ export const getUserByFirebaseId = async (
       }
     }`,
     { userId: userId },
+  )
+  return response
+}
+
+
+export const getArtists = async (): Promise<ArtistType[]> => {
+  const response = await query(
+    `getArtists`,
+    `query GetArtists{
+      getArtists {
+        uuid
+        nickName
+        firstName
+        surName
+        email
+        country
+        logo
+        role {
+          name
+          slug
+        }
+      }
+    }`,
   )
   return response
 }

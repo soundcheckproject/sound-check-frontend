@@ -11,7 +11,7 @@
 		? 'text-blue-900 '
 		: theme == 'dark'
 		? 'text-gray-700'
-		: 'text-white text-opacity-90'} pr-8 {className}"
+		: 'text-white text-opacity-90'} pr-8 {className} "
 >
 	<div
 		class="w-1 h-5 {theme == 'error'
