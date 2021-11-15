@@ -14,6 +14,9 @@
   }
 
   let hoverStatus = false
+  $: {
+    console.log($$props.track)
+  }
 </script>
 
 <a

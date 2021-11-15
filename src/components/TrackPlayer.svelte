@@ -6,7 +6,7 @@
   export let theme: 'light' | 'dark' = 'dark'
 
   let playerBar
-  let audio: any = ''
+  let audio: any
   let trackInfo: any = {
     duration: '0:00',
     currentTime: '0:00',
@@ -24,16 +24,17 @@
 
   onMount(() => {
     console.log('comp has been mounted')
+    if (audio) {
+      audio.onloadedmetadata = () => {
+        let trackDuration = parseInt(audio.duration.toFixed(0))
+        trackInfo.duration = formatTime(trackDuration)
 
-    audio.onloadedmetadata = () => {
-      let trackDuration = parseInt(audio.duration.toFixed(0))
-      trackInfo.duration = formatTime(trackDuration)
+        audio.ontimeupdate = () => {
+          let trackCurrentTime = parseInt(audio.currentTime.toFixed(0))
+          trackInfo.currentTime = formatTime(trackCurrentTime)
 
-      audio.ontimeupdate = () => {
-        let trackCurrentTime = parseInt(audio.currentTime.toFixed(0))
-        trackInfo.currentTime = formatTime(trackCurrentTime)
-
-        playerBar.style.width = (100 * trackCurrentTime) / trackDuration + '%'
+          playerBar.style.width = (100 * trackCurrentTime) / trackDuration + '%'
+        }
       }
     }
   })
@@ -197,45 +198,46 @@
         </div>
         <div
           on:click={() => {
-            audio.muted = !audio.muted
+            if (audio) audio.muted = !audio.muted
           }}
         >
-          {#if !audio.muted}
-            <svg
-              class:active={!audio.muted}
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-              <path
-                d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"
-              />
-            </svg>
-          {:else}
-            <svg
-              class:active={!audio.muted}
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-              <line x1="23" y1="9" x2="17" y2="15" />
-              <line x1="17" y1="9" x2="23" y2="15" />
-            </svg>
-          {/if}
+          {#if audio}
+            {#if !audio.muted}
+              <svg
+                class:active={!audio.muted}
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path
+                  d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"
+                />
+              </svg>
+            {:else}
+              <svg
+                class:active={!audio.muted}
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            {/if}{/if}
         </div>
       </div>
       <!-- <div>show more</div> -->

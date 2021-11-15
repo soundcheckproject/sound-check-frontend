@@ -103,6 +103,7 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
     `getTracksByArtist`,
     `query GetTracksByArtist($artistId: String!) {
       getTracksByArtist(artistId: $artistId) {
+        uuid
         title
         description
         lyrics
@@ -152,8 +153,47 @@ export const getUserByFirebaseId = async (
   )
   return response
 }
-
-
+export const updateUserInfoByUserId = (
+  userId: string,
+  userData: UserType,
+): Promise<UserType> => {
+  return query(
+    `updateUserByUserId`,
+    `mutation UpdateUserByUserId($userId: String!, $data: UpdateUserInput!) {
+      updateUserByUserId(userId: $userId, data: $data) {
+        nickName
+        firstName
+        surName
+        birthdate
+        country
+        state
+        city
+        logo
+        userLinks {
+          link {
+            type
+          }
+          linkAddress
+        }
+      }
+    }`,
+    { userId: userId, data: userData },
+  )
+}
+export const updateUserLinksByUserId = (
+  userId: string,
+  linkData: any,
+): Promise<UserType> => {
+  return query(
+    `updateUserLinksByUserId`,
+    `mutation CreateUserLink($createUserLinkInput: CreateUserLinkInput!, $data: CreateUserInput!) {
+      createUserLink(createUserLinkInput: $createUserLinkInput) {
+        userId
+      }
+    }`,
+    { userId: userId, data: linkData },
+  )
+}
 export const getArtists = async (): Promise<ArtistType[]> => {
   const response = await query(
     `getArtists`,
