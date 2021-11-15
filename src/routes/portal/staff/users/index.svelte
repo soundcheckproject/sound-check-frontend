@@ -13,6 +13,7 @@
   onMount(async () => {
     users = await getArtists()
   })
+  $:{console.log(users)}
 </script>
 
 <Box>
