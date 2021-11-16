@@ -12,6 +12,6 @@
     ? 'bg-gray-700'
     : ''} opacity-{opacity} "
 >
-  <div><slot /></div>
+  <div class="text-sm"><slot /></div>
   <!-- <div> </div> -->
 </div>

@@ -4,6 +4,7 @@
 
   import Box from '../../../../components/Box.svelte'
   import TrackRow from '../../../../components/TrackRow.svelte'
+  import Skeleton from '../../../../components/Skeleton.svelte'
 
   import type { TrackType } from '../../../../types/Track.type'
   import { getTracksByArtistId } from '../../../../utils/useGraphQL'
@@ -26,9 +27,7 @@
     },
   }
   let mode: 'all' | 'pending' | 'accepted' | 'denied' = 'all'
-  // const changeMode = () => {
-  //   console.log(mode)
-  // }
+
   let tracks: { [key: string]: TrackType[] } = {
     all: [],
     pending: [],
@@ -83,7 +82,7 @@
           </TrackRow>
         {/each}
         {#if tracks.pending.length <= 0}
-          <div class="text-center">No pending tracks</div>
+          <Skeleton>Loading pending tracks..</Skeleton>
         {/if}
       </div>
     {/if}
@@ -102,7 +101,9 @@
           >
         {/each}
         {#if tracks.accepted.length <= 0}
-          <div class="text-center">No accepted tracks</div>
+          <div class="col-span-2">
+            <Skeleton>Loading accepted tracks..</Skeleton>
+          </div>
         {/if}
       </div>
     {/if}
@@ -118,7 +119,9 @@
           >
         {/each}
         {#if tracks.denied.length <= 0}
-          <div class="text-center">No denied tracks</div>
+          <div class="col-span-2">
+            <Skeleton>Loading denied tracks..</Skeleton>
+          </div>
         {/if}
       </div>
     {/if}

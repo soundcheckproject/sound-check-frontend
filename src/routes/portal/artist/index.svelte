@@ -10,7 +10,7 @@
   <SubTitle>
     <div class="flex justify-between w-full">
       <div>💽 Your tracks</div>
-      <div>Add</div>
+      <div></div>
     </div>
   </SubTitle>
   <div class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-scroll snap rounded-md">
@@ -19,12 +19,7 @@
       <Track size="sm" />
     {/each}
   </div>
-  <SubTitle>hoi</SubTitle>
-  <a href="/artist/tracks">/artist/tracks</a>
-  <a href="/artist/demo">/artist/demo</a>
-  <a href="/artist/demo/submit">/artist/demo/submit</a>
-  <a href="/artist/demo/12342341">/artist/demo/:trackId</a>
-  <a href="/artist/demo/12342341/edit">/artist/demo/:trackId/edit</a>
+
 </Box>
 
 <style>

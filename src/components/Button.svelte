@@ -4,7 +4,7 @@
   export let state: 'default' | 'active' = 'default'
   export let color: 'default' | string = 'default'
   export let rounded: 'default' | 'full' | 'none' = 'default'
-  export let size: 'sm' | 'md' | 'lg' | 'stretch' = 'sm'
+  export let size: 'xs' | 'sm' | 'md' | 'lg' | 'stretch' = 'sm'
   export let className: string = ''
 </script>
 
@@ -20,14 +20,16 @@
 	{state == 'active' ? '' : ''}
 	 {color != 'default' ? `${color} text-white` : ''}
 	 {type == 'glass' ? ' bg-opacity-25 text-white hover:bg-opacity-10' : ''}
-	 {size == 'sm'
+	 {size == 'xs'
+    ? ' px-3 py-2 text-xs'
+    : size == 'sm'
     ? ' px-4 py-2 text-sm'
     : size == 'md'
     ? ' px-8 py-4 text-sm'
     : size == 'lg'
     ? ' px-12 py-6 text-md'
     : ''}
-	 {className}
+	 {className} {$$props.class}
 	 "
 >
   <slot />

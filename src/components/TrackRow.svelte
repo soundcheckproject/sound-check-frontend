@@ -40,7 +40,7 @@
     <slot />
     <div class="grid grid-flow-col gap-3 items-center">
       <div class="hidden sm:flex text-xs text-gray-400">
-        {track.prefferdReleaseDate}
+        {track.prefferdReleaseDate??""}
       </div>
       <a href={'/portal/artist/demo/' + track.uuid + '/edit'}>
         <svg

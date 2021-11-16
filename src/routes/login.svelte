@@ -70,6 +70,7 @@
           <label
             >Email addres<input
               bind:value={user.email}
+              required
               class="input"
               placeholder="Email address."
             /></label
@@ -77,6 +78,7 @@
           <label
             >Password<input
               bind:value={user.password}
+              required
               class="input "
               placeholder="Password.."
               autocomplete="current-password"

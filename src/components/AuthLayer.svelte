@@ -3,7 +3,7 @@
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { roleStore } from '../stores/stores'
-  import { getUserByFirebaseId } from '../utils/useGraphQL'
+  import { getUserViaFirebase } from '../utils/useGraphQL'
   import userStore from '../stores/userStore'
 
   onMount(() => {
@@ -11,8 +11,9 @@
       if (!isLoggedIn && firebaseControlled) {
         await goto('/login')
       } else {
+        // console.log(user)
         // Get userinfo and put in store
-        const userInfo = await getUserByFirebaseId(user?.uid)
+        const userInfo = await getUserViaFirebase()
         // localStorage.setItem('userInfo', JSON.stringify(userInfo))
         userStore.set(userInfo)
 

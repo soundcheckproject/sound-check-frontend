@@ -1,5 +1,11 @@
 interface Artwork {
-  designer: string
+  designer?: string
+  resource?: string
+}
+interface Genre {
+  uuid?: string
+  name?: string
+  description?: string
 }
 export interface TrackType {
   uuid?: string
@@ -13,6 +19,7 @@ export interface TrackType {
   isSigned?: boolean
   prefferdReleaseDate?: string
   genreId: string
+  genre?: Genre
   artwork: Artwork
   label?: string
   artistIds: string[]

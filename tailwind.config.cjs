@@ -19,7 +19,9 @@ module.exports = {
 			},
 			gridTemplateColumns: {
 				'min-auto': "min-content auto;",
-				'1fr-auto': "1fr auto"
+				'1fr-auto': "1fr auto",
+				'150-auto-fr': "150px auto 1fr",
+				'150-fr': "150px 1fr",
 			}
 
 		}

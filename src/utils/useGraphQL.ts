@@ -1,5 +1,6 @@
 import { getAuth } from 'firebase/auth'
-import type { Link, UserType,ArtistType } from '../types/User.type'
+import type { TrackType } from '../types/Track.type'
+import type { Link, UserType, ArtistType } from '../types/User.type'
 
 export const query = async (
   name: string,
@@ -119,13 +120,68 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
   return response
 }
 
-export const getUserByFirebaseId = async (
-  userId: string,
-): Promise<UserType> => {
+export const getAllTracks = async (): Promise<TrackType[]> => {
   const response = await query(
-    `getUserByFirebaseId`,
-    `query GetUserByFirebaseId($userId: String!) {
-      getUserByFirebaseId(userId: $userId) {
+    `getTracksReleased`,
+    `query GetTracks {
+      getTracksReleased {
+        uuid
+        title
+        description
+        lyrics
+        contractFile
+        resource
+        previewStart
+        previewStop
+        isSigned
+        prefferdReleaseDate
+        genreId
+        artwork {
+          resource
+        }
+        genre {
+          name
+        }
+      }
+    }`,
+  )
+  return response
+}
+
+export const getTrackById = async (trackId: string): Promise<any> => {
+  const response = await query(
+    'getTrackById',
+    `query GetTrackById($trackId: String!) {
+      getTrackById(trackId: $trackId) {
+        artwork {
+          resource
+          designer
+        }
+        genre {
+          name
+        }
+        title
+        description
+        lyrics
+        uuid
+        contractFile
+        resource
+        previewStart
+        previewStop
+        isSigned
+        prefferdReleaseDate
+      }
+    }`,
+    { trackId: trackId },
+  )
+  return response
+}
+
+export const getUserViaFirebase = async (): Promise<UserType> => {
+  const response = await query(
+    `getUserViaFirebase`,
+    `query GetUserViaFirebase {
+      getUserViaFirebase {
         uuid
         uid
         nickName
@@ -149,7 +205,6 @@ export const getUserByFirebaseId = async (
         }
       }
     }`,
-    { userId: userId },
   )
   return response
 }
