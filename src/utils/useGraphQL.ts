@@ -122,9 +122,9 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
 
 export const getAllTracks = async (): Promise<TrackType[]> => {
   const response = await query(
-    `getTracksReleased`,
+    `getTracks`,
     `query GetTracks {
-      getTracksReleased {
+      getTracks {
         uuid
         title
         description
@@ -136,11 +136,23 @@ export const getAllTracks = async (): Promise<TrackType[]> => {
         isSigned
         prefferdReleaseDate
         genreId
-        artwork {
-          resource
-        }
         genre {
           name
+        }
+        artwork {
+          designer
+          resource
+        }
+        artistTracks {
+          user {
+            nickName
+            userLinks {
+              linkAddress
+              link {
+                type
+              }
+            }
+          }
         }
       }
     }`,
@@ -267,6 +279,38 @@ export const getArtists = async (): Promise<ArtistType[]> => {
         }
       }
     }`,
+  )
+  return response
+}
+
+export const updateTrack = async (
+  trackId: string,
+  data: TrackType,
+): Promise<TrackType> => {
+  const response = await query(
+    'updateTrack',
+    `mutation UpdateTrack($data: UpdateTrackInput!, $trackId: String!) {
+      updateTrack(data: $data, trackId: $trackId) {
+        uuid
+      }
+    }`,
+    { data: data, trackId: trackId },
+  )
+  return response
+}
+
+export const toggleSigned = async (
+  isSigned: boolean,
+  trackId: string,
+): Promise<any> => {
+  const response = await query(
+    'toggleSigned',
+    `mutation toggleSigned($isSigned: Boolean!, $trackId: String!) {
+      toggleSigned(isSigned: $isSigned, trackId: $trackId) {
+        uuid
+      }
+    }`,
+    { isSigned: isSigned, trackId: trackId },
   )
   return response
 }
