@@ -19,9 +19,35 @@
     denied: [],
   }
 
+  let tracksLoaded: boolean = false
+
   onMount(async () => {
     if ($demoTracksStore == null) {
-      demoTracksStore.set(await getTracksByArtistId($userStore.uuid))
+      demoTracksStore.set(await getAllTracks())
+      tracksLoaded = true
+    }
+  })
+  let filteredDemos: any
+  let searchInput = ''
+  // TODO: filter doesn't show items when length 0
+  const filterInput = () => {
+    if (searchInput.length == 0) {
+      filteredDemos = demos
+      console.log(demos)
+    } else {
+      filteredDemos.accepted =
+        $demoTracksStore
+          .filter(track => track.isSigned === true)
+          .filter(
+            track =>
+              track.title.toLowerCase().substring(0, searchInput.length) ==
+              searchInput.toLowerCase().substring(0, searchInput.length),
+          ) ?? []
+    }
+  }
+
+  $: {
+    if (tracksLoaded) {
       demos = {
         all: $demoTracksStore,
         pending: $demoTracksStore.filter(track => track.isSigned == null) ?? [],
@@ -31,10 +57,7 @@
           $demoTracksStore.filter(track => track.isSigned === false) ?? [],
       }
     }
-  })
-
-  $: {
-    console.log(demos)
+    filteredDemos = demos
   }
 </script>
 
@@ -44,30 +67,40 @@
       <div>All demos</div>
       <div>
         <label>
-          <input class="input portal" placeholder="Search.." />
+          <input
+            bind:value={searchInput}
+            on:input={filterInput}
+            class="input portal"
+            placeholder="Search.."
+          />
         </label>
       </div>
     </div>
   </Title>
-  <DemoRow></DemoRow>
-  <DemoRow></DemoRow>
+
   {#if mode == 'pending' || mode == 'all'}
     <div class="flex justify-between items-center">
       <SubTitle>Pending demos</SubTitle>
     </div>
     <div class="grid gap-4 ">
-      {#each demos.pending as track}
-        <DemoRow
-          {track}
-          status="pending"
-          size="lg"
-          artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-          ><div>Your track "<b>Memories</b>"" hasn't been reviewed yet.</div>
-        </DemoRow>
+      {#each filteredDemos.pending as track}
+        <DemoRow {track} />
       {/each}
-      {#if demos.pending.length <= 0}
+      <div class="flex justify-between items-center">
+        <SubTitle>Accepted demos</SubTitle>
+      </div>
+      {#each filteredDemos.accepted as track}
+        <DemoRow {track} />
+      {/each}
+      <div class="flex justify-between items-center">
+        <SubTitle>Denied demos</SubTitle>
+      </div>
+      {#each filteredDemos.denied as track}
+        <DemoRow {track} />
+      {/each}
+      <!-- {#if demos.pending.length <= 0}
         <Skeleton>Loading pending demos..</Skeleton>
-      {/if}
+      {/if} -->
     </div>
   {/if}
   <div />

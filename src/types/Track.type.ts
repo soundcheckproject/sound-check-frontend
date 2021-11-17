@@ -1,3 +1,5 @@
+import type { UserType } from './User.type'
+
 interface Artwork {
   designer?: string
   resource?: string
@@ -9,18 +11,19 @@ interface Genre {
 }
 export interface TrackType {
   uuid?: string
-  title: string
+  title?: string
   description?: string
   lyrics?: string
   contractFile?: string
   resource?: string
-  previewStart: number
-  previewStop: number
+  previewStart?: number
+  previewStop?: number
   isSigned?: boolean
   prefferdReleaseDate?: string
-  genreId: string
+  genreId?: string
   genre?: Genre
-  artwork: Artwork
+  artwork?: Artwork
   label?: string
-  artistIds: string[]
+  artistIds?: string[]
+  artistTracks?: { user: UserType }[]
 }

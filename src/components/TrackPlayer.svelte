@@ -89,8 +89,8 @@
       style="grid-template-rows:auto repeat(2,min-content) "
     >
       <div class="flex justify-between items-center ">
-        <SubTitle theme="light">{$$props.title??"No title"}</SubTitle>
-        <div class="text-sm">#{$$props.genre??"No genre"}</div>
+        <SubTitle theme="light">{$$props.title ?? 'No title'}</SubTitle>
+        <div class="text-sm">#{$$props.genre ?? 'No genre'}</div>
       </div>
 
       <div class="grid gap-2 mt-4">

@@ -302,7 +302,7 @@ export const updateTrack = async (
 export const toggleSigned = async (
   isSigned: boolean,
   trackId: string,
-): Promise<any> => {
+): Promise<string> => {
   const response = await query(
     'toggleSigned',
     `mutation toggleSigned($isSigned: Boolean!, $trackId: String!) {
