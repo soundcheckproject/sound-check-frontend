@@ -7,26 +7,58 @@
   import Button from '../components/Button.svelte'
   import Container from '../components/Container.svelte'
   import Footer from '../components/Footer.svelte'
+  import Error from '../components/Error.svelte'
 
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
+  import {
+    validateEmailLength,
+    validateEmailValid,
+    validatePasswordLength,
+  } from './../utils/useValidation'
+  import validationStore, { formErrors } from '../stores/validationStore'
 
   // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
+  // interface Error {
+  //   [key: string]: { display?: boolean; errorName?: string; message?: string }
+  // }
+
   interface formError {
-    [key: string]: { display?: boolean; errorName: string; message: string }[]
+    // [key: string]: Error[]
   }
 
-  let formErrors: formError = {}
+  // let formErrors: any = $validationStore
+  let errors = []
+  const checkValidation = (type: string) => {
+    errors = []
+    if (type == 'email') {
+      validateErrors([
+        validateEmailValid(user.email),
+        validateEmailLength(user.email),
+      ])
+    }
+    if (type == 'password') {
+      validateErrors([validatePasswordLength(user.password)])
+    }
+    validationStore.set(errors)
+  }
+
+  const validateErrors = (validations: any) => {
+    for (const validation of validations) {
+      validation ? (errors = [...errors, validation]) : null
+    }
+  }
+
   const login = () => {
-    formErrors = { email: [], password: [] }
-
-    // isNotEmptyValidation(user, 'email')
-    // isNotEmptyValidation(user, 'password')
-    // isNotStrongEnoughValidation(user, 'password')
-
-    loginUser(user.email, user.password)
+    if ($validationStore.length == 0) {
+      try {
+        loginUser(user.email, user.password)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -34,6 +66,10 @@
       await goto('/portal')
     }
   })
+
+  $: {
+    console.log($validationStore)
+  }
 </script>
 
 <Header type="split" />
@@ -59,27 +95,59 @@
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
 
-          {#each Object.keys(formErrors) as errorKey}
-            {#each formErrors[errorKey] as error}
-              {#if error.display}
-                <SubTitle theme="error">{error.message}</SubTitle>
+          <!-- {#each Object.keys(formErrors) as errorKey}
+           
+            {#each Object.keys(formErrors[errorKey]) as error}
+             
+              {#if formErrors[errorKey][error].display}
+                <Error>{formErrors[errorKey][error].message}</Error>
               {/if}
             {/each}
-          {/each}
+            {#each formErrors[errorKey] as error}
+             
+            {/each}
+          {/each} -->
+
+          {#if $validationStore.length > 0}
+            {#each $validationStore as error}
+              <SubTitle theme="error"
+                >{formErrors.email.filter(e => e.errorName == error)[0]
+                  .message}</SubTitle
+              >
+            {/each}
+          {/if}
 
           <label
             >Email addres<input
               bind:value={user.email}
               required
-              class="input"
+              on:change={() => {
+                checkValidation('email')
+              }}
+              class="input {$validationStore[0] == 'email_valid'
+                ? ' error'
+                : ''}"
               placeholder="Email address."
             /></label
           >
+          {#if $validationStore.length > 0}
+            {#each $validationStore as error}
+              <SubTitle theme="error"
+                >{formErrors.password.filter(e => e.errorName == error)[0]
+                  .message}</SubTitle
+              >
+            {/each}
+          {/if}
           <label
             >Password<input
               bind:value={user.password}
               required
-              class="input "
+              on:change={() => {
+                checkValidation('password')
+              }}
+              class="input {$validationStore[0] == 'password_length'
+                ? ' error'
+                : ''}"
               placeholder="Password.."
               autocomplete="current-password"
             /></label

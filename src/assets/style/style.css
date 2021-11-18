@@ -40,6 +40,10 @@ section {
   @apply border-opacity-100;
 }
 
+.input.error{
+  @apply hover:border-red-600 border-red-600 text-red-800;
+}
+
 .appHeaderGrid {
   grid-template-rows: min-content auto;
 }

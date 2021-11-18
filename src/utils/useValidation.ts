@@ -1,3 +1,4 @@
+import validationStore from '../stores/validationStore'
 import type { UserType } from '../types/User.type'
 
 export const validate = () => {
@@ -38,4 +39,21 @@ export const isNickNameAvailable = (
   nickName: string,
 ): Promise<boolean> => {
   return new Promise<boolean>((resolve, reject) => resolve(true))
+}
+
+// const validationStoreObj = $validationStore
+
+// const errorArray = [...$validationStore,'email_valid']
+
+export const validateEmailValid = (email: string): string | false => {
+  if (email.length < 12) return 'email_valid'
+  return false
+}
+export const validateEmailLength = (email: string): string | false => {
+  if (email.length < 12) return 'email_length'
+  return false
+}
+export const validatePasswordLength = (password: string): string | false => {
+  if (password.length < 8) return 'password_length'
+  return false
 }
