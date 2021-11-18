@@ -65,3 +65,18 @@ export const validatePasswordLength = (password: string): Error => {
   if (password.length > 8) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
+export const validatePasswordNumbers = (password: string): Error => {
+  const errorName = 'password_numbers'
+  if (password.match('/[0-9]/g')) return { error: errorName, status: true }
+  return { error: errorName, status: false }
+}
+export const validatePasswordCapital = (password: string): Error => {
+  const errorName = 'password_capital'
+  if (password.match('/[A-Z]/g')) return { error: errorName, status: true }
+  return { error: errorName, status: false }
+}
+export const validatePasswordLower = (password: string): Error => {
+  const errorName = 'password_lower'
+  if (password.match('/[a-z]/g')) return { error: errorName, status: true }
+  return { error: errorName, status: false }
+}

@@ -15,7 +15,10 @@
   import {
     validateEmailLength,
     validateEmailValid,
+    validatePasswordCapital,
     validatePasswordLength,
+validatePasswordLower,
+validatePasswordNumbers,
   } from './../utils/useValidation'
   import validationStore, { formErrors } from '../stores/validationStore'
 
@@ -40,14 +43,20 @@
       ])
     }
     if (type == 'password') {
-      validateErrors([validatePasswordLength(user.password)])
+      validateErrors([
+        validatePasswordLength(user.password),
+        // .Match in usevalidation not working
+        validatePasswordNumbers(user.password),
+        validatePasswordCapital(user.password),
+        validatePasswordLower(user.password),
+      ])
     }
   }
   // errors = errors.filter(v => v !== validation),
   const validateErrors = (validations: any) => {
     for (const validation of validations) {
       if (validation.status != true) {
-         // if not found in array Add to array
+        // if not found in array Add to array
         if (errors.indexOf(validation.error) == -1) {
           errors = [...errors, validation.error]
         }
@@ -73,7 +82,6 @@
 
   $: {
     validationStore.set(errors)
-
   }
 </script>
 
