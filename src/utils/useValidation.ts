@@ -44,16 +44,24 @@ export const isNickNameAvailable = (
 // const validationStoreObj = $validationStore
 
 // const errorArray = [...$validationStore,'email_valid']
+interface Error {
+  error: string
+  status: boolean
+}
 
-export const validateEmailValid = (email: string): string | false => {
-  if (email.length < 12) return 'email_valid'
-  return false
+export const validateEmailValid = (email: string): Error => {
+  const errorName = 'email_valid'
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    return { error: errorName, status: true }
+  return { error: errorName, status: false }
 }
-export const validateEmailLength = (email: string): string | false => {
-  if (email.length < 12) return 'email_length'
-  return false
+export const validateEmailLength = (email: string): Error => {
+  const errorName = 'email_length'
+  if (email.length > 12) return { error: errorName, status: true }
+  return { error: errorName, status: false }
 }
-export const validatePasswordLength = (password: string): string | false => {
-  if (password.length < 8) return 'password_length'
-  return false
+export const validatePasswordLength = (password: string): Error => {
+  const errorName = 'password_length'
+  if (password.length > 8) return { error: errorName, status: true }
+  return { error: errorName, status: false }
 }

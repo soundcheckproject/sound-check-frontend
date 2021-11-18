@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 
-export const formErrors = {
+export const formErrors:any = {
   email: [
     {
       display: false,

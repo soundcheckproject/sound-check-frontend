@@ -8,6 +8,7 @@
   import Container from '../components/Container.svelte'
   import Footer from '../components/Footer.svelte'
   import Error from '../components/Error.svelte'
+  import InputError from '../components/InputError.svelte'
 
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
@@ -32,7 +33,6 @@
   // let formErrors: any = $validationStore
   let errors = []
   const checkValidation = (type: string) => {
-    errors = []
     if (type == 'email') {
       validateErrors([
         validateEmailValid(user.email),
@@ -42,12 +42,16 @@
     if (type == 'password') {
       validateErrors([validatePasswordLength(user.password)])
     }
-    validationStore.set(errors)
   }
-
+  // errors = errors.filter(v => v !== validation),
   const validateErrors = (validations: any) => {
     for (const validation of validations) {
-      validation ? (errors = [...errors, validation]) : null
+      if (validation.status != true) {
+         // if not found in array Add to array
+        if (errors.indexOf(validation.error) == -1) {
+          errors = [...errors, validation.error]
+        }
+      } else errors = errors.filter(v => v !== validation.error)
     }
   }
 
@@ -68,7 +72,8 @@
   })
 
   $: {
-    console.log($validationStore)
+    validationStore.set(errors)
+
   }
 </script>
 
@@ -108,19 +113,15 @@
             {/each}
           {/each} -->
 
-          {#if $validationStore.length > 0}
-            {#each $validationStore as error}
-              <SubTitle theme="error"
-                >{formErrors.email.filter(e => e.errorName == error)[0]
-                  .message}</SubTitle
-              >
-            {/each}
-          {/if}
+          <InputError errorInput="email" />
 
           <label
             >Email addres<input
               bind:value={user.email}
               required
+              on:input={() => {
+                checkValidation('email')
+              }}
               on:change={() => {
                 checkValidation('email')
               }}
@@ -130,18 +131,14 @@
               placeholder="Email address."
             /></label
           >
-          {#if $validationStore.length > 0}
-            {#each $validationStore as error}
-              <SubTitle theme="error"
-                >{formErrors.password.filter(e => e.errorName == error)[0]
-                  .message}</SubTitle
-              >
-            {/each}
-          {/if}
+          <InputError errorInput="password" />
           <label
             >Password<input
               bind:value={user.password}
               required
+              on:input={() => {
+                checkValidation('password')
+              }}
               on:change={() => {
                 checkValidation('password')
               }}

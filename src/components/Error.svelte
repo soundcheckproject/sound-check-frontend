@@ -1,7 +1,7 @@
 <script lang="ts">
   import { slide } from 'svelte/transition'
 
-  let display = true
+  export let display = true
 </script>
 
 {#if display}
