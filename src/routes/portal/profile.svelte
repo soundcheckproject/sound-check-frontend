@@ -20,9 +20,10 @@
   import { onMount } from 'svelte'
   import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
   import { getAuth } from '@firebase/auth'
+  import { updateFirebaseEmail, updateFirebasePassword } from '../../utils/useFirebase'
 
   let artist: UserType = {
-    email: $userStore.email ?? 'Email',
+    email: $userStore.email ?? 'example@of.mail',
     birthdate: $userStore.birthdate ?? '2020-01-01',
     nickName: $userStore.nickName,
     logo: $userStore.logo ?? 'avatarimguel',
@@ -48,15 +49,32 @@
 
   const updateUser = async () => {
     console.log(newArtist)
+
     await updateUserInfoByUserId($userStore.uuid, newArtist)
   }
   const updateUserEmail = () => {
     console.log(newArtist.email)
+    // Todo: update email in database => email toevoegen aan graphql
+    // updateFirebaseEmail(newArtist)
+    //   .then(result => {
+    //     console.log(result)
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //   })
   }
 
   let userPassword = { old: '', new: '' }
   const updateUserPassword = () => {
     console.log(newArtist.password)
+    // Todo: functie nog niet getest
+    updateFirebasePassword(userPassword.new)
+      .then(result => {
+        console.log(result)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
   const updateUserUserLinks = () => {
     console.log(newArtist.userLinks)
@@ -78,14 +96,8 @@
     )
   }
 
-  const checkIfNickNameIsAvailable = () => {
+  const checkNickNameAvailability = () => {
     isNickNameAvailable(newArtist.nickName).then(result => {
-      // if (result) {
-      //   console.log('nickname is available')
-      // } else {
-      //   console.log('nickname is not available')
-      //   // errors = [...errors, 'nickname_available']
-      // }
       errors = validateError('nickname', 'available', result, errors)
     })
   }
@@ -111,7 +123,7 @@
           errorInput={'nickname'}
           title="Nickname"
           bind:value={newArtist.nickName}
-          on:input={() => checkIfNickNameIsAvailable()}
+          on:input={() => checkNickNameAvailability()}
           placeholder="Choose a nickname.."
         />
         <Input

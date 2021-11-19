@@ -17,13 +17,13 @@
       ref.type = type
     }
   })
-
+  export let errorInput = ""
   $: if (!value) value = ''
 </script>
 
 <div class="grid gap-4">
-  {#if $$props.errorInput}
-    <InputError errorInput={$$props.errorInput} />
+  {#if errorInput}
+    <InputError errorInput={errorInput} />
   {/if}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="portal capitalize"

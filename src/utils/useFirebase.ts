@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  updateEmail,
+  updatePassword,
 } from 'firebase/auth'
 import type { UserType } from '../types/User.type'
 import { query } from './useGraphQL'
@@ -63,6 +65,45 @@ export const registerUser = (user: UserType): Promise<boolean> => {
         // const errorMessage = error.message
 
         console.log({ error })
+        reject(false)
+      })
+  })
+}
+
+// Todo: update email in database => email toevoegen aan graphql
+export const updateFirebaseEmail = (user: UserType): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    updateEmail(getAuth().currentUser, user.email)
+      .then(async () => {
+        await query(
+          `updateUser`,
+          `mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
+            updateUser(data: $data, userId: $userId) {
+              uuid
+            }
+          }
+          `,
+          {
+            data: { email: user.email },
+            userId: user.uuid,
+          },
+        )
+        resolve(true)
+      })
+      .catch(() => {
+        reject(false)
+      })
+  })
+}
+
+// todo: functie nog niet getest
+export const updateFirebasePassword = (password: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    updatePassword(getAuth().currentUser, password)
+      .then(() => {
+        resolve(true)
+      })
+      .catch(() => {
         reject(false)
       })
   })
