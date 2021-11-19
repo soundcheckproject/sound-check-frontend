@@ -218,6 +218,23 @@ export const getTrackFeedbacksByTrackId = async (
   return response['feedbacks']
 }
 
+// todo: post to database
+export const addFeedbackToTrack = async (
+  feedback: FeedbackType,
+) => {
+  const response = await query(
+    'createFeedback',
+    `mutation Mutation($createFeedbackInput: CreateFeedbackInput!) {
+        createFeedback(createFeedbackInput: $createFeedbackInput) {
+          uuid
+        }
+      }
+    `,
+    { createFeedbackInput: feedback },
+  )
+  return response
+}
+
 export const getUserViaFirebase = async (): Promise<UserType> => {
   const response = await query(
     `getUserViaFirebase`,

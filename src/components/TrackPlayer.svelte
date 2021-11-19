@@ -3,14 +3,19 @@
 
   import { onMount } from 'svelte'
   import type FeedbackType from '../types/Feedback.type'
-  import { getTrackFeedbacksByTrackId } from '../utils/useGraphQL'
+  import {
+    addFeedbackToTrack,
+    getTrackFeedbacksByTrackId,
+  } from '../utils/useGraphQL'
   import Button from './Button.svelte'
   import userStore from '../stores/userStore'
   import { sortByDate } from '../utils/useSorting'
+  import { fly, slide } from 'svelte/transition'
 
   export let theme: 'light' | 'dark' = 'dark'
 
   export let feedback: boolean = false
+  let showFeedback = true
 
   let playerBar
   let audio: any
@@ -43,15 +48,23 @@
         description: feedbackInput,
         timeStampSong: audio ? audio.currentTime ?? 0 : 0,
         date: new Date().toString(),
-        user: $userStore,
+        
       }
-      console.log(feedback)
-      feedbacks = [...feedbacks, feedback]
-      // await addFeedbackToTrack(feedback)
+      
+      // Todo: post to database
+      try {
+        await addFeedbackToTrack(feedback)
+        feedback.user = $userStore,
+        feedbacks = [...feedbacks, feedback]
+        // console.log(feedback)
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 
   let feedbacks: FeedbackType[] = []
+
   onMount(async () => {
     console.log('comp has been mounted')
     if (audio) {
@@ -279,72 +292,96 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  <div class="z-10 p-8 grid gap-6 bg-black bg-opacity-20">
-    <SubTitle theme="light"
-      ><div class="flex w-full justify-between">
-        <div>Feedback</div>
-        <div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="4 14 10 14 10 20" />
-            <polyline points="20 10 14 10 14 4" />
-            <line x1="14" y1="10" x2="21" y2="3" />
-            <line x1="3" y1="21" x2="10" y2="14" />
-          </svg>
-        </div>
-      </div></SubTitle
-    >
-    <div class="grid gap-4">
-      {#each sortByDate(feedbacks, true) as feedback}
-        <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm">
-          <div class="text-sm py-3 flex items-center w-full relative ">
-            <img
-              alt="Logo of {feedback.user.nickName}"
-              src={feedback.user.logo}
-              class="object-cover h-8 w-8 rounded-full -ml-4 mshadow-md"
-            />
-            <p class="font-medium pl-2 pr-1">{feedback.user.nickName}</p>
-            <p class="opacity-50">
-              wrote on {new Date(feedback.date)}
-            </p>
-            <div
-              on:click={() => changeTrackTime(feedback.timeStampSong)}
-              class="px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4"
+  {#if feedback}
+    <div class="z-10 p-8 grid gap-6 bg-black bg-opacity-20">
+      <SubTitle theme="light">Add feedback</SubTitle>
+      <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
+        <input
+          type="text"
+          value="00:00"
+          class="bg-opacity-0 bg-white w-10 outline-none opacity-40 mx-3"
+        />
+        <input
+          type="text"
+          bind:value={feedbackInput}
+          class="bg-opacity-0 bg-white outline-none w-full mr-2"
+          placeholder="Write a comment.."
+        />
+        <Button onClick={() => addComment()} type="glass">Post</Button>
+      </div>
+      <SubTitle theme="light"
+        ><div class="flex w-full justify-between ">
+          <div>Feedback</div>
+          <!-- <div>
+            <svg
+              on:click={() => (showFeedback = !showFeedback)}
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
-              {formatTime(feedback.timeStampSong)}
+              <polyline points="4 14 10 14 10 20" />
+              <polyline points="20 10 14 10 14 4" />
+              <line x1="14" y1="10" x2="21" y2="3" />
+              <line x1="3" y1="21" x2="10" y2="14" />
+            </svg>
+          </div> -->
+        </div></SubTitle
+      >
+      {#if showFeedback}
+        <div class="grid gap-4 max-h-96 overflow-y-scroll -mx-8">
+          {#each sortByDate(feedbacks, true) as feedback}
+            <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm mx-8">
+              <div class="text-sm py-3 flex items-center w-full relative ">
+                <img
+                  alt="Logo of {feedback.user.nickName}"
+                  src={feedback.user.logo}
+                  class="object-cover h-8 w-8 rounded-full -ml-4 mshadow-md"
+                />
+                <p class="font-medium pl-2 pr-1">{feedback.user.nickName}</p>
+                <p class="opacity-50">
+                  wrote on {new Date(feedback.date)}
+                </p>
+                <!-- Todo: make weird cursor pointer smooth -->
+                <div
+                  on:click={() => changeTrackTime(feedback.timeStampSong)}
+                  class=" px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 flex hover:hidden peer"
+                >
+                  {formatTime(feedback.timeStampSong)}
+                </div>
+                <div
+                  class=" absolute right-4 hidden rounded-full peer-hover:flex bg-opacity-10 bg-white p-2 justify-center items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <polygon points="10 8 16 12 10 16 10 8" />
+                  </svg>
+                </div>
+              </div>
+              <p class="pl-6 pb-4 opacity-80 -mt-2">
+                {feedback.description}
+              </p>
             </div>
-          </div>
-          <p class="pl-6 pb-4 opacity-80 -mt-2">
-            {feedback.description}
-          </p>
+          {/each}
         </div>
-      {/each}
+      {/if}
     </div>
-    <SubTitle theme="light">Add feedback</SubTitle>
-    <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
-      <input
-        type="text"
-        value="00:00"
-        class="bg-opacity-0 bg-white w-10 outline-none opacity-40 mx-3"
-      />
-      <input
-        type="text"
-        bind:value={feedbackInput}
-        class="bg-opacity-0 bg-white outline-none w-full mr-2"
-        placeholder="Write a comment.."
-      />
-      <Button onClick={() => addComment()} type="glass">Post</Button>
-    </div>
-  </div>
+  {/if}
 </div>
 
 <style lang="postcss">
