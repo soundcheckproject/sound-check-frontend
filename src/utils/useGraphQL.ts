@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth'
+import type FeedbackType from '../types/Feedback.type'
 import type { TrackType } from '../types/Track.type'
 import type { Link, UserType, ArtistType } from '../types/User.type'
 
@@ -187,6 +188,34 @@ export const getTrackById = async (trackId: string): Promise<any> => {
     { trackId: trackId },
   )
   return response
+}
+
+// Todo: role {name} toevoegen
+export const getTrackFeedbacksByTrackId = async (
+  trackId: string,
+): Promise<FeedbackType[]> => {
+  const response = await query(
+    'getTrackById',
+    `query Feedbacks($trackId: String!) {
+      getTrackById(trackId: $trackId) {
+        feedbacks {
+          trackId
+          userId
+          description
+          timeStampSong
+          date
+          user {
+            nickName
+            logo
+           
+          }
+        }
+      }
+    }
+    `,
+    { trackId: trackId },
+  )
+  return response['feedbacks']
 }
 
 export const getUserViaFirebase = async (): Promise<UserType> => {

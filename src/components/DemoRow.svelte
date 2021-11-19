@@ -56,6 +56,7 @@
     class="h-32 w-32 bg-gray-100 rounded-sm"
     src={track.artwork.resource}
     alt="artwork"
+    on:click={() => goto('demo/' + track.uuid)}
   />
   <div
     class={` w-full justify-between flex  rounded-md text-sm transition-colors `}

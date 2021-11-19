@@ -6,7 +6,7 @@
 </script>
 
 <Box>
-  <Title>Artist portal</Title>
+  <Title>Portal</Title>
   <SubTitle>
     <div class="flex justify-between w-full">
       <div>💽 Your tracks</div>
@@ -19,6 +19,7 @@
       <Track size="sm" />
     {/each}
   </div>
+  Welcome to the panel.
 
 </Box>
 

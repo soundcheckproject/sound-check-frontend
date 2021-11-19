@@ -2,8 +2,12 @@
   import SubTitle from './SubTitle.svelte'
 
   import { onMount } from 'svelte'
+  import type FeedbackType from '../types/Feedback.type'
+  import { getTrackFeedbacksByTrackId } from '../utils/useGraphQL'
 
   export let theme: 'light' | 'dark' = 'dark'
+
+  export let feedback: boolean = false
 
   let playerBar
   let audio: any
@@ -22,7 +26,10 @@
       .join(':')
   }
 
-  onMount(() => {
+  const changeTrackTime = () => {}
+
+  let feedbacks: FeedbackType[] = []
+  onMount(async () => {
     console.log('comp has been mounted')
     if (audio) {
       audio.onloadedmetadata = () => {
@@ -37,7 +44,13 @@
         }
       }
     }
+    if (feedback) {
+      feedbacks = await getTrackFeedbacksByTrackId($$props.track.uuid)
+    }
   })
+  $: {
+    console.log(feedbacks)
+  }
 </script>
 
 {#if $$props.audioSrc}}
@@ -242,6 +255,58 @@
       </div>
       <!-- <div>show more</div> -->
     </div>
+  </div>
+  <div class="p-8 grid gap-6 bg-black bg-opacity-20">
+    <SubTitle theme="light"
+      ><div class="flex w-full justify-between">
+        <div>Feedback</div>
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="4 14 10 14 10 20" />
+            <polyline points="20 10 14 10 14 4" />
+            <line x1="14" y1="10" x2="21" y2="3" />
+            <line x1="3" y1="21" x2="10" y2="14" />
+          </svg>
+        </div>
+      </div></SubTitle
+    >
+    <div class="grid gap-4">
+      {#each feedbacks as feedback}
+        <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm">
+          <div class="text-sm py-3 flex items-center w-full relative">
+            <img
+              alt="Logo of {feedback.user.nickName}"
+              src={feedback.user.logo}
+              class="object-cover h-8 w-8 rounded-full -ml-4"
+            />
+            <p class="font-medium pl-2 pr-1">{feedback.user.nickName}</p>
+            <p class="opacity-50">
+              wrote on {new Date(feedback.date)}
+            </p>
+            <div
+              on:click={() => changeTrackTime()}
+              class="px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4"
+            >
+              {formatTime(feedback.timeStampSong)}
+            </div>
+          </div>
+          <p class="pl-6 pb-4 opacity-80">
+            {feedback.description}
+          </p>
+        </div>
+      {/each}
+    </div>
+    <SubTitle theme="light">Add feedback</SubTitle>
   </div>
 </div>
 

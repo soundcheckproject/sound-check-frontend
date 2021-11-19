@@ -13,17 +13,18 @@
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
   import {
-    validateEmailLength,
     validateEmailValid,
-    validatePasswordCapital,
-    validatePasswordLength,
-validatePasswordLower,
-validatePasswordNumbers,
+    validateLength,
+    validateCapital,
+    validateLower,
+    validateNumbers,
+    validateErrors,
   } from './../utils/useValidation'
   import validationStore, { formErrors } from '../stores/validationStore'
+  import type ErrorType from '../types/Error.type'
 
-  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
-  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
   // interface Error {
   //   [key: string]: { display?: boolean; errorName?: string; message?: string }
@@ -37,30 +38,24 @@ validatePasswordNumbers,
   let errors = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
-      validateErrors([
-        validateEmailValid(user.email),
-        validateEmailLength(user.email),
-      ])
+      errors = validateErrors(
+        [validateEmailValid(user.email), validateLength(user.email, 12)],
+        type,
+        errors,
+      )
     }
     if (type == 'password') {
-      validateErrors([
-        validatePasswordLength(user.password),
-        // .Match in usevalidation not working
-        validatePasswordNumbers(user.password),
-        validatePasswordCapital(user.password),
-        validatePasswordLower(user.password),
-      ])
-    }
-  }
-  // errors = errors.filter(v => v !== validation),
-  const validateErrors = (validations: any) => {
-    for (const validation of validations) {
-      if (validation.status != true) {
-        // if not found in array Add to array
-        if (errors.indexOf(validation.error) == -1) {
-          errors = [...errors, validation.error]
-        }
-      } else errors = errors.filter(v => v !== validation.error)
+      errors = validateErrors(
+        [
+          validateLength(user.password, 5),
+          // Todo: .Match in usevalidation not working
+          validateNumbers(user.password),
+          validateCapital(user.password),
+          validateLower(user.password),
+        ],
+        type,
+        errors,
+      )
     }
   }
 
@@ -107,19 +102,6 @@ validatePasswordNumbers,
           class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full box-content justify-self-end"
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
-
-          <!-- {#each Object.keys(formErrors) as errorKey}
-           
-            {#each Object.keys(formErrors[errorKey]) as error}
-             
-              {#if formErrors[errorKey][error].display}
-                <Error>{formErrors[errorKey][error].message}</Error>
-              {/if}
-            {/each}
-            {#each formErrors[errorKey] as error}
-             
-            {/each}
-          {/each} -->
 
           <InputError errorInput="email" />
 

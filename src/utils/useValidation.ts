@@ -1,5 +1,6 @@
 import validationStore from '../stores/validationStore'
 import type { UserType } from '../types/User.type'
+import type { Error } from '../types/Error.type'
 
 export const validate = () => {
   return false
@@ -44,39 +45,63 @@ export const isNickNameAvailable = (
 // const validationStoreObj = $validationStore
 
 // const errorArray = [...$validationStore,'email_valid']
-interface Error {
-  error: string
-  status: boolean
-}
 
 export const validateEmailValid = (email: string): Error => {
-  const errorName = 'email_valid'
+  const errorName = 'valid'
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
     return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
-export const validateEmailLength = (email: string): Error => {
-  const errorName = 'email_length'
-  if (email.length > 12) return { error: errorName, status: true }
+export const validateLength = (input: string, length: number): Error => {
+  const errorName = 'length'
+  if (input.length > length) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
-export const validatePasswordLength = (password: string): Error => {
-  const errorName = 'password_length'
-  if (password.length > 8) return { error: errorName, status: true }
+export const validateEmpty = (input: string): Error => {
+  const errorName = 'empty'
+  if (input.length > 1) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
-export const validatePasswordNumbers = (password: string): Error => {
-  const errorName = 'password_numbers'
-  if (password.match('/[0-9]/g')) return { error: errorName, status: true }
-  return { error: errorName, status: false }
+
+export const validateNumbers = (input: string): Error => {
+  const errorName = 'numbers'
+  if (input.match('/[0-9]/g')) return { error: errorName, status: false }
+  return { error: errorName, status: true }
 }
-export const validatePasswordCapital = (password: string): Error => {
-  const errorName = 'password_capital'
-  if (password.match('/[A-Z]/g')) return { error: errorName, status: true }
-  return { error: errorName, status: false }
+export const validateCapital = (input: string): Error => {
+  const errorName = 'capital'
+  if (input.match('/[A-Z]/g')) return { error: errorName, status: false }
+  return { error: errorName, status: true }
 }
-export const validatePasswordLower = (password: string): Error => {
-  const errorName = 'password_lower'
-  if (password.match('/[a-z]/g')) return { error: errorName, status: true }
-  return { error: errorName, status: false }
+export const validateLower = (input: string): Error => {
+  const errorName = 'lower'
+  if (input.match('/[a-z]/g')) return { error: errorName, status: false }
+  return { error: errorName, status: true }
+}
+// Todo: Check if works
+export const validateDate = (input: string): Error => {
+  const errorName = 'date'
+  try {
+    const date = new Date(input)
+    if (date.getFullYear() < 1900) return { error: errorName, status: true }
+    else return { error: errorName, status: false }
+  } catch (e) {
+    return { error: errorName, status: false }
+  }
+}
+
+export const validateErrors = (
+  validations: Error[],
+  type: string,
+  errors: Error[],
+): Error[] => {
+  for (const validation of validations) {
+    const errorName = type + '_' + validation.error
+    if (validation.status != true) {
+      // if not found in array Add to array
+      if (errors.indexOf(errorName) == -1) {
+        return [...errors, errorName]
+      }
+    } else return errors.filter((v: string) => v !== errorName)
+  }
 }

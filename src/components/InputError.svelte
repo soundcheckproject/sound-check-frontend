@@ -11,7 +11,7 @@
                 >{formErrors.email.filter(e => e.errorName == error)[0]
                   .message}</SubTitle
               > -->
-      <Error >{error}</Error>
+      <Error>{error}</Error>
     {/if}
   {/each}
 {/if}

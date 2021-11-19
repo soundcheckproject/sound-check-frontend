@@ -25,6 +25,7 @@ export interface UserType {
   bio?: string
   role?: Role
   userLinks?: UserLink[]
+  royaltyPercentage?: number
 }
 
 export interface ArtistType extends UserType {

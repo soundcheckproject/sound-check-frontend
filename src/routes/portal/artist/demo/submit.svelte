@@ -24,8 +24,7 @@
   import { goto } from '$app/navigation'
   import { uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
-
-  let artistsArray = []
+  import userStore from '../../../../stores/userStore'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -42,6 +41,9 @@
       designer: 'nielsonderbeke2',
     },
   }
+  let user = $userStore
+  user.royaltyPercentage = 100
+  let artistsArray = [user]
 
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
@@ -61,7 +63,6 @@
     for (let artist of artistsArray) {
       royaltyPercentageTotal += artist.royaltyPercentage
     }
-    console.log(royaltyPercentageTotal)
   }
 
   let uploadPageStatus = parseInt(localStorage.getItem('uploadPageStatus')) ?? 1
@@ -122,6 +123,7 @@
   const searchArtistByNickName = async () => {
     if (artistSearch.nickName.length > 0) {
       artists = await getArtistsByNickName(artistSearch.nickName)
+      artists = artists.filter(artist => artist.uuid !== artistsArray[0].uuid)
     }
   }
 
@@ -290,6 +292,7 @@
                   >Search collaborator<input
                     bind:value={artistSearch.nickName}
                     on:input={() => searchArtistByNickName()}
+                    on:blur={() => searchArtistByNickName()}
                     class="input portal"
                     placeholder="Search by name.."
                   /></label
@@ -306,27 +309,23 @@
                       <p class="text-xs font-semibold ">Select artist</p>
                       {#if artistSearch.nickName.length > 0}
                         <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
-                          {#each artists as artist}<Artist
-                              onClick={() => {
-                                artist.royaltyPercentage = 0
+                          {#if artists.length == 0}
+                            <p class="text-sm animate-pulse	">
+                              No artists found..
+                            </p>{:else}
+                            {#each artists as artist}<Artist
+                                onClick={() => {
+                                  artist.royaltyPercentage = 0
 
-                                artistsArray = [
-                                  ...artistsArray,
-                                  artist,
-                                  // {
-                                  //   uuid: '12',
-                                  //   artistName: 'ghaha',
-                                  //   nickName: 'ekmaz',
-                                  //   royaltyPercentage: 100,
-                                  // },
-                                ]
-                                newTrack.artistIds = [
-                                  ...newTrack.artistIds,
-                                  artist.uuid,
-                                ]
-                              }}>{artist.nickName}</Artist
-                            >
-                          {/each}
+                                  artistsArray = [...artistsArray, artist]
+                                  newTrack.artistIds = [
+                                    ...newTrack.artistIds,
+                                    artist.uuid,
+                                  ]
+                                }}>{artist.nickName}</Artist
+                              >
+                            {/each}
+                          {/if}
                         </div>
                       {:else}
                         <p class="text-sm animate-pulse	">Loading artists..</p>

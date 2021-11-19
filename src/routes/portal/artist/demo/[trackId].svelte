@@ -12,9 +12,12 @@
   import { goto } from '$app/navigation'
   import { onMount } from 'svelte'
   import { getTrackById } from '../../../../utils/useGraphQL'
-import userStore from '../../../../stores/userStore';
+  import userStore from '../../../../stores/userStore'
+
+  import type FeedbackType from '../../../../types/Feedback.type'
 
   let track: TrackType = {
+    uuid:"612a4d86-f56d-4543-a0d8-793600e68a01",
     title: 'Miss you so feat. Jebroer',
     description: 'Niels his new hit song',
     previewStart: 20,
@@ -40,20 +43,26 @@ import userStore from '../../../../stores/userStore';
     } else {
       console.log('no trackId found')
     }
-   
   })
+  
 </script>
 
 <div class="grid gap-8">
-  <TrackPlayer title={track.title} genre={track.genreId} audioSrc="" imgSrc="" />
+  <TrackPlayer
+    feedback={true}
+    track={track}
+    title={track.title}
+    genre={track.genreId}
+    audioSrc=""
+    imgSrc=""
+  />
   <Box>
     <Title
       ><div class="flex justify-between items-center">
-        <div>{track.title??"No title found"}</div>
+        <div>{track.title ?? 'No title found'}</div>
 
         <a
           href={$page.path + '-edit'}
-          
           class="bg-gray-200 p-2 rounded-full mshadow-sm hover:bg-gray-300 transition-colors"
         >
           <!-- href={$page.path + `/edit`} -->
