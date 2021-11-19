@@ -25,6 +25,7 @@
     lyrics: 'I hate to admit it',
     artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
+    genre:{name:""},
     prefferdReleaseDate: '2022-01-01',
     artwork: {
       designer: 'nielsonderbeke2',
@@ -44,15 +45,15 @@
       console.log('no trackId found')
     }
   })
-  
+
 </script>
 
 <div class="grid gap-8">
   <TrackPlayer
     feedback={true}
-    track={track}
+    {track}
     title={track.title}
-    genre={track.genreId}
+    genre={track.genre.name}
     audioSrc=""
     imgSrc=""
   />
