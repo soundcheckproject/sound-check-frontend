@@ -35,7 +35,7 @@
   }
 
   // let formErrors: any = $validationStore
-  let errors = []
+  let errors:string[] = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
       errors = validateErrors(

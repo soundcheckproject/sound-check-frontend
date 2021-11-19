@@ -1,10 +1,9 @@
 import validationStore from '../stores/validationStore'
 import type { UserType } from '../types/User.type'
 import type { Error } from '../types/Error.type'
+import { getArtistsByNickName } from './useGraphQL'
 
-export const validate = () => {
-  return false
-}
+
 
 // export const isNotEmptyValidation = (value: any, typeName: string) => {
 //   let errorName = 'isNotEmptyValidation' + typeName
@@ -35,9 +34,25 @@ export const validate = () => {
 //   }
 // }
 
-export const isNickNameAvailable = (
-  artist: UserType,
+export const isNickNameAvailable = async (
   nickName: string,
+): Promise<boolean> => {
+  const users: UserType[] = await getArtistsByNickName(nickName)
+
+  if (users.length == 0) return true
+  else {
+    for (const user of users) {
+      if (user.nickName.toLowerCase() == nickName.toLowerCase()) {
+        console.log('ja da kan nie e')
+        return false
+      }
+    }
+    return true
+  }
+}
+export const isEmailAvailable = (
+  artist: UserType,
+  email: string,
 ): Promise<boolean> => {
   return new Promise<boolean>((resolve, reject) => resolve(true))
 }
@@ -104,4 +119,19 @@ export const validateErrors = (
       }
     } else return errors.filter((v: string) => v !== errorName)
   }
+}
+
+export const validateError = (
+  type: string,
+  validation: string,
+  status: boolean,
+  errors: Error[],
+): Error[] => {
+  const errorName = type + '_' + validation
+  if (status != true) {
+    // if not found in array Add to array
+    if (errors.indexOf(errorName) == -1) {
+      return [...errors, errorName]
+    }
+  } else return errors.filter((v: string) => v !== errorName)
 }

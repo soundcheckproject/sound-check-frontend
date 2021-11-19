@@ -5,10 +5,18 @@
   import SubTitle from '../../components/SubTitle.svelte'
   import Input from '../../components/Input.svelte'
   import Button from '../../components/Button.svelte'
-  import { isNickNameAvailable } from '../../utils/useValidation'
+  import InputError from '../../components/InputError.svelte'
+  import {
+    isEmailAvailable,
+    isNickNameAvailable,
+    validateError,
+    validateErrors,
+  } from '../../utils/useValidation'
 
   import type { Link, UserLink, UserType } from '../../types/User.type'
+  import type ErrorType from '../../types/Error.type'
   import userStore from '../../stores/userStore'
+  import validationStore from '../../stores/validationStore'
   import { onMount } from 'svelte'
   import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
   import { getAuth } from '@firebase/auth'
@@ -31,6 +39,7 @@
   // let links = [{ type: 'mixcloud' }, { type: 'spotify' }]
   // let links = [{ type: 'mixcloud' }, { type: 'spotify' }]
   let links: Link[] = []
+  let errors: string[] = []
 
   onMount(async () => {
     links = await getLinks()
@@ -70,11 +79,23 @@
   }
 
   const checkIfNickNameIsAvailable = () => {
-    if (isNickNameAvailable(artist, newArtist.nickName)) {
-      console.log('nice!')
-    } else {
-      console.log('niet beschikbaar')
+    isNickNameAvailable(newArtist.nickName).then(result => {
+      // if (result) {
+      //   console.log('nickname is available')
+      // } else {
+      //   console.log('nickname is not available')
+      //   // errors = [...errors, 'nickname_available']
+      // }
+      errors = validateError('nickname', 'available', result, errors)
+    })
+  }
+
+  const checkIfEmailIsAvailable = () => {
+    if (isEmailAvailable(artist, newArtist.email)) {
     }
+  }
+  $: {
+    validationStore.set(errors)
   }
 </script>
 
@@ -85,7 +106,9 @@
     <SubTitle>Personal information</SubTitle>
     <form class="grid gap-6">
       <div class="grid grid-cols-2 gap-4">
+        <!-- <InputError errorInput={'nickname'} /> -->
         <Input
+          errorInput={'nickname'}
           title="Nickname"
           bind:value={newArtist.nickName}
           on:input={() => checkIfNickNameIsAvailable()}
@@ -115,7 +138,6 @@
         <Input
           title="Country"
           bind:value={newArtist.country}
-          on:input={() => checkIfNickNameIsAvailable()}
           placeholder="What's your country?"
         />
         <Input
@@ -240,7 +262,7 @@
           <Input
             title="Email address"
             bind:value={newArtist.email}
-            on:input={() => checkIfNickNameIsAvailable()}
+            on:input={() => checkIfEmailIsAvailable()}
             placeholder="Email address.."
           />
 
@@ -260,7 +282,6 @@
               title="Old password"
               type="password"
               bind:value={userPassword.old}
-              on:input={() => checkIfNickNameIsAvailable()}
               placeholder="Old password.."
               autocomplete="current-password"
             />
@@ -268,7 +289,6 @@
               title="New password"
               type="password"
               bind:value={userPassword.new}
-              on:input={() => checkIfNickNameIsAvailable()}
               placeholder="New passord.."
               autocomplete="new-password"
             />
