@@ -16,19 +16,22 @@
       />
     </div>
     <div
-      class="grid items-end justify-start grid-row-auto gap-6"
+      class="grid items-end grid-row-auto gap-6 "
       style="grid-template-rows: min-content 1fr"
     >
-      <div>
-        <p class="text-lg lg:text-4xl font-semibold">
-          {$$props.artist.nickName}
-        </p>
+      <div class="">
+        <div class="flex w-full justify-between">
+          <p class="text-lg lg:text-4xl font-semibold ">
+            {$$props.artist.nickName}
+          </p>
+        </div>
         <p class="text-sm lg:text-lg">
           {$$props.artist.firstName}
           {$$props.artist.surName}
         </p>
         <div class="mt-4 text-xs opacity-75 ">
-          {#if $$props.artist.bio.length > 2}
+          <!-- // Todo: add bio to database -->
+          {#if $$props.artist.bio && $$props.artist.bio.length > 2}
             <p class="flex lg:hidden">
               Click to read bio <svg
                 class="ml-2"
@@ -53,9 +56,19 @@
             Artist has not biography yet.{/if}
         </div>
       </div>
-      <p class="text-sm capitalize opacity-50 text-right">
-        {$$props.artist.country}, {$$props.artist.city}
-      </p>
+      <div class="flex justify-between items-center">
+        <div
+          class="mshadow-md text-sm rounded-full flex h-8 text-center bg-opacity-10 bg-white  px-4 justify-center items-center"
+        >
+          {$$props.artist.role.name}
+        </div>
+
+        <p
+          class="text-sm capitalize opacity-50 text-right"
+        >
+          {$$props.artist.country}, {$$props.artist.city}
+        </p>
+      </div>
     </div>
   </div>
 </div>

@@ -4,7 +4,7 @@
 </script>
 
 <h2
-	class="-mt-1 font-bold text-3xl {theme == 'color'
+	class="-mt-1 font-bold text-2xl lg:text-3xl {theme == 'color'
 		? 'text-blue-900 '
 		: theme == 'dark'
 		? 'text-gray-700'

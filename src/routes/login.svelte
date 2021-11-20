@@ -20,7 +20,7 @@
     validateNumbers,
     validateErrors,
   } from './../utils/useValidation'
-  import validationStore, { formErrors } from '../stores/validationStore'
+  import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }

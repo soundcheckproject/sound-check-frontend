@@ -2,6 +2,7 @@
   import Box from '../../../components/Box.svelte'
   import Title from '../../../components/Title.svelte'
   import TrackRow from '../../../components/TrackRow.svelte'
+  import Skeleton from '../../../components/Skeleton.svelte'
   import SubTitle from '../../../components/SubTitle.svelte'
   import Input from '../../../components/Input.svelte'
   import type { TrackType } from '../../../types/Track.type'
@@ -60,11 +61,17 @@
     </div>
   </SubTitle>
 
-  <div class="grid gap-4 lg:grid-cols-2 ">
-    {#each filteredTracks as track}
-      <TrackRow {track} artworkSource={track.artwork.resource}
-        >{track.title}</TrackRow
-      >
-    {/each}
-  </div>
+  {#if tracks.length == 0}
+    <Skeleton>Loading tracks..</Skeleton>
+  {:else if filteredTracks.length == 0}
+    <Skeleton>No tracks found..</Skeleton>
+  {:else}
+    <div class="grid gap-4 lg:grid-cols-2 ">
+      {#each filteredTracks as track}
+        <TrackRow {track} artworkSource={track.artwork.resource}
+          >{track.title}</TrackRow
+        >
+      {/each}
+    </div>
+  {/if}
 </Box>

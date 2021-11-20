@@ -87,6 +87,33 @@ export const getArtistsByNickName = async (
   )
   return response
 }
+export const getArtistByUserId = async (
+  userId: string,
+): Promise<UserType> => {
+  const response = await query(
+    `getUser`,
+    `query GetUser($userId: String!) {
+      getUser(userId: $userId) {
+        nickName
+        uid
+        uuid
+        firstName
+        surName
+        birthdate
+        email
+        country
+        city
+        state
+        logo
+        role {
+          name
+        }
+      }
+    }`,
+    { userId: userId },
+  )
+  return response
+}
 export const createTrack = async (track: any): Promise<{ uuid: string }> => {
   const response = await query(
     'createTrack',
@@ -113,6 +140,10 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
         prefferdReleaseDate
         genre {
           name
+        }
+        artwork{
+          designer
+          resource
         }
       }
     }`,
@@ -233,9 +264,7 @@ export const getTrackFeedbacksByTrackId = async (
 }
 
 // todo: post to database
-export const addFeedbackToTrack = async (
-  feedback: FeedbackType,
-) => {
+export const addFeedbackToTrack = async (feedback: FeedbackType) => {
   const response = await query(
     'createFeedback',
     `mutation Mutation($createFeedbackInput: CreateFeedbackInput!) {

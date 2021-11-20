@@ -10,6 +10,7 @@
     prefferdReleaseDate: 'No release date found',
     artwork: {
       designer: 'nielsonderbeke2',
+      resource: '',
     },
   }
   status = track.isSigned
@@ -21,7 +22,6 @@
     : 'denied'
 
   let hoverStatus = false
-
 </script>
 
 <a
@@ -30,7 +30,7 @@
     size == 'sm' ? 'h-12' : size == 'md' ? 'h-20' : size == 'lg' ? 'h-28' : ''
   } `}
 >
-  <img class="rounded-sm" src={artworkSource} alt="artwork" />
+  <img class="rounded-sm" src={track.artwork.resource ?? ''} alt="artwork" />
   <div
     class={`${
       size == 'sm'
@@ -42,12 +42,12 @@
         : ''
     } items-center justify-between flex w-full rounded-sm text-sm bg-gray-100`}
   >
-    <slot />
+    <p>{$$props.track.title}</p>
     <div class="grid grid-flow-col gap-3 items-center">
       <div class="hidden sm:flex text-xs text-gray-400">
         {track.prefferdReleaseDate ?? ''}
       </div>
-      <a href={""+track.uuid + '-edit'}>
+      <a href={'' + track.uuid + '-edit'}>
         <svg
           class="text-gray-700"
           xmlns="http://www.w3.org/2000/svg"

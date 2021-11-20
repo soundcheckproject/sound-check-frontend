@@ -73,7 +73,7 @@
   </SubTitle>
   <div class="grid gap-4">
     {#if users.length === 0}
-      <Skeleton>Loading users..</Skeleton>
+      <Skeleton loading={true}>Loading users..</Skeleton>
     {:else}
       {#each filteredUsers as user}
         <div

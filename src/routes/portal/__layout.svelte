@@ -16,27 +16,28 @@
   <div class="c-portal">
     <PortalNavigation />
     <div class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll">
-      <p
-        class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
-      >
-        {#each pageBread as bread, index}
-          {#if index != 0}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              class="opacity-25"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          {/if}
-          <!-- <a
+      <div style="max-width:1000px " class="mx-auto">
+        <p
+          class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
+        >
+          {#each pageBread as bread, index}
+            {#if index != 0}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                class="opacity-25"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            {/if}
+            <!-- <a
             class="hover:underline"
             in:fly={{ x: -50, duration: 200 }}
             out:fade={{ duration: 200 }}
@@ -45,16 +46,17 @@
               goto(`/portal/${pageBread.slice(0, index + 1).join('/')}`)}
             >{bread}
           </a> -->
-          <a
-            class="hover:underline"
-            in:fly|local={{ x: -50, duration: 200 }}
-            out:fade|local={{ duration: 200 }}
-            href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
-            >{bread}
-          </a>
-        {/each}
-      </p>
-      <div class=""><slot /></div>
+            <a
+              class="hover:underline"
+              in:fly|local={{ x: -50, duration: 200 }}
+              out:fade|local={{ duration: 200 }}
+              href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
+              >{bread}
+            </a>
+          {/each}
+        </p>
+        <div class=""><slot /></div>
+      </div>
     </div>
   </div>
 </AuthLayer>

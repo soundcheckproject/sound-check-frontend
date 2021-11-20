@@ -121,8 +121,8 @@
     </div>
   </Title>
 
-  {#if tracksLoaded && demos.all.length == 0}
-    <Skeleton>Loading demos..</Skeleton>
+  {#if demos.all.length == 0}
+    <Skeleton loading={true}>Loading demos..</Skeleton>
   {:else if filterType == 'all' && searchInput.length > 0}
     <div class="flex justify-between items-center">
       <SubTitle
@@ -172,9 +172,6 @@
       </div>
     {/if}
   {/if}
-  <!-- {#if demos.pending.length <= 0}
-        <Skeleton>Loading pending demos..</Skeleton>
-      {/if} -->
 
   <div />
 </Box>
