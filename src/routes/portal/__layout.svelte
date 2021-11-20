@@ -10,12 +10,21 @@
     pageBread = $page.path.split('/')
     pageBread.splice(0, 2)
   }
+  let nav: HTMLDivElement
+  const scrollUp = () => {
+    nav.scrollTop = 0
+    // Todo: smooth scroll to top
+    // window.scrollTo({top: 0, behavior: 'smooth'});
+  }
 </script>
 
 <AuthLayer>
   <div class="c-portal">
     <PortalNavigation />
-    <div class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll">
+    <div
+      class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll"
+      bind:this={nav}
+    >
       <div style="max-width:1000px " class="mx-auto">
         <p
           class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
@@ -57,6 +66,25 @@
         </p>
         <div class=""><slot /></div>
       </div>
+    </div>
+
+    <div
+      on:click={() => scrollUp()}
+      class=" backdrop-blur-2xl absolute right-12 bottom-12 rounded-full bg-opacity-25 bg-gray-500 p-4 text-white cursor-pointer hover:bg-opacity-75 transition-all"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="18 15 12 9 6 15" />
+      </svg>
     </div>
   </div>
 </AuthLayer>

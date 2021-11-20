@@ -30,10 +30,12 @@
       authStore.set(authInfo)
     })
   })
+
 </script>
 
-<div class="font-roboto c-app">
-  <slot />
+<div class="font-roboto c-app relative" >
+  <slot ></slot>
+
 </div>
 
 <style lang="postcss">

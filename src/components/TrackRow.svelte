@@ -5,6 +5,7 @@
   export let size: 'sm' | 'md' | 'lg' = 'sm'
   export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
+  export let portal: 'staff' | 'artist' = 'artist'
   let track = $$props.track ?? {
     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
     prefferdReleaseDate: 'No release date found',
