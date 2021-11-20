@@ -11,7 +11,7 @@
       if (!isLoggedIn && firebaseControlled) {
         await goto('/login')
       } else {
-        // console.log(user)
+        console.log(user)
         // Get userinfo and put in store
         const userInfo = await getUserViaFirebase()
         // localStorage.setItem('userInfo', JSON.stringify(userInfo))

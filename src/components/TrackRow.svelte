@@ -12,11 +12,16 @@
       designer: 'nielsonderbeke2',
     },
   }
+  status = track.isSigned
+    ? 'denied'
+    : track.isSigned == true
+    ? 'accepted'
+    : track.isSigned == null
+    ? 'pending'
+    : 'denied'
 
   let hoverStatus = false
-  $: {
-    console.log($$props.track)
-  }
+
 </script>
 
 <a
@@ -40,9 +45,9 @@
     <slot />
     <div class="grid grid-flow-col gap-3 items-center">
       <div class="hidden sm:flex text-xs text-gray-400">
-        {track.prefferdReleaseDate??""}
+        {track.prefferdReleaseDate ?? ''}
       </div>
-      <a href={'/portal/artist/demo/' + track.uuid + '/edit'}>
+      <a href={""+track.uuid + '-edit'}>
         <svg
           class="text-gray-700"
           xmlns="http://www.w3.org/2000/svg"

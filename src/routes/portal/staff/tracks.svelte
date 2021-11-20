@@ -9,12 +9,41 @@
   import { getAllTracks } from '../../../utils/useGraphQL'
 
   let tracks: TrackType[] = []
+  let filteredTracks: TrackType[] = []
+
+  let searchInput = ''
+
+  const searchTracks = (tracks: TrackType[], input: string) => {
+    if (input.length > 0) {
+      const filteredInput = input.toLowerCase().substring(0, input.length)
+
+      return tracks.filter(
+        track =>
+          track.title.toLowerCase().substring(0, input.length) == filteredInput,
+        // TODO: filter on artist nickname from tracks
+        (track: { artistTracks: { user: { nickName: string } }[] }) =>
+          track.artistTracks[0] ??
+          track.artistTracks[0].user.nickName
+            .toLowerCase()
+            .substring(0, input.length) == filteredInput,
+
+        // console.log(
+        //   track.artistTracks[0].user.nickName
+        //     .toLowerCase()
+        //     .substring(0, input.length) == filteredInput,
+        // )
+      )
+    } else return tracks
+  }
 
   onMount(async () => {
     tracks = await getAllTracks()
   })
+  $: {
+    filteredTracks = tracks
+    console.log(tracks)
+  }
 </script>
-
 
 <Box>
   <Title>All tracks</Title>
@@ -22,26 +51,21 @@
     <div class="flex justify-between w-full items-center">
       <div>Filters</div>
       <label>
-        <input class="input portal" placeholder="Search.." />
+        <input
+          bind:value={searchInput}
+          on:input={() => (filteredTracks = searchTracks(tracks, searchInput))}
+          class="input portal"
+          placeholder="Search.."
+        />
       </label>
     </div>
   </SubTitle>
 
   <div class="grid gap-4 lg:grid-cols-2 ">
-    {#each tracks as track}
-      <TrackRow />
+    {#each filteredTracks as track}
+      <TrackRow {track} artworkSource={track.artwork.resource}
+        >{track.title}</TrackRow
+      >
     {/each}
-    <TrackRow
-      artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-      >Trackname</TrackRow
-    >
-    <TrackRow
-      artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-      >Trackname</TrackRow
-    >
-    <TrackRow
-      artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-      >Trackname</TrackRow
-    >
   </div>
 </Box>

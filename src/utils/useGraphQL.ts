@@ -183,6 +183,20 @@ export const getTrackById = async (trackId: string): Promise<any> => {
         previewStop
         isSigned
         prefferdReleaseDate
+        artistTracks {
+          user {
+            surName
+            firstName
+            nickName
+            logo
+            userLinks {
+              linkAddress
+              link {
+                type
+              }
+            }
+          }
+        }
       }
     }`,
     { trackId: trackId },
