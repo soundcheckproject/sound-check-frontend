@@ -31,6 +31,16 @@ const errorStore = readable<{
       errorName: 'password_strength',
       message: 'Password is not strong enough',
     },
+    {
+      display: false,
+      errorName: 'password_match',
+      message: 'Password does not match',
+    },
+    {
+      display: false,
+      errorName: 'password_old',
+      message: 'Password cannot be the same',
+    },
   ],
   nickname: [
     {

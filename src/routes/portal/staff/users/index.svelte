@@ -9,12 +9,36 @@
   import { goto } from '$app/navigation'
 
   let users: ArtistType[] = []
+  let filterValue: string,
+    searchValue: string = ''
 
+  let filteredUsers: UserType[] = []
+
+  const filterUsers = () => {
+    if (filterValue == 'all') filteredUsers = users
+    else
+      filteredUsers = users.filter(user =>
+        user.role.slug.toLowerCase().includes(filterValue.toLowerCase()),
+      )
+  }
+  // Todo: combine filter & search
+  const searchUsers = () => {
+    if (searchValue.length > 0)
+      filteredUsers = users.filter(
+        user =>
+          user.nickName.toLowerCase().substring(0, searchValue.length) ==
+            searchValue.toLowerCase().substring(0, searchValue.length) ||
+          user.email.toLowerCase().substring(0, searchValue.length) ==
+            searchValue.toLowerCase().substring(0, searchValue.length),
+      )
+    else filterUsers()
+  }
   onMount(async () => {
     users = await getArtists()
   })
   $: {
-    console.log(users)
+    // console.log(searchValue)
+    filteredUsers = users
   }
 </script>
 
@@ -24,7 +48,11 @@
     <div class="flex justify-between w-full items-center">
       <div>Filters</div>
       <div class="flex space-x-2">
-        <select class="portal input w-32">
+        <select
+          class="portal input w-32"
+          bind:value={filterValue}
+          on:change={() => filterUsers()}
+        >
           <option value="all">All</option>
           <option value="user">User</option>
           <option value="label-artist">Label Artist</option>
@@ -33,7 +61,12 @@
         </select>
 
         <label>
-          <input class="input portal" placeholder="Search.." />
+          <input
+            bind:value={searchValue}
+            on:input={() => searchUsers()}
+            class="input portal"
+            placeholder="Search.."
+          />
         </label>
       </div>
     </div>
@@ -42,7 +75,7 @@
     {#if users.length === 0}
       <Skeleton>Loading users..</Skeleton>
     {:else}
-      {#each users as user}
+      {#each filteredUsers as user}
         <div
           on:click={() => goto(`/portal/staff/users/${user.uuid}`)}
           class="flex space-x-4 "

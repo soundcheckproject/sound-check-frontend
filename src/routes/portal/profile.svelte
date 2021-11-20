@@ -11,6 +11,9 @@
     isNickNameAvailable,
     validateError,
     validateErrors,
+    validateLength,
+    validateMatch,
+validateOld,
   } from '../../utils/useValidation'
 
   import type { Link, UserLink, UserType } from '../../types/User.type'
@@ -20,7 +23,10 @@
   import { onMount } from 'svelte'
   import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
   import { getAuth } from '@firebase/auth'
-  import { updateFirebaseEmail, updateFirebasePassword } from '../../utils/useFirebase'
+  import {
+    updateFirebaseEmail,
+    updateFirebasePassword,
+  } from '../../utils/useFirebase'
 
   let artist: UserType = {
     email: $userStore.email ?? 'example@of.mail',
@@ -96,10 +102,32 @@
     )
   }
 
-  const checkNickNameAvailability = () => {
-    isNickNameAvailable(newArtist.nickName).then(result => {
-      errors = validateError('nickname', 'available', result, errors)
-    })
+  const checkNickNameAvailability = () => {}
+
+  const checkValidation = (type: string) => {
+    if (type == 'nickname') {
+      isNickNameAvailable(newArtist.nickName, $userStore.nickName).then(
+        result => {
+          errors = validateError('nickname', 'available', result, errors)
+        },
+      )
+    }
+    if (type == 'password') {
+      errors = validateErrors(
+        [
+          // validateMatch(userPassword.new, userPassword.old),
+          // todo: make work
+          validateOld(userPassword.new, userPassword.old),
+          validateLength(userPassword.new, 8),
+          // Todo: .Match in usevalidation not working
+          // validateNumbers(user.password),
+          // validateCapital(user.password),
+          // validateLower(user.password),
+        ],
+        type,
+        errors,
+      )
+    }
   }
 
   const checkIfEmailIsAvailable = () => {
@@ -123,7 +151,7 @@
           errorInput={'nickname'}
           title="Nickname"
           bind:value={newArtist.nickName}
-          on:input={() => checkNickNameAvailability()}
+          on:input={() => checkValidation('nickname')}
           placeholder="Choose a nickname.."
         />
         <Input
@@ -291,13 +319,16 @@
           <div class="grid gap-6">
             <SubTitle>Change password</SubTitle>
             <Input
+              errorInput={'password'}
               title="Old password"
               type="password"
+              on:input={() => checkValidation('password')}
               bind:value={userPassword.old}
               placeholder="Old password.."
               autocomplete="current-password"
             />
             <Input
+              on:input={() => checkValidation('password')}
               title="New password"
               type="password"
               bind:value={userPassword.new}

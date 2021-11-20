@@ -2,8 +2,9 @@ import validationStore from '../stores/validationStore'
 import type { UserType } from '../types/User.type'
 import type { Error } from '../types/Error.type'
 import { getArtistsByNickName } from './useGraphQL'
-
-
+import { getAuth } from '@firebase/auth'
+import userStore from '../stores/userStore'
+import authStore from '../stores/authStore'
 
 // export const isNotEmptyValidation = (value: any, typeName: string) => {
 //   let errorName = 'isNotEmptyValidation' + typeName
@@ -36,14 +37,15 @@ import { getArtistsByNickName } from './useGraphQL'
 
 export const isNickNameAvailable = async (
   nickName: string,
+  userNickName: string = null,
 ): Promise<boolean> => {
+  if (userNickName && userNickName.toLowerCase() == nickName.toLowerCase())
+    return true
   const users: UserType[] = await getArtistsByNickName(nickName)
-
   if (users.length == 0) return true
   else {
     for (const user of users) {
       if (user.nickName.toLowerCase() == nickName.toLowerCase()) {
-        console.log('ja da kan nie e')
         return false
       }
     }
@@ -74,7 +76,7 @@ export const validateLength = (input: string, length: number): Error => {
 }
 export const validateEmpty = (input: string): Error => {
   const errorName = 'empty'
-  if (input.length > 1) return { error: errorName, status: true }
+  if (input.length > 0) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
 
@@ -103,6 +105,19 @@ export const validateDate = (input: string): Error => {
   } catch (e) {
     return { error: errorName, status: false }
   }
+}
+export const validateMatch = (input: string, input2: string): Error => {
+  const errorName = 'match'
+  if (input === input2) return { error: errorName, status: true }
+  else return { error: errorName, status: false }
+}
+export const validateOld = (input: string, input2: string): Error => {
+  const errorName = 'old'
+  if (input.length > 0 || input2.length > 0) {
+    if (input === input2) return { error: errorName, status: false }
+    else return { error: errorName, status: true }
+  }
+  return { error: errorName, status: true }
 }
 
 export const validateErrors = (
