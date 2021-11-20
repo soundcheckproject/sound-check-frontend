@@ -48,14 +48,12 @@
         description: feedbackInput,
         timeStampSong: audio ? audio.currentTime ?? 0 : 0,
         date: new Date().toString(),
-        
       }
-      
+
       // Todo: post to database
       try {
         await addFeedbackToTrack(feedback)
-        feedback.user = $userStore,
-        feedbacks = [...feedbacks, feedback]
+        ;(feedback.user = $userStore), (feedbacks = [...feedbacks, feedback])
         // console.log(feedback)
       } catch (e) {
         console.log(e)
@@ -89,7 +87,7 @@
   }
 </script>
 
-{#if $$props.audioSrc}}
+{#if $$props.audioSrc}
   <audio hidden bind:this={audio} preload="auto" controls>
     <source src={$$props.audioSrc} type="audio/mpeg" />
     Your browser does not support the audio element.
@@ -138,8 +136,10 @@
       style="grid-template-rows:auto repeat(2,min-content) "
     >
       <div class="flex justify-between items-center ">
-        <SubTitle theme="light">{$$props.title ?? 'No title'}</SubTitle>
-        <div class="text-sm">#{$$props.genre ?? 'No genre'}</div>
+        <SubTitle theme="light">{$$props.track.title ?? 'No title'}</SubTitle>
+        {#if $$props.track.genre}
+          <div class="text-sm">#{$$props.track.genre.name ?? 'No genre'}</div>
+        {/if}
       </div>
 
       <div class="grid gap-2 mt-4">

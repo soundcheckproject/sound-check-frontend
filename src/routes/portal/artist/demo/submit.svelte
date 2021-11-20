@@ -486,7 +486,7 @@
       {#if uploadPageStatus == 4}
         <FlyBox>
           {#if trackPreview}
-            <TrackPlayer artworkSrc={artworkPreview} audioSrc={trackPreview} />
+            <TrackPlayer track={newTrack} artworkSrc={artworkPreview} audioSrc={trackPreview} />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>
 

@@ -49,7 +49,7 @@
   <Title>All tracks</Title>
   <SubTitle>
     <div class="flex justify-between w-full items-center">
-      <div>Filters</div>
+      <div>The archive</div>
       <label>
         <input
           bind:value={searchInput}
@@ -68,7 +68,7 @@
   {:else}
     <div class="grid gap-4 lg:grid-cols-2 ">
       {#each filteredTracks as track}
-        <TrackRow {track} artworkSource={track.artwork.resource}
+        <TrackRow portal="staff" {track} artworkSource={track.artwork.resource}
           >{track.title}</TrackRow
         >
       {/each}

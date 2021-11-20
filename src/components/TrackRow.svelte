@@ -26,7 +26,7 @@
 </script>
 
 <a
-  href={'/portal/artist/demo/' + track.uuid}
+  href="/portal/{portal}/demo/{track.uuid}"
   class={`relative flex space-x-3 ${
     size == 'sm' ? 'h-12' : size == 'md' ? 'h-20' : size == 'lg' ? 'h-28' : ''
   } `}
@@ -48,7 +48,7 @@
       <div class="hidden sm:flex text-xs text-gray-400">
         {track.prefferdReleaseDate ?? ''}
       </div>
-      <a href={'' + track.uuid + '-edit'}>
+      <a href="/portal/{portal}/demo/{track.uuid}-edit">
         <svg
           class="text-gray-700"
           xmlns="http://www.w3.org/2000/svg"

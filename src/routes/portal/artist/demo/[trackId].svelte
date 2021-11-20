@@ -10,12 +10,11 @@
   import Artist from '../../../../components/Artist.svelte'
   import Button from '../../../../components/Button.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
+  import EditButton from '../../../../components/portal/EditButton.svelte'
   import { goto } from '$app/navigation'
   import { onMount } from 'svelte'
   import { getTrackById } from '../../../../utils/useGraphQL'
   import userStore from '../../../../stores/userStore'
-
-  import type FeedbackType from '../../../../types/Feedback.type'
 
   let track: TrackType = {
     uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
@@ -51,8 +50,6 @@
   <TrackPlayer
     feedback={true}
     {track}
-    title={track.title}
-    genre={track.genre.name}
     audioSrc=""
     imgSrc=""
   />
@@ -61,27 +58,7 @@
       ><div class="flex justify-between items-center">
         <div>{track.title ?? 'No title found'}</div>
 
-        <a
-          href={$page.path + '-edit'}
-          class="bg-gray-200 p-2 rounded-full mshadow-sm hover:bg-gray-300 transition-colors"
-        >
-          <!-- href={$page.path + `/edit`} -->
-          <svg
-            class="text-gray-700"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-          </svg>
-        </a>
+        <EditButton href={$page.path + '-edit'} />
       </div></Title
     >
     <div class="grid gap-6 lg:grid-cols-2 items-start">
@@ -99,15 +76,17 @@
       </div>
       <div class="grid gap-4">
         <SubTitle>👨🏼‍🎨 Artists</SubTitle>
-        <div class="flex space-x-2">
-          {#if track.artistTracks && track.artistTracks.length > 0}
+        {#if track.artistTracks && track.artistTracks.length > 0}
+          <div class="flex space-x-2">
             {#each track.artistTracks as artist}
-              <Artist artist={artist.user} socials theme="dark">{artist.user.nickName}</Artist>
+              <Artist artist={artist.user} socials theme="dark"
+                >{artist.user.nickName}</Artist
+              >
             {/each}
-          {:else}
-            <Skeleton>Loading artists..</Skeleton>
-          {/if}
-        </div>
+          </div>
+        {:else}
+          No artists found..
+        {/if}
         <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
       </div>
     </div>
