@@ -43,13 +43,13 @@
   //   userLinks: $userStore.userLinks ?? [],
   //   role: { name: 'user' },
   // }
+  let newArtist: UserType 
 
-  let newArtist: UserType = artist
   let newUserLink: UserLink = { link: { type: '' }, linkAddress: '' }
-
+  
   let links: Link[] = []
   let errors: string[] = []
-
+  
   onMount(async () => {
     links = await getLinks()
     artist = $userStore
@@ -137,6 +137,7 @@
     }
   }
   $: {
+    newArtist = artist
     validationStore.set(errors)
   }
 </script>
