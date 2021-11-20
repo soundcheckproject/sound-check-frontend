@@ -41,7 +41,6 @@
   })
   $: {
     filteredTracks = tracks
-    console.log(tracks)
   }
 </script>
 
