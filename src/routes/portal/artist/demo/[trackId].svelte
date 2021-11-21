@@ -29,6 +29,8 @@
     prefferdReleaseDate: '2022-01-01',
     artwork: {
       designer: 'nielsonderbeke2',
+      resource:
+        'https://i.scdn.co/image/ab67616d0000b273f8b9b9b9b9b9b9b9b9b9b9b9b',
     },
   }
 
@@ -41,17 +43,14 @@
       // console.log('no trackId found')
     }
   })
-  $: {
-    console.log(track)
-  }
 </script>
 
 <div class="grid gap-8">
   <TrackPlayer
     feedback={true}
     {track}
-    audioSrc=""
-    imgSrc=""
+    audioSrc={track.resource}
+    imgSrc={track.artwork.resource}
   />
   <Box>
     <Title
@@ -95,6 +94,7 @@
     ><Title>Contract</Title>
 
     <SubTitle>📝 Manage contract</SubTitle>
+  
     <div class="flex space-x-4">
       <Button size="sm" color="bg-teal-700">
         <div class="download">
@@ -158,9 +158,3 @@
     </div>
   </Box>
 </div>
-
-<style lang="postcss">
-  .download {
-    @apply cursor-pointer flex space-x-2 items-center;
-  }
-</style>

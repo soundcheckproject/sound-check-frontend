@@ -93,3 +93,7 @@ label.portal,
     hsla(215, 32%, 17%, 1) 100%
   );
 }
+
+.download {
+  @apply cursor-pointer flex space-x-2 items-center;
+}

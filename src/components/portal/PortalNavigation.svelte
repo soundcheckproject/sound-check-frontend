@@ -40,10 +40,22 @@
           <polyline points="15 18 9 12 15 6" />
         </svg>
       </div>
-      <h1 class="text-3xl font-bold -mt-2 relative flex items-center ">
-        <div class="opacity-25">
-          {#if !$menuState}SoundCheck{:else}SC{/if}
-        </div>
+      <h1 class="text-3xl font-bold -mt-2   ">
+        <a href="/portal" class="opacity-25  h-8 flex ">
+          {#if !$menuState}<div
+              in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
+              out:fade|local
+              class="absolute left-0 right-0 text-center"
+            >
+              SoundCheck
+            </div>{:else}<div
+              in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
+              out:fade|local
+              class="absolute left-0 right-0 text-center"
+            >
+              SC
+            </div>{/if}
+        </a>
       </h1>
 
       <hr />
@@ -221,11 +233,36 @@
           </NavLink>
         </RoleLayer>
       </div>
+      <hr />
+      <div
+        class={`text-sm grid gap-4 w-full transition-all delay-200 ${
+          $menuState ? ' ml-4' : ''
+        }`}
+      >
+        <NavLink href="/" name="Home">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polygon
+              points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+            />
+          </svg>
+        </NavLink>
+      </div>
       <!-- <hr /> -->
     </div>
     <div
       on:click={logout}
-      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-4  rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform"
+      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2  rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform"
     >
       {#if !$menuState}
         <p
