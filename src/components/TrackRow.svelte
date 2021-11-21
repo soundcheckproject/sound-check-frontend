@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { validateStatusTrack } from '../utils/useValidation'
+
   import { fade } from 'svelte/transition'
+  import TrackStatus from './TrackStatus.svelte'
 
   export let artworkSource = ''
   export let size: 'sm' | 'md' | 'lg' = 'sm'
-  export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
   export let portal: 'staff' | 'artist' = 'artist'
   let track = $$props.track ?? {
@@ -14,15 +16,10 @@
       resource: '',
     },
   }
-  status = track.isSigned
-    ? 'denied'
-    : track.isSigned == true
-    ? 'accepted'
-    : track.isSigned == null
-    ? 'pending'
-    : 'denied'
 
   let hoverStatus = false
+  $:{ console.log(track.isSigned)}
+ 
 </script>
 
 <a
@@ -66,44 +63,8 @@
         </svg>
       </a>
     </div>
-    <div
-      on:mouseenter={() => (hoverStatus = true)}
-      on:mouseleave={() => (hoverStatus = false)}
-      class="absolute top-0 right-0"
-    >
-      {#if hoverStatus}
-        <div
-          transition:fade={{ duration: 200 }}
-          class={`absolute -top-1 -right-1 p-2 ${
-            status == 'denied'
-              ? 'bg-red-500 '
-              : status == 'pending'
-              ? 'bg-orange-500 '
-              : status == 'accepted'
-              ? 'bg-purple-500 '
-              : status == 'released'
-              ? 'bg-green-500 '
-              : ''
-          } rounded-full capitalize mshadow-md  p-2 px-4 font-semibold text-white text-xs`}
-        >
-          {status}
-        </div>
-      {:else}
-        <div
-          transition:fade={{ duration: 200 }}
-          class={`absolute -top-1 -right-1 p-2 ${
-            status == 'denied'
-              ? 'bg-red-500 '
-              : status == 'pending'
-              ? 'bg-orange-500 '
-              : status == 'accepted'
-              ? 'bg-purple-500 '
-              : status == 'released'
-              ? 'bg-green-500 '
-              : ''
-          } rounded-full group capitalize mshadow-md`}
-        />
-      {/if}
-    </div>
+    <TrackStatus
+      status={validateStatusTrack(track.isSigned, track.prefferdReleaseDate)}
+    />
   </div>
 </a>

@@ -95,5 +95,5 @@ label.portal,
 }
 
 .download {
-  @apply cursor-pointer flex space-x-2 items-center;
+  @apply flex space-x-2 items-center;
 }

@@ -11,7 +11,7 @@
 <button
   on:click|preventDefault={onClick}
   type="submit"
-  class=" transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 cursor-pointer 
+  class="space-x-2 transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center text-gray-600 
 	{rounded == 'default'
     ? ' rounded-md'
     : rounded == 'full'
@@ -29,8 +29,11 @@
     : size == 'lg'
     ? ' px-12 py-6 text-md'
     : ''}
-	 {className} {$$props.class}
+	 {className} {$$props.class} {$$props.disabled
+    ? 'opacity-10 cursor-default '
+    : 'opacity-100 cursor-pointer '}
 	 "
+   disabled={$$props.disabled}
 >
   <slot />
 </button>

@@ -15,6 +15,10 @@ module.exports = {
 			colors: {
 				gray: colors.blueGray,
 				teal: colors.teal,
+				pending:colors.orange["500"],
+				accepted:colors.purple["500"],
+				denied:colors.red["500"],
+				released:colors.purple["500"],
 
 			},
 			gridTemplateColumns: {

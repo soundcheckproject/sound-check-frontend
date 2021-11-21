@@ -41,7 +41,7 @@
         </svg>
       </div>
       <h1 class="text-3xl font-bold -mt-2   ">
-        <a href="/portal" class="opacity-25  h-8 flex ">
+        <a href="/portal" class="opacity-25  h-8 mb-1 flex ">
           {#if !$menuState}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local

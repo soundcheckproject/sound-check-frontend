@@ -96,7 +96,7 @@
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
           non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-          <b>Create account!</b>
+          <a href="/register" class="font-semibold">Create account!</a>
         </div>
         <div
           class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full box-content justify-self-end"
@@ -148,7 +148,7 @@
             <Button
               onClick={login}
               rounded="none"
-              color="bg-blue-900"
+              color="bg-teal-700"
               className="justify-self-end">Login</Button
             >
           </div>

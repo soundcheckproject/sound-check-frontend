@@ -11,6 +11,8 @@
   import userStore from '../stores/userStore'
   import { sortByDate } from '../utils/useSorting'
   import { fly, slide } from 'svelte/transition'
+  import TrackStatus from './TrackStatus.svelte'
+  import { validateStatusTrack } from '../utils/useValidation'
 
   export let theme: 'light' | 'dark' = 'dark'
 
@@ -83,7 +85,7 @@
     }
   })
   $: {
-    console.log(feedbacks)
+    console.log($$props.track)
   }
 </script>
 
@@ -94,12 +96,27 @@
   </audio>
 {/if}
 <div
-  class="overflow-hidden grid bg-gray-800 rounded-md backdrop-blur-sm text-gray-100"
+  class="overflow-hidden relative grid bg-gray-800 rounded-md backdrop-blur-sm text-gray-100"
 >
+  <div
+    class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
+    style={`background:url('${$$props.track.artwork.resource}') center center no-repeat;background-size:cover`}
+  />
+  <!-- Todo: show track status in trackplayer -->
+  <!-- {#if $$props.track.isSigned}
+    <TrackStatus
+      status={validateStatusTrack(
+        $$props.track.isSigned,
+        $$props.track.prefferdReleaseDate,
+      )}
+    />
+  {/if} -->
+  <!-- <div class="overflow-hidden"> -->
   <div
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
     style={`background:url('${$$props.artworkSrc}') center center no-repeat;background-size:cover`}
   />
+
   <div
     class="z-10 grid grid-flow-col gap-8 justify-start p-8"
     style="grid-template-columns: auto 1fr"
@@ -107,10 +124,10 @@
     <div
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
-      {#if $$props.artworkSrc}
+      {#if $$props.track.artwork.resource}
         <img
           alt="img"
-          src={`${$$props.artworkSrc}`}
+          src={`${$$props.track.artwork.resource}`}
           class="object-cover h-full w-full "
         />
       {:else}
@@ -292,7 +309,7 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if feedback}
+  {#if feedback && $$props.track.isSigned == null || $$props.track.isSigned == true}
     <div class="z-10 p-8 grid gap-6 bg-black bg-opacity-20">
       <SubTitle theme="light">Add feedback</SubTitle>
       <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
@@ -304,7 +321,7 @@
         <input
           type="text"
           bind:value={feedbackInput}
-          class="bg-opacity-0 bg-white outline-none w-full mr-2"
+          class="bg-opacity-0 bg-white outline-none w-full mr-2 text-white text-opacity-75"
           placeholder="Write a comment.."
         />
         <Button onClick={() => addComment()} type="glass">Post</Button>
@@ -382,6 +399,7 @@
       {/if}
     </div>
   {/if}
+  <!-- </div> -->
 </div>
 
 <style lang="postcss">

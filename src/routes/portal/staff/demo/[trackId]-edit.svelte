@@ -6,4 +6,4 @@
 <h1>Demo Page</h1>
 <p>Displaying information about Demo: {$page.params.trackId}</p> -->
 
-Index demo
+edit demo

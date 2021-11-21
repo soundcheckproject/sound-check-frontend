@@ -59,7 +59,10 @@
 </a>
 {#if $$props.routes && isActive && !$menuState}
   <!-- <div in:fly={{ y: 200, duration: 200 }} out:fade> -->
-  <div transition:slide|local>
+  <div
+    in:slide|local={{ duration: 200, delay: 200 }}
+    out:slide|local={{ duration: 200 }}
+  >
     <SubLink routes={$$props.routes} />
   </div>
 {/if}

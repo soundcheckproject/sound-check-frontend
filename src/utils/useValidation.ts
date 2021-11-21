@@ -150,3 +150,16 @@ export const validateError = (
     }
   } else return errors.filter((v: string) => v !== errorName)
 }
+
+export const validateStatusTrack = (
+  track: boolean | null,
+  releaseDate: string,
+): 'accepted' | 'pending' | 'denied' | 'released' => {
+  return track == false
+    ? 'denied'
+    : track == true
+    ? 'accepted'
+    : track == null
+    ? 'pending'
+    : 'denied'
+}

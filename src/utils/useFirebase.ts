@@ -6,8 +6,9 @@ import {
   updateEmail,
   updatePassword,
 } from 'firebase/auth'
+import userStore from '../stores/userStore'
 import type { UserType } from '../types/User.type'
-import { query } from './useGraphQL'
+import { getUserViaFirebase, query } from './useGraphQL'
 
 export const logout = async () => {
   await getAuth()
@@ -23,8 +24,9 @@ export const loginUser = (
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
+      .then(async () => {
         // Signed in
+        storeUserInfoInLocalStorage()
         resolve(true)
       })
       .catch(error => {
@@ -36,6 +38,13 @@ export const loginUser = (
   })
 }
 
+export const storeUserInfoInLocalStorage = async () => {
+  const userInfo = await getUserViaFirebase()
+  localStorage.setItem('user', JSON.stringify(userInfo))
+
+  userStore.set(userInfo)
+}
+
 export const registerUser = (user: UserType): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(getAuth(), user.email, user.password)
@@ -43,22 +52,28 @@ export const registerUser = (user: UserType): Promise<boolean> => {
         // Signed in -> success -> let's add a record to our own database!
         // #2 Eigen account op server bijhouden
         delete user.password
-        user.uid = userCredential.user?.uid
-        console.log(user)
+        // user.uid = userCredential.user?.uid
+        user.birthdate = new Date(user.birthdate)
 
-        await query(
-          `createArtist`,
-          `mutation CreateArtistMutation($data: CreateArtistInput!) {
-            createArtist(data: $data) {
-                uuid
-            }
-          }`,
-          {
-            data: user,
-          },
-        )
+        try {
+          await query(
+            `createUser`,
+            `mutation CreateUserMutation($data: CreateUserInput!) {
+              createUser(data: $data) {
+                  uuid
+              }
+            }`,
+            {
+              data: user,
+            },
+          )
+          storeUserInfoInLocalStorage()
 
-        resolve(true)
+          resolve(true)
+        } catch (error) {
+          console.error({ error })
+          reject(false)
+        }
       })
       .catch(error => {
         // const errorCode = error.code

@@ -17,12 +17,11 @@
   } from '../../utils/useValidation'
 
   import type { Link, UserLink, UserType } from '../../types/User.type'
-  import type ErrorType from '../../types/Error.type'
+
   import userStore from '../../stores/userStore'
   import validationStore from '../../stores/validationStore'
   import { onMount } from 'svelte'
   import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
-  import { getAuth } from '@firebase/auth'
   import {
     updateFirebaseEmail,
     updateFirebasePassword,
@@ -43,13 +42,13 @@
   //   userLinks: $userStore.userLinks ?? [],
   //   role: { name: 'user' },
   // }
-  let newArtist: UserType 
+  let newArtist: UserType
 
   let newUserLink: UserLink = { link: { type: '' }, linkAddress: '' }
-  
+
   let links: Link[] = []
   let errors: string[] = []
-  
+
   onMount(async () => {
     links = await getLinks()
     artist = $userStore
@@ -136,6 +135,18 @@
     if (isEmailAvailable(artist, newArtist.email)) {
     }
   }
+
+  let logoPreview: any = ''
+  let logoBlob: any = ''
+  const previewLogo = (e: any) => {
+    let image = e.target.files[0]
+    let reader = new FileReader()
+    reader.readAsDataURL(image)
+    reader.onload = e => {
+      logoPreview = e.target.result
+    }
+  }
+
   $: {
     newArtist = artist
     validationStore.set(errors)
@@ -144,7 +155,7 @@
 
 <div class="grid gap-8">
   {#if artist}
-    <ProfileBanner artist={newArtist} />
+    <ProfileBanner artist={newArtist} logo={logoPreview} />
     <Box
       ><Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
@@ -215,6 +226,45 @@
             }}>Save changes</Button
           >
         </div>
+        <SubTitle>Profile picture</SubTitle>
+        <div class="flex">
+          <div class="label portal">
+            Upload Artwork
+            <div
+              class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+              on:click={() => logoBlob.click()}
+            >
+              <svg
+                class="-mt-px"
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <p>Click to upload or drag your artwork here..</p>
+              
+              <input
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                bind:this={logoBlob}
+                on:change={e => previewLogo(e)}
+                class="hidden"
+                placeholder=""
+              />
+            </div>
+          </div>
+        
+        </div>
+        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5"/>
       </form>
     </Box>
     <Box

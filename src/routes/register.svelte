@@ -15,18 +15,19 @@
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
     password: 'veryStr0ng_',
-    nickName: 'testertje' + Math.floor(Math.random() * 9999 + 1),
-    firstName: 'tester',
-    surName: 'tje',
-    country: 'hola',
-    state: 'di',
-    city: 'jee',
-    logo: 'letsgo',
+    nickName: 'testAccount' + Math.floor(Math.random() * 9999 + 1),
+    firstName: 'Maxime',
+    surName: 'Vermeeren',
+    country: 'België',
+    state: 'Oost-Vlaanderen',
+    city: 'Oudenaarde',
     birthdate: '2000-01-01',
   }
 
   const register = () => {
-    registerUser(userRegister)
+    registerUser(userRegister).catch(err => {
+      console.log(err)
+    })
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -40,7 +41,7 @@
 <Container>
   <section class="">
     <article>
-      <Title theme="dark">Portal</Title>
+      <Title theme="dark">Register account</Title>
 
       <div class="flex space-x-12 flex-col sm:flex-row" style="">
         <div
@@ -63,6 +64,14 @@
             /></label
           >
           <label
+            >Password again<input
+              bind:value={userRegister.password}
+              class="input"
+              type="password"
+              placeholder="Password.."
+            /></label
+          >
+          <label
             >Birthdate<input
               bind:value={userRegister.birthdate}
               class="input"
@@ -72,7 +81,7 @@
           >
         </div>
         <div class="grid gap-4 py-12">
-          <SubTitle theme="dark">Additional info</SubTitle>
+          <SubTitle theme="dark">🏡 Additional info</SubTitle>
           <label
             >What's your artistname?<input
               bind:value={userRegister.nickName}

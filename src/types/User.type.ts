@@ -20,7 +20,7 @@ export interface UserType {
   city?: string
   address?: string
   logo?: string
-  birthdate?: string
+  birthdate?: string|Date
   uid?: string
   bio?: string
   role?: Role

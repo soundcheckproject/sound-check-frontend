@@ -80,12 +80,33 @@
           on:click={() => goto(`/portal/staff/users/${user.uuid}`)}
           class="flex space-x-4 "
         >
-          <img
-            src={user.logo}
-            alt={user.nickName}
-            class="h-24 w-24 bg-gray-100  rounded-md  object-cover "
-          />
-
+          <div
+            class="h-24 w-24 bg-gray-100 rounded-md flex justify-center items-center"
+          >
+            {#if user.logo}
+              <img
+                src={user.logo}
+                alt={user.nickName}
+                class="bg-gray-100 w-full h-full rounded-md  object-cover "
+              />
+            {:else}
+              <svg
+                class="text-gray-400 opacity-90"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>{/if}
+          </div>
           <div
             class="bg-gray-100 border-2 border-gray-100 hover:border-gray-300 transition-colors w-full grid gap-6 grid-flow-col items-center px-8 rounded-md cursor-pointer grid-template-columns-150-fr lg:grid-template-columns-150-auto-fr"
           >
