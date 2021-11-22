@@ -10,14 +10,15 @@
   import Button from './Button.svelte'
   import userStore from '../stores/userStore'
   import { sortByDate } from '../utils/useSorting'
-  import { fly, slide } from 'svelte/transition'
+  import { fade, fly, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
 
   export let theme: 'light' | 'dark' = 'dark'
 
   export let feedback: boolean = false
-  let showFeedback = true
+  let showFeedback: boolean =
+    JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
   let playerBar
   let audio: any
@@ -86,6 +87,7 @@
   })
   $: {
     console.log($$props.track)
+    localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
   }
 </script>
 
@@ -96,6 +98,8 @@
   </audio>
 {/if}
 <div
+  in:fade|local={{ duration: 200, delay: 200 }}
+  out:fade={{ duration: 200 }}
   class="overflow-hidden relative grid bg-gray-800 rounded-md backdrop-blur-sm text-gray-100"
 >
   <div
@@ -124,10 +128,10 @@
     <div
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
-      {#if $$props.track.artwork.resource}
+      {#if $$props.track.artwork.resource|| $$props.artworkSrc}
         <img
           alt="img"
-          src={`${$$props.track.artwork.resource}`}
+          src={`${$$props.track.artwork.resource ?? $$props.artworkSrc}`}
           class="object-cover h-full w-full "
         />
       {:else}
@@ -309,8 +313,11 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if feedback && $$props.track.isSigned == null || $$props.track.isSigned == true}
-    <div class="z-10 p-8 grid gap-6 bg-black bg-opacity-20">
+  {#if (feedback && $$props.track.isSigned == null) || $$props.track.isSigned == true}
+    <div
+      transition:slide|local={{ delay: 400, duration: 200 }}
+      class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"
+    >
       <SubTitle theme="light">Add feedback</SubTitle>
       <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
         <input
@@ -329,9 +336,10 @@
       <SubTitle theme="light"
         ><div class="flex w-full justify-between ">
           <div>Feedback</div>
-          <!-- <div>
+          <div>
             <svg
               on:click={() => (showFeedback = !showFeedback)}
+              class:active={showFeedback}
               xmlns="http://www.w3.org/2000/svg"
               width="20"
               height="20"
@@ -347,11 +355,14 @@
               <line x1="14" y1="10" x2="21" y2="3" />
               <line x1="3" y1="21" x2="10" y2="14" />
             </svg>
-          </div> -->
+          </div>
         </div></SubTitle
       >
       {#if showFeedback}
-        <div class="grid gap-4 max-h-96 overflow-y-scroll -mx-8">
+        <div
+          transition:slide|local
+          class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
+        >
           {#each sortByDate(feedbacks, true) as feedback}
             <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm mx-8">
               <div class="text-sm py-3 flex items-center w-full relative ">

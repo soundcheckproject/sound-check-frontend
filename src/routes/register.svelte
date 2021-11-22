@@ -11,6 +11,16 @@
 
   import authStore from '../stores/authStore'
   import { registerUser } from '../utils/useFirebase'
+  import Input from '../components/Input.svelte'
+  import {
+    isNickNameAvailable,
+    validateError,
+    validateErrors,
+    validateLength,
+    validateMatch,
+    validateOld,
+  } from '../utils/useValidation'
+  import validationStore from '../stores/validationStore'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -22,6 +32,33 @@
     state: 'Oost-Vlaanderen',
     city: 'Oudenaarde',
     birthdate: '2000-01-01',
+  }
+  let passwordCheck: string = ''
+  let errors: string[] = []
+  // Todo: validation
+  const checkValidation = (type: string) => {
+    if (type == 'nickname') {
+      // isNickNameAvailable(userRegister.nickName).then(result => {
+      //   errors = validateError('nickname', 'available', result, errors)
+      // })
+    }
+    if (type == 'password') {
+      // errors = validateErrors(
+      //   [
+      //     // validateMatch(userPassword.new, userPassword.old),
+      //     // todo: make work
+
+      //     // validateLength(userRegister.password, 8),
+      //     // validateMatch(userRegister.password, passwordCheck),
+      //     // Todo: .Match in usevalidation not working
+      //     // validateNumbers(user.password),
+      //     // validateCapital(user.password),
+      //     // validateLower(user.password),
+      //   ],
+      //   type,
+      //   errors,
+      // )
+    }
   }
 
   const register = () => {
@@ -35,6 +72,12 @@
       await goto('/portal')
     }
   })
+  let newUser
+  $: {
+
+    validationStore.set(errors)
+    console.log($validationStore)
+  }
 </script>
 
 <Header type="split" />
@@ -55,22 +98,31 @@
               placeholder="Email adress.."
             /></label
           >
-          <label
+          <!-- <label
             >Password<input
               bind:value={userRegister.password}
               class="input"
               type="password"
               placeholder="Password.."
             /></label
-          >
+          > -->
+          <Input
+            errorInput={'password'}
+            title="Password"
+            bind:value={userRegister.password}
+            portal=""
+            on:input={() => checkValidation('password')}
+            placeholder="Strong password.."
+          />
           <label
             >Password again<input
-              bind:value={userRegister.password}
+              bind:value={passwordCheck}
               class="input"
               type="password"
-              placeholder="Password.."
+              placeholder="Password again.."
             /></label
           >
+
           <label
             >Birthdate<input
               bind:value={userRegister.birthdate}
@@ -82,13 +134,21 @@
         </div>
         <div class="grid gap-4 py-12">
           <SubTitle theme="dark">🏡 Additional info</SubTitle>
-          <label
+          <!-- <label
             >What's your artistname?<input
               bind:value={userRegister.nickName}
               class="input"
               placeholder="Artist name.."
             /></label
-          >
+          > -->
+          <Input
+            errorInput={'nickname'}
+            title="What's your artistname?"
+            bind:value={userRegister.nickName}
+            portal=""
+            on:input={() => checkValidation('nickname')}
+            placeholder="Choose a nickname.."
+          />
           <div class="grid md:grid-cols-2 gap-4">
             <label
               >First name<input

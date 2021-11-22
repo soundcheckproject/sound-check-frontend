@@ -3,6 +3,13 @@ import { readable } from 'svelte/store'
 const errorStore = readable<{
   [key: string]: { [key: string]: string | boolean }[]
 }>({
+  connection: [
+    {
+      display: false,
+      errorName: 'connection_graphql',
+      message: 'Connection with database is not working.',
+    },
+  ],
   email: [
     {
       display: false,

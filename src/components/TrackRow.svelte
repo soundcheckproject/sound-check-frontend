@@ -4,7 +4,7 @@
   import { fade } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
 
-  export let artworkSource = ''
+
   export let size: 'sm' | 'md' | 'lg' = 'sm'
 
   export let portal: 'staff' | 'artist' = 'artist'

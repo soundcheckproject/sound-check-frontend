@@ -122,6 +122,7 @@
   </Title>
 
   {#if demos.all.length == 0}
+    <SubTitle>Demos</SubTitle>
     <Skeleton loading={true}>Loading demos..</Skeleton>
   {:else if filterType == 'all' && searchInput.length > 0}
     <div class="flex justify-between items-center">

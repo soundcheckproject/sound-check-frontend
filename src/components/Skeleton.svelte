@@ -5,6 +5,7 @@
 </script>
 
 <div
+
   class="grid gap-2 {loading
     ? 'animate-pulse '
     : ''} rounded-md justify-center items-center py-12 {theme == 'white'

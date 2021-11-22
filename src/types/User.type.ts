@@ -32,3 +32,4 @@ export interface ArtistType extends UserType {
   royaltyPercentage?: number
   uuid?: string
 }
+

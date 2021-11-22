@@ -1,7 +1,12 @@
 <script lang="ts">
   import { initializeApp } from 'firebase/app'
 
-  import { getAuth, User } from 'firebase/auth'
+  import {
+    browserLocalPersistence,
+    getAuth,
+    initializeAuth,
+    User,
+  } from 'firebase/auth'
   import { onMount } from 'svelte'
 
   import 'animate.css'
@@ -18,7 +23,11 @@
       appId: '1:357132427436:web:eca118cfb03620924dbf09',
       measurementId: 'G-QLH9WHRQJE',
     }
-    initializeApp(firebaseConfig)
+    const app = initializeApp(firebaseConfig)
+    initializeAuth(app, {
+      persistence: browserLocalPersistence,
+      // No popupRedirectResolver defined
+    })
 
     getAuth().onAuthStateChanged(async (user: User | any) => {
       // Get auth info and put in store
@@ -30,12 +39,10 @@
       authStore.set(authInfo)
     })
   })
-
 </script>
 
-<div class="font-roboto c-app relative" >
-  <slot ></slot>
-
+<div class="font-roboto c-app relative">
+  <slot />
 </div>
 
 <style lang="postcss">

@@ -19,23 +19,16 @@
     validateLower,
     validateNumbers,
     validateErrors,
+    validateError,
   } from './../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
+  import userStore from '../stores/userStore'
 
-  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
-  // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
-  // interface Error {
-  //   [key: string]: { display?: boolean; errorName?: string; message?: string }
-  // }
-
-  interface formError {
-    // [key: string]: Error[]
-  }
-
-  // let formErrors: any = $validationStore
-  let errors:string[] = []
+  let errors: string[] = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
       errors = validateErrors(
@@ -61,11 +54,14 @@
 
   const login = () => {
     if ($validationStore.length == 0) {
-      try {
-        loginUser(user.email, user.password)
-      } catch (error) {
-        console.log(error)
-      }
+      loginUser(user.email, user.password)
+        .then(async e => {
+          errors = validateError('connection', 'graphql', e, errors)
+          await goto('/portal')
+        })
+        .catch(e => {
+          errors = validateError('connection', 'graphql', e, errors)
+        })
     }
   }
 
@@ -103,6 +99,7 @@
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
 
+          <InputError errorInput="connection" />
           <InputError errorInput="email" />
 
           <label

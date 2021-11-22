@@ -6,30 +6,31 @@
   import { getUserViaFirebase } from '../utils/useGraphQL'
   import userStore from '../stores/userStore'
   import type { UserType } from '../types/User.type'
+  import { getUserInfoFromLocalStorage, storeUserInfoInLocalStorage } from '../utils/useFirebase'
 
   onMount(() => {
     authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
       if (!isLoggedIn && firebaseControlled) {
         // Reset user in localstorage
-        localStorage.setItem('user', '')
+
+        storeUserInfoInLocalStorage(true)
         await goto('/login')
       } else {
-        // console.log(user.accessToken)
+        console.log(user.accessToken)
         const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
         const roleName = roleObject.roles[0]
+
         roleStore.set(roleName)
 
-        const userInfo: UserType = JSON.parse(localStorage.getItem('user'))
-        userStore.set(userInfo)
-
+        getUserInfoFromLocalStorage()
       }
     })
   })
 </script>
 
-{#if $authStore.isLoggedIn}
+{#if $authStore.isLoggedIn && $userStore}
   <!-- Authenticated -->
   <slot />
 {:else}
-  <!-- Checking for authentication -->
+  <!-- Not authenticated -->
 {/if}

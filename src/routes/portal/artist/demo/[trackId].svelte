@@ -16,6 +16,7 @@
   import { getTrackById } from '../../../../utils/useGraphQL'
   import userStore from '../../../../stores/userStore'
 
+  // let track: TrackType
   let track: TrackType = {
     uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
     title: 'Miss you so feat. Jebroer',
@@ -29,15 +30,16 @@
     prefferdReleaseDate: '2022-01-01',
     artwork: {
       designer: 'nielsonderbeke2',
-      resource:
-        'https://i.scdn.co/image/ab67616d0000b273f8b9b9b9b9b9b9b9b9b9b9b9b',
+      resource: '',
     },
   }
 
   onMount(async () => {
     if ($page.params.trackId) {
+      // track = await getTrackById($page.params.trackId).catch(e =>
+      //   console.log(e),
+      // )
       try {
-        track = await getTrackById($page.params.trackId)
       } catch (e) {}
     } else {
       // console.log('no trackId found')
@@ -46,79 +48,94 @@
 </script>
 
 <div class="grid gap-8">
-  <TrackPlayer
-    feedback={true}
-    {track}
-    audioSrc={track.resource}
-    imgSrc={track.artwork.resource}
-  />
-  <Box>
-    <Title
-      ><div class="flex justify-between items-center">
-        <div>{track.title ?? 'No title found'}</div>
+  {#if track}
+    <TrackPlayer feedback={true} {track} audioSrc={track.resource} />
+    <Box>
+      <Title
+        ><div class="flex justify-between items-center">
+          <div>{track.title ?? 'No title found'}</div>
 
-        <EditButton href={$page.path + '-edit'} />
-      </div></Title
-    >
-    <div class="grid gap-6 lg:grid-cols-2 items-start">
-      <div class="grid gap-4">
-        <SubTitle>💽 Information</SubTitle>
+          <EditButton href={$page.path + '-edit'} />
+        </div></Title
+      >
+      <div class="grid gap-6 lg:grid-cols-2 items-start">
+        <div class="grid gap-4">
+          <SubTitle>💽 Information</SubTitle>
 
-        <div class="grid ">
-          <p class="font-semibold ">Description</p>
+          <div class="grid ">
+            <p class="font-semibold ">Description</p>
 
-          <p class="text-sm">{track.description}</p>
-          <p class="mt-4 font-semibold  ">Lyrics</p>
+            <p class="text-sm">{track.description}</p>
+            <p class="mt-4 font-semibold  ">Lyrics</p>
 
-          <p class="text-sm">{track.lyrics}</p>
-        </div>
-      </div>
-      <div class="grid gap-4">
-        <SubTitle>👨🏼‍🎨 Artists</SubTitle>
-        {#if track.artistTracks && track.artistTracks.length > 0}
-          <div class="flex space-x-2">
-            {#each track.artistTracks as artist}
-              <Artist artist={artist.user} socials theme="dark"
-                >{artist.user.nickName}</Artist
-              >
-            {/each}
+            <p class="text-sm">{track.lyrics}</p>
           </div>
-        {:else}
-          No artists found..
-        {/if}
-        <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
-      </div>
-    </div>
-  </Box>
-  <Box
-    ><Title>Contract</Title>
-
-    <SubTitle>📝 Manage contract</SubTitle>
-  
-    <div class="flex space-x-4">
-      <Button size="sm" color="bg-teal-700">
-        <div class="download">
-          <svg
-            class="-mt-px"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-            <polyline points="17 8 12 3 7 8" />
-            <line x1="12" y1="3" x2="12" y2="15" />
-          </svg>
-          <div>Upload signed contract</div>
         </div>
-      </Button>
-      <Button size="sm" color="bg-gray-500">
-        <div class="download">
+        <div class="grid gap-4">
+          <SubTitle>👨🏼‍🎨 Artists</SubTitle>
+          {#if track.artistTracks && track.artistTracks.length > 0}
+            <div class="flex space-x-2">
+              {#each track.artistTracks as artist}
+                <Artist artist={artist.user} socials theme="dark"
+                  >{artist.user.nickName}</Artist
+                >
+              {/each}
+            </div>
+          {:else}
+            No artists found..
+          {/if}
+          <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
+        </div>
+      </div>
+    </Box>
+    <Box
+      ><Title>Contract</Title>
+
+      <SubTitle>📝 Manage contract</SubTitle>
+
+      <div class="flex space-x-4">
+        <Button size="sm" color="bg-teal-700">
+          <div class="download">
+            <svg
+              class="-mt-px"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <div>Upload signed contract</div>
+          </div>
+        </Button>
+        <Button size="sm" color="bg-gray-500">
+          <div class="download">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <div>Download unsigned contract</div>
+          </div>
+        </Button>
+        <div class="download opacity-25">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -134,27 +151,9 @@
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
-          <div>Download unsigned contract</div>
+          <div>Download signed contract</div>
         </div>
-      </Button>
-      <div class="download opacity-25">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-          <polyline points="7 10 12 15 17 10" />
-          <line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        <div>Download signed contract</div>
       </div>
-    </div>
-  </Box>
+    </Box>
+  {/if}
 </div>

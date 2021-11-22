@@ -25,6 +25,7 @@
   import { uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
   import userStore from '../../../../stores/userStore'
+  import FadeBox from '../../../../components/portal/FadeBox.svelte'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -34,7 +35,7 @@
     previewStart: 20,
     previewStop: 35,
     lyrics: 'I hate to admit it',
-    artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
+    artistIds: [$userStore.uuid],
     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
     prefferdReleaseDate: '2022-01-01',
     artwork: {
@@ -90,6 +91,9 @@
   }
 
   const postTrack = async () => {
+    newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
+    console.log(newTrack)
+
     await createTrack(newTrack)
       .then(async resCreateTrack => {
         console.log(resCreateTrack)
@@ -138,45 +142,15 @@
 </script>
 
 <div class="grid gap-8">
-  <div class="flex space-x-2">
-    <ButtonBox
-      on:click={() => {
-        uploadPageStatus > 1 ? uploadPageStatus-- : () => {}
-      }}
-    >
-      <svg
-        class="rotate-180 "
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <polyline points="9 18 15 12 9 6" />
-      </svg>
-    </ButtonBox>
-
-    {#each [1, 2, 3, 4] as i}
-      <ButtonBox
-        active={uploadPageStatus == i ? true : false}
-        on:click={() => {
-          setUploadPageStatus(i)
-        }}
-      >
-        {i}
-      </ButtonBox>{/each}
-    {#if uploadPageStatus != 4}
+  <FadeBox>
+    <div class="flex space-x-2">
       <ButtonBox
         on:click={() => {
-          uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
+          uploadPageStatus > 1 ? uploadPageStatus-- : () => {}
         }}
       >
-        Next
         <svg
+          class="rotate-180 "
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"
@@ -190,8 +164,40 @@
           <polyline points="9 18 15 12 9 6" />
         </svg>
       </ButtonBox>
-    {/if}
-  </div>
+
+      {#each [1, 2, 3, 4] as i}
+        <ButtonBox
+          active={uploadPageStatus == i ? true : false}
+          on:click={() => {
+            setUploadPageStatus(i)
+          }}
+        >
+          {i}
+        </ButtonBox>{/each}
+      {#if uploadPageStatus != 4}
+        <ButtonBox
+          on:click={() => {
+            uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
+          }}
+        >
+          Next
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </ButtonBox>
+      {/if}
+    </div>
+  </FadeBox>
   <Box>
     <div class="z-10 absolute -top-4 left-12 flex space-x-2" />
     <Title>Submit a new track</Title>
@@ -314,6 +320,7 @@
                               No artists found..
                             </p>{:else}
                             {#each artists as artist}<Artist
+                                {artist}
                                 onClick={() => {
                                   artist.royaltyPercentage = 0
 
@@ -360,6 +367,7 @@
                     transition:fade
                   >
                     <Artist
+                      {artist}
                       size="md"
                       remove={() => {
                         removeArtist(artist.uuid)
@@ -451,23 +459,23 @@
                   class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
                   on:click={() => artworkBlob.click()}
                 >
-                <svg
-                class="-mt-px"
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                <polyline points="17 8 12 3 7 8" />
-                <line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              <p>Click to upload or drag your artwork here..</p>
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload or drag your artwork here..</p>
                   <input
                     type="file"
                     accept=".jpg, .jpeg, .png"
@@ -502,7 +510,11 @@
       {#if uploadPageStatus == 4}
         <FlyBox>
           {#if trackPreview}
-            <TrackPlayer track={newTrack} artworkSrc={artworkPreview} audioSrc={trackPreview} />
+            <TrackPlayer
+              track={newTrack}
+              artworkSrc={artworkPreview}
+              audioSrc={trackPreview}
+            />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>
 

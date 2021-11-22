@@ -1,7 +1,11 @@
 import { goto } from '$app/navigation'
 import {
+  browserLocalPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
+  reauthenticateWithCredential,
+  setPersistence,
   signInWithEmailAndPassword,
   updateEmail,
   updatePassword,
@@ -24,10 +28,13 @@ export const loginUser = (
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(getAuth(), email, password)
-      .then(async () => {
+      .then(() => {
         // Signed in
         storeUserInfoInLocalStorage()
-        resolve(true)
+          .then(() => {
+            resolve(true)
+          })
+          .catch(() => reject(false))
       })
       .catch(error => {
         // const errorCode = error.code
@@ -38,10 +45,20 @@ export const loginUser = (
   })
 }
 
-export const storeUserInfoInLocalStorage = async () => {
-  const userInfo = await getUserViaFirebase()
-  localStorage.setItem('user', JSON.stringify(userInfo))
+export const storeUserInfoInLocalStorage = async (
+  reset = false,
+): Promise<void> => {
+  if (reset) localStorage.setItem('user', '')
+  else {
+    const userInfo: UserType = await getUserViaFirebase()
 
+    localStorage.setItem('user', JSON.stringify(userInfo))
+    userStore.set(userInfo)
+  }
+}
+
+export const getUserInfoFromLocalStorage = async (): Promise<void> => {
+  const userInfo: UserType = JSON.parse(localStorage.getItem('user'))
   userStore.set(userInfo)
 }
 
@@ -67,7 +84,21 @@ export const registerUser = (user: UserType): Promise<boolean> => {
               data: user,
             },
           )
-          storeUserInfoInLocalStorage()
+          // storeUserInfoInLocalStorage()
+
+          // const userAuth = getAuth().currentUser
+
+          // // TODO(you): prompt the user to re-provide their sign-in credentials
+          // const credential = promptForCredentials()
+
+          // reauthenticateWithCredential(userAuth, credential)
+          //   .then(() => {
+          //     // User re-authenticated.
+          //   })
+          //   .catch(error => {
+          //     // An error ocurred
+          //     // ...
+          //   })
 
           resolve(true)
         } catch (error) {
