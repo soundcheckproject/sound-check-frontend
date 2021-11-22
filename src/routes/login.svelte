@@ -66,7 +66,7 @@
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-    if (isLoggedIn && firebaseControlled) {
+    if (isLoggedIn && firebaseControlled && $userStore.nickName.length > 0) {
       await goto('/portal')
     }
   })

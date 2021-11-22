@@ -23,11 +23,12 @@
       appId: '1:357132427436:web:eca118cfb03620924dbf09',
       measurementId: 'G-QLH9WHRQJE',
     }
-    const app = initializeApp(firebaseConfig)
-    initializeAuth(app, {
-      persistence: browserLocalPersistence,
-      // No popupRedirectResolver defined
-    })
+    initializeApp(firebaseConfig)
+    // const app = initializeApp(firebaseConfig)
+    // initializeAuth(app, {
+    //   persistence: browserLocalPersistence,
+    //   // No popupRedirectResolver defined
+    // })
 
     getAuth().onAuthStateChanged(async (user: User | any) => {
       // Get auth info and put in store

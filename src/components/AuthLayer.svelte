@@ -6,17 +6,21 @@
   import { getUserViaFirebase } from '../utils/useGraphQL'
   import userStore from '../stores/userStore'
   import type { UserType } from '../types/User.type'
-  import { getUserInfoFromLocalStorage, storeUserInfoInLocalStorage } from '../utils/useFirebase'
+  import {
+    getUserInfoFromLocalStorage,
+    storeUserInfoInLocalStorage,
+  } from '../utils/useFirebase'
+  import Popup from './Popup.svelte'
 
   onMount(() => {
     authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
-      if (!isLoggedIn && firebaseControlled) {
+      if (!isLoggedIn && firebaseControlled ) {
         // Reset user in localstorage
 
         storeUserInfoInLocalStorage(true)
         await goto('/login')
       } else {
-        console.log(user.accessToken)
+
         const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
         const roleName = roleObject.roles[0]
 
@@ -28,9 +32,10 @@
   })
 </script>
 
-{#if $authStore.isLoggedIn && $userStore}
+{#if $authStore.isLoggedIn && $userStore.nickName && $userStore.nickName.length > 0}
   <!-- Authenticated -->
   <slot />
 {:else}
   <!-- Not authenticated -->
+  <Popup>Not authenticated</Popup>
 {/if}

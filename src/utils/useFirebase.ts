@@ -30,9 +30,14 @@ export const loginUser = (
     signInWithEmailAndPassword(getAuth(), email, password)
       .then(() => {
         // Signed in
+
         storeUserInfoInLocalStorage()
           .then(() => {
-            resolve(true)
+            setPersistenceFirebase(email, password)
+              .then(() => resolve(true))
+              .catch(() => {
+                reject(false)
+              })
           })
           .catch(() => reject(false))
       })
@@ -47,19 +52,47 @@ export const loginUser = (
 
 export const storeUserInfoInLocalStorage = async (
   reset = false,
-): Promise<void> => {
-  if (reset) localStorage.setItem('user', '')
-  else {
-    const userInfo: UserType = await getUserViaFirebase()
+): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    if (reset) {
+      localStorage.setItem('user', '')
+      resolve(true)
+    } else {
+      getUserViaFirebase()
+        .then((res: UserType) => {
+          localStorage.setItem('user', JSON.stringify(res))
+          userStore.set(res)
 
-    localStorage.setItem('user', JSON.stringify(userInfo))
-    userStore.set(userInfo)
-  }
+          resolve(true)
+        })
+        .catch(() => reject(false))
+    }
+  })
 }
 
 export const getUserInfoFromLocalStorage = async (): Promise<void> => {
   const userInfo: UserType = JSON.parse(localStorage.getItem('user'))
   userStore.set(userInfo)
+}
+
+export const setPersistenceFirebase = async (
+  email: string,
+  password: string,
+): Promise<void> => {
+  setPersistence(getAuth(), browserLocalPersistence)
+    .then(() => {
+      // Existing and future Auth states are now persisted in the current
+      // session only. Closing the window would clear any existing state even
+      // if a user forgets to sign out.
+      // ...
+      // New sign-in will be persisted with session persistence.
+      return signInWithEmailAndPassword(getAuth(), email, password)
+    })
+    .catch(error => {
+      // Handle Errors here.
+      const errorCode = error.code
+      const errorMessage = error.message
+    })
 }
 
 export const registerUser = (user: UserType): Promise<boolean> => {

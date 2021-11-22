@@ -63,11 +63,13 @@
         href="/portal/profile"
         class="text-lg flex space-x-4 items-center h-12 cursor-pointer"
       >
-        <img
-          alt="Artist"
-          src="https://partyflock.nl/images/artist/61243_1080x1080_585775/Martin-Garrix.webp"
-          class=" w-12 h-12 bg-gray-300  rounded-full mshadow-sm "
-        />
+        {#if $userStore.logo}
+          <img
+            alt="Artist {$userStore.nickName}"
+            src={$userStore.logo}
+            class="object-cover w-12 h-12 bg-gray-300  rounded-full mshadow-sm "
+          />
+        {/if}
         {#if !$menuState}
           <p
             in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}

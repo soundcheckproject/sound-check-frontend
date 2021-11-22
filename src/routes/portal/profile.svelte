@@ -26,8 +26,9 @@
     updateFirebaseEmail,
     updateFirebasePassword,
   } from '../../utils/useFirebase'
+  import { formatDate } from '../../utils/useFormat'
 
-  let artist: UserType
+  let artist: UserType = $userStore
 
   // let artist: UserType = {
   //   email: $userStore.email ?? 'example@of.mail',
@@ -51,7 +52,7 @@
 
   onMount(async () => {
     links = await getLinks()
-    artist = $userStore
+    // artist
   })
 
   const updateUser = async () => {
@@ -155,7 +156,10 @@
 
 <div class="grid gap-8">
   {#if artist}
-    <ProfileBanner artist={newArtist} logo={logoPreview} />
+    <ProfileBanner
+      artist={newArtist}
+      logo={logoPreview.length > 0 ? logoPreview : newArtist.logo}
+    />
     <Box
       ><Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
@@ -169,6 +173,7 @@
             on:input={() => checkValidation('nickname')}
             placeholder="Choose a nickname.."
           />
+          <!-- // Todo make birthdate work -->
           <Input
             title="Birthdate"
             type="date"
@@ -251,7 +256,7 @@
                 <line x1="12" y1="3" x2="12" y2="15" />
               </svg>
               <p>Click to upload or drag your artwork here..</p>
-              
+
               <input
                 type="file"
                 accept=".jpg, .jpeg, .png"
@@ -262,9 +267,8 @@
               />
             </div>
           </div>
-        
         </div>
-        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5"/>
+        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5" />
       </form>
     </Box>
     <Box
@@ -306,7 +310,7 @@
               <div class="relative">
                 <Input
                   title={newArtist.userLinks[i].link.type}
-                  bind:group={newArtist.userLinks[i].linkAddress}
+                  bind:value={newArtist.userLinks[i].linkAddress}
                   placeholder="Link address.."
                 />
                 <div

@@ -105,7 +105,7 @@
 		<section>
 			<article>
 				<Title>What is label?</Title>
-				<Title>What is label?</Title>
+
 				<SubTitle>🚨 Letsgo!</SubTitle>
 				<p>
 					Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece
@@ -174,7 +174,7 @@
 							</svg>
 						</div>
 					</label>
-					<Button color="bg-blue-900" size="md">Learn more!</Button>
+					<Button color="bg-teal-700" size="md">Learn more!</Button>
 				</form>
 			</article>
 			<article class="py-12 md:w-1/2 lg:w-3/5 lg:left">

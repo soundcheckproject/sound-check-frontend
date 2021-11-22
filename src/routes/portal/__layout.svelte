@@ -70,7 +70,7 @@
 
     <div
       on:click={() => scrollUp()}
-      class=" backdrop-blur-2xl absolute right-12 bottom-12 rounded-full bg-opacity-25 bg-gray-500 p-4 text-white cursor-pointer hover:bg-opacity-75 transition-all"
+      class="backdrop-blur-2xl absolute right-12 bottom-12 rounded-full bg-opacity-25 bg-gray-500 p-4 text-white cursor-pointer hover:bg-opacity-75 transition-all"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

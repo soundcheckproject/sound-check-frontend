@@ -8,9 +8,6 @@
   import { onMount } from 'svelte'
   import { getAllTracks } from '../../../../utils/useGraphQL'
   import demoTracksStore from '../../../../stores/demoTracksStore'
-  import userStore from '../../../../stores/userStore'
-  import { getTracksByArtistId } from '../../../../utils/useGraphQL'
-  import { slide } from 'svelte/transition'
 
   interface DemoListType {
     all: TrackType[]
@@ -27,11 +24,6 @@
 
   let tracksLoaded: boolean = false
 
-  onMount(async () => {
-    demoTracksStore.set(await getAllTracks())
-    demos = sortTracksByType($demoTracksStore)
-    tracksLoaded = true
-  })
   let filterType: string
   let filteredDemos: DemoListType = {
     all: [],
@@ -45,7 +37,6 @@
     console.log(searchInput, filterType, type)
     console.log(searchInput.length)
     if (searchInput.length > 0) {
-      console.log(demos[type])
       filteredDemos[type] = demos[type].filter(
         (track: TrackType) =>
           track.title.toLowerCase().substring(0, searchInput.length) ==
@@ -91,6 +82,18 @@
       denied: trackStore.filter(track => track.isSigned === false) ?? [],
     }
   }
+
+  onMount(() => {
+    getAllTracks()
+      .then(res => {
+        demoTracksStore.set(res)
+        demos = sortTracksByType(res)
+        tracksLoaded = true
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  })
 
   $: {
     if (tracksLoaded) filteredDemos = sortTracksByType($demoTracksStore)
