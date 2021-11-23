@@ -6,29 +6,33 @@ import type { Link, UserType, ArtistType } from '../types/User.type'
 export const query = async (
   name: string,
   query: string,
-  variables?: Object,
+  variables?: any,
 ): Promise<any> => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
-    .then(res => res.json())
-    .then(gqlresponse => {
-      if(gqlresponse.errors){
-        throw gqlresponse.errors
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    return gqlresponse.data[name]
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
     })
-    .catch(error => console.error( error ))
+
+    const gqlReqponse = await res.json()
+
+    if (gqlReqponse.errors) {
+      throw gqlReqponse.errors
+    }
+
+
+    console.log({gqlReqponse})
+    return gqlReqponse.data[name]
+  } catch (err) {
+    console.log({ err })
+  }
 }
 
 export const uploadQuery = async (
@@ -157,6 +161,8 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
   )
   return response
 }
+
+
 
 export const getAllTracks = async (): Promise<TrackType[]> => {
   const response = await query(

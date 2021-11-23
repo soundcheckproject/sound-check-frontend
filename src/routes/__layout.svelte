@@ -13,17 +13,18 @@
 
   import authStore from '../stores/authStore'
 
+  const firebaseConfig = {
+    apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
+    authDomain: 'sound-check-cccba.firebaseapp.com',
+    projectId: 'sound-check-cccba',
+    storageBucket: 'sound-check-cccba.appspot.com',
+    messagingSenderId: '357132427436',
+    appId: '1:357132427436:web:eca118cfb03620924dbf09',
+    measurementId: 'G-QLH9WHRQJE',
+  }
+  initializeApp(firebaseConfig)
+  
   onMount(() => {
-    const firebaseConfig = {
-      apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
-      authDomain: 'sound-check-cccba.firebaseapp.com',
-      projectId: 'sound-check-cccba',
-      storageBucket: 'sound-check-cccba.appspot.com',
-      messagingSenderId: '357132427436',
-      appId: '1:357132427436:web:eca118cfb03620924dbf09',
-      measurementId: 'G-QLH9WHRQJE',
-    }
-    initializeApp(firebaseConfig)
     // const app = initializeApp(firebaseConfig)
     // initializeAuth(app, {
     //   persistence: browserLocalPersistence,
@@ -42,7 +43,7 @@
   })
 </script>
 
-<div class="font-roboto c-app relative">
+<div class="font-roboto c-app relative ">
   <slot />
 </div>
 
