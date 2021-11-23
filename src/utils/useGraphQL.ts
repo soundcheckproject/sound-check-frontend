@@ -6,29 +6,30 @@ import type { Link, UserType, ArtistType } from '../types/User.type'
 export const query = async (
   name: string,
   query: string,
-  variables?: Object,
+  variables?: any,
 ): Promise<any> => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
-    .then(res => res.json())
-    .then(gqlresponse => {
-      if(gqlresponse.errors){
-        throw gqlresponse.errors
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-    return gqlresponse.data[name]
+  try {
+    const res= await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+      },
+      body: JSON.stringify({
+        query,
+        variables,
+      }),
     })
-    .catch(error => console.error( error ))
+    console.log({res})
+    // res = res.json()
+    // if (res.errors) {
+    //   throw res.errors
+    // }
+
+    // return res.data[name]
+  } catch (err) {
+    console.log({ err })
+  }
 }
 
 export const uploadQuery = async (
@@ -93,9 +94,7 @@ export const getArtistsByNickName = async (
   )
   return response
 }
-export const getArtistByUserId = async (
-  userId: string,
-): Promise<UserType> => {
+export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   const response = await query(
     `getUser`,
     `query GetUser($userId: String!) {
@@ -313,6 +312,7 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
       }
     }`,
   )
+  console.log({ response })
   return response
 }
 export const updateUserInfoByUserId = (

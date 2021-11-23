@@ -24,6 +24,7 @@
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
   import userStore from '../stores/userStore'
+import { roleStore } from '../stores/stores';
 
   // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
@@ -66,7 +67,7 @@
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-    if (isLoggedIn && firebaseControlled && $userStore.nickName.length > 0) {
+    if (isLoggedIn && firebaseControlled && $roleStore) {
       await goto('/portal')
     }
   })

@@ -21,7 +21,7 @@
     validateOld,
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
-  import userStore from 'src/stores/userStore'
+  import userStore from '../stores/userStore'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',

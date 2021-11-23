@@ -11,6 +11,7 @@ import {
   updatePassword,
 } from 'firebase/auth'
 import userStore from '../stores/userStore'
+import { roleStore } from '../stores/stores'
 import type { UserType } from '../types/User.type'
 import { getUserViaFirebase, query } from './useGraphQL'
 
@@ -28,18 +29,36 @@ export const loginUser = (
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
+      .then(async (userCredential): Promise<any> => {
         // Signed in
+        const roleName = JSON.parse(
+          userCredential.user['reloadUserInfo'].customAttributes,
+        ).roles[0]
 
-        storeUserInfoInLocalStorage()
+        roleStore.set(roleName)
+        roleStore.subscribe((role: string) => console.log(role))
+
+        setPersistenceFirebase(email, password)
           .then(() => {
-            setPersistenceFirebase(email, password)
-              .then(() => resolve(true))
-              .catch(() => {
-                reject(false)
-              })
+            resolve(true)
           })
-          .catch(() => reject(false))
+          .catch(() => {
+            reject(false)
+          })
+
+        // const user = await getUserViaFirebase()
+        // console.log(user)
+
+        // roleStore.set(
+
+        //   JSON.parse(userCredential.user['reloadUserInfo'].customAttributes)
+        //     .roles[0],
+        // )
+        // console.log(roleStore.subscribe((role: string) => console.log(role)))
+
+        // storeUserInfoInLocalStorage()
+        //   .then(() => {})
+        //   .catch(() => reject(false))
       })
       .catch(error => {
         // const errorCode = error.code
@@ -58,14 +77,23 @@ export const storeUserInfoInLocalStorage = async (
       localStorage.setItem('user', '')
       resolve(true)
     } else {
-      getUserViaFirebase()
-        .then((res: UserType) => {
-          localStorage.setItem('user', JSON.stringify(res))
-          userStore.set(res)
-
-          resolve(true)
+      const user = getUserViaFirebase()
+        .then(res => {
+          console.log(res)
         })
-        .catch(() => reject(false))
+        .catch(error => {
+          console.error(error)
+        })
+
+      // getUserViaFirebase()
+      //   .then((res: UserType) => {
+      //     console.log(res)
+      //     localStorage.setItem('user', JSON.stringify(res))
+      //     userStore.set(res)
+
+      //     resolve(true)
+      //   })
+      //   .catch(() => reject(false))
     }
   })
 }

@@ -11,28 +11,43 @@
     storeUserInfoInLocalStorage,
   } from '../utils/useFirebase'
   import Popup from './Popup.svelte'
+  import { getAuth } from '@firebase/auth'
 
   onMount(() => {
     authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
-      if (!isLoggedIn && firebaseControlled ) {
+      if (!isLoggedIn && firebaseControlled) {
         // Reset user in localstorage
 
         storeUserInfoInLocalStorage(true)
         await goto('/login')
       } else {
+        console.log(user)
+        // storeUserInfoInLocalStorage()
+        const userFirebase = await getUserViaFirebase()
+        console.log(userFirebase)
+        // const roleObject =
+        //   JSON.parse(getAuth().currentUser['reloadUserInfo'].customAttributes)
+        // let roleName: string
+        // if (roleObject) {
+        //   roleName = roleObject.roles[0]
+        //   if (roleName) {
+        //     roleStore.set(roleName)
+        //     getUserInfoFromLocalStorage()
+        //   }
+        // }
+        // const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
+        // const roleName = roleObject.roles[0]
 
-        const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
-        const roleName = roleObject.roles[0]
+        // roleStore.set(roleName)
 
-        roleStore.set(roleName)
-
-        getUserInfoFromLocalStorage()
+        // getUserInfoFromLocalStorage()
+        console.log($roleStore)
       }
     })
   })
 </script>
 
-{#if $authStore.isLoggedIn && $userStore.nickName && $userStore.nickName.length > 0}
+{#if $authStore.isLoggedIn && $roleStore && $userStore}
   <!-- Authenticated -->
   <slot />
 {:else}
