@@ -20,9 +20,15 @@ export const query = async (
     }),
   })
     .then(res => res.json())
-    .catch(error => console.error({ error }))
-
-  return res.data[name]
+    .then(gqlresponse => {
+      if(gqlresponse.errors){
+        throw gqlresponse.errors
+      }
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+    return gqlresponse.data[name]
+    })
+    .catch(error => console.error( error ))
 }
 
 export const uploadQuery = async (
