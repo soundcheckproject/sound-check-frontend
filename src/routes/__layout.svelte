@@ -23,6 +23,7 @@
     measurementId: 'G-QLH9WHRQJE',
   }
   initializeApp(firebaseConfig)
+  
   onMount(() => {
     // const app = initializeApp(firebaseConfig)
     // initializeAuth(app, {
@@ -42,7 +43,7 @@
   })
 </script>
 
-<div class="font-roboto c-app relative">
+<div class="font-roboto c-app relative ">
   <slot />
 </div>
 

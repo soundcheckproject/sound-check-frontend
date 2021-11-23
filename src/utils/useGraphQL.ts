@@ -158,6 +158,8 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
   return response
 }
 
+
+
 export const getAllTracks = async (): Promise<TrackType[]> => {
   const response = await query(
     `getTracks`,
