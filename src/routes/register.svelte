@@ -10,7 +10,7 @@
   import Footer from '../components/Footer.svelte'
 
   import authStore from '../stores/authStore'
-  import { registerUser } from '../utils/useFirebase'
+  import { loginUser, registerUser } from '../utils/useFirebase'
   import Input from '../components/Input.svelte'
   import {
     isNickNameAvailable,
@@ -22,6 +22,9 @@
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import userStore from '../stores/userStore'
+  import { roleStore } from '../stores/stores'
+  import InputError from '../components/InputError.svelte'
+  import { getAuth } from '@firebase/auth'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -62,25 +65,27 @@
   }
 
   const register = () => {
-    registerUser(userRegister)
-      .then(async e => {
-        errors = validateError('connection', 'graphql', e, errors)
-        await goto('/portal')
-      })
-      .catch(e => {
-        errors = validateError('connection', 'graphql', e, errors)
-      })
+    if ($validationStore.length == 0) {
+      registerUser(userRegister)
+        .then(async e => {
+          errors = validateError('connection', 'graphql', e, errors)
+
+          await goto('/portal')
+        })
+        .catch(e => {
+          errors = validateError('connection', 'graphql', e, errors)
+        })
+    }
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-    if (isLoggedIn && firebaseControlled && $userStore.nickName.length > 0) {
+    if (isLoggedIn && firebaseControlled && $roleStore && $userStore) {
       await goto('/portal')
     }
   })
-  let newUser
+
   $: {
     validationStore.set(errors)
-    console.log($validationStore)
   }
 </script>
 
@@ -94,6 +99,7 @@
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
+          <InputError errorInput="connection" />
           <SubTitle theme="dark">📝 Create account</SubTitle>
           <label
             >Email adress<input

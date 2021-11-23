@@ -29,7 +29,7 @@ export const loginUser = (
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(getAuth(), email, password)
-      .then(async (userCredential): Promise<any> => {
+      .then(async userCredential => {
         // Signed in
 
         setPersistenceFirebase(email, password)
@@ -49,7 +49,7 @@ export const loginUser = (
       .catch(error => {
         // const errorCode = error.code
         // const errorMessage = error.message
-        console.error(error)
+        console.error({ error })
         reject(false)
       })
   })
@@ -65,29 +65,31 @@ export const storeUserInfoInLocalStorage = async (
     } else {
       getUserViaFirebase()
         .then((res: UserType) => {
-          console.log(res)
-          localStorage.setItem('user', JSON.stringify(res))
-          userStore.set(res)
-
-          resolve(true)
+          if (res) {
+            localStorage.setItem('user', JSON.stringify(res))
+            userStore.set(res)
+            resolve(true)
+          } else reject(false)
         })
         .catch(() => reject(false))
     }
   })
 }
 
-export const storeRole = (userCredentials: any): Promise<boolean> => {
+export const storeRole = (userCredentials: [key: string]): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    console.log(
-      JSON.parse(userCredentials['reloadUserInfo'].customAttributes).roles[0],
-    )
-    const role = JSON.parse(userCredentials['reloadUserInfo'].customAttributes)
-      .roles[0]
-    if (role) {
-      roleStore.set(role)
-      roleStore.subscribe((role: string) => console.log(role))
-      resolve(true)
-    } else reject(false)
+    try {
+      const role: string = JSON.parse(
+        userCredentials['reloadUserInfo'].customAttributes,
+      ).roles[0]
+      if (role) {
+        roleStore.set(role)
+
+        resolve(true)
+      } else reject(false)
+    } catch (err) {
+      reject(false)
+    }
   })
 }
 
@@ -119,7 +121,7 @@ export const setPersistenceFirebase = async (
 export const registerUser = (user: UserType): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(getAuth(), user.email, user.password)
-      .then(async userCredential => {
+      .then(async userCred => {
         // Signed in -> success -> let's add a record to our own database!
         // #2 Eigen account op server bijhouden
 
@@ -141,15 +143,17 @@ export const registerUser = (user: UserType): Promise<boolean> => {
             },
           )
 
-          storeUserInfoInLocalStorage()
+          setPersistenceFirebase(addUser.email, addUser.password)
             .then(() => {
-              setPersistenceFirebase(user.email, user.password)
-                .then(() => resolve(true))
-                .catch(() => {
-                  reject(false)
+              storeUserInfoInLocalStorage()
+                .then(() => {
+                  resolve(true)
                 })
+                .catch(() => reject(false))
             })
-            .catch(() => reject(false))
+            .catch(() => {
+              reject(false)
+            })
         } catch (error) {
           console.error({ error })
           reject(false)

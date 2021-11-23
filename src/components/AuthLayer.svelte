@@ -22,9 +22,11 @@
         storeUserInfoInLocalStorage(true)
         await goto('/login')
       } else {
-        storeUserInfoInLocalStorage().then(() => {
-          storeRole(user)
-        })
+        if (user)
+          storeUserInfoInLocalStorage().then(() => {
+            storeRole(user)
+            console.log(user)
+          })
       }
     })
   })

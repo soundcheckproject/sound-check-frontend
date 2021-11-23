@@ -26,8 +26,8 @@
   import userStore from '../stores/userStore'
 import { roleStore } from '../stores/stores';
 
-  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
-  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
@@ -67,7 +67,7 @@ import { roleStore } from '../stores/stores';
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-    if (isLoggedIn && firebaseControlled && $roleStore) {
+    if (isLoggedIn && firebaseControlled && $roleStore && $userStore) {
       await goto('/portal')
     }
   })

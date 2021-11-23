@@ -38,12 +38,13 @@
   onMount(async () => {
     if ($userTracksStore == null) {
       userTracksStore.set(await getTracksByArtistId($userStore.uuid))
-      tracks = {
-        all: $userTracksStore,
-        pending: $userTracksStore.filter(track => track.isSigned == null) ?? [],
-        accepted: $userTracksStore.filter(track => track.isSigned === true),
-        denied: $userTracksStore.filter(track => track.isSigned === false),
-      }
+      if ($userTracksStore)
+        tracks = {
+          all: $userTracksStore,
+          pending: $userTracksStore.filter(track => track.isSigned == null),
+          accepted: $userTracksStore.filter(track => track.isSigned === true),
+          denied: $userTracksStore.filter(track => track.isSigned === false),
+        }
     }
   })
 
@@ -67,64 +68,69 @@
         </div>
       </div>
     </Title>
-    {#if mode == 'pending' || mode == 'all'}
-      <div class="flex justify-between items-center">
-        <SubTitle>Pending tracks</SubTitle>
-      </div>
-      <div class="grid gap-4 ">
-        {#each tracks.pending as track}
-          <TrackRow
-            {track}
-            status="pending"
-            size="lg"
-            artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-            ><div>Your track "<b>Memories</b>"" hasn't been reviewed yet.</div>
-          </TrackRow>
-        {/each}
-        {#if tracks.pending.length <= 0}
-          <Skeleton>Loading pending tracks..</Skeleton>
-        {/if}
-      </div>
+    {#if tracks.all.length === 0}
+      <Skeleton>No tracks found..</Skeleton>{:else}
+      {#if mode == 'pending' || mode == 'all'}
+        <div class="flex justify-between items-center">
+          <SubTitle>Pending tracks</SubTitle>
+        </div>
+        <div class="grid gap-4 ">
+          {#each tracks.pending as track}
+            <TrackRow
+              {track}
+              status="pending"
+              size="lg"
+              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
+              ><div>
+                Your track "<b>Memories</b>"" hasn't been reviewed yet.
+              </div>
+            </TrackRow>
+          {/each}
+          {#if tracks.pending.length <= 0}
+            <Skeleton>Loading pending tracks..</Skeleton>
+          {/if}
+        </div>
+      {/if}
+      {#if mode == 'accepted' || mode == 'all'}
+        <SubTitle>Accepted tracks</SubTitle>
+        <div class="grid gap-4 lg:grid-cols-2">
+          {#each tracks.accepted as track}
+            <TrackRow
+              {track}
+              status={new Date(track.prefferdReleaseDate) > new Date()
+                ? 'released'
+                : 'accepted'}
+              size="md"
+              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
+              >{track.title}</TrackRow
+            >
+          {/each}
+          {#if tracks.accepted.length <= 0}
+            <div class="col-span-2">
+              <Skeleton>Loading accepted tracks..</Skeleton>
+            </div>
+          {/if}
+        </div>
+      {/if}
+      {#if mode == 'denied' || mode == 'all'}
+        <SubTitle>Denied tracks</SubTitle>
+        <div class="grid gap-4 lg:grid-cols-2">
+          {#each tracks.denied as track}
+            <TrackRow
+              status="denied"
+              size="sm"
+              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
+              >Trackname</TrackRow
+            >
+          {/each}
+          {#if tracks.denied.length <= 0}
+            <div class="col-span-2">
+              <Skeleton>Loading denied tracks..</Skeleton>
+            </div>
+          {/if}
+        </div>
+      {/if}
+      <div />
     {/if}
-    {#if mode == 'accepted' || mode == 'all'}
-      <SubTitle>Accepted tracks</SubTitle>
-      <div class="grid gap-4 lg:grid-cols-2">
-        {#each tracks.accepted as track}
-          <TrackRow
-            {track}
-            status={new Date(track.prefferdReleaseDate) > new Date()
-              ? 'released'
-              : 'accepted'}
-            size="md"
-            artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-            >{track.title}</TrackRow
-          >
-        {/each}
-        {#if tracks.accepted.length <= 0}
-          <div class="col-span-2">
-            <Skeleton>Loading accepted tracks..</Skeleton>
-          </div>
-        {/if}
-      </div>
-    {/if}
-    {#if mode == 'denied' || mode == 'all'}
-      <SubTitle>Denied tracks</SubTitle>
-      <div class="grid gap-4 lg:grid-cols-2">
-        {#each tracks.denied as track}
-          <TrackRow
-            status="denied"
-            size="sm"
-            artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-            >Trackname</TrackRow
-          >
-        {/each}
-        {#if tracks.denied.length <= 0}
-          <div class="col-span-2">
-            <Skeleton>Loading denied tracks..</Skeleton>
-          </div>
-        {/if}
-      </div>
-    {/if}
-    <div />
   </Box>
 </div>
