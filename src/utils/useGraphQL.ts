@@ -7,7 +7,7 @@ export const query = async (
   name: string,
   query: string,
   variables?: Object,
-) => {
+): Promise<any> => {
   const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
     method: 'POST',
     headers: {
