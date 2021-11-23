@@ -8,6 +8,7 @@
   import type { UserType } from '../types/User.type'
   import {
     getUserInfoFromLocalStorage,
+    storeRole,
     storeUserInfoInLocalStorage,
   } from '../utils/useFirebase'
   import Popup from './Popup.svelte'
@@ -21,33 +22,15 @@
         storeUserInfoInLocalStorage(true)
         await goto('/login')
       } else {
-        console.log(user)
-        // storeUserInfoInLocalStorage()
-        const userFirebase = await getUserViaFirebase()
-        console.log(userFirebase)
-        // const roleObject =
-        //   JSON.parse(getAuth().currentUser['reloadUserInfo'].customAttributes)
-        // let roleName: string
-        // if (roleObject) {
-        //   roleName = roleObject.roles[0]
-        //   if (roleName) {
-        //     roleStore.set(roleName)
-        //     getUserInfoFromLocalStorage()
-        //   }
-        // }
-        // const roleObject = JSON.parse(user.reloadUserInfo.customAttributes)
-        // const roleName = roleObject.roles[0]
-
-        // roleStore.set(roleName)
-
-        // getUserInfoFromLocalStorage()
-        // console.log($roleStore)
+        storeUserInfoInLocalStorage().then(() => {
+          storeRole(user)
+        })
       }
     })
   })
 </script>
 
-{#if $authStore.isLoggedIn && $roleStore && $userStore}
+{#if $authStore.isLoggedIn && $userStore && $roleStore}
   <!-- Authenticated -->
   <slot />
 {:else}

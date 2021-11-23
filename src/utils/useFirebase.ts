@@ -31,34 +31,20 @@ export const loginUser = (
     signInWithEmailAndPassword(getAuth(), email, password)
       .then(async (userCredential): Promise<any> => {
         // Signed in
-        const roleName = JSON.parse(
-          userCredential.user['reloadUserInfo'].customAttributes,
-        ).roles[0]
-
-        roleStore.set(roleName)
-        roleStore.subscribe((role: string) => console.log(role))
 
         setPersistenceFirebase(email, password)
           .then(() => {
-            resolve(true)
+            storeUserInfoInLocalStorage()
+              .then(() => {
+                storeRole(userCredential.user)
+
+                resolve(true)
+              })
+              .catch(() => reject(false))
           })
           .catch(() => {
             reject(false)
           })
-
-        // const user = await getUserViaFirebase()
-        // console.log(user)
-
-        // roleStore.set(
-
-        //   JSON.parse(userCredential.user['reloadUserInfo'].customAttributes)
-        //     .roles[0],
-        // )
-        // console.log(roleStore.subscribe((role: string) => console.log(role)))
-
-        // storeUserInfoInLocalStorage()
-        //   .then(() => {})
-        //   .catch(() => reject(false))
       })
       .catch(error => {
         // const errorCode = error.code
@@ -77,24 +63,31 @@ export const storeUserInfoInLocalStorage = async (
       localStorage.setItem('user', '')
       resolve(true)
     } else {
-      const user = getUserViaFirebase()
-        .then(res => {
+      getUserViaFirebase()
+        .then((res: UserType) => {
           console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        })
+          localStorage.setItem('user', JSON.stringify(res))
+          userStore.set(res)
 
-      // getUserViaFirebase()
-      //   .then((res: UserType) => {
-      //     console.log(res)
-      //     localStorage.setItem('user', JSON.stringify(res))
-      //     userStore.set(res)
-
-      //     resolve(true)
-      //   })
-      //   .catch(() => reject(false))
+          resolve(true)
+        })
+        .catch(() => reject(false))
     }
+  })
+}
+
+export const storeRole = (userCredentials: any): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    console.log(
+      JSON.parse(userCredentials['reloadUserInfo'].customAttributes).roles[0],
+    )
+    const role = JSON.parse(userCredentials['reloadUserInfo'].customAttributes)
+      .roles[0]
+    if (role) {
+      roleStore.set(role)
+      roleStore.subscribe((role: string) => console.log(role))
+      resolve(true)
+    } else reject(false)
   })
 }
 
