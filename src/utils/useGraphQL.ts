@@ -9,7 +9,7 @@ export const query = async (
   variables?: any,
 ): Promise<any> => {
   try {
-    const res= await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -20,13 +20,14 @@ export const query = async (
         variables,
       }),
     })
-    console.log({res})
-    // res = res.json()
-    // if (res.errors) {
-    //   throw res.errors
-    // }
+    
+    const gqlReqponse = await res.json()
 
-    // return res.data[name]
+    if (gqlReqponse.errors) {
+      throw gqlReqponse.errors
+    }
+
+    return gqlReqponse.data[name]
   } catch (err) {
     console.log({ err })
   }
@@ -312,7 +313,6 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
       }
     }`,
   )
-  console.log({ response })
   return response
 }
 export const updateUserInfoByUserId = (

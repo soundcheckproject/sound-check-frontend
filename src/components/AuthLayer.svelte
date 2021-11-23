@@ -41,7 +41,7 @@
         // roleStore.set(roleName)
 
         // getUserInfoFromLocalStorage()
-        console.log($roleStore)
+        // console.log($roleStore)
       }
     })
   })
