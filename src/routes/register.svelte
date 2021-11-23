@@ -21,6 +21,7 @@
     validateOld,
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
+  import userStore from 'src/stores/userStore'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -47,7 +48,6 @@
       //   [
       //     // validateMatch(userPassword.new, userPassword.old),
       //     // todo: make work
-
       //     // validateLength(userRegister.password, 8),
       //     // validateMatch(userRegister.password, passwordCheck),
       //     // Todo: .Match in usevalidation not working
@@ -62,19 +62,23 @@
   }
 
   const register = () => {
-    registerUser(userRegister).catch(err => {
-      console.log(err)
-    })
+    registerUser(userRegister)
+      .then(async e => {
+        errors = validateError('connection', 'graphql', e, errors)
+        await goto('/portal')
+      })
+      .catch(e => {
+        errors = validateError('connection', 'graphql', e, errors)
+      })
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
-    if (isLoggedIn && firebaseControlled) {
+    if (isLoggedIn && firebaseControlled && $userStore.nickName.length > 0) {
       await goto('/portal')
     }
   })
   let newUser
   $: {
-
     validationStore.set(errors)
     console.log($validationStore)
   }

@@ -101,9 +101,11 @@ export const registerUser = (user: UserType): Promise<boolean> => {
       .then(async userCredential => {
         // Signed in -> success -> let's add a record to our own database!
         // #2 Eigen account op server bijhouden
+
+        const addUser = user
         delete user.password
         // user.uid = userCredential.user?.uid
-        user.birthdate = new Date(user.birthdate)
+        addUser.birthdate = new Date(user.birthdate)
 
         try {
           await query(
@@ -114,26 +116,19 @@ export const registerUser = (user: UserType): Promise<boolean> => {
               }
             }`,
             {
-              data: user,
+              data: addUser,
             },
           )
-          // storeUserInfoInLocalStorage()
 
-          // const userAuth = getAuth().currentUser
-
-          // // TODO(you): prompt the user to re-provide their sign-in credentials
-          // const credential = promptForCredentials()
-
-          // reauthenticateWithCredential(userAuth, credential)
-          //   .then(() => {
-          //     // User re-authenticated.
-          //   })
-          //   .catch(error => {
-          //     // An error ocurred
-          //     // ...
-          //   })
-
-          resolve(true)
+          storeUserInfoInLocalStorage()
+            .then(() => {
+              setPersistenceFirebase(user.email, user.password)
+                .then(() => resolve(true))
+                .catch(() => {
+                  reject(false)
+                })
+            })
+            .catch(() => reject(false))
         } catch (error) {
           console.error({ error })
           reject(false)
