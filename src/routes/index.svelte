@@ -10,82 +10,93 @@
   import { onMount } from 'svelte'
   import type { TrackType } from 'src/types/Track.type'
   import { query } from '../utils/useGraphQL'
+  import Skeleton from '../components/Skeleton.svelte'
+  import LineSkeleton from '../components/LineSkeleton.svelte'
   let count = 0
 
   let latestReleases: TrackType[] = []
-  let spotlightTrack: TrackType = {
-    title: 'Loading',
-    description: 'Loading',
-    artistTracks: [{ user: { nickName: 'loading' } }],
-    artwork: { resource: null },
-  }
+  let spotlightTrack: TrackType = undefined
 
   onMount(async () => {
-    const releases = await query(
-      `getTracksReleased`,
-      `query getTracksReleased {
-      getTracksReleased {
-        uuid
-        title
-		description
-		artistTracks {
-          user {
-            nickName
+    try {
+      const releases = await query(
+        `getTracksReleased`,
+        `query getTracksReleased {
+        getTracksReleased {
+          uuid
+          title
+      description
+      artistTracks {
+            user {
+              uuid
+              nickName
+            }
+          }
+       artwork {
+            resource
           }
         }
-		 artwork {
-          resource
-        }
-      }
-    }`,
-    )
+      }`,
+      )
 
-    if (releases && releases.length > 0) {
-      spotlightTrack = releases[0]
+      if (releases && releases.length > 0) {
+        spotlightTrack = releases[0]
+      }
+      latestReleases = releases
+    } catch (error) {
+      console.error('Could not get latest tracks.', error)
     }
-    latestReleases = releases
   })
 </script>
 
 <Header>
   <article
-    class="max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between "
+    class=" {spotlightTrack ? 'max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between' : 'w-80 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between' }"
   >
-    <div class="sm:w-2/3  grid gap-4">
+    <div class="sm:w-2/3 grid gap-4">
       <div>
-        <h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold">
-          {spotlightTrack.title}
+        <h1 class="text-2xl sm:text-3xl lg:text-5xl font-bold mb-2">
+          {#if spotlightTrack}
+            {spotlightTrack.title}
+            {:else}
+            <LineSkeleton loading={true} height={6}/>
+          {/if}
         </h1>
 
         <h3 class="text-white text-opacity-50 text-sm sm:text-md">
-          {#if spotlightTrack.artistTracks}
+          {#if spotlightTrack}
             by {#each spotlightTrack.artistTracks as at, i}
               {i > 0 ? `, ${at.user.nickName}` : at.user.nickName}
             {/each}
-          {:else}
-            Loading
+            {:else}
+            <LineSkeleton loading={true} height={3}/>
           {/if}
         </h3>
       </div>
       <p class="hidden sm:inline lg:text-md ">
-        {spotlightTrack.description}
+        {#if spotlightTrack}
+          {spotlightTrack.description}
+          {:else}
+          <LineSkeleton loading={true} lines={2}/>
+        {/if}
       </p>
-      <div class=" mb-2 flex justify-start items-end space-x-2">
-        <!-- <Artist size="md">Artist</Artist>
-					<Artist size="sm">Artist</Artist> -->
-        <Artist size="md" socials>Artist</Artist>
-        <Artist size="xs" socials>Artist</Artist>
-        <Artist size="xs">Artist</Artist>
-        <Artist size="xs">Artist</Artist>
+      <div class="mb-2 flex justify-start items-end space-x-2">
+        {#if spotlightTrack}
+          {#each spotlightTrack.artistTracks as at}
+            <Artist artist={at.user} size="xs">{at.user.nickName}</Artist>
+          {/each}
+        {/if}
       </div>
       <div class="flex">
+        {#if spotlightTrack}
         <Button onClick={() => count++} type="glass" rounded="none"
           >Learn more</Button
         >
+        {/if}
       </div>
     </div>
-    <div class="sm:w-1/3 px-6">
-      {#if spotlightTrack.artwork && spotlightTrack.artwork.resource}
+    <div class="max-w-full sm:w-1/3 sm:px-6">
+      {#if spotlightTrack}
         <img
           class="rounded-sm mshadow-lg sm:max-h-96  h-full max-w-xs w-full object-cover "
           src={spotlightTrack.artwork.resource}
@@ -93,12 +104,12 @@
         />
       {:else}
         <div
-          class="rounded-sm mshadow-lg h-64 w-64 bg-gray-500 animate-pulse grid place-items-center"
+          class="rounded-sm mshadow-lg h-64 w-full bg-gray-100 opacity-80 animate-pulse grid place-items-center"
         >
-          Loading artwork
         </div>
       {/if}
     </div>
+
 
     <!-- <Button type="glass" rounded="default" size="md">Learn more{count}</Button> -->
   </article>
