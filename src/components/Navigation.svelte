@@ -1,7 +1,36 @@
 <script lang="ts">
   import { generalStore } from '../stores/stores'
+
+  let toggleMenu: Boolean = false
+
+  let scrollable = true;
+	
+	const wheel = (node, options) => {
+		let { scrollable }: {scrollable: Boolean} = options;
+		
+		const handler = e => {
+			if (!scrollable) e.preventDefault();
+		};
+		
+		node.addEventListener('wheel', handler, { passive: false });
+		
+		return {
+			update(options) {
+				scrollable = options.scrollable;
+			},
+			destroy() {
+				node.removeEventListener('wheel', handler, { passive: false });
+			}
+		};
+  };
+
+  $:{
+    scrollable = !toggleMenu
+  }
+
 </script>
 
+<svelte:window use:wheel={{scrollable}} />
 <nav class="flex py-8 flex-row justify-between items-center">
   <a href="/"> <h1 class="text-xl font-bold">{$generalStore.Name}</h1></a>
 
@@ -26,6 +55,59 @@
     </div>
     <div class="grid sm:hidden">=</div>
   </div>
+
+  <div
+    class="transition-all sm:hidden cursor-pointer p-2 bg-gray-700 backdrop-blur-sm rounded-full"
+    on:click={() => (toggleMenu = true)}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      class=""
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      ><line x1="3" y1="12" x2="21" y2="12" /><line
+        x1="3"
+        y1="6"
+        x2="21"
+        y2="6"
+      /><line x1="3" y1="18" x2="21" y2="18" /></svg
+    >
+  </div>
+
+  <aside
+    class="{toggleMenu
+      ? '-translate-x-screen-w'
+      : 'translate-x-screen-w'} ease-out duration-200 absolute w-screen h-screen z-50 inset-0 bg-gray-900 grid place-items-center"
+  >
+     <div
+    class=" absolute top-8 right-6 cursor-pointer p-2 bg-gray-700 backdrop-blur-sm rounded-full"
+    on:click={() => (toggleMenu = false)}
+  >
+    <svg xmlns="http://www.w3.org/2000/svg"   width="16"
+      height="16"
+      class=""
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+  </div>
+    <ul class="grid gap-8 text-center font-bold" on:click={() => (toggleMenu = false)}>
+      <a href="/">Home</a>
+      <a href="#releases">releases</a>
+      <a href="/artists">artists</a>
+      <a href="/info">info</a>
+      <a href="/contact">contact</a>
+      <a href="/login">portal</a>
+    </ul>
+  </aside>
 </nav>
 
 <style>

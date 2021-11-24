@@ -14,36 +14,9 @@
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
 
-  let artistDetail: UserType = undefined
-
-  onMount(async () => {
-    console.log({ artist })
-    const data = await query(
-      `getUser`,
-      `query GetUser($userId: String!) {
-      getUser(userId: $userId) {
-        nickName
-        uuid
-        firstName
-        surName
-        email
-        country
-        logo
-        userLinks{
-          linkAddress
-          link{
-            type
-          }
-        }
-      }
-    }`,
-      { userId: artist.uuid },
-    )
-    artistDetail = data
-  })
 </script>
 
-{#if artistDetail}
+{#if artist}
   <div
     on:click={onClick}
     class="inline"
@@ -64,10 +37,10 @@
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
       <div class="cursor-pointer flex items-center group">
-        {#if artistDetail.logo}
+        {#if artist.logo}
           <img
-            alt="Artist {artistDetail.nickName ?? ''}"
-            src={artistDetail.logo ??
+            alt="Artist {artist.nickName ?? ''}"
+            src={artist.logo ??
               'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Ferror-icon-vector-illustration-vector-id922024216%3Fk%3D6%26m%3D922024216%26s%3D612x612%26w%3D0%26h%3DocSXgfV-7FlzSDe9LwBFoGTWAcfR6ES09hAl8OTe5Tw%3D&f=1&nofb=1'}
             class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
               ? 'mr-3'
@@ -119,10 +92,10 @@
           class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-gray-200 mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
         >
           {#if size == 'xs'}
-            <p class="font-bold">{artistDetail.nickName}</p>
+            <p class="font-bold">{artist.nickName}</p>
             <hr class="w-full border-gray-800 mb-2 mt-1" />{/if}
-          {#if artistDetail.userLinks && artistDetail.userLinks.length > 0}
-            {#each artistDetail.userLinks as userLink}
+          {#if artist.userLinks && artist.userLinks.length > 0}
+            {#each artist.userLinks as userLink}
               <div class="flex items-center">
                 <LinkIcon className="mr-2" type={userLink.link.type} />
                 <a
