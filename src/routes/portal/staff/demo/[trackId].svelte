@@ -32,12 +32,12 @@
   //   }
   //   let contractAvailable = false
 
-  let trackAudio 
+  let trackAudio
   onMount(async () => {
     if ($page.params.trackId) {
       try {
         track = await getTrackById($page.params.trackId)
-        // trackAudio = await getTrackAudioById()
+
         // contractAvailable = track.contractFile.length > 0 ? true : false
       } catch (e) {
         console.log(e)
@@ -47,16 +47,12 @@
     }
   })
   $: {
-    console.log(track)
-    if (track) {
-      console.log(track.isSigned)
-    }
   }
 </script>
 
 <div class="grid gap-8">
   {#if track}
-    <TrackPlayer feedback={true} {track} audioSrc="" imgSrc="" />
+    <TrackPlayer feedback={true} {track} />
     <Box
       ><Title>Contract</Title>
 

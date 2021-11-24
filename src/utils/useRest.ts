@@ -24,15 +24,23 @@ export const uploadTrack = async (
 export const getTrackFileFromTrackId = async (
   trackId: string,
 ): Promise<any> => {
-  const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL_REST}/tracks/file/` + trackId,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL_REST}/tracks/file/` + trackId,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+        },
       },
-    },
-  ).then(res => res.blob())
+    ).then(res => res.blob())
+    // Todo: error voor unloaded tracks
+    // .then(res => {
+    //   if (res.status === 500) throw new Error('Internal server error')
+    // })
 
-  return response
+    return response
+  } catch (err) {
+    console.log({ err })
+  }
 }

@@ -26,6 +26,15 @@
   import ButtonBox from '../../../../components/ButtonBox.svelte'
   import userStore from '../../../../stores/userStore'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
+  import {
+    validateEmailValid,
+    validateEmpty,
+    validateError,
+    validateErrors,
+    validateLength,
+  } from '../../../../utils/useValidation'
+  import validationStore from '../../../../stores/validationStore'
+  import InputError from '../../../../components/InputError.svelte'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -93,31 +102,33 @@
   const postTrack = async () => {
     newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
     console.log(newTrack)
-
-    await createTrack(newTrack)
-      .then(async resCreateTrack => {
-        console.log(resCreateTrack)
-        const uploadName = trackData.blob[0].name
-        const fileName =
-          newTrack.title
-            .replace(/ /g, '')
-            .replace(/[^a-zA-Z ]/g, '')
-            .toLowerCase() +
-          '.' +
-          uploadName
-            .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-            .split('.')
-            .pop()
-        await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
-          .then(res => {
-            console.log(res)
-            goto('/portal/artist/demo/' + resCreateTrack.uuid)
-          })
-          .catch(error => console.log(error))
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    if ($validationStore.length == 0) {
+      await createTrack(newTrack)
+        .then(async resCreateTrack => {
+          console.log(resCreateTrack)
+          const uploadName = trackData.blob[0].name
+          const fileName =
+            newTrack.title
+              .replace(/ /g, '')
+              .replace(/[^a-zA-Z ]/g, '')
+              .toLowerCase() +
+            '.' +
+            uploadName
+              .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
+              .split('.')
+              .pop()
+          await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
+            .then(res => {
+              console.log(res)
+              goto('/portal/artist/demo/' + resCreateTrack.uuid)
+            })
+            .catch(error => console.log(error))
+        })
+        .catch(e => {
+          errors = validateError('connection', 'graphql', e, errors)
+          console.log(e)
+        })
+    }
   }
 
   let genres: GenreType[] = []
@@ -131,13 +142,38 @@
     }
   }
 
+  let errors: string[] = []
+  const checkValidation = (type: string) => {
+    // if (type == 'title') {
+    //   errors = validateErrors(
+    //     [validateEmailValid(user.email), validateEmpty(user.email)],
+    //     type,
+    //     errors,
+    //   )
+    // }
+    // if (type == 'description') {
+    //   errors = validateErrors([validateLength(user.password, 5)], type, errors)
+    // }
+    for (const errorType of [
+      'title',
+      'description',
+      'lyrics',
+      'genreId',
+      'prefferdReleaseDate',
+    ]) {
+      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+    }
+    // console.log(errors)
+  }
+
   onMount(async () => {
     genres = await getGenres()
   })
 
   $: {
-    // console.log(artistSearch)
-    console.log(newTrack)
+    validationStore.set(errors)
+    // validationStore.set(errors)
+    // console.log($validationStore)
   }
 </script>
 
@@ -205,6 +241,8 @@
     <form class="" enctype="multipart/form-data">
       {#if uploadPageStatus == 1}
         <FlyBox>
+          <InputError errorInput="connection" />
+
           <SubTitle>📝 Information about your track</SubTitle>
 
           <div class="grid lg:grid-cols-2 gap-4">
@@ -216,10 +254,19 @@
             /></label
           > -->
             <Input
+              bind:value={newTrack.title}
+              title="Create a title"
+              errorInput="title"
+              on:input={() => {
+                checkValidation('title')
+              }}
+              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+            />
+            <!-- <Input
               title="Create a title"
               placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
               bind:value={newTrack.title}
-            />
+            /> -->
 
             <div class="grid grid-cols-2 gap-4">
               <label class="portal"
@@ -253,26 +300,38 @@
               /></label
             > -->
               <Input
+                errorInput="date"
+                bind:value={newTrack.prefferdReleaseDate}
+                on:input={() => {
+                  checkValidation('date')
+                }}
                 type="date"
                 title="Preferred release date"
                 placeholder="For example: August 8th, 2021"
-                bind:value={newTrack.prefferdReleaseDate}
               />
             </div>
             <Input
+              bind:value={newTrack.description}
+              errorInput="description"
+              on:input={() => {
+                checkValidation('description')
+              }}
               textarea
               rows="5"
               title="Describe your track"
               placeholder="This track is about.. It was created in .. The main theme of the track is.."
-              bind:value={newTrack.description}
             />
 
             <Input
+              bind:value={newTrack.lyrics}
+              errorInput="lyrics"
+              on:input={() => {
+                checkValidation('lyrics')
+              }}
               textarea
               rows="5"
               title="Lyrics of your track"
               placeholder="For example: “I’m in love with the shape of you..“"
-              bind:value={newTrack.lyrics}
             />
           </div>
           <div class="flex justify-end">

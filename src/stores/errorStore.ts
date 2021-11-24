@@ -56,6 +56,34 @@ const errorStore = readable<{
       message: 'Nickname is not available',
     },
   ],
+  title: [
+    {
+      display: false,
+      errorName: 'title_empty',
+      message: 'Please fill in a title',
+    },
+  ],
+  description: [
+    {
+      display: false,
+      errorName: 'description_empty',
+      message: 'Please fill in a description',
+    },
+  ],
+  date: [
+    {
+      display: false,
+      errorName: 'date_empty',
+      message: 'Please pick a possible releasedate',
+    },
+  ],
+  lyrics: [
+    {
+      display: false,
+      errorName: 'lyrics_empty',
+      message: 'Please fill in some lyrics',
+    },
+  ],
   general: [
     {
       display: false,

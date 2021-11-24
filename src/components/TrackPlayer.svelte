@@ -23,7 +23,7 @@
   let showFeedback: boolean =
     JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
-  let playerBar
+  let playerBar: HTMLDivElement
   let audio: any
   let trackInfo: any = {
     duration: '0:00',
@@ -93,8 +93,9 @@
 
   onMount(async () => {
     if (track.uuid) {
-      let trackBlob = await getTrackFileFromTrackId(track.uuid)
-      blobToBase64(trackBlob)
+      await getTrackFileFromTrackId(track.uuid)
+        .then(res => blobToBase64(res))
+        .catch(error => console.log(error))
     }
 
     if (feedback) {
@@ -178,9 +179,8 @@
           <div class="text-sm">#{track.genre.name ?? 'No genre'}</div>
         {/if}
       </div>
-
-      <div class="grid gap-2 mt-4">
-        {#if audio}
+      {#if audio}
+        <div class="grid gap-2 mt-4">
           <div class="flex justify-between w-full h-12 items-end">
             {#each Array(100) as i}
               <div
@@ -210,128 +210,133 @@
             </div>
             <div class="text-xs ml-auto">{trackInfo.duration}</div>
           </div>
-        {/if}
-      </div>
-      <div
-        class="mt-2 grid grid-flow-col  items-center justify-between gap-2 self-end py-4 px-5 bg-opacity-10 rounded-md bg-gray-50"
-      >
-        <div class="grid gap-2 grid-flow-col items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polygon points="19 20 9 12 19 4 19 20" />
-            <line x1="5" y1="19" x2="5" y2="5" />
-          </svg>
-          <svg
-            on:click={() => {
-              audio.pause()
-              trackInfo.playing = false
-            }}
-            class:active={!trackInfo.playing}
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="10" y1="15" x2="10" y2="9" />
-            <line x1="14" y1="15" x2="14" y2="9" />
-          </svg>
-          <svg
-            on:click={() => {
-              audio.play()
-              trackInfo.playing = true
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            class:active={trackInfo.playing}
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="10 8 16 12 10 16 10 8" />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polygon points="5 4 15 12 5 20 5 4" />
-            <line x1="19" y1="5" x2="19" y2="19" />
-          </svg>
         </div>
         <div
-          on:click={() => {
-            if (audio) audio.muted = !audio.muted
-          }}
+          class="mt-2 grid grid-flow-col  items-center justify-between gap-2 self-end py-4 px-5 bg-opacity-10 rounded-md bg-gray-50"
         >
-          {#if audio}
-            {#if !audio.muted}
-              <svg
-                class:active={!audio.muted}
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <path
-                  d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"
-                />
-              </svg>
-            {:else}
-              <svg
-                class:active={!audio.muted}
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <line x1="23" y1="9" x2="17" y2="15" />
-                <line x1="17" y1="9" x2="23" y2="15" />
-              </svg>
-            {/if}{/if}
+          <div class="grid gap-2 grid-flow-col items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="19 20 9 12 19 4 19 20" />
+              <line x1="5" y1="19" x2="5" y2="5" />
+            </svg>
+            <svg
+              on:click={() => {
+                audio.pause()
+                trackInfo.playing = false
+              }}
+              class:active={!trackInfo.playing}
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="10" y1="15" x2="10" y2="9" />
+              <line x1="14" y1="15" x2="14" y2="9" />
+            </svg>
+            <svg
+              on:click={() => {
+                audio.play()
+                trackInfo.playing = true
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              class:active={trackInfo.playing}
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="5 4 15 12 5 20 5 4" />
+              <line x1="19" y1="5" x2="19" y2="19" />
+            </svg>
+          </div>
+          <div
+            on:click={() => {
+              if (audio) audio.muted = !audio.muted
+            }}
+          >
+            {#if audio}
+              {#if !audio.muted}
+                <svg
+                  class:active={!audio.muted}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  <path
+                    d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"
+                  />
+                </svg>
+              {:else}
+                <svg
+                  class:active={!audio.muted}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  <line x1="23" y1="9" x2="17" y2="15" />
+                  <line x1="17" y1="9" x2="23" y2="15" />
+                </svg>
+              {/if}{/if}
+          </div>
         </div>
-      </div>
+      {:else}
+        <p class="text-sm">
+          Audio controls could not be loaded, because the audio of this track
+          doesn't excist on the server.
+        </p>
+      {/if}
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if (feedback && track.isSigned == null) || track.isSigned == true}
+  {#if audio && ((feedback && track.isSigned == null) || track.isSigned == true)}
     <div
       transition:slide|local={{ delay: 400, duration: 200 }}
       class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"

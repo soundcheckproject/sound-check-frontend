@@ -8,6 +8,7 @@
   const deleteError = (errorName: string) => {
     validationStore.set($validationStore.filter((e: string) => e !== errorName))
   }
+
 </script>
 
 {#if $validationStore && $validationStore.length > 0}
