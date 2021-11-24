@@ -1,6 +1,7 @@
 <script lang="ts">
   import InputError from './InputError.svelte'
   import { onMount } from 'svelte'
+  import validationStore from '../stores/validationStore'
   export let value = ''
   export let type:
     | 'email'
@@ -20,7 +21,12 @@
   export let errorInput = ''
   export let portal = 'portal'
   $: if (!value) value = ''
+  //todo: red border around error input
+  let borderColor = ''
+  // $: {
+  // }
 </script>
+
 <!-- //todo: add  red border to input validation -->
 <div class="grid gap-4">
   {#if errorInput}
@@ -34,7 +40,7 @@
         on:input
         on:change
         bind:this={ref}
-        class="input {portal} {$$props.class}"
+        class="input {portal} {borderColor} {$$props.class}"
         placeholder={$$props.placeholder ?? 'Type here..'}
         {autocomplete}
       />{:else}

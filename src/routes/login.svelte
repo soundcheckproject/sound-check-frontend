@@ -28,6 +28,7 @@
   import Artist from '../components/Artist.svelte'
   import Input from '../components/Input.svelte'
 
+
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
 
@@ -39,6 +40,8 @@
         type,
         errors,
       )
+      // errors = validateError("email","valid",true,errors)
+      // console.log(errors)
     }
     if (type == 'password') {
       errors = validateErrors(
@@ -66,6 +69,7 @@
           errors = validateError('connection', 'graphql', e, errors)
         })
     }
+
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -103,8 +107,9 @@
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
 
           <InputError errorInput="connection" />
-          <!-- <InputError errorInput="email" /> -->
+
           <Input
+            bind:value={user.email}
             title="Email address"
             type="email"
             errorInput="email"
@@ -112,15 +117,15 @@
             on:input={() => {
               checkValidation('email')
             }}
-            on:change={() => {
-              checkValidation('email')
-            }}
             placeholder="Email address.."
-            bind:value={user.email}
           />
+            <!-- on:change={() => {
+              checkValidation('email')
+            }} -->
           <Input
-            title="Email address"
-            type="email"
+            bind:value={user.password}
+            title="Password"
+            type="password"
             errorInput="password"
             portal=""
             on:input={() => {
@@ -130,39 +135,10 @@
               checkValidation('password')
             }}
             placeholder="Enter password.."
-            bind:value={user.password}
             autocomplete="current-password"
           />
 
-          <!-- <label
-            >Email addres<input
-              bind:value={user.email}
-              required
-              
-              class="input {$validationStore[0] == 'email_valid'
-                ? ' error'
-                : ''}"
-              placeholder="Email address."
-            /></label
-          > -->
-          <InputError errorInput="password" />
-          <!-- <label
-            >Password<input
-              bind:value={user.password}
-              required
-              on:input={() => {
-                checkValidation('password')
-              }}
-              on:change={() => {
-                checkValidation('password')
-              }}
-              class="input {$validationStore[0] == 'password_length'
-                ? ' error'
-                : ''}"
-              placeholder="Password.."
-              autocomplete="current-password"
-            /></label
-          > -->
+
           <div class="flex justify-between items-center">
             <label
               class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"

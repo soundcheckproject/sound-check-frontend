@@ -125,17 +125,20 @@ export const validateErrors = (
   type: string,
   errors: Error[],
 ): Error[] => {
+  let errorReturn: Error[] = errors
   for (const validation of validations) {
     const errorName = type + '_' + validation.error
-    if (errors) {
-      if (validation.status != true) {
-        // if not found in array Add to array
-        if (errors.indexOf(errorName) == -1) {
-          return [...errors, errorName]
-        }
-      } else return errors.filter((v: string) => v !== errorName)
-    } else return []
+
+
+    if (validation.status != true) {
+      if (errorReturn.indexOf(errorName) == -1)
+        errorReturn = [...errorReturn, errorName]
+    } else {
+      errorReturn = errorReturn.filter((e: string) => e !== errorName)
+    }
   }
+
+  return errorReturn
 }
 
 export const validateError = (
@@ -145,6 +148,7 @@ export const validateError = (
   errors: Error[],
 ): Error[] => {
   const errorName = type + '_' + validation
+
   if (status != true) {
     // if not found in array Add to array
     if (errors.indexOf(errorName) == -1) {
