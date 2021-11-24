@@ -19,7 +19,7 @@
 </script>
 
 <AuthLayer>
-  <div class="c-portal">
+  <div class="c-portal" transition:fade|local={{ duration: 200 }}>
     <PortalNavigation />
     <div
       class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll"

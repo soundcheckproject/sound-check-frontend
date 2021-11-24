@@ -206,7 +206,7 @@
             </svg>
             <svg
               on:click={() => {
-                audio.currentTime = audio.currentTime + 5
+                audio.currentTime += 5
               }}
               class="mr-3"
               xmlns="http://www.w3.org/2000/svg"

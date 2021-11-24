@@ -221,6 +221,7 @@
         >
           <div class="grid gap-2 grid-flow-col items-center">
             <svg
+              on:click={() => (audio.currentTime -= 5)}
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -274,6 +275,7 @@
               <polygon points="10 8 16 12 10 16 10 8" />
             </svg>
             <svg
+              on:click={() => (audio.currentTime += 5)}
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -406,27 +408,31 @@
                 <!-- Todo: make weird cursor pointer smooth -->
                 <div
                   on:click={() => changeTrackTime(feedback.timeStampSong)}
-                  class=" px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 flex hover:hidden peer"
+                  class="group cursor-pointer"
                 >
-                  {formatTimeForPlayer(feedback.timeStampSong)}
-                </div>
-                <div
-                  class=" absolute right-4 hidden rounded-full peer-hover:flex bg-opacity-10 bg-white p-2 justify-center items-center"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                  <div
+                    class="opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
                   >
-                    <circle cx="12" cy="12" r="10" />
-                    <polygon points="10 8 16 12 10 16 10 8" />
-                  </svg>
+                    {formatTimeForPlayer(feedback.timeStampSong)}
+                  </div>
+                  <div
+                    class="opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <polygon points="10 8 16 12 10 16 10 8" />
+                    </svg>
+                  </div>
                 </div>
               </div>
               <p class="pl-6 pb-4 opacity-80 -mt-2">
