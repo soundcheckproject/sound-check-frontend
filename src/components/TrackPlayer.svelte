@@ -39,11 +39,12 @@
 
   const addComment = async () => {
     if (feedbackInput.length > 0) {
+      console.log(audio.currentTime)
       const feedbackData: FeedbackType = {
         userId: $userStore.uuid,
         trackId: track.uuid,
         description: feedbackInput,
-        timeStampSong: audio ? audio.currentTime ?? 0 : 0,
+        timeStampSong: audio ? parseInt(audio.currentTime) : 0,
         date: new Date().toString(),
       }
 
@@ -338,8 +339,8 @@
       <SubTitle theme="light">Add feedback</SubTitle>
       <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
         <input
+          bind:value={trackInfo.currentTime}
           type="text"
-          value="00:00"
           class="bg-opacity-0 bg-white w-10 outline-none opacity-40 mx-3"
         />
         <input
