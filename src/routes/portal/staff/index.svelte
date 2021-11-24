@@ -6,6 +6,9 @@
   import Button from '../../../components/Button.svelte'
 
   import Demos from './demo/index.svelte'
+  import { quintOut } from 'svelte/easing'
+  import { crossfade, fade, fly, slide } from 'svelte/transition'
+  import { flip } from 'svelte/animate'
 
   interface TodoType {
     id: string
@@ -57,8 +60,13 @@
       <SubTitle>Todo list</SubTitle>
 
       <div class="overflow-y-scroll grid gap-2" style="max-height:300px">
-        {#each todos as todo}
-          <div class="p-4 text-sm flex items-center bg-gray-100 rounded-sm group">
+        {#each todos as todo, index (todo)}
+          <div
+            in:fly|local={{ y: 25, opacity: 0, duration: 200 }}
+            out:fade|local={{ duration: 200, delay: 200 }}
+            animate:flip={{ duration: 200, delay: 200 }}
+            class="p-4 text-sm flex items-center bg-gray-100 rounded-sm group"
+          >
             <input type="checkbox" class="mr-2" bind:checked={todo.done} />
             {todo.text}
             <svg

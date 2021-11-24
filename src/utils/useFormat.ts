@@ -1,7 +1,13 @@
 export const formatDate = (date: Date): string => {
   return new Date(date).toLocaleDateString()
 }
-export const formatTimeForPlayer = (seconds: number):string => {
+export const formatTime = (date: Date): string => {
+  return new Date(date).toLocaleTimeString()
+}
+export const formatDateTime = (date: Date): string => {
+  return formatDate(date) + ' - ' + formatTime(date)
+}
+export const formatTimeForPlayer = (seconds: number): string => {
   const h = Math.floor(seconds / 3600)
   const m = Math.floor((seconds % 3600) / 60)
   const s = seconds % 60

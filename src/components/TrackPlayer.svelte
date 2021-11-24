@@ -13,9 +13,13 @@
   import { fade, fly, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
-  import type { TrackType } from '../types/Track.type'
+  import type { TrackInfoType, TrackType } from '../types/Track.type'
   import { getTrackFileFromTrackId } from '../utils/useRest'
-  import { formatTimeForPlayer } from '../utils/useFormat'
+  import {
+    formatDate,
+    formatDateTime,
+    formatTimeForPlayer,
+  } from '../utils/useFormat'
 
   export let theme: 'light' | 'dark' = 'dark'
 
@@ -23,12 +27,13 @@
   let showFeedback: boolean =
     JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
-  let playerBar: HTMLDivElement
-  let audio: any
-  let trackInfo: any = {
+  let audio: HTMLAudioElement
+
+  let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
     playing: true,
+    playerBar: null,
   }
 
   let feedbackInput = ''
@@ -44,7 +49,7 @@
         userId: $userStore.uuid,
         trackId: track.uuid,
         description: feedbackInput,
-        timeStampSong: audio ? parseInt(audio.currentTime) : 0,
+        timeStampSong: audio ? parseInt(audio.currentTime.toString()) : 0,
         date: new Date().toString(),
       }
 
@@ -63,29 +68,30 @@
   let feedbacks: FeedbackType[] = []
 
   export let audioFile = null
-
   export let track: TrackType
 
   const blobToBase64 = (blob: Blob) => {
     const reader = new FileReader()
     reader.readAsDataURL(blob)
+    let readerFile: string | ArrayBuffer
 
     reader.onloadend = () => {
       audioFile = reader.result
     }
   }
-
-  const loadTrackInfo = (media: any) => {
+  let trackPlayable = false
+  const loadTrackInfo = (media: HTMLAudioElement) => {
     if (media) {
       media.onloadedmetadata = () => {
         let trackDuration = parseInt(media.duration.toFixed(0))
         trackInfo.duration = formatTimeForPlayer(trackDuration)
 
+        trackPlayable = true
         media.ontimeupdate = () => {
           let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
           trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
-
-          playerBar.style.width = (100 * trackCurrentTime) / trackDuration + '%'
+          trackInfo.playerBar.style.width =
+            (100 * trackCurrentTime) / trackDuration + '%'
         }
       }
     }
@@ -93,15 +99,14 @@
 
   onMount(async () => {
     if (track.uuid) {
-      await getTrackFileFromTrackId(track.uuid)
-        .then(res => blobToBase64(res))
-        .catch(error => console.log(error))
+      blobToBase64(await getTrackFileFromTrackId(track.uuid))
     }
 
     if (feedback) {
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
   })
+
   $: {
     if (audioFile) loadTrackInfo(audio)
     localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
@@ -179,7 +184,7 @@
           <div class="text-sm">#{track.genre.name ?? 'No genre'}</div>
         {/if}
       </div>
-      {#if audio}
+      {#if trackPlayable}
         <div class="grid gap-2 mt-4">
           <div class="flex justify-between w-full h-12 items-end">
             {#each Array(100) as i}
@@ -197,7 +202,7 @@
             <div class="flex mx-2 items-center opacity-25 w-full">
               <div
                 class="bg-gray-100 transition-all h-1 rounded-sm "
-                bind:this={playerBar}
+                bind:this={trackInfo.playerBar}
               />
               <div
                 class="-ml-2 bg-gray-100 h-3 w-3 relative rounded-full"
@@ -396,7 +401,7 @@
                 />
                 <p class="font-medium pl-2 pr-1">{feedback.user.nickName}</p>
                 <p class="opacity-50">
-                  wrote on {new Date(feedback.date)}
+                  wrote on {formatDateTime(new Date(feedback.date))}
                 </p>
                 <!-- Todo: make weird cursor pointer smooth -->
                 <div
