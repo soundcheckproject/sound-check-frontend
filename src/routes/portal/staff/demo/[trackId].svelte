@@ -31,12 +31,13 @@
   //     },
   //   }
   //   let contractAvailable = false
+
+  let trackAudio 
   onMount(async () => {
     if ($page.params.trackId) {
       try {
-        console.log($page.params.trackId)
         track = await getTrackById($page.params.trackId)
-        console.log(track)
+        // trackAudio = await getTrackAudioById()
         // contractAvailable = track.contractFile.length > 0 ? true : false
       } catch (e) {
         console.log(e)

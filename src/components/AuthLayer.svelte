@@ -25,8 +25,9 @@
         if (user)
           storeUserInfoInLocalStorage().then(() => {
             storeRole(user)
-            console.log(user)
+
           })
+          // console.log(user.accessToken)
       }
     })
   })

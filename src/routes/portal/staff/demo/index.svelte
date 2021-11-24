@@ -22,7 +22,7 @@
     denied: [],
   }
 
-  let tracksLoaded: boolean = false
+  let demosLoaded: boolean = false
 
   let filterType: string
   let filteredDemos: DemoListType = {
@@ -88,7 +88,7 @@
       .then(res => {
         demoTracksStore.set(res)
         demos = sortTracksByType(res)
-        tracksLoaded = true
+        demosLoaded = true
       })
       .catch(err => {
         console.log(err)
@@ -96,7 +96,7 @@
   })
 
   $: {
-    if (tracksLoaded) filteredDemos = sortTracksByType($demoTracksStore)
+    if (demosLoaded) filteredDemos = sortTracksByType($demoTracksStore)
   }
 </script>
 

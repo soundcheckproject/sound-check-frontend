@@ -29,8 +29,9 @@
   import Input from '../components/Input.svelte'
 
 
-  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
@@ -40,8 +41,7 @@
         type,
         errors,
       )
-      // errors = validateError("email","valid",true,errors)
-      // console.log(errors)
+ 
     }
     if (type == 'password') {
       errors = validateErrors(
@@ -59,6 +59,7 @@
   }
 
   const login = () => {
+    // todo: fix error when validationstore is empty because of connectione rror
     if ($validationStore.length == 0) {
       loginUser(user.email, user.password)
         .then(async e => {
@@ -68,6 +69,8 @@
         .catch(e => {
           errors = validateError('connection', 'graphql', e, errors)
         })
+    }else{
+      // errors = validateError('general', 'errors', false, errors)
     }
 
   }
@@ -101,11 +104,12 @@
           non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
           <a href="/register" class="font-semibold">Create account!</a>
         </div>
+    
         <div
           class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full box-content justify-self-end"
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
-
+          <InputError errorInput="general" />
           <InputError errorInput="connection" />
 
           <Input

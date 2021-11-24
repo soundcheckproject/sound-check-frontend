@@ -12,44 +12,59 @@
   import userStore from '../../../../stores/userStore'
   import userTracksStore from '../../../../stores/userTracksStore'
 
-  let exampleTrack: TrackType = {
-    uuid: '123',
-    title: 'Miss you so feat. Jebroer',
-    description: 'Niels his new hit song',
-    previewStart: 20,
-    previewStop: 35,
-    lyrics: 'I hate to admit it',
-    artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
-    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-    prefferdReleaseDate: '2022-01-01',
-    artwork: {
-      designer: 'nielsonderbeke2',
-    },
+  interface DemoListType {
+    all: TrackType[]
+    pending: TrackType[]
+    accepted: TrackType[]
+    denied: TrackType[]
   }
-  let mode: 'all' | 'pending' | 'accepted' | 'denied' = 'all'
 
-  let tracks: { [key: string]: TrackType[] } = {
+  let tracks: DemoListType = {
     all: [],
     pending: [],
     accepted: [],
     denied: [],
   }
 
-  onMount(async () => {
-    if ($userTracksStore == null) {
-      userTracksStore.set(await getTracksByArtistId($userStore.uuid))
-      if ($userTracksStore)
-        tracks = {
-          all: $userTracksStore,
-          pending: $userTracksStore.filter(track => track.isSigned == null),
-          accepted: $userTracksStore.filter(track => track.isSigned === true),
-          denied: $userTracksStore.filter(track => track.isSigned === false),
-        }
+
+  let tracksLoaded: boolean = false
+  let filterType: 'all' | 'pending' | 'accepted' | 'denied' = 'all'
+
+  const sortTracksByType = (trackStore: TrackType[]): DemoListType => {
+    return {
+      all: trackStore,
+      pending: trackStore.filter(track => track.isSigned == null) ?? [],
+      accepted: trackStore.filter(track => track.isSigned === true) ?? [],
+      denied: trackStore.filter(track => track.isSigned === false) ?? [],
     }
+  }
+
+  onMount(() => {
+    getTracksByArtistId($userStore.uuid)
+      .then(res => {
+        userTracksStore.set(res)
+        tracks = sortTracksByType(res)
+        tracksLoaded = true
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    // if ($userTracksStore == null) {
+    //   userTracksStore.set(await getTracksByArtistId($userStore.uuid))
+    //   console.log($userTracksStore)
+    //   if ($userTracksStore)
+    //     tracks = {
+    //       all: $userTracksStore,
+    //       pending: $userTracksStore.filter(track => track.isSigned == null),
+    //       accepted: $userTracksStore.filter(track => track.isSigned === true),
+    //       denied: $userTracksStore.filter(track => track.isSigned === false),
+    //     }
+    // }
   })
 
   $: {
-    console.log(tracks)
+    // console.log(tracks)
+    if (tracksLoaded) tracks = sortTracksByType($userTracksStore)
   }
 </script>
 
@@ -59,7 +74,7 @@
       <div class="flex justify-between items-center">
         <div>All tracks</div>
         <div>
-          <select class="portal input" bind:value={mode}>
+          <select class="portal input" bind:value={filterType}>
             <option value="all">All</option>
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
@@ -69,64 +84,51 @@
       </div>
     </Title>
     {#if tracks.all.length === 0}
-      <Skeleton>No tracks found..</Skeleton>{:else}
-      {#if mode == 'pending' || mode == 'all'}
+      <Skeleton>No tracks found..</Skeleton>
+    {:else}
+      {#if filterType == 'pending' || filterType == 'all'}
         <div class="flex justify-between items-center">
           <SubTitle>Pending tracks</SubTitle>
         </div>
         <div class="grid gap-4 ">
-          {#each tracks.pending as track}
-            <TrackRow
-              {track}
-              status="pending"
-              size="lg"
-              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-              ><div>
-                Your track "<b>Memories</b>"" hasn't been reviewed yet.
-              </div>
-            </TrackRow>
-          {/each}
           {#if tracks.pending.length <= 0}
             <Skeleton>Loading pending tracks..</Skeleton>
+          {:else}
+            {#each tracks.pending as track}
+              <TrackRow {track} size="lg" slot={true}
+                ><div>
+                  Your track "<b>{track.title}</b>" hasn't been reviewed yet.
+                </div>
+              </TrackRow>
+            {/each}
           {/if}
         </div>
       {/if}
-      {#if mode == 'accepted' || mode == 'all'}
+      {#if filterType == 'accepted' || filterType == 'all'}
         <SubTitle>Accepted tracks</SubTitle>
         <div class="grid gap-4 lg:grid-cols-2">
-          {#each tracks.accepted as track}
-            <TrackRow
-              {track}
-              status={new Date(track.prefferdReleaseDate) > new Date()
-                ? 'released'
-                : 'accepted'}
-              size="md"
-              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-              >{track.title}</TrackRow
-            >
-          {/each}
           {#if tracks.accepted.length <= 0}
             <div class="col-span-2">
               <Skeleton>Loading accepted tracks..</Skeleton>
             </div>
+          {:else}
+            {#each tracks.accepted as track}
+              <TrackRow {track} size="md" />
+            {/each}
           {/if}
         </div>
       {/if}
-      {#if mode == 'denied' || mode == 'all'}
+      {#if filterType == 'denied' || filterType == 'all'}
         <SubTitle>Denied tracks</SubTitle>
         <div class="grid gap-4 lg:grid-cols-2">
-          {#each tracks.denied as track}
-            <TrackRow
-              status="denied"
-              size="sm"
-              artworkSource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi1.sndcdn.com%2Fartworks-000454520877-chf2n6-t500x500.jpg&f=1&nofb=1"
-              >Trackname</TrackRow
-            >
-          {/each}
           {#if tracks.denied.length <= 0}
             <div class="col-span-2">
               <Skeleton>Loading denied tracks..</Skeleton>
             </div>
+          {:else}
+            {#each tracks.denied as track}
+              <TrackRow {track} size="sm" />
+            {/each}
           {/if}
         </div>
       {/if}

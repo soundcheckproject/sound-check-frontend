@@ -217,7 +217,7 @@ export const getTrackById = async (trackId: string): Promise<any> => {
         lyrics
         uuid
         contractFile
-        resource
+   
         previewStart
         previewStop
         isSigned

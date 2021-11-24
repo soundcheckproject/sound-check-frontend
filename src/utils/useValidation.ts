@@ -129,7 +129,6 @@ export const validateErrors = (
   for (const validation of validations) {
     const errorName = type + '_' + validation.error
 
-
     if (validation.status != true) {
       if (errorReturn.indexOf(errorName) == -1)
         errorReturn = [...errorReturn, errorName]
@@ -147,14 +146,16 @@ export const validateError = (
   status: boolean,
   errors: Error[],
 ): Error[] => {
+  let errorsReturn: Error[] = errors
   const errorName = type + '_' + validation
 
   if (status != true) {
     // if not found in array Add to array
     if (errors.indexOf(errorName) == -1) {
-      return [...errors, errorName]
+      errorsReturn = [...errorsReturn, errorName]
     }
-  } else return errors.filter((v: string) => v !== errorName)
+  } else errorsReturn = errors.filter((v: string) => v !== errorName)
+  return errorsReturn
 }
 
 export const validateStatusTrack = (

@@ -513,7 +513,7 @@
             <TrackPlayer
               track={newTrack}
               artworkSrc={artworkPreview}
-              audioSrc={trackPreview}
+              audioFile={trackPreview}
             />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>

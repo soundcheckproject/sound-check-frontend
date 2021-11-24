@@ -21,3 +21,18 @@ export const uploadTrack = async (
   )
   return response
 }
+export const getTrackFileFromTrackId = async (
+  trackId: string,
+): Promise<any> => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL_REST}/tracks/file/` + trackId,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+      },
+    },
+  ).then(res => res.blob())
+
+  return response
+}

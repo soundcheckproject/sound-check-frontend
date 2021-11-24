@@ -14,6 +14,7 @@
   import Input from '../components/Input.svelte'
   import {
     isNickNameAvailable,
+    validateEmailValid,
     validateError,
     validateErrors,
     validateLength,
@@ -25,6 +26,7 @@
   import { roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
   import { getAuth } from '@firebase/auth'
+  import validationStore from '../stores/validationStore'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -46,35 +48,52 @@
       //   errors = validateError('nickname', 'available', result, errors)
       // })
     }
+    if (type == 'email') {
+      errors = validateErrors(
+        [
+          validateLength(userRegister.email, 12),
+          validateEmailValid(userRegister.email),
+        ],
+        type,
+        errors,
+      )
+    }
     if (type == 'password') {
-      // errors = validateErrors(
-      //   [
-      //     // validateMatch(userPassword.new, userPassword.old),
-      //     // todo: make work
-      //     // validateLength(userRegister.password, 8),
-      //     // validateMatch(userRegister.password, passwordCheck),
-      //     // Todo: .Match in usevalidation not working
-      //     // validateNumbers(user.password),
-      //     // validateCapital(user.password),
-      //     // validateLower(user.password),
-      //   ],
-      //   type,
-      //   errors,
-      // )
+      errors = validateErrors(
+        [
+          validateLength(userRegister.password, 8),
+          // todo: make work
+          validateMatch(userRegister.password, passwordCheck),
+          // Todo: .Match in usevalidation not working
+          // validateNumbers(user.password),
+          // validateCapital(user.password),
+          // validateLower(user.password),
+        ],
+        type,
+        errors,
+      )
     }
   }
 
-  const register = () => {
-    if ($validationStore.length == 0) {
-      registerUser(userRegister)
-        .then(async e => {
-          errors = validateError('connection', 'graphql', e, errors)
+  $: {
+    validationStore.set(errors)
+  }
 
-          await goto('/portal')
-        })
+  const register = () => {
+
+     if ($validationStore.length == 0) {
+      registerUser(userRegister)
+      .then(async e => {
+        errors = validateError('connection', 'graphql', e, errors)
+        errors = validateError('general', 'errors', e, errors)
+        
+        await goto('/portal')
+      })
         .catch(e => {
           errors = validateError('connection', 'graphql', e, errors)
         })
+    } else {
+      errors = validateError('general', 'errors', false, errors)
     }
   }
 
@@ -85,6 +104,7 @@
   })
 
   $: {
+    
     validationStore.set(errors)
   }
 </script>
@@ -95,19 +115,25 @@
     <article>
       <Title theme="dark">Register account</Title>
 
+      <InputError errorInput="general" />
+      <InputError errorInput="connection" />
       <div class="flex space-x-12 flex-col sm:flex-row" style="">
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
-          <InputError errorInput="connection" />
           <SubTitle theme="dark">📝 Create account</SubTitle>
-          <label
-            >Email adress<input
-              bind:value={userRegister.email}
-              class="input"
-              placeholder="Email adress.."
-            /></label
-          >
+
+          <Input
+            bind:value={userRegister.email}
+            title="Email address"
+            type="email"
+            errorInput="email"
+            portal=""
+            on:input={() => {
+              checkValidation('email')
+            }}
+            placeholder="Email address.."
+          />
           <!-- <label
             >Password<input
               bind:value={userRegister.password}
@@ -127,6 +153,7 @@
           <label
             >Password again<input
               bind:value={passwordCheck}
+              on:input={() => checkValidation('password')}
               class="input"
               type="password"
               placeholder="Password again.."

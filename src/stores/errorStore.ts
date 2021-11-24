@@ -56,6 +56,13 @@ const errorStore = readable<{
       message: 'Nickname is not available',
     },
   ],
+  general: [
+    {
+      display: false,
+      errorName: 'general_errors',
+      message: 'Please fix all errors first and try again',
+    },
+  ],
 })
 
 export default {

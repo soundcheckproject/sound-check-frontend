@@ -13,6 +13,9 @@
   import { fade, fly, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
+  import type { TrackType } from '../types/Track.type'
+  import { getTrackFileFromTrackId } from '../utils/useRest'
+  import { formatTimeForPlayer } from '../utils/useFormat'
 
   export let theme: 'light' | 'dark' = 'dark'
 
@@ -29,15 +32,6 @@
   }
 
   let feedbackInput = ''
-
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600)
-    const m = Math.floor((seconds % 3600) / 60)
-    const s = seconds % 60
-    return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
-      .filter(a => a)
-      .join(':')
-  }
 
   const changeTrackTime = (timeStampSong: number) => {
     audio.currentTime = timeStampSong
@@ -66,34 +60,52 @@
 
   let feedbacks: FeedbackType[] = []
 
+  export let audioFile
+
+  export let track: TrackType
+
+  const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    return new Promise(resolve => {
+      reader.onloadend = () => {
+        resolve(reader.result)
+      }
+    })
+  }
+
   onMount(async () => {
-    console.log('comp has been mounted')
-    if (audio) {
+    if (track.uuid)
+      blobToBase64(await getTrackFileFromTrackId(track.uuid)).then(res => {
+        audioFile = res
+      })
+
+    if (audio && audioFile) {
       audio.onloadedmetadata = () => {
         let trackDuration = parseInt(audio.duration.toFixed(0))
-        trackInfo.duration = formatTime(trackDuration)
+        trackInfo.duration = formatTimeForPlayer(trackDuration)
 
         audio.ontimeupdate = () => {
           let trackCurrentTime = parseInt(audio.currentTime.toFixed(0))
-          trackInfo.currentTime = formatTime(trackCurrentTime)
+          trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
 
           playerBar.style.width = (100 * trackCurrentTime) / trackDuration + '%'
         }
       }
     }
     if (feedback) {
-      feedbacks = await getTrackFeedbacksByTrackId($$props.track.uuid)
+      feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
   })
   $: {
-    console.log($$props.track)
+  
     localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
   }
 </script>
 
-{#if $$props.audioSrc}
-  <audio hidden bind:this={audio} preload="auto" controls>
-    <source src={$$props.audioSrc} type="audio/mpeg" />
+{#if audioFile}
+  <audio bind:this={audio} preload="auto" controls>
+    <source src={audioFile} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 {/if}
@@ -104,13 +116,13 @@
 >
   <div
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
-    style={`background:url('${$$props.track.artwork.resource}') center center no-repeat;background-size:cover`}
+    style={`background:url('${track.artwork.resource}') center center no-repeat;background-size:cover`}
   />
   <!-- Todo: show track status in trackplayer -->
-  <!-- {#if $$props.track.isSigned}
+  <!-- {#if track.isSigned}
     <TrackStatus
       status={validateStatusTrack(
-        $$props.track.isSigned,
+        track.isSigned,
         $$props.track.prefferdReleaseDate,
       )}
     />
@@ -128,10 +140,10 @@
     <div
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
-      {#if $$props.track.artwork.resource|| $$props.artworkSrc}
+      {#if track.artwork.resource || $$props.artworkSrc}
         <img
           alt="img"
-          src={`${$$props.track.artwork.resource ?? $$props.artworkSrc}`}
+          src={`${track.artwork.resource ?? $$props.artworkSrc}`}
           class="object-cover h-full w-full "
         />
       {:else}
@@ -157,9 +169,9 @@
       style="grid-template-rows:auto repeat(2,min-content) "
     >
       <div class="flex justify-between items-center ">
-        <SubTitle theme="light">{$$props.track.title ?? 'No title'}</SubTitle>
-        {#if $$props.track.genre}
-          <div class="text-sm">#{$$props.track.genre.name ?? 'No genre'}</div>
+        <SubTitle theme="light">{track.title ?? 'No title'}</SubTitle>
+        {#if track.genre}
+          <div class="text-sm">#{track.genre.name ?? 'No genre'}</div>
         {/if}
       </div>
 
@@ -313,7 +325,7 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if (feedback && $$props.track.isSigned == null) || $$props.track.isSigned == true}
+  {#if (feedback && track.isSigned == null) || track.isSigned == true}
     <div
       transition:slide|local={{ delay: 400, duration: 200 }}
       class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"
@@ -380,7 +392,7 @@
                   on:click={() => changeTrackTime(feedback.timeStampSong)}
                   class=" px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 flex hover:hidden peer"
                 >
-                  {formatTime(feedback.timeStampSong)}
+                  {formatTimeForPlayer(feedback.timeStampSong)}
                 </div>
                 <div
                   class=" absolute right-4 hidden rounded-full peer-hover:flex bg-opacity-10 bg-white p-2 justify-center items-center"

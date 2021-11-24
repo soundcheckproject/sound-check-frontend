@@ -10,7 +10,7 @@
 
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
-  console.log(artist)
+
 </script>
 
 {#if artist}
