@@ -3,37 +3,11 @@
 
   let toggleMenu: Boolean = false
 
-  let scrollable = true;
-	
-	const wheel = (node, options) => {
-		let { scrollable }: {scrollable: Boolean} = options;
-		
-		const handler = e => {
-			if (!scrollable) e.preventDefault();
-		};
-		
-		node.addEventListener('wheel', handler, { passive: false });
-		
-		return {
-			update(options) {
-				scrollable = options.scrollable;
-			},
-			destroy() {
-				node.removeEventListener('wheel', handler, { passive: false });
-			}
-		};
-  };
-
-  $:{
-    scrollable = !toggleMenu
-  }
 
 </script>
 
-<svelte:window use:wheel={{scrollable}} />
 <nav class="flex py-8 flex-row justify-between items-center">
   <a href="/"> <h1 class="text-xl font-bold">{$generalStore.Name}</h1></a>
-
   <div
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >
@@ -83,7 +57,7 @@
   <aside
     class="{toggleMenu
       ? '-translate-x-screen-w'
-      : 'translate-x-screen-w'} ease-out duration-200 absolute w-screen h-screen z-50 inset-0 bg-gray-900 grid place-items-center"
+      : 'translate-x-screen-w'} ease-out duration-200 fixed w-screen h-screen z-50 inset-0 bg-gray-900 grid place-items-center"
   >
      <div
     class=" absolute top-8 right-6 cursor-pointer p-2 bg-gray-700 backdrop-blur-sm rounded-full"

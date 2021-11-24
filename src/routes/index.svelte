@@ -63,7 +63,7 @@
 <Header>
   <article
     class=" {spotlightTrack
-      ? 'max-w-xs sm:max-w-max mx-auto sm:mx-0 lg:-mx-12 md:-mx-24 mb-24 -mt-6 sm:-mt-0 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
+      ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
   >
     <div class="sm:w-2/3 grid gap-4">
@@ -86,7 +86,7 @@
           {/if}
         </h3>
       </div>
-      <p class="hidden sm:inline lg:text-md ">
+      <p class="hidden sm:inline lg:text-md max-w-lg ">
         {#if spotlightTrack}
           {spotlightTrack.description}
         {:else}
@@ -111,7 +111,7 @@
     <div class="max-w-full sm:w-1/3 sm:px-6">
       {#if spotlightTrack}
         <img
-          class="rounded-sm mshadow-lg max-h-72 max-w-xs w-full object-cover "
+          class="rounded-sm mshadow-lg max-h-72 max-w-xs xl:max-h-96 xl:max-w-lg w-full object-cover "
           src={spotlightTrack.artwork.resource}
           alt="Artwork"
         />
@@ -121,8 +121,6 @@
         />
       {/if}
     </div>
-
-    <!-- <Button type="glass" rounded="default" size="md">Learn more{count}</Button> -->
   </article>
 </Header>
 <Container>
