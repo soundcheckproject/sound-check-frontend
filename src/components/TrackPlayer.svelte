@@ -39,9 +39,9 @@
 
   const addComment = async () => {
     if (feedbackInput.length > 0) {
-      const feedback: FeedbackType = {
+      const feedbackData: FeedbackType = {
         userId: $userStore.uuid,
-        trackId: $$props.track.uuid,
+        trackId: track.uuid,
         description: feedbackInput,
         timeStampSong: audio ? audio.currentTime ?? 0 : 0,
         date: new Date().toString(),
@@ -49,8 +49,9 @@
 
       // Todo: post to database
       try {
-        await addFeedbackToTrack(feedback)
-        ;(feedback.user = $userStore), (feedbacks = [...feedbacks, feedback])
+        await addFeedbackToTrack(feedbackData)
+        feedbackData.user = $userStore
+        feedbacks = [...feedbacks, feedbackData]
         // console.log(feedback)
       } catch (e) {
         console.log(e)
@@ -60,51 +61,53 @@
 
   let feedbacks: FeedbackType[] = []
 
-  export let audioFile
+  export let audioFile = null
 
   export let track: TrackType
 
-  const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
+  const blobToBase64 = (blob: Blob) => {
     const reader = new FileReader()
     reader.readAsDataURL(blob)
-    return new Promise(resolve => {
-      reader.onloadend = () => {
-        resolve(reader.result)
-      }
-    })
+
+    reader.onloadend = () => {
+      audioFile = reader.result
+    }
   }
 
-  onMount(async () => {
-    if (track.uuid)
-      blobToBase64(await getTrackFileFromTrackId(track.uuid)).then(res => {
-        audioFile = res
-      })
-
-    if (audio && audioFile) {
-      audio.onloadedmetadata = () => {
-        let trackDuration = parseInt(audio.duration.toFixed(0))
+  const loadTrackInfo = (media: any) => {
+    if (media) {
+      media.onloadedmetadata = () => {
+        let trackDuration = parseInt(media.duration.toFixed(0))
         trackInfo.duration = formatTimeForPlayer(trackDuration)
 
-        audio.ontimeupdate = () => {
-          let trackCurrentTime = parseInt(audio.currentTime.toFixed(0))
+        media.ontimeupdate = () => {
+          let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
           trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
 
           playerBar.style.width = (100 * trackCurrentTime) / trackDuration + '%'
         }
       }
     }
+  }
+
+  onMount(async () => {
+    if (track.uuid) {
+      let trackBlob = await getTrackFileFromTrackId(track.uuid)
+      blobToBase64(trackBlob)
+    }
+
     if (feedback) {
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
   })
   $: {
-  
+    if (audioFile) loadTrackInfo(audio)
     localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
   }
 </script>
 
 {#if audioFile}
-  <audio bind:this={audio} preload="auto" controls>
+  <audio hidden bind:this={audio} preload="auto" controls>
     <source src={audioFile} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
@@ -176,35 +179,37 @@
       </div>
 
       <div class="grid gap-2 mt-4">
-        <div class="flex justify-between w-full h-12 items-end">
-          {#each Array(100) as i}
-            <div
-              on:click={() => {
-                console.log(i)
-                audio.currentTime = 1
-              }}
-              class={`w-0.5 h-full bg-gray-100 rounded-sm cursor-pointer`}
-            />
-          {/each}
-        </div>
-        <div class="flex  text-gray-200 ">
-          <div class="text-xs mr-2">00:00</div>
-          <div class="flex mx-2 items-center opacity-25 w-full">
-            <div
-              class="bg-gray-100 transition-all h-1 rounded-sm "
-              bind:this={playerBar}
-            />
-            <div
-              class="-ml-2 bg-gray-100 h-3 w-3 relative rounded-full"
-              style=""
-            >
-              <div class="absolute text-xs top-4 ml-1.5 -translate-x-1/2	">
-                {trackInfo.currentTime}
+        {#if audio}
+          <div class="flex justify-between w-full h-12 items-end">
+            {#each Array(100) as i}
+              <div
+                on:click={() => {
+                  console.log(i)
+                  audio.currentTime = 1
+                }}
+                class={`w-0.5 h-full bg-gray-100 rounded-sm cursor-pointer`}
+              />
+            {/each}
+          </div>
+          <div class="flex  text-gray-200 ">
+            <div class="text-xs mr-2">00:00</div>
+            <div class="flex mx-2 items-center opacity-25 w-full">
+              <div
+                class="bg-gray-100 transition-all h-1 rounded-sm "
+                bind:this={playerBar}
+              />
+              <div
+                class="-ml-2 bg-gray-100 h-3 w-3 relative rounded-full"
+                style=""
+              >
+                <div class="absolute text-xs top-4 ml-1.5 -translate-x-1/2	">
+                  {trackInfo.currentTime}
+                </div>
               </div>
             </div>
+            <div class="text-xs ml-auto">{trackInfo.duration}</div>
           </div>
-          <div class="text-xs ml-auto">{trackInfo.duration}</div>
-        </div>
+        {/if}
       </div>
       <div
         class="mt-2 grid grid-flow-col  items-center justify-between gap-2 self-end py-4 px-5 bg-opacity-10 rounded-md bg-gray-50"
