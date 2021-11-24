@@ -127,12 +127,14 @@ export const validateErrors = (
 ): Error[] => {
   for (const validation of validations) {
     const errorName = type + '_' + validation.error
-    if (validation.status != true) {
-      // if not found in array Add to array
-      if (errors.indexOf(errorName) == -1) {
-        return [...errors, errorName]
-      }
-    } else return errors.filter((v: string) => v !== errorName)
+    if (errors) {
+      if (validation.status != true) {
+        // if not found in array Add to array
+        if (errors.indexOf(errorName) == -1) {
+          return [...errors, errorName]
+        }
+      } else return errors.filter((v: string) => v !== errorName)
+    } else return []
   }
 }
 

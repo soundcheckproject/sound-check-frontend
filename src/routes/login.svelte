@@ -24,7 +24,9 @@
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
   import userStore from '../stores/userStore'
-import { roleStore } from '../stores/stores';
+  import { roleStore } from '../stores/stores'
+  import Artist from '../components/Artist.svelte'
+  import Input from '../components/Input.svelte'
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
@@ -101,26 +103,50 @@ import { roleStore } from '../stores/stores';
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
 
           <InputError errorInput="connection" />
-          <InputError errorInput="email" />
+          <!-- <InputError errorInput="email" /> -->
+          <Input
+            title="Email address"
+            type="email"
+            errorInput="email"
+            portal=""
+            on:input={() => {
+              checkValidation('email')
+            }}
+            on:change={() => {
+              checkValidation('email')
+            }}
+            placeholder="Email address.."
+            bind:value={user.email}
+          />
+          <Input
+            title="Email address"
+            type="email"
+            errorInput="password"
+            portal=""
+            on:input={() => {
+              checkValidation('password')
+            }}
+            on:change={() => {
+              checkValidation('password')
+            }}
+            placeholder="Enter password.."
+            bind:value={user.password}
+            autocomplete="current-password"
+          />
 
-          <label
+          <!-- <label
             >Email addres<input
               bind:value={user.email}
               required
-              on:input={() => {
-                checkValidation('email')
-              }}
-              on:change={() => {
-                checkValidation('email')
-              }}
+              
               class="input {$validationStore[0] == 'email_valid'
                 ? ' error'
                 : ''}"
               placeholder="Email address."
             /></label
-          >
+          > -->
           <InputError errorInput="password" />
-          <label
+          <!-- <label
             >Password<input
               bind:value={user.password}
               required
@@ -136,7 +162,7 @@ import { roleStore } from '../stores/stores';
               placeholder="Password.."
               autocomplete="current-password"
             /></label
-          >
+          > -->
           <div class="flex justify-between items-center">
             <label
               class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"

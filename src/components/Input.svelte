@@ -32,6 +32,7 @@
     {#if !$$props.textarea}<input
         bind:value
         on:input
+        on:change
         bind:this={ref}
         class="input {portal} {$$props.class}"
         placeholder={$$props.placeholder ?? 'Type here..'}
@@ -41,7 +42,8 @@
         rows={$$props.rows}
         bind:value
         on:input
-        class={`input portal ` + $$props.class}
+        on:change
+        class="input {portal} {$$props.class}"
         placeholder={$$props.placeholder ?? 'Type here..'}
       />
     {/if}</label
