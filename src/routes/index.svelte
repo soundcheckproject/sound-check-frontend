@@ -128,24 +128,21 @@
     <section>
       <article id="releases">
         <Title className="">Latest releases</Title>
-        <div
-          class="sm:grid-cols-3 gap-4 flex overflow-x-scroll mt-2  sm:-mx-6 "
-        >
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
-          <Track />
+        <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
+          {#each latestReleases as track}
+            <Track {track} />
+          {/each}
+          {#if spotlightTrack}
+            <Track track={spotlightTrack} />
+            <Track track={spotlightTrack} />
+            <Track track={spotlightTrack} />
+            <Track track={spotlightTrack} />
+          {/if}
         </div>
       </article>
     </section>
 
-    <section class="even:bg-gray-100 px-6 -mx-6 sm:px-12 sm:-mx-12 rounded-md">
+    <!-- <section class="even:bg-gray-100 px-6 -mx-6 sm:px-12 sm:-mx-12 rounded-md">
       <article>
         <Title>New artists</Title>
         <div>artists</div>
@@ -174,7 +171,7 @@
             </div>
           </div>
           <div class=" sm:w-1/2  lg:w-1/3">
-            <!-- svelte-ignore a11y-img-redundant-alt -->
+             svelte-ignore a11y-img-redundant-alt 
             <img
               alt="A photo of Martin Garrix"
               src="https://dynamicmedia.livenationinternational.com/Media/n/r/c/ad6a5ff7-fb0a-4e3f-a5fa-fb26381f186f.jpg"
@@ -183,8 +180,8 @@
           </div>
         </div>
       </article>
-    </section>
-    <section>
+    </section> -->
+    <!-- <section>
       <article>
         <Title>What is label?</Title>
 
@@ -212,9 +209,16 @@
           Rackham.
         </p>
       </article>
-    </section>
-    <Title>Contact</Title>
-    <section class="md:flex items-center">
+    </section> -->
+  </div>
+</Container>
+<div id="artists"></div>
+<div id="info"></div>
+<div id="contact" class="gradientBlueGreen">
+<Container>
+  <section class="py-16">
+    <Title theme='light' className='mb-4'>Contact</Title>
+    <div class="md:flex items-center">
       <article
         class="bg-gray-100 px-6 -mx-6 md:-ml-12 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
       >
@@ -270,26 +274,16 @@
           <Button color="bg-teal-700" size="md">Learn more!</Button>
         </form>
       </article>
-      <article class="py-12 md:w-1/2 lg:w-3/5 lg:left">
-        <SubTitle>📩 Get in touch with us!</SubTitle>
+      <article class="py-12 md:w-1/2 lg:w-3/5 lg:left text-white">
+        <SubTitle theme='light'>📩 Get in touch with us!</SubTitle>
         <p>
-          This book is a treatise on the theory of ethics, very popular during
-          the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit
-          amet..", comes from a line in section 1.10.32. The standard chunk of
-          Lorem Ipsum used since the 1500s is reproduced below for those
-          interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
-          Malorum" by Cicero are also reproduced in their exact original form,
-          accompanied by English versions from the 1914 translation by H.
-          Rackham.
+          As a label we like to interact with our fans and future artists. If you have any questions or suggestions, don't hesitate to contact us!
         </p>
-        <p>demo@jajarecords.com</p>
-        <p>promo@jajarecords.com</p>
-        <p>invoice@jajarecords.com</p>
-        <p>demo@jajarecords.com</p>
       </article>
-    </section>
-  </div>
+    </div>
+  </section>
 </Container>
+</div >
 
 <Footer />
 

@@ -1,12 +1,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import type { TrackType } from 'src/types/Track.type'
 
   import { fade } from 'svelte/transition'
 
-  export const track = {}
+  export let track: TrackType
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
   let hover = false
+
 </script>
 
 {#if add}
@@ -56,7 +58,7 @@
           ? ' h-64 w-64'
           : ''
       }  rounded-md mshadow-sm outline-none object-cover`}
-      src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flinkstorage.linkfire.com%2Fmedialinks%2Fimages%2Fab15a68d-ef47-4a99-9a25-cd88c7663985%2Fartwork-440x440.jpg&f=1&nofb=1"
+      src={track.artwork.resource}
     />
     {#if hover}
       <div
@@ -87,8 +89,12 @@
             <polygon points="10 8 16 12 10 16 10 8" />
           </svg>
         </div>
-        <div class="text-xs">artist & artist</div>
-        <b class={`${size == 'sm' ? 'text-xs' : ''}`}>trackname</b>
+        <div class="text-xs">
+          {#each track.artistTracks as at, i}
+            {i > 0 ? ` & ${at.user.nickName}` : at.user.nickName}
+          {/each}
+        </div>
+        <b class={`${size == 'sm' ? 'text-xs' : ''}`}>{track.title}</b>
       </div>
     {/if}
   </div>
