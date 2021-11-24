@@ -12,6 +12,7 @@
   import 'animate.css'
 
   import authStore from '../stores/authStore'
+  import { fade } from 'svelte/transition'
 
   const firebaseConfig = {
     apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
@@ -23,7 +24,7 @@
     measurementId: 'G-QLH9WHRQJE',
   }
   initializeApp(firebaseConfig)
-  
+
   onMount(() => {
     // const app = initializeApp(firebaseConfig)
     // initializeAuth(app, {
@@ -43,7 +44,10 @@
   })
 </script>
 
-<div class="font-roboto c-app relative ">
+<div
+  class="font-roboto c-app relative " 
+
+>
   <slot />
 </div>
 
