@@ -10,7 +10,7 @@
   export let artist: ArtistType = undefined
   export let size: 'xs' | 'sm' | 'md' = 'sm'
   let hover: boolean = false
-
+  
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
 

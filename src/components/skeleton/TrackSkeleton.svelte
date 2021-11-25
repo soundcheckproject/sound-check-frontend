@@ -7,7 +7,7 @@
 
 
   <div
-    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
+    class=" relative flex justify-center items-center flex-none"
   >
     <div
       class="{

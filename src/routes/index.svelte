@@ -99,8 +99,14 @@
       </p>
       <div class="mb-2 flex justify-start items-end">
         {#if spotlightTrack}
-          {#each spotlightTrack.artistTracks as at}
-            <Artist artist={at.user} size="xs">{at.user.nickName}</Artist>
+          {#each spotlightTrack.artistTracks as at, i}
+            {#if i > 0}
+              <Artist className="ml-4" artist={at.user} size="xs"
+                >{at.user.nickName}</Artist
+              >
+            {:else}
+              <Artist artist={at.user} size="xs">{at.user.nickName}</Artist>
+            {/if}
           {/each}
         {/if}
       </div>
@@ -140,6 +146,11 @@
           {:else}
             {#each Array(3) as i}
               <TrackSkeleton />
+            {/each}
+          {/if}
+          {#if latestReleases.length < 4}
+            {#each Array(3) as i}
+              <TrackSkeleton loading={false} />
             {/each}
           {/if}
         </div>
