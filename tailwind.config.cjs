@@ -30,6 +30,12 @@ module.exports = {
         'screen-w': '100vw',
         'screen-h': '100vh',
       },
+      minWidth: {
+        xs: '20rem',
+      },
+      minHeight: {
+        xs: '20rem',
+      },
     },
   },
   variants: {

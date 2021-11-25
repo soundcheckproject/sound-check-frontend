@@ -1,5 +1,15 @@
+import variables from '../utils/variables'
 import { writable } from 'svelte/store'
-export const labelStore = writable(undefined)
+
+const label = {
+  uuid: variables.labelId,
+  name: variables.name,
+  description: variables.description,
+  founded: variables.founded,
+  logo: variables.logo,
+}
+
+export const labelStore = writable(label)
 export const userRole = writable(2)
 export const userAuth = writable(true)
 

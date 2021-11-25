@@ -4,7 +4,7 @@ import { labelStore } from '../stores/stores';
   import Container from '../components/Container.svelte'
 </script>
 
-<footer class="w-screen py-12 bg-gray-900 text-gray-100 ">
+<footer class="w-screen py-12 gradientBlueGreen text-gray-100 ">
   <Container>
     <div class="flex justify-between">
       <div>
@@ -50,7 +50,7 @@ import { labelStore } from '../stores/stores';
         </ul>
       </div>
       <ul class="text-sm text-gray-400 text-right grid uppercase">
-        <a href="/">home</a>
+        <a href="#home">home</a>
         <a href="#releases">releases</a>
         <a href="#artists">artists</a>
         <a href="#info">info</a>

@@ -11,6 +11,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^3.0.0",
     "@sveltejs/kit": "next",
     "@types/howler": "^2.2.4",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
