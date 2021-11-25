@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { generalStore } from '../stores/stores'
+  import { labelStore } from '../stores/stores'
 
   let toggleMenu: Boolean = false
 
@@ -7,7 +7,7 @@
 </script>
 
 <nav class="flex py-8 flex-row justify-between items-center">
-  <a href="/"> <h1 class="text-xl font-bold">{$generalStore.Name}</h1></a>
+  <a href="/"> <h1 class="text-xl font-bold">{$labelStore && $labelStore.name}</h1></a>
   <div
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >

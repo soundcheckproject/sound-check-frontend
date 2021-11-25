@@ -1,4 +1,6 @@
 <script>
+import { labelStore } from '../stores/stores';
+
   import Container from '../components/Container.svelte'
 </script>
 
@@ -6,9 +8,9 @@
   <Container>
     <div class="flex justify-between">
       <div>
-        <h4 class="text-lg">SoundCheck</h4>
+        <h4 class="text-lg">{$labelStore && $labelStore.name}</h4>
         <ul class="text-sm text-gray-400">
-          <li>SC © 2021-{new Date().getFullYear()}</li>
+          <li>© 2021-{new Date().getFullYear()}</li>
           <li>
             Made by <a
               class="underline"

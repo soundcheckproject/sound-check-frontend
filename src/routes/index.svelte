@@ -13,14 +13,41 @@
   import Skeleton from '../components/Skeleton.svelte'
   import LineSkeleton from '../components/skeleton/LineSkeleton.svelte'
   import TrackSkeleton from '../components/skeleton/TrackSkeleton.svelte'
+  import type LabelType from 'src/types/Label.type'
+  import { variables } from '../utils/variables'
+  import { labelStore } from '../stores/stores'
   let count = 0
 
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
 
-  onMount(async () => {
+  const getLabelData = async () => {
     try {
-      const releases = await query(
+      const label: LabelType = await query(
+        `getLabelById`,
+        `query getLabelById($labelId: String!) {
+        getLabelById(labelId: $labelId) {
+             logo
+              founded
+              description
+              name
+              uuid
+        }
+      }`,
+        { labelId: variables.labelId },
+      )
+
+      console.log({ label })
+
+      if (label) labelStore.set(label)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const getReleasesData = async () => {
+    try {
+      const releases: TrackType[] = await query(
         `getTracksReleased`,
         `query getTracksReleased {
         getTracksReleased {
@@ -58,6 +85,11 @@
     } catch (error) {
       console.error('Could not get latest tracks.', error)
     }
+  }
+
+  onMount(async () => {
+    getReleasesData()
+    getLabelData()
   })
 </script>
 
@@ -181,35 +213,20 @@
         </div>
       </article>
     </section> -->
-    <!-- <section>
+    <section>
       <article>
-        <Title>What is label?</Title>
-
-        <SubTitle>🚨 Letsgo!</SubTitle>
-        <p>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It
-          has roots in a piece of classical Latin literature from 45 BC, making
-          it over 2000 years old. Richard McClintock, a Latin professor at
-          Hampden-Sydney College in Virginia, looked up one of the more obscure
-          Latin words, consectetur, from a Lorem Ipsum passage, and going
-          through the cites of the word in classical literature, discovered the
-          undoubtable source. Lorem Ipsum comes from sections 1.10.32 and
-          1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and
-          Evil) by Cicero, written in 45 BC.$
-        </p>
-        <SubTitle>🧠 How did it start</SubTitle>
-        <p>
-          This book is a treatise on the theory of ethics, very popular during
-          the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit
-          amet..", comes from a line in section 1.10.32. The standard chunk of
-          Lorem Ipsum used since the 1500s is reproduced below for those
-          interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
-          Malorum" by Cicero are also reproduced in their exact original form,
-          accompanied by English versions from the 1914 translation by H.
-          Rackham.
-        </p>
+        <Title>What is {$labelStore ? $labelStore.name : 'this label'}?</Title>
+        {#if $labelStore}
+          <SubTitle>🚨 Letsgo!</SubTitle>
+          <p class="max-w-lg">
+            {$labelStore.description}
+          </p>
+        {:else}
+          <LineSkeleton width='w-1/6' />
+          <LineSkeleton width='w-3/6' lines={4} />
+        {/if}
       </article>
-    </section> -->
+    </section>
   </div>
 </Container>
 <div id="artists" />
