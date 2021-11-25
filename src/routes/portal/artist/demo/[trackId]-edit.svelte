@@ -179,6 +179,7 @@ edit demo -->
     <TrackPlayer
       track={newTrack}
       audioFile={trackPreview ? trackPreview : null}
+      feedback={false}
     />
 
     <Box>

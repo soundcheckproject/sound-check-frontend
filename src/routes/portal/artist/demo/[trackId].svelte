@@ -49,7 +49,7 @@
 
 <div class="grid gap-8">
   {#if track}
-    <TrackPlayer feedback={true} {track} audioSrc={track.resource} />
+    <TrackPlayer feedback={true} {track} />
     <Box>
       <Title
         ><div class="flex justify-between items-center">

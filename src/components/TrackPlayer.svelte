@@ -401,7 +401,7 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if audio && ((feedback && track.isSigned == null) || track.isSigned == true)}
+  {#if audio && feedback &&(( track.isSigned == null) || track.isSigned == true)}
     <div
       transition:slide|local={{ delay: 400, duration: 200 }}
       class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"
