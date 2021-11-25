@@ -7,7 +7,11 @@
   import type { UserType } from '../types/User.type'
   import { toggleSigned, getAllTracks, updateTrack } from '../utils/useGraphQL'
   import demoTracksStore from '../stores/demoTracksStore'
-  import { formatTimeForPlayer } from '../utils/useFormat'
+  import {
+    formatDate,
+    formatDateTime,
+    formatTimeForPlayer,
+  } from '../utils/useFormat'
   import { onMount } from 'svelte'
   import { getTrackFileFromTrackId } from '../utils/useRest'
 
@@ -57,8 +61,10 @@
         trackInfo.duration = formatTimeForPlayer(trackDuration)
 
         trackPlayable = true
+        audio.currentTime = track.previewStart
         media.ontimeupdate = () => {
           let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
+
           trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
           trackInfo.playerBar.style.width =
             (100 * trackCurrentTime) / trackDuration + '%'
@@ -70,12 +76,14 @@
   onMount(async () => {
     if (track.uuid) {
       blobToBase64(await getTrackFileFromTrackId(track.uuid))
+      
     }
   })
 
   $: {
     if (audioFile) {
       loadTrackInfo(audio)
+      
     }
   }
 </script>
@@ -116,8 +124,9 @@
               <!-- {console.log(track.artistTracks)} -->
             </div>
             <p class="mt-2 text-gray-400 text-xs">
-              Preffered release date: {track.prefferdReleaseDate ??
-                'not yet determined'}
+              Preffered release date: {formatDate(
+                new Date(track.prefferdReleaseDate),
+              ) ?? 'not yet determined'}
             </p>
           </div>
 
@@ -235,7 +244,7 @@
                 <div
                   class="opacity-0 transition-opacity hover:bg-gray-400 rounded-full py-1 px-2 group-hover:opacity-100 absolute text-xs top-[6px] ml-1.5 -translate-y-1/2 -translate-x-1/2	text-shadow-lg filter drop-shadow-md"
                 >
-                  00:30
+                  {trackInfo.currentTime}
                 </div>
               </div>
             </div>

@@ -87,6 +87,7 @@
         trackInfo.duration = formatTimeForPlayer(trackDuration)
 
         trackPlayable = true
+        audio.currentTime = track.previewStart
         media.ontimeupdate = () => {
           let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
           trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
