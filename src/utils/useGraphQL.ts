@@ -397,7 +397,7 @@ export const updateTrack = async (
 }
 
 export const toggleSigned = async (
-  isSigned: boolean,
+  isSigned: boolean|null,
   trackId: string,
 ): Promise<string> => {
   const response = await query(

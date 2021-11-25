@@ -14,6 +14,7 @@ export interface TrackInfoType {
   currentTime: string
   playing: boolean
   playerBar?: HTMLDivElement
+  muted?: boolean
 }
 export interface TrackType {
   uuid?: string

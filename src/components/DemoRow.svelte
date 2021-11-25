@@ -14,6 +14,7 @@
   } from '../utils/useFormat'
   import { onMount } from 'svelte'
   import { getTrackFileFromTrackId } from '../utils/useRest'
+  import { denyTrack, signTrack } from '../utils/useTrack'
 
   export let artworkSource = ''
 
@@ -30,19 +31,6 @@
   export let track: TrackType
 
   let artistTracks: { user: UserType }[] = track.artistTracks ?? []
-
-  const denyTrack = async () => {
-    if (track.isSigned != false) {
-      await toggleSigned(false, track.uuid)
-      demoTracksStore.set(await getAllTracks())
-    }
-  }
-  const signTrack = async () => {
-    if (track.isSigned != true) {
-      await toggleSigned(true, track.uuid)
-      demoTracksStore.set(await getAllTracks())
-    }
-  }
 
   const blobToBase64 = (blob: Blob) => {
     const reader = new FileReader()
@@ -76,14 +64,12 @@
   onMount(async () => {
     if (track.uuid) {
       blobToBase64(await getTrackFileFromTrackId(track.uuid))
-      
     }
   })
 
   $: {
     if (audioFile) {
       loadTrackInfo(audio)
-      
     }
   }
 </script>
@@ -132,7 +118,7 @@
 
           <div class="justify-self-end flex flex-col justify-between items-end">
             <svg
-              on:click={denyTrack}
+              on:click={() => denyTrack(track)}
               class="text-red-700 m-2"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -150,7 +136,7 @@
             </svg>
 
             <svg
-              on:click={signTrack}
+              on:click={() => signTrack(track)}
               class="text-green-700 m-2"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
