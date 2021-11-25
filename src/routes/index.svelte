@@ -11,7 +11,8 @@
   import type { TrackType } from 'src/types/Track.type'
   import { query } from '../utils/useGraphQL'
   import Skeleton from '../components/Skeleton.svelte'
-  import LineSkeleton from '../components/LineSkeleton.svelte'
+  import LineSkeleton from '../components/skeleton/LineSkeleton.svelte'
+  import TrackSkeleton from '../components/skeleton/TrackSkeleton.svelte'
   let count = 0
 
   let latestReleases: TrackType[] = []
@@ -50,10 +51,10 @@
       }`,
       )
 
-      if (releases && releases.length > 0) {
-        spotlightTrack = releases[0]
-      }
-      latestReleases = releases
+      // if (releases && releases.length > 0) {
+      //   spotlightTrack = releases[0]
+      // }
+      // latestReleases = releases
     } catch (error) {
       console.error('Could not get latest tracks.', error)
     }
@@ -75,7 +76,6 @@
             <LineSkeleton loading={true} height={6} width="w-5/6" />
           {/if}
         </h1>
-
         <h3 class="text-white text-opacity-50 text-sm sm:text-md">
           {#if spotlightTrack}
             by {#each spotlightTrack.artistTracks as at, i}
@@ -111,13 +111,13 @@
     <div class="max-w-full sm:w-1/3 sm:px-6">
       {#if spotlightTrack}
         <img
-          class="rounded-sm mshadow-lg max-h-72 max-w-xs xl:max-h-96 xl:max-w-lg w-full object-cover "
+          class="rounded-md mshadow-lg max-h-72 max-w-xs xl:max-h-96 xl:max-w-lg w-full object-cover "
           src={spotlightTrack.artwork.resource}
           alt="Artwork"
         />
       {:else}
         <div
-          class="rounded-sm mshadow-lg h-56 lg:h-72 w-full max-w-xs bg-gray-400 opacity-80 animate-pulse grid place-items-center"
+          class="rounded-md mshadow-lg h-56 lg:h-72 w-full max-w-xs bg-gray-400 opacity-80 animate-pulse grid place-items-center"
         />
       {/if}
     </div>
@@ -129,14 +129,14 @@
       <article id="releases">
         <Title className="">Latest releases</Title>
         <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
-          {#each latestReleases as track}
-            <Track {track} />
-          {/each}
-          {#if spotlightTrack}
-            <Track track={spotlightTrack} />
-            <Track track={spotlightTrack} />
-            <Track track={spotlightTrack} />
-            <Track track={spotlightTrack} />
+          {#if latestReleases.length > 0}
+            {#each latestReleases as track}
+              <Track {track} />
+            {/each}
+          {:else}
+            {#each Array(3) as i}
+              <TrackSkeleton />
+            {/each}
           {/if}
         </div>
       </article>
@@ -212,35 +212,37 @@
     </section> -->
   </div>
 </Container>
-<div id="artists"></div>
-<div id="info"></div>
+<div id="artists" />
+<div id="info" />
 <div id="contact" class="gradientBlueGreen">
-<Container>
-  <section class="py-16">
-    <Title theme='light' className='mb-4'>Contact</Title>
-    <div class="md:flex items-center">
-      <article
-        class="bg-gray-100 px-6 -mx-6 md:-ml-12 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
-      >
-        <form class="grid gap-4 ">
-          <label
-            >Topic<input
-              class="input"
-              placeholder="Royalties, demo, promo, .."
-            /></label
-          >
-          <label
-            >What's your question?<textarea
-              class="input "
-              placeholder="For example: I'm interested to know how.."
-            /></label
-          >
+  <Container>
+    <section class="py-16">
+      <Title theme="light" className="mb-4">Contact</Title>
+      <div class="md:flex items-center">
+        <article
+          class="bg-gray-100 px-6 -mx-6 md:-ml-12 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+        >
+          <form class="grid gap-4 ">
+            <label
+              >Topic<input
+                class="input"
+                placeholder="Royalties, demo, promo, .."
+              /></label
+            >
+            <label
+              >What's your question?<textarea
+                class="input "
+                placeholder="For example: I'm interested to know how.."
+              /></label
+            >
 
-          <label for="file">
-            Attachment
-            <div class="relative flex items-center justify-end group">
-              <div class="input peer text-gray-500">Drag & drop your file!</div>
-              <!-- 
+            <label for="file">
+              Attachment
+              <div class="relative flex items-center justify-end group">
+                <div class="input peer text-gray-500">
+                  Drag & drop your file!
+                </div>
+                <!-- 
 								
 								<input
 								id="file"
@@ -249,41 +251,42 @@
 								class="hidden"
 								placeholder="Drag & drop!"
 							/> -->
-              <svg
-                class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
-                />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-                <line x1="10" y1="9" x2="8" y2="9" />
-              </svg>
-            </div>
-          </label>
-          <Button color="bg-teal-700" size="md">Learn more!</Button>
-        </form>
-      </article>
-      <article class="py-12 md:w-1/2 lg:w-3/5 lg:left text-white">
-        <SubTitle theme='light'>📩 Get in touch with us!</SubTitle>
-        <p>
-          As a label we like to interact with our fans and future artists. If you have any questions or suggestions, don't hesitate to contact us!
-        </p>
-      </article>
-    </div>
-  </section>
-</Container>
-</div >
+                <svg
+                  class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
+                  />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <line x1="10" y1="9" x2="8" y2="9" />
+                </svg>
+              </div>
+            </label>
+            <Button color="bg-teal-700" size="md">Learn more!</Button>
+          </form>
+        </article>
+        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left text-white">
+          <SubTitle theme="light">📩 Get in touch with us!</SubTitle>
+          <p>
+            As a label we like to interact with our fans and future artists. If
+            you have any questions or suggestions, don't hesitate to contact us!
+          </p>
+        </article>
+      </div>
+    </section>
+  </Container>
+</div>
 
 <Footer />
 

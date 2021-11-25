@@ -2,7 +2,7 @@
   import Container from '../components/Container.svelte'
 </script>
 
-<footer class="w-screen py-12 bg-gray-700 text-gray-100 ">
+<footer class="w-screen py-12 bg-gray-900 text-gray-100 ">
   <Container>
     <div class="flex justify-between">
       <div>
