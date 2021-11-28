@@ -4,7 +4,7 @@ import { labelStore } from '../stores/stores';
   import Container from '../components/Container.svelte'
 </script>
 
-<footer class="w-screen py-12 gradientBlueGreen text-gray-100 ">
+<footer class="w-screen py-12 bg-gray-800 text-gray-100 ">
   <Container>
     <div class="flex justify-between">
       <div>

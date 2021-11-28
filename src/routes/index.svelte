@@ -192,13 +192,13 @@
     </section></Container
   >
 </div>
-<div id="contact" class="py-16">
+<div id="contact" class="py-16 gradientBlueGreen">
   <Container>
     <section>
-      <Title className="mb-4">Contact</Title>
+      <Title className="mb-4" theme="light">Contact</Title>
       <div class="md:flex items-center">
         <article
-          class="bg-gray-800 text-white px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+          class="bg-gray-300 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
         >
           <form class="grid gap-4 ">
             <label
@@ -254,8 +254,8 @@
             <Button color="bg-teal-700" size="md">Learn more!</Button>
           </form>
         </article>
-        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left">
-          <SubTitle>📩 Get in touch with us!</SubTitle>
+        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left text-white">
+          <SubTitle theme="light">📩 Get in touch with us!</SubTitle>
           <p>
             As a label we like to interact with our fans and future artists. If
             you have any questions or suggestions, don't hesitate to contact us!

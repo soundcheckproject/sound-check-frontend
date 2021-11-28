@@ -31,6 +31,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.3.0",
     "animate.css": "^4.1.1",
     "dotenv": "^10.0.0",
     "firebase": "^9.1.3"

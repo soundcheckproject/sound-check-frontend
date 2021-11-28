@@ -17,7 +17,7 @@
   >
     <a href="/">Home</a>
     <a href="#releases">releases</a>
-    <a href="#artists">artists</a>
+    <a href="/artists">artists</a>
     <a href="#info">info</a>
     <a href="#contact">contact</a>
     <div class="relative group">
@@ -92,7 +92,7 @@
     >
       <a href="/">Home</a>
       <a href="#releases">releases</a>
-      <a href="#artists">artists</a>
+      <a href="/artists">artists</a>
       <a href="#info">info</a>
       <a href="#contact">contact</a>
       <a href="/login">portal</a>
