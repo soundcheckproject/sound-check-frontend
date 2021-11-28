@@ -69,6 +69,7 @@
   let feedbacks: FeedbackType[] = []
 
   export let audioFile = null
+  export let artworkFile = null
   export let track: TrackType
 
   const blobToBase64 = (blob: Blob) => {
@@ -193,7 +194,9 @@
   <!-- <div class="overflow-hidden"> -->
   <div
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
-    style={`background:url('${$$props.artworkSrc}') center center no-repeat;background-size:cover`}
+    style={`background:url('${
+      artworkFile ? artworkFile : track.artwork.resource
+    }') center center no-repeat;background-size:cover`}
   />
 
   <div
@@ -203,10 +206,14 @@
     <div
       class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
     >
-      {#if track.artwork.resource || $$props.artworkSrc}
+      {#if artworkFile || track.artwork.resource}
         <img
           alt="img"
-          src={`${track.artwork.resource ?? $$props.artworkSrc}`}
+          src={`${
+            artworkFile
+              ? artworkFile
+              : track.artwork.resource
+          }`}
           class="object-cover h-full w-full "
         />
       {:else}
@@ -401,7 +408,7 @@
       <!-- <div>show more</div> -->
     </div>
   </div>
-  {#if audio && feedback &&(( track.isSigned == null) || track.isSigned == true)}
+  {#if audio && feedback && (track.isSigned == null || track.isSigned == true)}
     <div
       transition:slide|local={{ delay: 400, duration: 200 }}
       class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"

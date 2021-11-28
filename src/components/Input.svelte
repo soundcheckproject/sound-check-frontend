@@ -34,7 +34,7 @@
     <InputError {errorInput} />
   {/if}
   <!-- svelte-ignore a11y-label-has-associated-control -->
-  <label class="portal capitalize"
+  <label class="portal"
     >{$$props.title ?? 'Title'}
     {#if !$$props.textarea}<input
         bind:value

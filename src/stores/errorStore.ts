@@ -10,6 +10,7 @@ const errorStore = readable<{
       message: 'Connection with database is not working.',
     },
   ],
+
   email: [
     {
       display: false,
@@ -89,6 +90,40 @@ const errorStore = readable<{
       display: false,
       errorName: 'general_errors',
       message: 'Please fix all errors first and try again',
+    },
+    {
+      display: false,
+      errorName: 'general_change',
+      message: 'Nothing has changed, please only submit changes',
+    },
+  ],
+  update: [
+    {
+      display: false,
+      errorName: 'update_403',
+      message: "You don't have the permission to do this action",
+    },
+    {
+      display: false,
+      errorName: 'update_linkexcist',
+      message: 'You already added a social media channel with this name',
+    },
+    {
+      display: false,
+      errorName: 'update_linktype',
+      message: 'Please pick a channel to add to the list',
+    },
+    {
+      display: false,
+      errorName: 'update_linkempty',
+      message: 'Please add an address link to the channel',
+    },
+  ],
+  artist: [
+    {
+      display: false,
+      errorName: 'artist_royalty_high',
+      message: 'Royalty total should be equal to 100%',
     },
   ],
 })

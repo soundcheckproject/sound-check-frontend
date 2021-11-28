@@ -15,6 +15,7 @@
   import {
     isNickNameAvailable,
     validateEmailValid,
+    validateEmpty,
     validateError,
     validateErrors,
     validateLength,
@@ -26,7 +27,6 @@
   import { roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
   import { getAuth } from '@firebase/auth'
-  import validationStore from '../stores/validationStore'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -73,6 +73,23 @@
         errors,
       )
     }
+    for (const errorType of [
+      'nickname',
+      'birthdate',
+      'firstName',
+      'surName',
+      'country',
+      'state',
+      'city',
+      // 'prefferdReleaseDate',
+    ]) {
+      if (errorType == type)
+        errors = validateErrors(
+          [validateEmpty(userRegister[type])],
+          type,
+          errors,
+        )
+    }
   }
 
   $: {
@@ -80,15 +97,14 @@
   }
 
   const register = () => {
-
-     if ($validationStore.length == 0) {
+    if ($validationStore.length == 0) {
       registerUser(userRegister)
-      .then(async e => {
-        errors = validateError('connection', 'graphql', e, errors)
-        errors = validateError('general', 'errors', e, errors)
-        
-        await goto('/portal')
-      })
+        .then(async e => {
+          errors = validateError('connection', 'graphql', e, errors)
+          errors = validateError('general', 'errors', e, errors)
+
+          await goto('/portal')
+        })
         .catch(e => {
           errors = validateError('connection', 'graphql', e, errors)
         })
@@ -104,20 +120,19 @@
   })
 
   $: {
-    
     validationStore.set(errors)
   }
 </script>
 
 <Header type="split" />
 <Container>
-  <section class="">
+  <section>
     <article>
       <Title theme="dark">Register account</Title>
 
       <InputError errorInput="general" />
       <InputError errorInput="connection" />
-      <div class="flex space-x-12 flex-col sm:flex-row" style="">
+      <div class="flex space-x-12 flex-col sm:flex-row bg-red-200" style="">
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
@@ -149,8 +164,18 @@
             portal=""
             on:input={() => checkValidation('password')}
             placeholder="Strong password.."
+            type="password"
           />
-          <label
+          <Input
+            title="Password validate"
+            bind:value={passwordCheck}
+            portal=""
+            on:input={() => checkValidation('password')}
+            placeholder="Password again.."
+            type="password"
+          />
+
+          <!-- <label
             >Password again<input
               bind:value={passwordCheck}
               on:input={() => checkValidation('password')}
@@ -158,18 +183,26 @@
               type="password"
               placeholder="Password again.."
             /></label
-          >
-
-          <label
+          > -->
+          <Input
+            errorInput={'birthdate'}
+            title="Birthdate"
+            bind:value={userRegister.birthdate}
+            portal=""
+            on:input={() => checkValidation('birthdate')}
+            placeholder="Birthdate.."
+            type="date"
+          />
+          <!-- <label
             >Birthdate<input
               bind:value={userRegister.birthdate}
               class="input"
               placeholder="Birthdate.."
               type="date"
             /></label
-          >
+          > -->
         </div>
-        <div class="grid gap-4 py-12">
+        <div class="grid gap-4 py-12 bg-red-300 w-full">
           <SubTitle theme="dark">🏡 Additional info</SubTitle>
           <!-- <label
             >What's your artistname?<input
@@ -187,44 +220,75 @@
             placeholder="Choose a nickname.."
           />
           <div class="grid md:grid-cols-2 gap-4">
-            <label
+            <Input
+              errorInput={'firstName'}
+              title="First name"
+              bind:value={userRegister.firstName}
+              portal=""
+              on:input={() => checkValidation('firstName')}
+              placeholder="First name.."
+            />
+            <!-- <label
               >First name<input
                 bind:value={userRegister.firstName}
                 class="input"
                 placeholder="First name.."
               /></label
-            >
-            <label
-              >Last name<input
-                bind:value={userRegister.surName}
-                class="input"
-                placeholder="Last name.."
-              /></label
-            >
+            > -->
+            <Input
+              errorInput={'surName'}
+              title="Last name"
+              bind:value={userRegister.surName}
+              portal=""
+              on:input={() => checkValidation('surName')}
+              placeholder="Last name.."
+            />
           </div>
           <div class="grid md:grid-cols-3 gap-4">
-            <label
+            <Input
+              errorInput={'country'}
+              title="Country"
+              bind:value={userRegister.country}
+              portal=""
+              on:input={() => checkValidation('country')}
+              placeholder="Country.."
+            />
+            <!-- <label
               >Country<input
                 bind:value={userRegister.country}
                 class="input"
                 placeholder="Country.."
               /></label
-            >
-            <label
+            > -->
+            <Input
+              errorInput={'state'}
+              title="State"
+              bind:value={userRegister.state}
+              portal=""
+              on:input={() => checkValidation('state')}
+              placeholder="State.."
+            />
+            <!-- <label
               >State<input
                 bind:value={userRegister.state}
                 class="input"
                 placeholder="State.."
               /></label
-            >
-            <label
-              >City<input
-                bind:value={userRegister.city}
-                class="input"
-                placeholder="City.."
-              /></label
-            >
+            > -->
+            <Input
+              errorInput={'city'}
+              title="City"
+              bind:value={userRegister.city}
+              portal=""
+              on:input={() => checkValidation('city')}
+              placeholder="City.."
+            />
           </div>
+          <p class="text-gray-400 text-sm">
+            * If you register an account, then you give the label the permission
+            to use your data on this platform.
+          </p>
+
           <Button
             onClick={register}
             rounded="none"

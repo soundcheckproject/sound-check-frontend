@@ -106,9 +106,9 @@
       {/if}
       {#if filterType == 'accepted' || filterType == 'all'}
         <SubTitle>Accepted tracks</SubTitle>
-        <div class="grid gap-4 lg:grid-cols-2">
+        <div class="grid gap-4 ">
           {#if tracks.accepted.length <= 0}
-            <div class="col-span-2">
+            <div class="">
               <Skeleton>Loading accepted tracks..</Skeleton>
             </div>
           {:else}

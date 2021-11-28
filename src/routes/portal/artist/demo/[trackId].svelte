@@ -54,8 +54,10 @@
       <Title
         ><div class="flex justify-between items-center">
           <div>{track.title ?? 'No title found'}</div>
-
-          <EditButton href={$page.path + '-edit'} />
+          <div class="flex space-x-2">
+            <EditButton href={$page.path + '-edit'} />
+            <EditButton href={$page.path + '-finance'} />
+          </div>
         </div></Title
       >
       <div class="grid gap-6 lg:grid-cols-2 items-start">

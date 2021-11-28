@@ -20,7 +20,7 @@ export const query = async (
         variables,
       }),
     })
-    
+
     const gqlReqponse = await res.json()
 
     if (gqlReqponse.errors) {
@@ -29,6 +29,7 @@ export const query = async (
 
     return gqlReqponse.data[name]
   } catch (err) {
+    return err
     console.log({ err })
   }
 }
@@ -158,8 +159,6 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
   return response
 }
 
-
-
 export const getAllTracks = async (): Promise<TrackType[]> => {
   const response = await query(
     `getTracks`,
@@ -209,6 +208,7 @@ export const getTrackById = async (trackId: string): Promise<any> => {
           resource
           designer
         }
+        genreId
         genre {
           name
         }
@@ -222,8 +222,12 @@ export const getTrackById = async (trackId: string): Promise<any> => {
         previewStop
         isSigned
         prefferdReleaseDate
+   
         artistTracks {
+          royaltySplit
+          isApproved
           user {
+            uuid
             surName
             firstName
             nickName
@@ -319,29 +323,16 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
 }
 export const updateUserInfoByUserId = (
   userId: string,
-  userData: UserType,
+  data: UserType,
 ): Promise<UserType> => {
   return query(
-    `updateUserByUserId`,
-    `mutation UpdateUserByUserId($userId: String!, $data: UpdateUserInput!) {
-      updateUserByUserId(userId: $userId, data: $data) {
-        nickName
-        firstName
-        surName
-        birthdate
-        country
-        state
-        city
-        logo
-        userLinks {
-          link {
-            type
-          }
-          linkAddress
-        }
+    `updateUser`,
+    `mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
+      updateUser(data: $data, userId: $userId) {
+        uuid
       }
     }`,
-    { userId: userId, data: userData },
+    { data: data, userId: userId },
   )
 }
 export const updateUserLinksByUserId = (
@@ -397,7 +388,7 @@ export const updateTrack = async (
 }
 
 export const toggleSigned = async (
-  isSigned: boolean|null,
+  isSigned: boolean | null,
   trackId: string,
 ): Promise<string> => {
   const response = await query(

@@ -571,7 +571,7 @@
           {#if trackPreview}
             <TrackPlayer
               track={newTrack}
-              artworkSrc={artworkPreview}
+              artworkFile={artworkPreview}
               audioFile={trackPreview}
             />
           {/if}
@@ -596,37 +596,36 @@
                 />
               </div>
             </div>
-            <div class="label portal opacity-40">
-              Preview part
+            <div
+              class="label portal {trackPreview ? 'opacity-100' : 'opacity-40'}"
+            >
+              Preview part *
               <div
-                class="input portal grid gap-4 p-2 grid-flow-col grid-cols-3 w-full justify-center items-center"
-                style="grid-template-columns: 1fr min-content 1fr"
+                class="input portal grid grid-cols-3 justify-around items-center"
+               style="grid-template-colums:1fr min-content 1fr"
               >
-                <!-- <input
-                type=number
-                class="p-1 bg-gray-100 text-center w-16"
-                value="00"
-				bind:value={newTrack.previewStart}
-                disabled={true}
-              /> -->
                 <input
                   type="number"
-                  class="p-1 bg-gray-100 text-center w-16"
+                  class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
                   min="0"
-                  disabled={true}
+                  disabled={trackPreview ? false : true}
                 />
-                <div class="w-px rounded-sm h-full bg-gray-200" />
+                <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
                 <input
                   type="number"
-                  class="p-1 bg-gray-100 text-center w-16"
+                  class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
                   min="30"
-                  disabled={false}
+                  disabled={trackPreview ? false : true}
                 />
               </div>
             </div>
           </div>
+          <p class="text-sm text-gray-400">
+            * Preview part is the part that will be heard first by the label
+            team.
+          </p>
           <div class="flex justify-end">
             <Button color="bg-teal-700" onClick={postTrack} size="md"
               >Submit track</Button

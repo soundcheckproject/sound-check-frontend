@@ -11,6 +11,7 @@
     isNickNameAvailable,
     validateError,
     validateErrors,
+    validateErrorTime,
     validateLength,
     validateMatch,
     validateOld,
@@ -21,12 +22,18 @@
   import userStore from '../../stores/userStore'
   import validationStore from '../../stores/validationStore'
   import { onMount } from 'svelte'
-  import { getLinks, updateUserInfoByUserId } from '../../utils/useGraphQL'
+  import {
+    getLinks,
+    getUserViaFirebase,
+    updateUserInfoByUserId,
+  } from '../../utils/useGraphQL'
   import {
     updateFirebaseEmail,
     updateFirebasePassword,
   } from '../../utils/useFirebase'
   import { formatDate } from '../../utils/useFormat'
+  import { goto } from '$app/navigation'
+  import { page } from '$app/stores'
 
   let artist: UserType = $userStore
 
@@ -45,7 +52,10 @@
   // }
   let newArtist: UserType
 
-  let newUserLink: UserLink = { link: { type: '' }, linkAddress: '' }
+  let newUserLink: UserLink = {
+    link: { type: 'Pick a channel' },
+    linkAddress: '',
+  }
 
   let links: Link[] = []
   let errors: string[] = []
@@ -56,9 +66,47 @@
   })
 
   const updateUser = async () => {
-    console.log(newArtist)
+    if ($validationStore.length == 0) {
+      let updatedUser: UserType = {}
 
-    await updateUserInfoByUserId($userStore.uuid, newArtist)
+      const oldUser = await getUserViaFirebase()
+
+      for (const objectKey of [
+        'nickName',
+        'surName',
+        'firstName',
+        'country',
+        'city',
+        'state',
+        'birthdate',
+      ]) {
+        if (newArtist[objectKey] != oldUser[objectKey]) {
+          updatedUser[objectKey] = newArtist[objectKey]
+        }
+      }
+
+      if (Object.keys(updatedUser).length > 0) {
+        await updateUserInfoByUserId($userStore.uuid, updatedUser)
+          .then(err => {
+            errors = validateError('connection', 'graphql', true, errors)
+            // console.log({data})
+            // if (err) {
+            //   console.log(err)
+            //   if (err[0].extensions.response.statusCode == 403) {
+            //     errors = validateError('update', '403', false, errors)
+            //   }
+            // } else {
+            //   errors = validateError('update', '403', true, errors)
+
+            // }
+            console.log('User has been updated!', updatedUser)
+            goto($page.path)
+          })
+          .catch(e => {
+            errors = validateError('connection', 'graphql', false, errors)
+          })
+      }
+    }
   }
   const updateUserEmail = () => {
     console.log(newArtist.email)
@@ -89,13 +137,29 @@
   }
 
   const addUserLink = () => {
-    newArtist.userLinks = [
-      ...newArtist.userLinks,
-      {
-        link: { type: newUserLink.link.type },
-        linkAddress: newUserLink.linkAddress,
-      },
-    ]
+    if (newUserLink.linkAddress.length > 0) {
+      if (
+        newArtist.userLinks.filter(
+          link => link.link.type == newUserLink.link.type,
+        ).length == 0
+      ) {
+        if (newUserLink.link.type != 'Pick a channel') {
+          newArtist.userLinks = [
+            ...newArtist.userLinks,
+            {
+              link: { type: newUserLink.link.type },
+              linkAddress: newUserLink.linkAddress,
+            },
+          ]
+        } else {
+          validateErrorTime('update', 'linktype', errors)
+        }
+      } else {
+        validateErrorTime('update', 'linkexcist', errors)
+      }
+    } else {
+      validateErrorTime('update', 'linkempty', errors)
+    }
   }
 
   const deleteUserLink = (linkAddress: string) => {
@@ -188,9 +252,9 @@
             placeholder="What's your first name?"
           />
           <Input
-            title="Surname"
+            title="Last name"
             bind:value={newArtist.surName}
-            placeholder="What's your surname?"
+            placeholder="What's your last name?"
           />
         </div>
         <SubTitle>Address</SubTitle>
@@ -211,18 +275,8 @@
             placeholder="What's your city?"
           />
         </div>
-        <div class="grid grid-cols-2 gap-4">
-          <Input
-            title="First name"
-            bind:value={newArtist.firstName}
-            placeholder="Choose a nickname"
-          />
-          <Input
-            title="Surname"
-            bind:value={newArtist.surName}
-            placeholder="Choose a nickname"
-          />
-        </div>
+        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5" />
+
         <div class="flex justify-end">
           <Button
             color="bg-teal-700"
@@ -268,7 +322,6 @@
             </div>
           </div>
         </div>
-        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5" />
       </form>
     </Box>
     <Box
@@ -276,13 +329,14 @@
       <SubTitle>Social media channels</SubTitle>
       <form class="grid gap-6">
         <div class="grid lg:grid-cols-2 gap-6">
-          <div class="grid gap-6 auto-rows-min items-start">
-            <label class="portal mt-1"
+          <div class="grid gap-4 auto-rows-min items-start">
+            <InputError errorInput="update" />
+            <label class="portal"
               >Pick a channel
 
               <select
                 bind:value={newUserLink.link.type}
-                class="input portal text-red-300"
+                class="input portal text-red-300 capitalize"
                 placeholder="For example: Instagram, facebook, .."
               >
                 <option selected disabled>Pick a channel</option>

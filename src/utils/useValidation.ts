@@ -158,6 +158,23 @@ export const validateError = (
   return errorsReturn
 }
 
+export const validateErrorTime = (
+  type: string,
+  validation: string,
+  errors: Error[],
+) => {
+  const errorsReturn: Error[] = errors
+  const errorName = type + '_' + validation
+
+  // if not found in array Add to array
+  if (errors.indexOf(errorName) == -1) {
+    validationStore.set([...errorsReturn, errorName])
+    setTimeout(() => {
+      validationStore.set(errors.filter((v: string) => v !== errorName))
+    }, 3000)
+  }
+}
+
 export const validateStatusTrack = (
   track: boolean | null,
   releaseDate: string,
