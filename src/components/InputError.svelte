@@ -8,7 +8,6 @@
   const deleteError = (errorName: string) => {
     validationStore.set($validationStore.filter((e: string) => e !== errorName))
   }
-
 </script>
 
 {#if $validationStore && $validationStore.length > 0}
@@ -19,7 +18,10 @@
           in:fade={{ duration: 200, delay: 200 }}
           out:fade={{ duration: 200 }}
         >
-          <Error onClose={() => deleteError(error)}
+          <Error
+            onClose={error == errorInput + '_available'
+              ? null
+              : () => deleteError(error)}
             >{$errorStore[errorInput].filter(e => e.errorName == error)[0]
               .message}</Error
           >

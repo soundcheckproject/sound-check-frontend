@@ -29,10 +29,7 @@
 
 <!-- //todo: add  red border to input validation -->
 <div class="grid gap-4">
-  {#if errorInput}
 
-    <InputError {errorInput} />
-  {/if}
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="portal"
     >{$$props.title ?? 'Title'}
@@ -54,5 +51,8 @@
         placeholder={$$props.placeholder ?? 'Type here..'}
       />
     {/if}</label
-  >
+  >  {#if errorInput}
+
+  <InputError {errorInput} />
+{/if}
 </div>

@@ -1,55 +1,46 @@
 <script lang="ts">
-  import ProfileBanner from '../../components/ProfileBanner.svelte'
-  import Box from '../../components/Box.svelte'
-  import Title from '../../components/Title.svelte'
-  import SubTitle from '../../components/SubTitle.svelte'
-  import Input from '../../components/Input.svelte'
-  import Button from '../../components/Button.svelte'
-  import InputError from '../../components/InputError.svelte'
+  import ProfileBanner from '../../../components/ProfileBanner.svelte'
+  import Box from '../../../components/Box.svelte'
+  import Title from '../../../components/Title.svelte'
+  import SubTitle from '../../../components/SubTitle.svelte'
+  import Input from '../../../components/Input.svelte'
+  import Button from '../../../components/Button.svelte'
+  import InputError from '../../../components/InputError.svelte'
   import {
     isEmailAvailable,
     isNickNameAvailable,
+    validateEmailValid,
+    validateEmpty,
     validateError,
     validateErrors,
     validateErrorTime,
     validateLength,
     validateMatch,
     validateOld,
-  } from '../../utils/useValidation'
+  } from '../../../utils/useValidation'
 
-  import type { Link, UserLink, UserType } from '../../types/User.type'
+  import type { Link, UserLink, UserType } from '../../../types/User.type'
 
-  import userStore from '../../stores/userStore'
-  import validationStore from '../../stores/validationStore'
+  import userStore from '../../../stores/userStore'
+  import validationStore from '../../../stores/validationStore'
   import { onMount } from 'svelte'
   import {
     getLinks,
     getUserViaFirebase,
+    getUserViaFirebase,
     updateUserInfoByUserId,
-  } from '../../utils/useGraphQL'
+  } from '../../../utils/useGraphQL'
   import {
     updateFirebaseEmail,
     updateFirebasePassword,
-  } from '../../utils/useFirebase'
-  import { formatDate } from '../../utils/useFormat'
+  } from '../../../utils/useFirebase'
+  import { formatDate } from '../../../utils/useFormat'
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
+  import { uploadLogo } from '../../../utils/useRest'
 
   let artist: UserType = $userStore
 
-  // let artist: UserType = {
-  //   email: $userStore.email ?? 'example@of.mail',
-  //   birthdate: $userStore.birthdate ?? '2020-01-01',
-  //   nickName: $userStore.nickName ?? 'Nickname',
-  //   logo: $userStore.logo ?? 'avatarimguel',
-  //   firstName: $userStore.firstName ?? 'Firstname',
-  //   surName: $userStore.surName ?? 'Surname',
-  //   country: $userStore.country ?? 'Country',
-  //   city: $userStore.city ?? 'City',
-  //   bio: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est',
-  //   userLinks: $userStore.userLinks ?? [],
-  //   role: { name: 'user' },
-  // }
   let newArtist: UserType
 
   let newUserLink: UserLink = {
@@ -86,9 +77,8 @@
       }
 
       if (Object.keys(updatedUser).length > 0) {
-        await updateUserInfoByUserId($userStore.uuid, updatedUser)
+        await updateUserInfoByUserId(artist.uuid, updatedUser)
           .then(err => {
-            errors = validateError('connection', 'graphql', true, errors)
             // console.log({data})
             // if (err) {
             //   console.log(err)
@@ -103,9 +93,19 @@
             goto($page.path)
           })
           .catch(e => {
-            errors = validateError('connection', 'graphql', false, errors)
+            validateErrorTime('connection', 'graphql', errors)
           })
+      } else {
+        validateErrorTime('general', 'change', errors)
       }
+    } else {
+      validateErrorTime('general', 'errors', errors)
+    }
+  }
+
+  const updateLogo = async () => {
+    if (previewLogo.length > 0) {
+      await uploadLogo(logoBlob, artist.nickName + 'logo', artist.uuid)
     }
   }
   const updateUserEmail = () => {
@@ -170,19 +170,24 @@
 
   const checkNickNameAvailability = () => {}
 
-  const checkValidation = (type: string) => {
-    if (type == 'nickname') {
-      isNickNameAvailable(newArtist.nickName, $userStore.nickName).then(
-        result => {
-          errors = validateError('nickname', 'available', result, errors)
-        },
+  const checkValidation = async (type: string) => {
+    if (type == 'email') {
+      errors = validateErrors(
+        [validateEmailValid(newArtist.email)],
+        type,
+        errors,
       )
+    }
+    if (type == 'nickname') {
+      // Todo: work without query to get old data
+      const oldUser = await getUserViaFirebase()
+      isNickNameAvailable(newArtist.nickName, oldUser.nickName).then(result => {
+        errors = validateError('nickname', 'available', result, errors)
+      })
     }
     if (type == 'password') {
       errors = validateErrors(
         [
-          // validateMatch(userPassword.new, userPassword.old),
-          // todo: make work
           validateOld(userPassword.new, userPassword.old),
           validateLength(userPassword.new, 8),
           // Todo: .Match in usevalidation not working
@@ -193,6 +198,19 @@
         type,
         errors,
       )
+    }
+    for (const errorType of [
+      'nickName',
+      'birthdate',
+      'firstName',
+      'surName',
+      'country',
+      'state',
+      'city',
+      // 'prefferdReleaseDate',
+    ]) {
+      if (errorType == type)
+        errors = validateErrors([validateEmpty(newArtist[type])], type, errors)
     }
   }
 
@@ -227,57 +245,76 @@
     <Box
       ><Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
+      <InputError errorInput="general" />
       <form class="grid gap-6">
         <div class="grid grid-cols-2 gap-4">
           <!-- <InputError errorInput={'nickname'} /> -->
           <Input
-            errorInput={'nickname'}
+            errorInput="nickname"
             title="Nickname"
+            placeholder="Choose a nickname.."
             bind:value={newArtist.nickName}
             on:input={() => checkValidation('nickname')}
-            placeholder="Choose a nickname.."
           />
           <!-- // Todo make birthdate work -->
           <Input
             title="Birthdate"
             type="date"
-            bind:value={newArtist.birthdate}
+            errorInput="birthdate"
             placeholder="What's your birthdate?"
+            bind:value={newArtist.birthdate}
+            on:input={() => checkValidation('birthdate')}
           />
         </div>
         <div class="grid grid-cols-2 gap-4">
           <Input
             title="First name"
-            bind:value={newArtist.firstName}
+            errorInput={'firstName'}
             placeholder="What's your first name?"
+            bind:value={newArtist.firstName}
+            on:input={() => checkValidation('firstName')}
           />
           <Input
             title="Last name"
-            bind:value={newArtist.surName}
+            errorInput={'surName'}
             placeholder="What's your last name?"
+            bind:value={newArtist.surName}
+            on:input={() => checkValidation('surName')}
           />
         </div>
         <SubTitle>Address</SubTitle>
         <div class="grid lg:grid-cols-3 gap-4">
           <Input
             title="Country"
-            bind:value={newArtist.country}
+            errorInput={'country'}
             placeholder="What's your country?"
+            bind:value={newArtist.country}
+            on:input={() => checkValidation('country')}
           />
           <Input
             title="State"
-            bind:value={newArtist.state}
+            errorInput={'state'}
             placeholder="What's your state?"
+            bind:value={newArtist.state}
+            on:input={() => checkValidation('state')}
           />
           <Input
             title="City"
             bind:value={newArtist.city}
+            errorInput={'city'}
+            on:input={() => checkValidation('city')}
             placeholder="What's your city?"
           />
         </div>
         <Input bind:value={newArtist.bio} title="Biography" textarea rows="5" />
 
-        <div class="flex justify-end">
+        <div class="flex justify-end space-x-2">
+          <Button
+            color="bg-gray-600"
+            onClick={() => {
+              goto($page.path)
+            }}>Cancel changes</Button
+          >
           <Button
             color="bg-teal-700"
             onClick={() => {
@@ -288,7 +325,7 @@
         <SubTitle>Profile picture</SubTitle>
         <div class="flex">
           <div class="label portal">
-            Upload Artwork
+            Upload logo
             <div
               class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
               on:click={() => logoBlob.click()}
@@ -321,6 +358,14 @@
               />
             </div>
           </div>
+        </div>
+        <div class="flex justify-end">
+          <Button
+            color="bg-teal-700"
+            onClick={() => {
+              updateLogo()
+            }}>Update logo</Button
+          >
         </div>
       </form>
     </Box>
@@ -413,8 +458,9 @@
 
             <Input
               title="Email address"
+              errorInput="email"
               bind:value={newArtist.email}
-              on:input={() => checkIfEmailIsAvailable()}
+              on:input={() => checkValidation('email')}
               placeholder="Email address.."
             />
 

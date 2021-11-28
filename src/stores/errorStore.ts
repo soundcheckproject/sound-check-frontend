@@ -56,6 +56,54 @@ const errorStore = readable<{
       errorName: 'nickname_available',
       message: 'Nickname is not available',
     },
+    {
+      display: false,
+      errorName: 'nickname_empty',
+      message: 'Please fill in a nickname',
+    },
+  ],
+  firstName: [
+    {
+      display: false,
+      errorName: 'firstName_empty',
+      message: 'Please fill in a first name',
+    },
+  ],
+  surName: [
+    {
+      display: false,
+      errorName: 'surName_empty',
+      message: 'Please fill in a last name',
+    },
+  ],
+
+  state: [
+    {
+      display: false,
+      errorName: 'state_empty',
+      message: 'Please fill in a state',
+    },
+  ],
+  birthdate: [
+    {
+      display: false,
+      errorName: 'birthdate_empty',
+      message: 'Please fill in a birthdate',
+    },
+  ],
+  country: [
+    {
+      display: false,
+      errorName: 'country_empty',
+      message: 'Please fill in a country',
+    },
+  ],
+  city: [
+    {
+      display: false,
+      errorName: 'city_empty',
+      message: 'Please fill in a city',
+    },
   ],
   title: [
     {

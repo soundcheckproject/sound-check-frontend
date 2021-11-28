@@ -42,6 +42,7 @@ export const isNickNameAvailable = async (
   if (userNickName && userNickName.toLowerCase() == nickName.toLowerCase())
     return true
   const users: UserType[] = await getArtistsByNickName(nickName)
+
   if (users.length == 0) return true
   else {
     for (const user of users) {

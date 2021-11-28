@@ -21,6 +21,26 @@ export const uploadTrack = async (
   )
   return response
 }
+export const uploadLogo = async (
+  file: any,
+  fileName: string,
+  userId: string,
+): Promise<any> => {
+  const formData = new FormData()
+  formData.append('audioFile', file, fileName)
+
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL_REST}/users/upload/` + userId,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
+      },
+      body: formData,
+    },
+  )
+  return response
+}
 export const getTrackFileFromTrackId = async (
   trackId: string,
 ): Promise<any> => {
