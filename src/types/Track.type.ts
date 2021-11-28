@@ -25,7 +25,7 @@ export interface TrackType {
   resource?: string
   previewStart?: number
   previewStop?: number
-  isSigned?: boolean
+  isSigned?: boolean|null
   prefferdReleaseDate?: string | Date
   genreId?: string
   genre?: Genre

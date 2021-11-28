@@ -15,24 +15,10 @@
   import { onMount } from 'svelte'
   import { getTrackById } from '../../../../utils/useGraphQL'
   import userStore from '../../../../stores/userStore'
+  import FinanceButton from '../../../../components/portal/FinanceButton.svelte'
+  import { formatDate } from '../../../../utils/useFormat'
 
   let track: TrackType
-  // let track: TrackType = {
-  //   uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
-  //   title: 'Miss you so feat. Jebroer',
-  //   description: 'Niels his new hit song',
-  //   previewStart: 20,
-  //   previewStop: 35,
-  //   lyrics: 'I hate to admit it',
-  //   artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
-  //   genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-  //   genre: { name: '' },
-  //   prefferdReleaseDate: '2022-01-01',
-  //   artwork: {
-  //     designer: 'nielsonderbeke2',
-  //     resource: '',
-  //   },
-  // }
 
   onMount(async () => {
     if ($page.params.trackId) {
@@ -55,8 +41,12 @@
         ><div class="flex justify-between items-center">
           <div>{track.title ?? 'No title found'}</div>
           <div class="flex space-x-2">
-            <EditButton href={$page.path + '-edit'} />
-            <EditButton href={$page.path + '-finance'} />
+            {#if track.isSigned == null}
+              <EditButton href={$page.path + '-edit'} />
+            {/if}
+            {#if track.isSigned == true}
+              <FinanceButton href={$page.path + '-finance'} />
+            {/if}
           </div>
         </div></Title
       >
@@ -65,7 +55,14 @@
           <SubTitle>💽 Information</SubTitle>
 
           <div class="grid ">
-            <p class="font-semibold ">Description</p>
+            <p class="font-semibold ">Releasedate</p>
+            <p class="text-sm">
+              {new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
+                new Date(track.prefferdReleaseDate),
+              )} - 
+              {formatDate(new Date(track.prefferdReleaseDate))}
+            </p>
+            <p class="mt-4 font-semibold ">Description</p>
 
             <p class="text-sm">{track.description}</p>
             <p class="mt-4 font-semibold  ">Lyrics</p>
