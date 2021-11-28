@@ -27,8 +27,8 @@
   import {
     getLinks,
     getUserViaFirebase,
-    getUserViaFirebase,
     updateUserInfoByUserId,
+    updateUserLinksByUserId,
   } from '../../../utils/useGraphQL'
   import {
     updateFirebaseEmail,
@@ -47,6 +47,8 @@
     link: { type: 'Pick a channel' },
     linkAddress: '',
   }
+
+  let logoClick: HTMLInputElement
 
   let links: Link[] = []
   let errors: string[] = []
@@ -105,7 +107,10 @@
 
   const updateLogo = async () => {
     if (previewLogo.length > 0) {
-      await uploadLogo(logoBlob, artist.nickName + 'logo', artist.uuid)
+      console.log(artist.uuid)
+      await uploadLogo(logoBlob[0], artist.nickName + 'logo'+'.jpg', artist.uuid).then(
+        res => console.log(res),
+      ).catch(error => console.log(error))
     }
   }
   const updateUserEmail = () => {
@@ -132,8 +137,24 @@
         console.log(error)
       })
   }
-  const updateUserUserLinks = () => {
+  // update userlinks Query
+  // als er een link anders is dan een vorige link, moet deze worden gewijzigd in de database
+  // als er een niet meer is, dan moet deze worden verwijdert in de database
+  // als er een nieuwe link is, dan moet deze worden toegevoegd in de database
+
+  const updateUserLinks = async () => {
+    //todo send new userlinks to database
     console.log(newArtist.userLinks)
+    for (let userLink of newArtist.userLinks) {
+      let newUserLink = {
+        userId: artist.uuid,
+        linkId: userLink.link.uuid,
+        linkAddress: userLink.linkAddress,
+      }
+
+      console.log(userLink)
+    }
+    // await updateUserLinksByUserId(artist.uuid, newArtist.userLinks)
   }
 
   const addUserLink = () => {
@@ -242,8 +263,8 @@
       artist={newArtist}
       logo={logoPreview.length > 0 ? logoPreview : newArtist.logo}
     />
-    <Box
-      ><Title>Account</Title>
+    <Box>
+      {artist.uuid}<Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
       <InputError errorInput="general" />
       <form class="grid gap-6">
@@ -328,7 +349,7 @@
             Upload logo
             <div
               class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
-              on:click={() => logoBlob.click()}
+              on:click={() => logoClick.click()}
             >
               <svg
                 class="-mt-px"
@@ -351,7 +372,8 @@
               <input
                 type="file"
                 accept=".jpg, .jpeg, .png"
-                bind:this={logoBlob}
+                bind:this={logoClick}
+                bind:files={logoBlob}
                 on:change={e => previewLogo(e)}
                 class="hidden"
                 placeholder=""
@@ -443,7 +465,7 @@
           <Button
             color="bg-teal-700"
             onClick={() => {
-              updateUserUserLinks()
+              updateUserLinks()
             }}>Update socials</Button
           >
         </div>

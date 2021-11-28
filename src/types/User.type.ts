@@ -1,9 +1,12 @@
 import type { Role } from './Role.type'
 export interface Link {
   type?: string
+  uuid?:string
 }
 
 export interface UserLink {
+  
+  userId?:string
   link?: Link
   linkAddress?: string
 }

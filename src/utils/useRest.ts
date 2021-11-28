@@ -27,7 +27,7 @@ export const uploadLogo = async (
   userId: string,
 ): Promise<any> => {
   const formData = new FormData()
-  formData.append('audioFile', file, fileName)
+  formData.append('imageFile', file, fileName)
 
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL_REST}/users/upload/` + userId,

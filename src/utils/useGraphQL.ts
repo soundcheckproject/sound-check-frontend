@@ -311,7 +311,9 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
           slug
         }
         userLinks {
+
           link {
+            uuid
             type
           }
           linkAddress
