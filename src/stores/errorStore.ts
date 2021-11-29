@@ -69,6 +69,13 @@ const errorStore = readable<{
       message: 'Please fill in a first name',
     },
   ],
+  logo: [
+    {
+      display: false,
+      errorName: 'logo_empty',
+      message: 'Cannot update logo if logo is empty',
+    },
+  ],
   surName: [
     {
       display: false,

@@ -104,13 +104,26 @@
       validateErrorTime('general', 'errors', errors)
     }
   }
-
+  let updateLogoLoader: boolean = false
   const updateLogo = async () => {
-    if (previewLogo.length > 0) {
+    updateLogoLoader = true
+
+    if (logoBlob) {
       console.log(artist.uuid)
-      await uploadLogo(logoBlob[0], artist.nickName + 'logo'+'.jpg', artist.uuid).then(
-        res => console.log(res),
-      ).catch(error => console.log(error))
+      await uploadLogo(
+        logoBlob[0],
+        artist.nickName + 'logo' + '.jpg',
+        artist.uuid,
+      )
+        .then(res => {
+          console.log(res)
+          updateLogoLoader = false
+          logoBlob = null
+        })
+        .catch(error => console.log(error))
+    } else {
+      updateLogoLoader = false
+      validateErrorTime('logo', 'empty', errors)
     }
   }
   const updateUserEmail = () => {
@@ -344,30 +357,38 @@
           >
         </div>
         <SubTitle>Profile picture</SubTitle>
+        <InputError errorInput="logo" />
         <div class="flex">
           <div class="label portal">
             Upload logo
             <div
-              class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+              class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
               on:click={() => logoClick.click()}
             >
-              <svg
-                class="-mt-px"
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                <polyline points="17 8 12 3 7 8" />
-                <line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              <p>Click to upload or drag your artwork here..</p>
+              {#if logoBlob}
+                <img class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3" src={logoPreview} alt="Preview of logo" />
+                <p class="text-teal-700 font-medium">
+                  Logo has been selected. Press update logo to submit!
+                </p>
+              {:else}
+                <svg
+                  class="-mt-px"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <p>Click to upload or drag your artwork here..</p>
+              {/if}
 
               <input
                 type="file"
@@ -386,7 +407,9 @@
             color="bg-teal-700"
             onClick={() => {
               updateLogo()
-            }}>Update logo</Button
+            }}
+            loading={updateLogoLoader ? 'Updating logo..' : null}
+            >Update logo</Button
           >
         </div>
       </form>
