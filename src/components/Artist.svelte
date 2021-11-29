@@ -1,13 +1,16 @@
 <script lang="ts">
-  import type { ArtistType } from '../types/User.type'
+  import type { ArtistType, UserType } from '../types/User.type'
 
   import { fade, fly } from 'svelte/transition'
+  import { onMount } from 'svelte'
+  import { query } from '../utils/useGraphQL'
+  import LinkIcon from './LinkIcon.svelte'
 
   export let className = ''
-  export let artist: ArtistType = null
+  export let artist: ArtistType = undefined
   export let size: 'xs' | 'sm' | 'md' = 'sm'
   let hover: boolean = false
-
+  
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
 
@@ -34,14 +37,22 @@
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
       <div class="cursor-pointer flex items-center group">
-        <img
-          alt="Artist {artist.nickName ?? ''}"
-          src={artist.logo ??
-            'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Ferror-icon-vector-illustration-vector-id922024216%3Fk%3D6%26m%3D922024216%26s%3D612x612%26w%3D0%26h%3DocSXgfV-7FlzSDe9LwBFoGTWAcfR6ES09hAl8OTe5Tw%3D&f=1&nofb=1'}
-          class="object-cover w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
-            ? 'mr-3'
-            : ''} {size == 'md' ? ' w-12 h-12' : ''}"
-        />
+        {#if artist.logo}
+          <img
+            alt="Artist {artist.nickName ?? ''}"
+            src={artist.logo ??
+              'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Ferror-icon-vector-illustration-vector-id922024216%3Fk%3D6%26m%3D922024216%26s%3D612x612%26w%3D0%26h%3DocSXgfV-7FlzSDe9LwBFoGTWAcfR6ES09hAl8OTe5Tw%3D&f=1&nofb=1'}
+            class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
+              ? 'mr-3'
+              : ''} {size == 'md' ? ' w-12 h-12' : ''}"
+          />
+        {:else}
+          <div
+            class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
+              ? 'mr-3'
+              : ''} {size == 'md' ? ' w-12 h-12' : ''}"
+          />
+        {/if}
         {#if size != 'xs'}
           <div class="flex justify-between w-full items-center">
             <div><slot /></div>
@@ -78,36 +89,26 @@
         <div
           in:fly={{ y: 25, opacity: 0 }}
           out:fade={{ duration: 200 }}
-          class="grid animate__fadeInUp group-hover:animate__fadeInUp z-10  absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
+          class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-gray-200 mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
         >
           {#if size == 'xs'}
-            {artist.nickName}
-            <hr class="w-full border-gray-100 mb-2 mt-1" />{/if}
-
+            <p class="font-bold">{artist.nickName}</p>
+            <hr class="w-full border-gray-800 mb-2 mt-1" />{/if}
           {#if artist.userLinks && artist.userLinks.length > 0}
             {#each artist.userLinks as userLink}
-              <a
-                href={'https://' + userLink.linkAddress}
-                target="_blank"
-                class="hover:underline grid grid-flow-col gap-2 items-center "
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+              <div class="flex items-center">
+                <LinkIcon className="mr-2" type={userLink.link.type} />
+                <a
+                  href={'https://' + userLink.linkAddress}
+                  target="_blank"
+                  class="hover:underline grid grid-flow-col gap-2 items-center "
                 >
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>{userLink.link.type}
-              </a>
+                  {userLink.link.type}
+                </a>
+              </div>
             {/each}
+            {:else}
+            <p>No links found 😥</p>
           {/if}
           <!-- <a
           href="twitter.com"
