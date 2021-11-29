@@ -25,6 +25,10 @@ module.exports = {
         '1fr-auto': '1fr auto',
         '150-auto-fr': '150px auto 1fr',
         '150-fr': '150px 1fr',
+        'repeat-min-64': 'repeat(auto-fill, minmax(16rem, 1fr))',
+      },
+      gridTemplateRows: {
+        'min-64': 'minmax(16rem, 1fr)',
       },
       translate: {
         'screen-w': '100vw',
