@@ -1,57 +1,90 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import type { TrackType } from '../types/Track.type'
+  import type { TrackInfoType, TrackType } from '../types/Track.type'
 
   import { fade, slide } from 'svelte/transition'
-  import Artist from './Artist.svelte'
-  import Button from './Button.svelte'
+
   import type { UserType } from '../types/User.type'
   import { toggleSigned, getAllTracks, updateTrack } from '../utils/useGraphQL'
   import demoTracksStore from '../stores/demoTracksStore'
+  import {
+    formatDate,
+    formatDateTime,
+    formatTimeForPlayer,
+  } from '../utils/useFormat'
+  import { onMount } from 'svelte'
+  import { getTrackFileFromTrackId } from '../utils/useRest'
+  import { denyTrack, signTrack } from '../utils/useTrack'
 
   export let artworkSource = ''
 
   export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
-  let playerBar
-  let audio: any
-  let trackInfo: any = {
+  let audio: HTMLAudioElement
+  let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
-    playing: true,
+    playing: null,
   }
 
-  let track: TrackType = $$props.track ?? {
-    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-    prefferdReleaseDate: 'No release date found',
-    artwork: {
-      designer: 'nielsonderbeke2',
-    },
-  }
+  export let audioFile = null
+  export let track: TrackType
 
   let artistTracks: { user: UserType }[] = track.artistTracks ?? []
 
-  const denyTrack = async () => {
-    if (track.isSigned != false) {
-      await toggleSigned(false, track.uuid)
-      demoTracksStore.set(await getAllTracks())
+  const blobToBase64 = (blob: Blob) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    let readerFile: string | ArrayBuffer
+
+    reader.onloadend = () => {
+      audioFile = reader.result
     }
   }
-  const signTrack = async () => {
-    if (track.isSigned != true) {
-      await toggleSigned(true, track.uuid)
-      demoTracksStore.set(await getAllTracks())
+  let trackPlayable = false
+  const loadTrackInfo = (media: HTMLAudioElement) => {
+    if (media) {
+      media.onloadedmetadata = () => {
+        let trackDuration = parseInt(media.duration.toFixed(0))
+        trackInfo.duration = formatTimeForPlayer(trackDuration)
+
+        trackPlayable = true
+        audio.currentTime = track.previewStart
+        media.ontimeupdate = () => {
+          let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
+
+          trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
+          trackInfo.playerBar.style.width =
+            (100 * trackCurrentTime) / trackDuration + '%'
+        }
+      }
+    }
+  }
+
+  onMount(async () => {
+    if (track.uuid) {
+      blobToBase64(await getTrackFileFromTrackId(track.uuid))
+    }
+  })
+
+  $: {
+    if (audioFile) {
+      loadTrackInfo(audio)
     }
   }
 </script>
 
-{#if track.resource}
+{#if audioFile}
   <audio hidden bind:this={audio} preload="auto" controls>
-    <source src={track.resource} type="audio/mpeg" />
+    <source src={audioFile} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 {/if}
-<div class={`relative flex space-x-4 h-32 `} transition:slide|local>
+<div
+  class={`relative flex space-x-4 h-32 `}
+  in:slide|local={{ duration: 200, delay: 200 }}
+  out:slide|local={{ duration: 200 }}
+>
   <img
     class="h-32 w-32 bg-gray-100 rounded-sm"
     src={track.artwork.resource}
@@ -77,13 +110,15 @@
               <!-- {console.log(track.artistTracks)} -->
             </div>
             <p class="mt-2 text-gray-400 text-xs">
-              Preffered release date: {track.prefferdReleaseDate ??
-                'not yet determined'}
+              Preffered release date: {formatDate(
+                new Date(track.prefferdReleaseDate),
+              ) ?? 'not yet determined'}
             </p>
           </div>
+
           <div class="justify-self-end flex flex-col justify-between items-end">
             <svg
-              on:click={denyTrack}
+              on:click={() => denyTrack(track)}
               class="text-red-700 m-2"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -101,7 +136,7 @@
             </svg>
 
             <svg
-              on:click={signTrack}
+              on:click={() => signTrack(track)}
               class="text-green-700 m-2"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -120,69 +155,95 @@
         </div>
 
         <div
-          class="px-4 py-2 self-end flex rounded-md bg-gray-700 text-gray-100 items-center"
+          class="h-10 px-4 py-2 self-end flex rounded-md bg-gray-700 text-gray-100 items-center"
         >
-          <svg
-            on:click={() => {
-              audio.pause()
-              trackInfo.playing = false
-            }}
-            class="mr-1 cursor-pointer"
-            class:active={!trackInfo.playing}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="10" y1="15" x2="10" y2="9" />
-            <line x1="14" y1="15" x2="14" y2="9" />
-          </svg>
-          <svg
-            on:click={() => {
-              audio.play()
-              trackInfo.playing = true
-            }}
-            class="mr-3 cursor-pointer"
-            xmlns="http://www.w3.org/2000/svg"
-            class:active={trackInfo.playing}
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="10 8 16 12 10 16 10 8" />
-          </svg>
-          <div class="text-xs mr-2">00:00</div>
-          <div class="flex ml-2 mr-4 items-center w-full">
-            <div class="bg-gray-400 transition-all w-24 h-0.5 rounded-sm " />
-            <div
-              class="-ml-2 bg-gray-400 group cursor-pointer h-3 w-3 relative rounded-full"
-              style=""
+          {#if trackPlayable}
+            <svg
+              on:click={() => {
+                trackInfo.playing = false
+                audio.pause()
+              }}
+              class="mr-1"
+              class:active={!trackInfo.playing}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="10" y1="15" x2="10" y2="9" />
+              <line x1="14" y1="15" x2="14" y2="9" />
+            </svg>
+            <svg
+              on:click={() => {
+                trackInfo.playing = true
+                audio.play()
+              }}
+              class="mr-1 "
+              xmlns="http://www.w3.org/2000/svg"
+              class:active={trackInfo.playing}
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" />
+            </svg>
+            <svg
+              on:click={() => {
+                audio.currentTime += 5
+              }}
+              class="mr-3"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polygon points="13 19 22 12 13 5 13 19" />
+              <polygon points="2 19 11 12 2 5 2 19" />
+            </svg>
+            <div class="text-xs mr-2">00:00</div>
+            <div class="flex ml-2 mr-4 items-center w-full">
               <div
-                class="hidden group-hover:flex absolute text-xs top-4 ml-1.5 -translate-x-1/2	text-shadow-lg filter drop-shadow-md"
+                class="bg-gray-400 transition-all h-0.5 rounded-sm "
+                bind:this={trackInfo.playerBar}
+              />
+              <div
+                class="-ml-2 bg-gray-400 group cursor-pointer h-3 w-3 relative rounded-full "
+                style=""
               >
-                00:30
+                <div
+                  class="opacity-0 transition-opacity hover:bg-gray-400 rounded-full py-1 px-2 group-hover:opacity-100 absolute text-xs top-[6px] ml-1.5 -translate-y-1/2 -translate-x-1/2	text-shadow-lg filter drop-shadow-md"
+                >
+                  {trackInfo.currentTime}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="text-xs ml-auto ">00:30</div>
-          <a
-            href="/portal/staff/demo/{track.uuid}"
-            class="w-28 text-xs text-right font-medium hover:underline"
-            >Learn more..</a
-          >
+            <div class="text-xs ml-auto">{trackInfo.duration}</div>
+            <a
+              href="/portal/staff/demo/{track.uuid}"
+              class="w-28 text-xs text-right font-medium hover:underline"
+              >Learn more..</a
+            >
+          {:else}<p class="text-xs">
+              Track is not playable. Audio cannot be found on the server.
+            </p>
+          {/if}
         </div>
       </div>
     </div>

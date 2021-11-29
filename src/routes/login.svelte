@@ -24,10 +24,14 @@
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
   import userStore from '../stores/userStore'
-import { roleStore } from '../stores/stores';
+  import { roleStore } from '../stores/stores'
+  import Artist from '../components/Artist.svelte'
+  import Input from '../components/Input.svelte'
+
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
@@ -37,6 +41,7 @@ import { roleStore } from '../stores/stores';
         type,
         errors,
       )
+ 
     }
     if (type == 'password') {
       errors = validateErrors(
@@ -54,6 +59,7 @@ import { roleStore } from '../stores/stores';
   }
 
   const login = () => {
+    // todo: fix error when validationstore is empty because of connectione rror
     if ($validationStore.length == 0) {
       loginUser(user.email, user.password)
         .then(async e => {
@@ -63,7 +69,10 @@ import { roleStore } from '../stores/stores';
         .catch(e => {
           errors = validateError('connection', 'graphql', e, errors)
         })
+    }else{
+      // errors = validateError('general', 'errors', false, errors)
     }
+
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -95,48 +104,45 @@ import { roleStore } from '../stores/stores';
           non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
           <a href="/register" class="font-semibold">Create account!</a>
         </div>
+    
         <div
           class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full box-content justify-self-end"
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
-
+          <InputError errorInput="general" />
           <InputError errorInput="connection" />
-          <InputError errorInput="email" />
 
-          <label
-            >Email addres<input
-              bind:value={user.email}
-              required
-              on:input={() => {
-                checkValidation('email')
-              }}
-              on:change={() => {
-                checkValidation('email')
-              }}
-              class="input {$validationStore[0] == 'email_valid'
-                ? ' error'
-                : ''}"
-              placeholder="Email address."
-            /></label
-          >
-          <InputError errorInput="password" />
-          <label
-            >Password<input
-              bind:value={user.password}
-              required
-              on:input={() => {
-                checkValidation('password')
-              }}
-              on:change={() => {
-                checkValidation('password')
-              }}
-              class="input {$validationStore[0] == 'password_length'
-                ? ' error'
-                : ''}"
-              placeholder="Password.."
-              autocomplete="current-password"
-            /></label
-          >
+          <Input
+            bind:value={user.email}
+            title="Email address"
+            type="email"
+            errorInput="email"
+            portal=""
+            on:input={() => {
+              checkValidation('email')
+            }}
+            placeholder="Email address.."
+          />
+            <!-- on:change={() => {
+              checkValidation('email')
+            }} -->
+          <Input
+            bind:value={user.password}
+            title="Password"
+            type="password"
+            errorInput="password"
+            portal=""
+            on:input={() => {
+              checkValidation('password')
+            }}
+            on:change={() => {
+              checkValidation('password')
+            }}
+            placeholder="Enter password.."
+            autocomplete="current-password"
+          />
+
+
           <div class="flex justify-between items-center">
             <label
               class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"

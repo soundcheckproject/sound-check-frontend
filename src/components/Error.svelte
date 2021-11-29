@@ -1,7 +1,11 @@
 <script lang="ts">
+
   import { slide } from 'svelte/transition'
 
   export let display = true
+  export let onClose
+
+
 </script>
 
 {#if display}
@@ -13,8 +17,12 @@
   >
     <slot />
 
+    <!-- on:click={() => {
+        display = false
+        if(onClose) onClose()
+      }} -->
     <div
-      on:click={() => (display = false)}
+      on:click|preventDefault={onClose}
       class="absolute right-3 cursor-pointer "
     >
       <svg

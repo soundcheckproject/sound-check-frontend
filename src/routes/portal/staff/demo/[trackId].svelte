@@ -12,9 +12,15 @@
   import Button from '../../../../components/Button.svelte'
   import Toggle from '../../../../components/Toggle.svelte'
   import Error from '../../../../components/Error.svelte'
+  import {
+    denyTrack,
+    pendingTrack,
+    signTrack,
+  } from '../../../../utils/useTrack'
+  import { goto } from '$app/navigation'
 
   let track: TrackType
-  //   let track: TrackType = {
+  //   let track: TrackType = {ƒ
   //     uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
   //     title: 'Miss you so feat. Jebroer',
   //     description: 'Niels his new hit song',
@@ -31,12 +37,11 @@
   //     },
   //   }
   //   let contractAvailable = false
-  onMount(async () => {
+  const loadTrack = async () => {
     if ($page.params.trackId) {
       try {
-        console.log($page.params.trackId)
         track = await getTrackById($page.params.trackId)
-        console.log(track)
+
         // contractAvailable = track.contractFile.length > 0 ? true : false
       } catch (e) {
         console.log(e)
@@ -44,18 +49,19 @@
     } else {
       // console.log('no trackId found')
     }
+  }
+  let reloadTrack: boolean = false
+  onMount(async () => {
+    loadTrack()
   })
   $: {
-    console.log(track)
-    if (track) {
-      console.log(track.isSigned)
-    }
   }
 </script>
 
+
 <div class="grid gap-8">
   {#if track}
-    <TrackPlayer feedback={true} {track} audioSrc="" imgSrc="" />
+    <TrackPlayer feedback={true} {track} />
     <Box
       ><Title>Contract</Title>
 
@@ -142,11 +148,20 @@
       <hr />
       <!-- Todo: check if track has been released or not
       <Error>Track has already been released..</Error> -->
+      Track status: {track.isSigned == true
+        ? 'Accepted'
+        : track.isSigned == false
+        ? 'Denied'
+        : 'Pending'}
       <div class="flex space-x-4">
         <Button
           color="bg-accepted"
           class="button"
           disabled={track.isSigned == true}
+          onClick={() => {
+            signTrack(track)
+            goto($page.path)
+          }}
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -167,6 +182,10 @@
           color="bg-denied"
           class="button"
           disabled={track.isSigned == false}
+          onClick={() => {
+            denyTrack(track)
+            goto($page.path)
+          }}
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -184,10 +203,14 @@
           </svg>
           <div>Deny track</div></Button
         >
+        <!-- //todo: make track pending -->
         <Button
           color="bg-pending"
           class="button"
           disabled={track.isSigned == null}
+          onClick={() => {
+            goto($page.path)
+          }}
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

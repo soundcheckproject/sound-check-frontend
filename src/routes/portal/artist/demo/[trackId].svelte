@@ -16,29 +16,29 @@
   import { getTrackById } from '../../../../utils/useGraphQL'
   import userStore from '../../../../stores/userStore'
 
-  // let track: TrackType
-  let track: TrackType = {
-    uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
-    title: 'Miss you so feat. Jebroer',
-    description: 'Niels his new hit song',
-    previewStart: 20,
-    previewStop: 35,
-    lyrics: 'I hate to admit it',
-    artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
-    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-    genre: { name: '' },
-    prefferdReleaseDate: '2022-01-01',
-    artwork: {
-      designer: 'nielsonderbeke2',
-      resource: '',
-    },
-  }
+  let track: TrackType
+  // let track: TrackType = {
+  //   uuid: '612a4d86-f56d-4543-a0d8-793600e68a01',
+  //   title: 'Miss you so feat. Jebroer',
+  //   description: 'Niels his new hit song',
+  //   previewStart: 20,
+  //   previewStop: 35,
+  //   lyrics: 'I hate to admit it',
+  //   artistIds: ['b95656c1-e994-42d3-9e5d-c37f260b2a78'],
+  //   genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
+  //   genre: { name: '' },
+  //   prefferdReleaseDate: '2022-01-01',
+  //   artwork: {
+  //     designer: 'nielsonderbeke2',
+  //     resource: '',
+  //   },
+  // }
 
   onMount(async () => {
     if ($page.params.trackId) {
-      // track = await getTrackById($page.params.trackId).catch(e =>
-      //   console.log(e),
-      // )
+      track = await getTrackById($page.params.trackId).catch(e =>
+        console.log(e),
+      )
       try {
       } catch (e) {}
     } else {
@@ -49,7 +49,7 @@
 
 <div class="grid gap-8">
   {#if track}
-    <TrackPlayer feedback={true} {track} audioSrc={track.resource} />
+    <TrackPlayer feedback={true} {track} />
     <Box>
       <Title
         ><div class="flex justify-between items-center">

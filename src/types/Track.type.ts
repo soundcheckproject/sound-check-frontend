@@ -9,6 +9,13 @@ interface Genre {
   name?: string
   description?: string
 }
+export interface TrackInfoType {
+  duration: string
+  currentTime: string
+  playing: boolean
+  playerBar?: HTMLDivElement
+  muted?: boolean
+}
 export interface TrackType {
   uuid?: string
   title?: string
@@ -19,7 +26,7 @@ export interface TrackType {
   previewStart?: number
   previewStop?: number
   isSigned?: boolean
-  prefferdReleaseDate?: string|Date
+  prefferdReleaseDate?: string | Date
   genreId?: string
   genre?: Genre
   artwork?: Artwork

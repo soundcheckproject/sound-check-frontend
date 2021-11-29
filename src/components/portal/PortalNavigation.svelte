@@ -166,7 +166,27 @@
             <path d="M13.73 21a2 2 0 01-3.46 0" />
           </svg>
         </NavLink>
-        <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
+        <RoleLayer allowedForRoles={['label-ar', 'label-manager']}>
+          <NavLink href="/portal/staff" name="Todo" class="">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="10" y1="6" x2="21" y2="6" />
+              <line x1="10" y1="12" x2="21" y2="12" />
+              <line x1="10" y1="18" x2="21" y2="18" />
+              <polyline points="3 6 4 7 6 5" />
+              <polyline points="3 12 4 13 6 11" />
+              <polyline points="3 18 4 19 6 17" />
+            </svg>
+          </NavLink>
           <NavLink href="/portal/staff/users" name="Artists" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -188,6 +208,7 @@
               <path d="M17 18.5c-1.4-1-3.1-1.5-5-1.5s-3.6.6-5 1.5" />
             </svg>
           </NavLink>
+
           <NavLink
             href=""
             name="Demos"

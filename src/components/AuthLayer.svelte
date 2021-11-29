@@ -25,8 +25,9 @@
         if (user)
           storeUserInfoInLocalStorage().then(() => {
             storeRole(user)
-            console.log(user)
+
           })
+          // console.log(user.accessToken)
       }
     })
   })
@@ -37,5 +38,10 @@
   <slot />
 {:else}
   <!-- Not authenticated -->
-  <Popup>Not authenticated</Popup>
+  <Popup
+  title="Authentication"
+  subTitle="⛔️ No access"
+  description="You don't have access to this page. You need to be logged in."
+  hidden={false}
+/>
 {/if}
