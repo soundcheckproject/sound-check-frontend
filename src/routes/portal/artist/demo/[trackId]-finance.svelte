@@ -55,7 +55,7 @@
 <div class="grid gap-8">
   {#if newTrack}
     <TrackPlayer track={newTrack} feedback={false} />
-    {#if newTrack.isSigned == true}
+    {#if newTrack.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
       <Box>
         <Title>Track finance</Title>
 

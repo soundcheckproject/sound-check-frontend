@@ -209,11 +209,7 @@
       {#if artworkFile || track.artwork.resource}
         <img
           alt="img"
-          src={`${
-            artworkFile
-              ? artworkFile
-              : track.artwork.resource
-          }`}
+          src={`${artworkFile ? artworkFile : track.artwork.resource}`}
           class="object-cover h-full w-full "
         />
       {:else}
@@ -248,17 +244,6 @@
       <div class="grid gap-2 mt-4 cursor-pointer">
         <div on:click={() => wavesurfer.play()} id="waveform" />
 
-        <!-- <div class="flex justify-between w-full h-12 items-end">
-          {#each Array(100) as i}
-            <div
-              on:click={() => {
-                console.log(i)
-                audio.currentTime = 1
-              }}
-              class={`w-0.5 h-full bg-gray-100 rounded-sm cursor-pointer`}
-            />
-          {/each}
-        </div> -->
         {#if trackPlayable}
           <div class="flex  text-gray-200 ">
             <div class="text-xs mr-2">00:00</div>
@@ -305,7 +290,6 @@
           </svg>
           <svg
             on:click={() => {
-              // audio.pause()
               wavesurfer.pause()
               trackInfo.playing = false
             }}
@@ -326,7 +310,6 @@
           </svg>
           <svg
             on:click={() => {
-              // audio.play()
               wavesurfer.playPause()
               trackInfo.playing = true
             }}

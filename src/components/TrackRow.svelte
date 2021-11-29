@@ -4,6 +4,7 @@
   import { fade } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { formatDate } from '../utils/useFormat'
+  import { roleStore } from '../stores/stores'
 
   export let size: 'sm' | 'md' | 'lg' = 'sm'
 
@@ -55,7 +56,7 @@
         {formatDate(track.prefferdReleaseDate) ?? ''}
       </div>
       <div class="flex space-x-2 text-gray-700">
-        {#if track.isSigned == null}
+        {#if (track.isSigned == true || track.isSigned == null) && ['label-ar', 'label-manager'].includes($roleStore)}
           <a href="/portal/{portal}/demo/{track.uuid}-edit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +74,7 @@
             </svg>
           </a>
         {/if}
-        {#if track.isSigned == true}
+        {#if track.isSigned == true }
           <a href="/portal/{portal}/demo/{track.uuid}-finance">
             <svg
               xmlns="http://www.w3.org/2000/svg"

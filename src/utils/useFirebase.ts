@@ -1,10 +1,10 @@
 import { goto } from '$app/navigation'
 import {
   browserLocalPersistence,
-  browserSessionPersistence,
+
   createUserWithEmailAndPassword,
   getAuth,
-  reauthenticateWithCredential,
+
   setPersistence,
   signInWithEmailAndPassword,
   updateEmail,
@@ -36,7 +36,7 @@ export const loginUser = (
           .then(() => {
             storeUserInfoInLocalStorage()
               .then(() => {
-                storeRole(userCredential.user)
+                // storeRole(userCredential.user)
 
                 resolve(true)
               })

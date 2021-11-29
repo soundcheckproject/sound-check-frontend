@@ -58,7 +58,16 @@
     // artist
   })
 
+  let loadingStatus: { [key: string]: boolean } = {
+    logo: false,
+    userinfo: false,
+    password: false,
+    email: false,
+    socials: false,
+  }
+
   const updateUser = async () => {
+    loadingStatus.userinfo = true
     if ($validationStore.length == 0) {
       let updatedUser: UserType = {}
 
@@ -91,25 +100,28 @@
             //   errors = validateError('update', '403', true, errors)
 
             // }
+            loadingStatus.userinfo = false
             console.log('User has been updated!', updatedUser)
-            goto($page.path)
+            // goto($page.path)
           })
           .catch(e => {
+            loadingStatus.userinfo = false
             validateErrorTime('connection', 'graphql', errors)
           })
       } else {
+        loadingStatus.userinfo = false
         validateErrorTime('general', 'change', errors)
       }
     } else {
+      loadingStatus.userinfo = false
       validateErrorTime('general', 'errors', errors)
     }
   }
-  let updateLogoLoader: boolean = false
+
   const updateLogo = async () => {
-    updateLogoLoader = true
+    loadingStatus.logo = true
 
     if (logoBlob) {
-      console.log(artist.uuid)
       await uploadLogo(
         logoBlob[0],
         artist.nickName + 'logo' + '.jpg',
@@ -117,25 +129,33 @@
       )
         .then(res => {
           console.log(res)
-          updateLogoLoader = false
+          loadingStatus.logo = false
           logoBlob = null
         })
         .catch(error => console.log(error))
     } else {
-      updateLogoLoader = false
+      loadingStatus.logo = false
       validateErrorTime('logo', 'empty', errors)
     }
   }
   const updateUserEmail = () => {
+    loadingStatus.email = true
     console.log(newArtist.email)
     // Todo: update email in database => email toevoegen aan graphql
-    // updateFirebaseEmail(newArtist)
-    //   .then(result => {
-    //     console.log(result)
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //   })
+    if ($validationStore.length > 0) {
+      updateFirebaseEmail(newArtist)
+        .then(result => {
+          console.log(result)
+          loadingStatus.email = false
+        })
+        .catch(error => {
+          console.log(error)
+          loadingStatus.email = false
+        })
+    } else {
+      loadingStatus.email = false
+      validateErrorTime('general', 'errors', errors)
+    }
   }
 
   let userPassword = { old: '', new: '' }
@@ -277,7 +297,7 @@
       logo={logoPreview.length > 0 ? logoPreview : newArtist.logo}
     />
     <Box>
-      {artist.uuid}<Title>Account</Title>
+      <Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
       <InputError errorInput="general" />
       <form class="grid gap-6">
@@ -351,73 +371,139 @@
           >
           <Button
             color="bg-teal-700"
+            loading={loadingStatus.userinfo ? 'Updating userinfo..' : null}
             onClick={() => {
               updateUser()
             }}>Save changes</Button
           >
         </div>
-        <SubTitle>Profile picture</SubTitle>
+        <SubTitle>🖼 Images</SubTitle>
         <InputError errorInput="logo" />
-        <div class="flex">
-          <div class="label portal">
-            Upload logo
-            <div
-              class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
-              on:click={() => logoClick.click()}
-            >
-              {#if logoBlob}
-                <img class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3" src={logoPreview} alt="Preview of logo" />
-                <p class="text-teal-700 font-medium">
-                  Logo has been selected. Press update logo to submit!
-                </p>
-              {:else}
-                <svg
-                  class="-mt-px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                <p>Click to upload or drag your artwork here..</p>
-              {/if}
+        <div class="grid gap-4 grid-cols-2">
+          <div class="grid gap-6">
+            <div class="label portal w-full">
+              Upload logo
+              <div
+                class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
+                on:click={() => logoClick.click()}
+              >
+                {#if logoBlob}
+                  <img
+                    class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3"
+                    src={logoPreview}
+                    alt="Preview of logo"
+                  />
+                  <p class="text-teal-700 font-medium">
+                    Logo has been selected. Press update logo to submit!
+                  </p>
+                {:else}
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload or drag your logo here..</p>
+                {/if}
 
-              <input
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                bind:this={logoClick}
-                bind:files={logoBlob}
-                on:change={e => previewLogo(e)}
-                class="hidden"
-                placeholder=""
-              />
+                <input
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  bind:this={logoClick}
+                  bind:files={logoBlob}
+                  on:change={e => previewLogo(e)}
+                  class="hidden"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <Button
+                color="bg-teal-700"
+                onClick={() => {
+                  updateLogo()
+                }}
+                loading={loadingStatus.logo ? 'Updating logo..' : null}
+                >Update logo</Button
+              >
             </div>
           </div>
-        </div>
-        <div class="flex justify-end">
-          <Button
-            color="bg-teal-700"
-            onClick={() => {
-              updateLogo()
-            }}
-            loading={updateLogoLoader ? 'Updating logo..' : null}
-            >Update logo</Button
-          >
+          <!-- // todo: add  header -->
+          <div class="grid gap-6 opacity-30">
+            <div class="label portal w-full">
+              Upload banner
+              <div
+                class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
+                on:click={() => logoClick.click()}
+              >
+                {#if logoBlob}
+                  <img
+                    class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3"
+                    src={logoPreview}
+                    alt="Preview of logo"
+                  />
+                  <p class="text-teal-700 font-medium">
+                    Logo has been selected. Press update logo to submit!
+                  </p>
+                {:else}
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload or drag your artwork here..</p>
+                {/if}
+
+                <input
+                  type="file"
+                  accept=".jpg, .jpeg, .png"
+                  bind:this={logoClick}
+                  bind:files={logoBlob}
+                  on:change={e => previewLogo(e)}
+                  class="hidden"
+                  placeholder=""
+                />
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <Button
+                color="bg-teal-700"
+                onClick={() => {
+                  updateLogo()
+                }}
+                loading={loadingStatus.logo ? 'Updating logo..' : null}
+                >Update logo</Button
+              >
+            </div>
+          </div>
         </div>
       </form>
     </Box>
     <Box
       ><Title>Socials</Title>
       <SubTitle>Social media channels</SubTitle>
-      <form class="grid gap-6">
+      <div class="grid gap-6">
         <div class="grid lg:grid-cols-2 gap-6">
           <div class="grid gap-4 auto-rows-min items-start">
             <InputError errorInput="update" />
@@ -450,6 +536,11 @@
             </div>
           </div>
           <div class="grid auto-rows-min gap-4">
+            {#if newArtist.userLinks.length == 0}
+              <div class="input portal mt-7">
+                You haven't added any social media channels yet.
+              </div>
+            {/if}
             {#each newArtist.userLinks as userLink, i}
               <div class="relative">
                 <Input
@@ -487,12 +578,13 @@
         <div class="flex justify-end">
           <Button
             color="bg-teal-700"
+            loading={loadingStatus.socials ? 'Updating socials..' : null}
             onClick={() => {
               updateUserLinks()
             }}>Update socials</Button
           >
         </div>
-      </form>
+      </div>
     </Box>
     <Box
       ><Title>Login credentials</Title>
@@ -512,6 +604,7 @@
             <div class="flex justify-end">
               <Button
                 color="bg-teal-700"
+                loading={loadingStatus.email ? 'Updating email..' : null}
                 onClick={() => {
                   updateUserEmail()
                 }}>Update email</Button
@@ -541,6 +634,7 @@
               <div class="flex justify-end">
                 <Button
                   color="bg-teal-700"
+                  loading={loadingStatus.password ? 'Updating password..' : null}
                   onClick={() => {
                     updateUserPassword()
                   }}>Update password</Button

@@ -18,6 +18,11 @@
     signTrack,
   } from '../../../../utils/useTrack'
   import { goto } from '$app/navigation'
+  import { uploadContract } from '../../../../utils/useRest'
+
+  let loadingStatus: { [key: string]: boolean } = {
+    contractUpload: false,
+  }
 
   let track: TrackType
   //   let track: TrackType = {ƒ
@@ -37,27 +42,40 @@
   //     },
   //   }
   //   let contractAvailable = false
-  const loadTrack = async () => {
-    if ($page.params.trackId) {
-      try {
-        track = await getTrackById($page.params.trackId)
-
-        // contractAvailable = track.contractFile.length > 0 ? true : false
-      } catch (e) {
-        console.log(e)
-      }
+  const downloadContractFile = () => {}
+  let contractFileBlob: any
+  let contractFileUploadClick: HTMLInputElement
+  const uploadContractFile = async () => {
+    if (contractFileBlob) {
+      await uploadContract(
+        contractFileBlob[0],
+        'contract.pdf',
+        track.uuid,
+      )
+        .then(() => {
+          loadingStatus.contractUpload = false
+          // goto('/track/' + track.uuid)
+          console.log('uploaded contract file')
+        })
+        .catch(err => {
+          loadingStatus.contractUpload = false
+          console.log({ err })
+        })
     } else {
-      // console.log('no trackId found')
+      loadingStatus.contractUpload = false
+      console.log('no contract file')
     }
   }
   let reloadTrack: boolean = false
   onMount(async () => {
-    loadTrack()
+    track = await getTrackById($page.params.trackId)
   })
   $: {
+    if (contractFileBlob) {
+      uploadContractFile()
+    }
   }
 </script>
-
 
 <div class="grid gap-8">
   {#if track}
@@ -70,11 +88,19 @@
         Make contract available
         <Toggle bind:value={contractAvailable} />
       </div> -->
+      {#if contractFileBlob}
+        <p on:click={() => goto('/')}>View uploaded contract <u>here</u>..</p>
+      {/if}
       <div class="flex space-x-4">
         <Button
           size="sm"
           color="bg-teal-700"
+          onClick={() => {
+            contractFileUploadClick.click()
+            loadingStatus.contractUpload = true
+          }}
           disabled={track.isSigned == false}
+          loading={loadingStatus.contractUpload ? 'Uploading contract..' : null}
         >
           <div class="download">
             <svg
@@ -96,6 +122,14 @@
             <div>Upload new contract</div>
           </div>
         </Button>
+        <input
+          type="file"
+          accept=".pdf"
+          bind:this={contractFileUploadClick}
+          bind:files={contractFileBlob}
+          class="hidden"
+          placeholder=""
+        />
         <Button
           size="sm"
           color="bg-gray-500"
