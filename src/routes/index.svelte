@@ -158,7 +158,7 @@
     </section>
   </Container>
 </div>
-<div id="info">
+<div>
   <Container>
     <section>
       <article
@@ -192,7 +192,7 @@
     </section></Container
   >
 </div>
-<div id="contact" class="py-16 gradientBlueGreen">
+<div class="py-16 gradientBlueGreen">
   <Container>
     <section>
       <Title className="mb-4" theme="light">Contact</Title>

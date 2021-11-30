@@ -16,10 +16,10 @@
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >
     <a href="/">Home</a>
-    <a href="#releases">releases</a>
+    <a href="/#releases">releases</a>
     <a href="/artists">artists</a>
-    <a href="#info">info</a>
-    <a href="#contact">contact</a>
+    <a href="/#info">info</a>
+    <a href="/#contact">contact</a>
     <div class="relative group">
       <a href="/login">portal </a>
       <div class=" absolute hidden group-hover:block pt-3 ">

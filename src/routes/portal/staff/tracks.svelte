@@ -12,7 +12,7 @@
   let tracks: TrackType[] = []
   let filteredTracks: TrackType[] = []
 
-  let searchInput = ''
+  let searchInput: string = ''
 
   const searchTracks = (tracks: TrackType[], input: string) => {
     if (input.length > 0) {
