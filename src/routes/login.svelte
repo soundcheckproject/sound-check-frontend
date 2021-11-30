@@ -20,6 +20,7 @@
     validateNumbers,
     validateErrors,
     validateError,
+validateErrorTime,
   } from './../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
@@ -29,9 +30,9 @@
   import Input from '../components/Input.svelte'
 
 
-  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
-  // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
+  let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
@@ -63,14 +64,13 @@
     if ($validationStore.length == 0) {
       loginUser(user.email, user.password)
         .then(async e => {
-          errors = validateError('connection', 'graphql', e, errors)
           await goto('/portal')
         })
         .catch(e => {
-          errors = validateError('connection', 'graphql', e, errors)
+          validateErrorTime('connection', 'graphql', errors)
         })
     }else{
-      // errors = validateError('general', 'errors', false, errors)
+      validateErrorTime('general', 'errors', errors)
     }
 
   }

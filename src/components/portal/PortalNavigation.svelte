@@ -6,7 +6,7 @@
   import { goto } from '$app/navigation'
 
   import RoleLayer from '../RoleLayer.svelte'
-  import { menuState } from '../../stores/stores'
+  import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
 </script>
@@ -47,13 +47,13 @@
               out:fade|local
               class="absolute left-0 right-0 text-center"
             >
-              SoundCheck
+              {#if $labelStore}{$labelStore.name}{:else}SoundCheck{/if}
             </div>{:else}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local
               class="absolute left-0 right-0 text-center"
             >
-              SC
+            {#if $labelStore}{$labelStore.shortName}{:else}SC{/if}
             </div>{/if}
         </a>
       </h1>

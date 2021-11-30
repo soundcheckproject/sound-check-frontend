@@ -7,6 +7,7 @@
 
   onMount(async () => {
     // logout()
+    localStorage.removeItem('user')
 
     await getAuth().signOut()
     goto('/login')

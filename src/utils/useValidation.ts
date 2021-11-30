@@ -178,7 +178,7 @@ export const validateErrorTime = (
 
 export const validateStatusTrack = (
   track: boolean | null,
-  releaseDate: string,
+  releaseDate: Date|string,
 ): 'accepted' | 'pending' | 'denied' | 'released' => {
   return track == false
     ? 'denied'

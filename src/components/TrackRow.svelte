@@ -5,16 +5,18 @@
   import TrackStatus from './TrackStatus.svelte'
   import { formatDate } from '../utils/useFormat'
   import { roleStore } from '../stores/stores'
+import type { TrackType } from '../types/Track.type';
 
   export let size: 'sm' | 'md' | 'lg' = 'sm'
 
   export let portal: 'staff' | 'artist' = 'artist'
-  export let track
+  export let track: TrackType
 
   let hoverStatus = false
   // $:{ console.log(track.isSigned)}
 </script>
 
+{#if track}
 <a
   href="/portal/{portal}/demo/{track.uuid}"
   class="relative flex space-x-3 {size == 'sm'
@@ -53,7 +55,7 @@
       <p>{track.title ?? 'No title'}</p>{/if}
     <div class="grid grid-flow-col gap-3 items-center">
       <div class="hidden lg:flex text-xs text-gray-400">
-        {formatDate(track.prefferdReleaseDate) ?? ''}
+        {formatDate(new Date(track.prefferdReleaseDate)) ?? ''}
       </div>
       <div class="flex space-x-2 text-gray-700">
         {#if (track.isSigned == true || track.isSigned == null) && ['label-ar', 'label-manager'].includes($roleStore)}
@@ -100,3 +102,4 @@
     />
   </div>
 </a>
+{/if}

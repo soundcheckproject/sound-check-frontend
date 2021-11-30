@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
-  import type { TrackType } from 'src/types/Track.type'
+  import type { TrackType } from '../types/Track.type'
 
   import { fade } from 'svelte/transition'
 
@@ -41,7 +41,7 @@
       <line x1="8" y1="12" x2="16" y2="12" />
     </svg>
   </div>
-{:else}
+{:else if track}
   <div
     class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
     on:mouseenter={() => (hover = true)}

@@ -18,6 +18,7 @@
     validateEmpty,
     validateError,
     validateErrors,
+    validateErrorTime,
     validateLength,
     validateMatch,
     validateOld,
@@ -38,15 +39,16 @@
     state: 'Oost-Vlaanderen',
     city: 'Oudenaarde',
     birthdate: '2000-01-01',
+    biography: 'Not a bio yet',
   }
   let passwordCheck: string = ''
   let errors: string[] = []
   // Todo: validation
-  const checkValidation = (type: string) => {
+  const checkValidation = (type: string = null) => {
     if (type == 'nickname') {
-      // isNickNameAvailable(userRegister.nickName).then(result => {
-      //   errors = validateError('nickname', 'available', result, errors)
-      // })
+      isNickNameAvailable(userRegister.nickName).then(result => {
+        errors = validateError('nickname', 'available', result, errors)
+      })
     }
     if (type == 'email') {
       errors = validateErrors(
@@ -81,6 +83,7 @@
       'country',
       'state',
       'city',
+      'biography',
       // 'prefferdReleaseDate',
     ]) {
       if (errorType == type)
@@ -91,25 +94,25 @@
         )
     }
   }
-
-  $: {
-    validationStore.set(errors)
+  let loadingStatus: { [key: string]: boolean } = {
+    register: false,
   }
-
   const register = () => {
+    checkValidation()
+    loadingStatus.register = true
     if ($validationStore.length == 0) {
       registerUser(userRegister)
         .then(async e => {
-          errors = validateError('connection', 'graphql', e, errors)
-          errors = validateError('general', 'errors', e, errors)
-
-          await goto('/portal')
+          // await goto('/portal')
+          loadingStatus.register = false
         })
         .catch(e => {
-          errors = validateError('connection', 'graphql', e, errors)
+          loadingStatus.register = false
+          validateErrorTime('connection', 'graphql', errors)
         })
     } else {
-      errors = validateError('general', 'errors', false, errors)
+      loadingStatus.register = false
+      validateErrorTime('general', 'errors', errors)
     }
   }
 
@@ -132,7 +135,7 @@
 
       <InputError errorInput="general" />
       <InputError errorInput="connection" />
-      <div class="flex space-x-12 flex-col sm:flex-row bg-red-200" style="">
+      <div class="flex space-x-12 flex-col sm:flex-row " style="">
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
@@ -202,7 +205,7 @@
             /></label
           > -->
         </div>
-        <div class="grid gap-4 py-12 bg-red-300 w-full">
+        <div class="grid gap-4 py-12  w-full">
           <SubTitle theme="dark">🏡 Additional info</SubTitle>
           <!-- <label
             >What's your artistname?<input
@@ -284,15 +287,25 @@
               placeholder="City.."
             />
           </div>
+          <Input
+          errorInput={'biography'}
+          title="Biography"
+          bind:value={userRegister.biography}
+          portal=""
+          on:input={() => checkValidation('biography')}
+          textarea
+          placeholder="About you.."
+          />
+          
           <p class="text-gray-400 text-sm">
             * If you register an account, then you give the label the permission
             to use your data on this platform.
           </p>
-
           <Button
             onClick={register}
             rounded="none"
             color="bg-teal-700"
+            loading={loadingStatus.register ? 'Creading account..' : null}
             className="justify-self-end">Create account!</Button
           >
         </div>

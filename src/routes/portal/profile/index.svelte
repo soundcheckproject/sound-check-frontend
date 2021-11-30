@@ -286,8 +286,8 @@
 
   onMount(async () => {
     links = await getLinks()
-    console.log($page.params.userId)
-    // artist
+
+    // Admin update
     if ($page.params.userId) {
       artist = await getArtistByUserId($page.params.userId)
     } else {

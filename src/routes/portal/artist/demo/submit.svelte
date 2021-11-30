@@ -599,6 +599,7 @@
                 Click to upload or drag your track here..
                 <input
                   type="file"
+                  accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}
                   bind:files={trackData.blob}
                   on:change={e => previewTrack(e)}

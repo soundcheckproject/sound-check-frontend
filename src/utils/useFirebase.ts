@@ -1,10 +1,8 @@
 import { goto } from '$app/navigation'
 import {
   browserLocalPersistence,
-
   createUserWithEmailAndPassword,
   getAuth,
-
   setPersistence,
   signInWithEmailAndPassword,
   updateEmail,
@@ -76,7 +74,7 @@ export const storeUserInfoInLocalStorage = async (
   })
 }
 
-export const storeRole = (userCredentials: [key: string]): Promise<boolean> => {
+export const storeRole = (userCredentials: { [x: string]: { customAttributes: string } }): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
       const role: string = JSON.parse(
@@ -122,11 +120,12 @@ export const registerUser = (user: UserType): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(getAuth(), user.email, user.password)
       .then(async userCred => {
+        console.log(userCred)
         // Signed in -> success -> let's add a record to our own database!
         // #2 Eigen account op server bijhouden
 
         const addUser = user
-        delete user.password
+        delete addUser.password
         // user.uid = userCredential.user?.uid
         addUser.birthdate = new Date(user.birthdate)
 
@@ -141,7 +140,7 @@ export const registerUser = (user: UserType): Promise<boolean> => {
             {
               data: addUser,
             },
-          )
+          ).then(res => console.log(res))
 
           setPersistenceFirebase(addUser.email, addUser.password)
             .then(() => {

@@ -91,6 +91,13 @@ const errorStore = readable<{
       message: 'Please fill in a state',
     },
   ],
+  biography: [
+    {
+      display: false,
+      errorName: 'biography_empty',
+      message: 'Please fill in a biography',
+    },
+  ],
   birthdate: [
     {
       display: false,
