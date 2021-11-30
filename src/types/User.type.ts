@@ -25,7 +25,7 @@ export interface UserType {
   logo?: string
   birthdate?: string|Date
   uid?: string
-  bio?: string
+  biography?: string
   role?: Role
   userLinks?: UserLink[]
   royaltyPercentage?: number

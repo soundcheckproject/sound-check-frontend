@@ -101,6 +101,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
     `getUser`,
     `query GetUser($userId: String!) {
       getUser(userId: $userId) {
+        biography
         nickName
         uid
         uuid
@@ -114,6 +115,12 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
         logo
         role {
           name
+        }
+        userLinks {
+          linkAddress
+          link {
+            type
+          }
         }
       }
     }`,
@@ -298,6 +305,7 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
         uuid
         uid
         nickName
+        biography
         firstName
         surName
         birthdate

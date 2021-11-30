@@ -25,6 +25,7 @@
   import validationStore from '../../../stores/validationStore'
   import { onMount } from 'svelte'
   import {
+    getArtistByUserId,
     getLinks,
     getUserViaFirebase,
     updateUserInfoByUserId,
@@ -39,7 +40,8 @@
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
 
-  let artist: UserType = $userStore
+  // let artist: UserType = $userStore
+  let artist: UserType
 
   let newArtist: UserType
 
@@ -52,11 +54,6 @@
 
   let links: Link[] = []
   let errors: string[] = []
-
-  onMount(async () => {
-    links = await getLinks()
-    // artist
-  })
 
   let loadingStatus: { [key: string]: boolean } = {
     logo: false,
@@ -81,6 +78,7 @@
         'city',
         'state',
         'birthdate',
+        'biography'
       ]) {
         if (newArtist[objectKey] != oldUser[objectKey]) {
           updatedUser[objectKey] = newArtist[objectKey]
@@ -90,6 +88,7 @@
       if (Object.keys(updatedUser).length > 0) {
         await updateUserInfoByUserId(artist.uuid, updatedUser)
           .then(err => {
+            console.log(err)
             // console.log({data})
             // if (err) {
             //   console.log(err)
@@ -261,6 +260,7 @@
       'country',
       'state',
       'city',
+      'biography'
       // 'prefferdReleaseDate',
     ]) {
       if (errorType == type)
@@ -283,6 +283,17 @@
       logoPreview = e.target.result
     }
   }
+
+  onMount(async () => {
+    links = await getLinks()
+    console.log($page.params.userId)
+    // artist
+    if ($page.params.userId) {
+      artist = await getArtistByUserId($page.params.userId)
+    } else {
+      artist = $userStore
+    }
+  })
 
   $: {
     newArtist = artist
@@ -360,7 +371,7 @@
             placeholder="What's your city?"
           />
         </div>
-        <Input bind:value={newArtist.bio} title="Biography" textarea rows="5" />
+        <Input bind:value={newArtist.biography} title="Biography" textarea rows="5" />
 
         <div class="flex justify-end space-x-2">
           <Button
@@ -586,64 +597,68 @@
         </div>
       </div>
     </Box>
-    <Box
-      ><Title>Login credentials</Title>
-      <form class="grid gap-6">
-        <div class="grid lg:grid-cols-2 gap-6">
-          <div class="grid gap-6 auto-rows-min items-start">
-            <SubTitle>Change email</SubTitle>
+    {#if artist.uuid == $userStore.uuid}
+      <Box
+        ><Title>Login credentials</Title>
+        <form class="grid gap-6">
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="grid gap-6 auto-rows-min items-start">
+              <SubTitle>Change email</SubTitle>
 
-            <Input
-              title="Email address"
-              errorInput="email"
-              bind:value={newArtist.email}
-              on:input={() => checkValidation('email')}
-              placeholder="Email address.."
-            />
+              <Input
+                title="Email address"
+                errorInput="email"
+                bind:value={newArtist.email}
+                on:input={() => checkValidation('email')}
+                placeholder="Email address.."
+              />
 
-            <div class="flex justify-end">
-              <Button
-                color="bg-teal-700"
-                loading={loadingStatus.email ? 'Updating email..' : null}
-                onClick={() => {
-                  updateUserEmail()
-                }}>Update email</Button
-              >
-            </div>
-          </div>
-          <div>
-            <div class="grid gap-6">
-              <SubTitle>Change password</SubTitle>
-              <Input
-                errorInput={'password'}
-                title="Old password"
-                type="password"
-                on:input={() => checkValidation('password')}
-                bind:value={userPassword.old}
-                placeholder="Old password.."
-                autocomplete="current-password"
-              />
-              <Input
-                on:input={() => checkValidation('password')}
-                title="New password"
-                type="password"
-                bind:value={userPassword.new}
-                placeholder="New passord.."
-                autocomplete="new-password"
-              />
               <div class="flex justify-end">
                 <Button
                   color="bg-teal-700"
-                  loading={loadingStatus.password ? 'Updating password..' : null}
+                  loading={loadingStatus.email ? 'Updating email..' : null}
                   onClick={() => {
-                    updateUserPassword()
-                  }}>Update password</Button
+                    updateUserEmail()
+                  }}>Update email</Button
                 >
               </div>
             </div>
+            <div>
+              <div class="grid gap-6">
+                <SubTitle>Change password</SubTitle>
+                <Input
+                  errorInput={'password'}
+                  title="Old password"
+                  type="password"
+                  on:input={() => checkValidation('password')}
+                  bind:value={userPassword.old}
+                  placeholder="Old password.."
+                  autocomplete="current-password"
+                />
+                <Input
+                  on:input={() => checkValidation('password')}
+                  title="New password"
+                  type="password"
+                  bind:value={userPassword.new}
+                  placeholder="New passord.."
+                  autocomplete="new-password"
+                />
+                <div class="flex justify-end">
+                  <Button
+                    color="bg-teal-700"
+                    loading={loadingStatus.password
+                      ? 'Updating password..'
+                      : null}
+                    onClick={() => {
+                      updateUserPassword()
+                    }}>Update password</Button
+                  >
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </form>
-    </Box>
+        </form>
+      </Box>
+    {/if}
   {/if}
 </div>

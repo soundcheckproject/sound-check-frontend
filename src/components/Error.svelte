@@ -9,8 +9,10 @@
   <h2
     transition:slide|local
     class="relative text-md font-base justify-items-stretch flex items-center normal-case 
-    text-red-600 bg-black bg-opacity-5 text-sm rounded-sm py-3 px-4
-     "
+    text-sm rounded-sm py-3 px-4 {$$props.filled
+      ? 'bg-red-600 text-white bg-opacity-75'
+      : 'text-red-600 bg-black bg-opacity-5 '} 
+     {$$props.class}"
   >
     <slot />
 
