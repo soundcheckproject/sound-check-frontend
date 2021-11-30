@@ -49,6 +49,21 @@ const errorStore = readable<{
       errorName: 'password_old',
       message: 'Password cannot be the same',
     },
+    {
+      display: false,
+      errorName: 'password_number',
+      message: 'Password should contain at least 1 number',
+    },
+    {
+      display: false,
+      errorName: 'password_capital',
+      message: 'Password should contain at least 1 uppercase letter',
+    },
+    {
+      display: false,
+      errorName: 'password_lower',
+      message: 'Password should contain at least 1 lowercase letter',
+    },
   ],
   nickname: [
     {

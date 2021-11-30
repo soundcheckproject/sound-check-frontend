@@ -10,8 +10,7 @@
     getTrackById,
     updateTrack,
   } from '../../../../utils/useGraphQL'
-  //Todo: Royaltie percentage calc
-
+ 
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Box from '../../../../components/Box.svelte'

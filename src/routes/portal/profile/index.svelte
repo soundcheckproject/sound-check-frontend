@@ -9,13 +9,16 @@
   import {
     isEmailAvailable,
     isNickNameAvailable,
+    validateCapital,
     validateEmailValid,
     validateEmpty,
     validateError,
     validateErrors,
     validateErrorTime,
     validateLength,
+    validateLower,
     validateMatch,
+    validateNumbers,
     validateOld,
   } from '../../../utils/useValidation'
 
@@ -243,10 +246,10 @@
         [
           validateOld(userPassword.new, userPassword.old),
           validateLength(userPassword.new, 8),
-          // Todo: .Match in usevalidation not working
-          // validateNumbers(user.password),
-          // validateCapital(user.password),
-          // validateLower(user.password),
+
+          validateNumbers(userPassword.new),
+          validateCapital(userPassword.new),
+          validateLower(userPassword.new),
         ],
         type,
         errors,

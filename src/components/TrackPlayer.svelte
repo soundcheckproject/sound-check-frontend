@@ -182,16 +182,7 @@
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
     style={`background:url('${track.artwork.resource}') center center no-repeat;background-size:cover`}
   />
-  <!-- Todo: show track status in trackplayer -->
-  <!-- {#if track.isSigned}
-    <TrackStatus
-      status={validateStatusTrack(
-        track.isSigned,
-        $$props.track.prefferdReleaseDate,
-      )}
-    />
-  {/if} -->
-  <!-- <div class="overflow-hidden"> -->
+
   <div
     class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
     style={`background:url('${

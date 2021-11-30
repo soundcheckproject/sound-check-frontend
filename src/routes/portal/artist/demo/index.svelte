@@ -25,7 +25,13 @@
     accepted: [],
     denied: [],
   }
-
+  let filteredTracks: DemoListType = {
+    all: [],
+    pending: [],
+    accepted: [],
+    denied: [],
+  }
+  let searchInput: string = ''
 
   let tracksLoaded: boolean = false
   let filterType: 'all' | 'pending' | 'accepted' | 'denied' = 'all'
@@ -36,6 +42,18 @@
       pending: trackStore.filter(track => track.isSigned == null) ?? [],
       accepted: trackStore.filter(track => track.isSigned === true) ?? [],
       denied: trackStore.filter(track => track.isSigned === false) ?? [],
+    }
+  }
+
+  const searchTracks = (type: string) => {
+    if (searchInput.length > 0) {
+      filteredTracks[type] = tracks[type].filter(
+        (track: TrackType) =>
+          track.title.toLowerCase().substring(0, searchInput.length) ==
+          searchInput.toLowerCase().substring(0, searchInput.length),
+      )
+    } else {
+      filteredTracks[type] = tracks[type]
     }
   }
 
@@ -73,18 +91,39 @@
     <Title>
       <div class="flex justify-between items-center">
         <div>All tracks</div>
-        <div>
-          <select class="portal input" bind:value={filterType}>
+        <div class="flex space-x-2  ">
+          <select class="portal input w-32" bind:value={filterType}>
             <option value="all">All</option>
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
             <option value="denied">Denied</option>
           </select>
+          <label>
+            <input
+              bind:value={searchInput}
+              on:input={() => searchTracks(filterType)}
+              class="input portal"
+              placeholder="Search.."
+            />
+          </label>
         </div>
       </div>
     </Title>
     {#if tracks.all.length === 0}
+      <SubTitle>Tracks</SubTitle>
       <Skeleton>No tracks found..</Skeleton>
+    {:else if filterType == 'all' && searchInput.length > 0}
+      <div class="flex justify-between items-center">
+        <SubTitle
+          >Search in all demos with title starting "{searchInput}"</SubTitle
+        >
+      </div>
+      {#each filteredTracks.all as track}
+        <TrackRow {track} size="md" />
+      {/each}
+      {#if filteredTracks.all.length == 0}
+        <Skeleton>No demos found..</Skeleton>
+      {/if}
     {:else}
       {#if filterType == 'pending' || filterType == 'all'}
         <div class="flex justify-between items-center">

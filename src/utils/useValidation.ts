@@ -82,19 +82,19 @@ export const validateEmpty = (input: string): Error => {
 }
 
 export const validateNumbers = (input: string): Error => {
-  const errorName = 'numbers'
-  if (input.match('/[0-9]/g')) return { error: errorName, status: false }
+  const errorName = 'number'
+  if (!/\d/.test(input)) return { error: errorName, status: false }
   return { error: errorName, status: true }
 }
 export const validateCapital = (input: string): Error => {
   const errorName = 'capital'
-  if (input.match('/[A-Z]/g')) return { error: errorName, status: false }
-  return { error: errorName, status: true }
+  if (!/^[A-Z]*$/.test(input)) return { error: errorName, status: true }
+  return { error: errorName, status: false }
 }
 export const validateLower = (input: string): Error => {
   const errorName = 'lower'
-  if (input.match('/[a-z]/g')) return { error: errorName, status: false }
-  return { error: errorName, status: true }
+  if (!/^[a-z]*$/.test(input)) return { error: errorName, status: true }
+  return { error: errorName, status: false }
 }
 // Todo: Check if works
 export const validateDate = (input: string): Error => {

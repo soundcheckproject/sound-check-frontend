@@ -31,7 +31,7 @@
     accepted: [],
     denied: [],
   }
-  let searchInput = ''
+  let searchInput:string = ''
   // TODO: filter doesn't show items when length 0
   const searchTracks = (type: string) => {
     console.log(searchInput, filterType, type)

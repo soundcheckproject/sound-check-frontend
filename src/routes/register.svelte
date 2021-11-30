@@ -14,13 +14,16 @@
   import Input from '../components/Input.svelte'
   import {
     isNickNameAvailable,
+    validateCapital,
     validateEmailValid,
     validateEmpty,
     validateError,
     validateErrors,
     validateErrorTime,
     validateLength,
+    validateLower,
     validateMatch,
+    validateNumbers,
     validateOld,
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
@@ -64,12 +67,12 @@
       errors = validateErrors(
         [
           validateLength(userRegister.password, 8),
-          // todo: make work
+
           validateMatch(userRegister.password, passwordCheck),
-          // Todo: .Match in usevalidation not working
-          // validateNumbers(user.password),
-          // validateCapital(user.password),
-          // validateLower(user.password),
+
+          validateNumbers(userRegister.password),
+          validateCapital(userRegister.password),
+          validateLower(userRegister.password),
         ],
         type,
         errors,
@@ -288,15 +291,15 @@
             />
           </div>
           <Input
-          errorInput={'biography'}
-          title="Biography"
-          bind:value={userRegister.biography}
-          portal=""
-          on:input={() => checkValidation('biography')}
-          textarea
-          placeholder="About you.."
+            errorInput={'biography'}
+            title="Biography"
+            bind:value={userRegister.biography}
+            portal=""
+            on:input={() => checkValidation('biography')}
+            textarea
+            placeholder="About you.."
           />
-          
+
           <p class="text-gray-400 text-sm">
             * If you register an account, then you give the label the permission
             to use your data on this platform.

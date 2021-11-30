@@ -60,7 +60,6 @@ validateErrorTime,
   }
 
   const login = () => {
-    // todo: fix error when validationstore is empty because of connectione rror
     if ($validationStore.length == 0) {
       loginUser(user.email, user.password)
         .then(async e => {
