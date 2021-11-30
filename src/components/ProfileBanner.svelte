@@ -1,6 +1,7 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition'
-  export let logo = $$props.artist.logo
+  export let artist
+  export let logo 
 </script>
 
 <div
@@ -49,16 +50,15 @@
       <div class="">
         <div class="flex w-full justify-between">
           <p class="text-lg lg:text-4xl font-semibold ">
-            {$$props.artist.nickName}
+            {artist.nickName}
           </p>
         </div>
         <p class="text-sm lg:text-lg">
-          {$$props.artist.firstName}
-          {$$props.artist.surName}
+          {artist.firstName}
+          {artist.surName}
         </p>
         <div class="mt-4 text-xs opacity-75 ">
-          <!-- // Todo: add bio to database -->
-          {#if $$props.artist.bio && $$props.artist.bio.length > 2}
+          {#if artist.biography && artist.biography.length > 2}
             <p class="flex lg:hidden">
               Click to read bio <svg
                 class="ml-2"
@@ -77,21 +77,21 @@
               </svg>
             </p>
             <p class="hidden lg:flex">
-              {$$props.artist.bio}
+              {artist.biography}
             </p>
           {:else}
-            Artist has not biography yet.{/if}
+            Artist has no biography yet.{/if}
         </div>
       </div>
       <div class="flex justify-between items-center">
         <div
           class="mshadow-md text-sm rounded-full flex h-8 text-center bg-opacity-10 bg-white  px-4 justify-center items-center"
         >
-          {$$props.artist.role.name}
+          {artist.role.name}
         </div>
 
         <p class="text-sm capitalize opacity-50 text-right">
-          {$$props.artist.country}, {$$props.artist.city}
+          {artist.country}, {artist.city}
         </p>
       </div>
     </div>

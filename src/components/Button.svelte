@@ -16,16 +16,16 @@
 <button
   on:click|preventDefault={onClick}
   type="submit"
-  class=" transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 text-gray-600 
+  class="space-x-2 transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center
 	{rounded == 'default'
     ? ' rounded-md'
     : rounded == 'full'
     ? ' rounded-full'
     : 'rounded-sm'}
-	{state == 'active' ? '' : ''}
-	 {color != 'default' ? `${color} text-white` : ''}
-	 {type == 'glass' ? ' bg-opacity-25 text-white hover:bg-opacity-10' : ''}
-	 {size == 'xs'
+	  {state == 'active' ? '' : ''}
+    {type == 'glass' && ' bg-opacity-25 text-white hover:bg-opacity-10'}
+	  {color != 'default' ? `${color} text-white` : ''}
+	  {size == 'xs'
     ? ' px-3 py-2 text-xs'
     : size == 'sm'
     ? ' px-4 py-2 text-sm'
