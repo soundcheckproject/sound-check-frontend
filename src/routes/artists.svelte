@@ -87,7 +87,7 @@
             <ArtistCard {artist} />
           {/each}
         {:else}
-          {#each Array(12) as i}
+          {#each Array(4) as i}
             <ArtistCardSkeleton />
           {/each}
         {/if}
