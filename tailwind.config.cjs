@@ -25,7 +25,7 @@ module.exports = {
         '1fr-auto': '1fr auto',
         '150-auto-fr': '150px auto 1fr',
         '150-fr': '150px 1fr',
-        'repeat-min-12rem': 'repeat(auto-fit, minmax(12rem, 1fr))',
+        'repeat-min-12rem': 'repeat(auto-fill, minmax(12rem, 1fr))',
       },
       gridTemplateRows: {
         'min-64': 'repeat(auto-fit, minmax(8rem, 16rem))',
