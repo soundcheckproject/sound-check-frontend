@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { query } from '../utils/useGraphQL'
+  import { query } from '../../utils/useGraphQL'
   import { onMount } from 'svelte'
-  import Artist from '../components/Artist.svelte'
-  import Container from '../components/Container.svelte'
-  import Header from '../components/Header.svelte'
-  import type { UserType } from '../types/User.type'
+  import Artist from '../../components/Artist.svelte'
+  import Container from '../../components/Container.svelte'
+  import Header from '../../components/Header.svelte'
+  import type { UserType } from '../../types/User.type'
   import { each, prevent_default } from 'svelte/internal'
-  import ArtistCard from '../components/ArtistCard.svelte'
-  import ArtistCardSkeleton from '../components/skeleton/ArtistCardSkeleton.svelte'
-  import Footer from '../components/Footer.svelte'
+  import ArtistCard from '../../components/ArtistCard.svelte'
+  import ArtistCardSkeleton from '../../components/skeleton/ArtistCardSkeleton.svelte'
+  import Footer from '../../components/Footer.svelte'
 
   let searchNickname: string = ''
   let artists: UserType[] = []

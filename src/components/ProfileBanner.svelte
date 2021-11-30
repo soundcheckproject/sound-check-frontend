@@ -57,8 +57,7 @@
           {$$props.artist.surName}
         </p>
         <div class="mt-4 text-xs opacity-75 ">
-          <!-- // Todo: add bio to database -->
-          {#if $$props.artist.bio && $$props.artist.bio.length > 2}
+          {#if $$props.artist.biography && $$props.artist.biography.length > 2}
             <p class="flex lg:hidden">
               Click to read bio <svg
                 class="ml-2"
@@ -77,10 +76,10 @@
               </svg>
             </p>
             <p class="hidden lg:flex">
-              {$$props.artist.bio}
+              {$$props.artist.biography}
             </p>
           {:else}
-            Artist has not biography yet.{/if}
+            Artist has no biography yet.{/if}
         </div>
       </div>
       <div class="flex justify-between items-center">

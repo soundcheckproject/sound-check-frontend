@@ -6,9 +6,10 @@
   export let artist: UserType
 </script>
 
-<article
+<a
+  href="/artists/{artist.uuid}"
   in:fly={{ y: 25, opacity: 0 }}
-  class="cursor-pointer relative p-0 w-full h-full shadow-sm hover:shadow-2xl hover:scale-105 transition-all ease-out"
+  class="cursor-pointer relative p-0 w-full h-full shadow-sm hover:shadow-2xl hover:scale-105 focus:scale-105 focus:shadow-2xl transition-all ease-out outline-none"
 >
 <div class="w-full pb-[100%]">
   <img
@@ -23,4 +24,4 @@
   >
     <p class="text-white font-bold text-lg lg:text-xl ">{artist.nickName}</p>
   </div>
-</article>
+</a>
