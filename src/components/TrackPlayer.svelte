@@ -21,14 +21,16 @@
     formatTimeForPlayer,
   } from '../utils/useFormat'
 
+  import WaveSurfer from 'wavesurfer.js'
+  
   export let theme: 'light' | 'dark' = 'dark'
-
+  
   export let feedback: boolean = false
   let showFeedback: boolean =
-    JSON.parse(localStorage.getItem('showFeedback')) ?? true
-
+  JSON.parse(localStorage.getItem('showFeedback')) ?? true
+  
   let audio: HTMLAudioElement
-
+  
   let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
@@ -36,21 +38,29 @@
     playerBar: null,
     muted: false,
   }
-
+  
+  let wavesurfer: any
   let feedbackInput = ''
 
   const changeTrackTime = (timeStampSong: number) => {
     audio.currentTime = timeStampSong
+    wavesurfer.stop()
+    wavesurfer.skip(timeStampSong)
+    wavesurfer.play()
+    // parseInt(
+    //           wavesurfer.getCurrentTime().toFixed(0),
+    //         )
   }
 
   const addComment = async () => {
     if (feedbackInput.length > 0) {
-      console.log(audio.currentTime)
       const feedbackData: FeedbackType = {
         userId: $userStore.uuid,
         trackId: track.uuid,
         description: feedbackInput,
-        timeStampSong: audio ? parseInt(audio.currentTime.toString()) : 0,
+        timeStampSong: audio
+          ? parseInt(wavesurfer.getCurrentTime().toFixed(0))
+          : 0,
         date: new Date().toString(),
       }
 
@@ -99,19 +109,7 @@
       }
     }
   }
-  import WaveSurfer from 'wavesurfer.js'
-  let wavesurfer: {
-    load: (arg0: any) => void
-    on: (arg0: string, arg1: { (): void; (): void }) => void
-    getDuration: () => number
-    getCurrentTime: () => number
-    play: () => any
-    skip: (arg0: number) => any
-    pause: () => void
-    playPause: () => void
-    setMute: (arg0: boolean) => void
-    getMute: () => any
-  }
+
 
   onMount(async () => {
     if (track.uuid) {

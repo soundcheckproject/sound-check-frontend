@@ -81,7 +81,7 @@
         'city',
         'state',
         'birthdate',
-        'biography'
+        'biography',
       ]) {
         if (newArtist[objectKey] != oldUser[objectKey]) {
           updatedUser[objectKey] = newArtist[objectKey]
@@ -142,9 +142,10 @@
   }
   const updateUserEmail = () => {
     loadingStatus.email = true
-    console.log(newArtist.email)
-    // Todo: update email in database => email toevoegen aan graphql
-    if ($validationStore.length > 0) {
+
+    // Todo: testen update email in database
+    if ($validationStore.length == 0) {
+      console.log(newArtist.email)
       updateFirebaseEmail(newArtist)
         .then(result => {
           console.log(result)
@@ -162,10 +163,10 @@
 
   let userPassword = { old: '', new: '' }
   const updateUserPassword = () => {
-    console.log(newArtist.password)
     // Todo: functie nog niet getest
     updateFirebasePassword(userPassword.new)
       .then(result => {
+        console.log('old' + userPassword.old, 'new' + userPassword.new)
         console.log(result)
       })
       .catch(error => {
@@ -263,7 +264,7 @@
       'country',
       'state',
       'city',
-      'biography'
+      'biography',
       // 'prefferdReleaseDate',
     ]) {
       if (errorType == type)
@@ -374,7 +375,12 @@
             placeholder="What's your city?"
           />
         </div>
-        <Input bind:value={newArtist.biography} title="Biography" textarea rows="5" />
+        <Input
+          bind:value={newArtist.biography}
+          title="Biography"
+          textarea
+          rows="5"
+        />
 
         <div class="flex justify-end space-x-2">
           <Button
@@ -630,16 +636,16 @@
               <div class="grid gap-6">
                 <SubTitle>Change password</SubTitle>
                 <Input
-                  errorInput={'password'}
+                
                   title="Old password"
                   type="password"
-                  on:input={() => checkValidation('password')}
                   bind:value={userPassword.old}
                   placeholder="Old password.."
                   autocomplete="current-password"
                 />
                 <Input
                   on:input={() => checkValidation('password')}
+                  errorInput={'password'}
                   title="New password"
                   type="password"
                   bind:value={userPassword.new}
