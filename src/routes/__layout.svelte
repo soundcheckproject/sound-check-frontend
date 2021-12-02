@@ -1,18 +1,10 @@
 <script lang="ts">
   import { initializeApp } from 'firebase/app'
 
-  import {
-    browserLocalPersistence,
-    getAuth,
-    initializeAuth,
-    User,
-  } from 'firebase/auth'
+  import { getAuth, User } from 'firebase/auth'
   import { onMount } from 'svelte'
 
-  import 'animate.css'
-
   import authStore from '../stores/authStore'
-  import { fade } from 'svelte/transition'
 
   const firebaseConfig = {
     apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
@@ -26,12 +18,6 @@
   initializeApp(firebaseConfig)
 
   onMount(() => {
-    // const app = initializeApp(firebaseConfig)
-    // initializeAuth(app, {
-    //   persistence: browserLocalPersistence,
-    //   // No popupRedirectResolver defined
-    // })
-
     getAuth().onAuthStateChanged(async (user: User | any) => {
       // Get auth info and put in store
       const authInfo = {
@@ -44,10 +30,7 @@
   })
 </script>
 
-<div
-  class="font-roboto c-app relative " 
-
->
+<div class="font-roboto c-app relative ">
   <slot />
 </div>
 
@@ -63,7 +46,7 @@
 
   .c-app {
     /* background: red; */
-    @apply bg-gray-50;
+    @apply bg-gray-50 bg-opacity-75;
     display: grid;
     height: 100vh;
     grid-template-rows: auto 1fr auto;

@@ -25,7 +25,7 @@
         ? 'bg-gray-400'
         : theme == 'dark'
         ? 'bg-gray-700'
-        : ''} {loading && 'animate-pulse'}  rounded-md mshadow-sm opacity-80 outline-none object-cover"
+        : ''} {loading && 'animate-pulse'} rounded-md mshadow-sm opacity-25 outline-none object-cover"
     />
   </div>
 

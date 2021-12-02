@@ -1,20 +1,28 @@
 <script lang="ts">
+  import type { UserType } from '../types/User.type'
+  import Container from '../components/Container.svelte'
+
   import { fade, fly } from 'svelte/transition'
-  export let artist
-  export let logo 
+  export let rounded: '' | 'rounded-md' | 'rounded-sm' = 'rounded-md'
+  export let container = false
+  export let artist: UserType
+  export let logo: string
 </script>
 
 <div
-  class="relative overflow-hidden  backdrop-blur-sm text-gray-50 grid  bg-gray-800 rounded-md"
+  class="relative overflow-hidden  backdrop-blur-sm text-gray-50 grid  bg-gray-800 {rounded}"
   in:fade={{ duration: 200, delay: 200 }}
   out:fade={{ duration: 200 }}
 >
+  <!-- {#if container}
+    <Container> -->
   {#if logo}
     <div
       class="absolute w-full z-1 h-full filter blur-3xl opacity-75"
       style={`background:url('${logo}') center center no-repeat;background-size:cover`}
     />
   {/if}
+
   <div class="z-10 grid grid-cols-min-auto p-6 lg:p-12 gap-6 lg:gap-12">
     <div
       class="w-32 h-32 lg:h-64 lg:w-64 mshadow-md bg-opacity-10 bg-gray-200 rounded-md overflow-hidden flex justify-center items-center"
@@ -96,4 +104,6 @@
       </div>
     </div>
   </div>
+  <!-- </Container
+    >{/if} -->
 </div>

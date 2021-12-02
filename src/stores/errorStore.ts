@@ -57,12 +57,12 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'password_capital',
-      message: 'Password should contain at least 1 uppercase letter',
+      message: 'Password should contain at least 1 lowercase letter',
     },
     {
       display: false,
       errorName: 'password_lower',
-      message: 'Password should contain at least 1 lowercase letter',
+      message: 'Password should contain at least 1 uppercase letter',
     },
   ],
   nickname: [

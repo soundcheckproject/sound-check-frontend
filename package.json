@@ -11,6 +11,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
+    "@beyonk/svelte-mapbox": "^8.1.4",
     "@rollup/plugin-replace": "^3.0.0",
     "@sveltejs/kit": "next",
     "@types/howler": "^2.2.4",

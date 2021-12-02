@@ -163,15 +163,24 @@
 
   let userPassword = { old: '', new: '' }
   const updateUserPassword = () => {
+    loadingStatus.password = true
     // Todo: functie nog niet getest
-    updateFirebasePassword(userPassword.new)
-      .then(result => {
-        console.log('old' + userPassword.old, 'new' + userPassword.new)
-        console.log(result)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    if ($validationStore.length == 0 && userPassword.new && userPassword.old) {
+      updateFirebasePassword(userPassword.new)
+        .then(result => {
+          console.log('old' + userPassword.old, 'new' + userPassword.new)
+          console.log(result)
+          loadingStatus.password = false
+        })
+        .catch(error => {
+          console.log(error)
+          loadingStatus.password = false
+          validateErrorTime('connection', 'graphql', errors)
+        })
+    } else {
+      loadingStatus.password = false
+      validateErrorTime('general', 'errors', errors)
+    }
   }
   // update userlinks Query
   // als er een link anders is dan een vorige link, moet deze worden gewijzigd in de database
@@ -634,9 +643,9 @@
             </div>
             <div>
               <div class="grid gap-6">
+                <InputError errorInput="general" />
                 <SubTitle>Change password</SubTitle>
                 <Input
-                
                   title="Old password"
                   type="password"
                   bind:value={userPassword.old}

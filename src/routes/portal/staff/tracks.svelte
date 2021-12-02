@@ -68,9 +68,7 @@
   {:else}
     <div class="grid gap-4 lg:grid-cols-2 ">
       {#each filteredTracks as track}
-        <TrackRow portal="staff" {track}
-          >{track.title}</TrackRow
-        >
+        <TrackRow portal="staff" {track}>{track.title}</TrackRow>
       {/each}
     </div>
   {/if}

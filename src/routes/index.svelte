@@ -13,8 +13,8 @@
   import LineSkeleton from '../components/skeleton/LineSkeleton.svelte'
   import TrackSkeleton from '../components/skeleton/TrackSkeleton.svelte'
   import { labelStore } from '../stores/stores'
+  import { goto } from '$app/navigation'
 
-  let count = 0
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
 
@@ -23,32 +23,32 @@
       const releases: TrackType[] = await query(
         `getTracksReleased`,
         `query getTracksReleased {
-        getTracksReleased {
-          uuid
-          title
-      description
-      artistTracks {
-            user {
-             nickName
+          getTracksReleased {
             uuid
-            firstName
-            surName
-            email
-            country
-            logo
-            userLinks{
-              linkAddress
-                link{
-                  type
+            title
+            description
+            artistTracks {
+              user {
+              nickName
+              uuid
+              firstName
+              surName
+              email
+              country
+              logo
+              userLinks{
+                linkAddress
+                  link{
+                    type
+                  }
                 }
               }
             }
+            artwork {
+                resource
+            }
           }
-       artwork {
-            resource
-          }
-        }
-      }`,
+        }`,
       )
 
       if (releases && releases.length > 0) {
@@ -105,15 +105,17 @@
                 >{at.user.nickName}</Artist
               >
             {:else}
-              <Artist artist={at.user} size="xs">{at.user.nickName}</Artist>
+              <Artist theme="dark" artist={at.user} size="xs">{at.user.nickName}</Artist>
             {/if}
           {/each}
         {/if}
       </div>
       <div class="flex">
         {#if spotlightTrack}
-          <Button onClick={() => count++} type="glass" rounded="none"
-            >Learn more</Button
+          <Button
+            onClick={() => goto('/releases/' + spotlightTrack.uuid)}
+            type="glass"
+            rounded="none">Learn more</Button
           >
         {/if}
       </div>
@@ -121,7 +123,8 @@
     <div class="max-w-full sm:w-1/3 sm:px-4">
       {#if spotlightTrack}
         <img
-          class="rounded-md mshadow-lg max-h-96 max-w-md xl:max-h-96 xl:max-w-lg w-full object-cover "
+          on:click={() => goto('/releases/' + spotlightTrack.uuid)}
+          class="cursor-pointer rounded-md mshadow-lg max-h-96 max-w-md xl:max-h-96 xl:max-w-lg w-full object-cover "
           src={spotlightTrack.artwork.resource}
           alt="Artwork"
         />
@@ -145,7 +148,7 @@
             {/each}
           {:else}
             {#each Array(3) as i}
-              <TrackSkeleton />
+              <TrackSkeleton loading={false} />
             {/each}
           {/if}
           {#if latestReleases.length < 4}
@@ -158,19 +161,19 @@
     </section>
   </Container>
 </div>
-<div>
+<div class="gradientBlueGreen">
   <Container>
     <section>
       <article
         class="flex justify-between flex-col md:flex-row items-center gap-8"
       >
-        <div class="w-full">
-          <Title className="mb-4"
+        <div class="w-full grid gap-4">
+          <Title theme="light"
             >What is {$labelStore ? $labelStore.name : 'this label'}?</Title
           >
           {#if $labelStore}
-            <SubTitle className="mb-2">🚨 Letsgo!</SubTitle>
-            <p class="max-w-lg">
+            <SubTitle theme="light">🚨 Letsgo!</SubTitle>
+            <p class="max-w-lg text-white text-sm font-base">
               {$labelStore.description}
             </p>
           {:else}
@@ -180,7 +183,7 @@
         {#if $labelStore}
           <img
             class="w-full h-full rounded-md mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
-            src={$labelStore.logo}
+            src={$labelStore.logo.toString()}
             alt="Logo of label {$labelStore.name}"
           />
         {:else}
@@ -192,13 +195,13 @@
     </section></Container
   >
 </div>
-<div class="py-16 gradientBlueGreen">
+<div class="py-16 ">
   <Container>
-    <section>
-      <Title className="mb-4" theme="light">Contact</Title>
+    <section class="grid gap-6">
+      <Title>Contact</Title>
       <div class="md:flex items-center">
         <article
-          class="bg-gray-300 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+          class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
         >
           <form class="grid gap-4 ">
             <label
@@ -254,12 +257,57 @@
             <Button color="bg-teal-700" size="md">Learn more!</Button>
           </form>
         </article>
-        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left text-white">
-          <SubTitle theme="light">📩 Get in touch with us!</SubTitle>
+        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left ">
+          <SubTitle>📩 Get in touch with us!</SubTitle>
           <p>
             As a label we like to interact with our fans and future artists. If
             you have any questions or suggestions, don't hesitate to contact us!
           </p>
+          <p>
+            <b class="grid grid-flow-col  items-center justify-start gap-1">
+              <svg
+                class="-mt-px"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polygon
+                  points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+                />
+              </svg> Company</b
+            >
+            Ethereal<br />
+            Deinzestraat 175, 9700 Oudenaarde<br />
+            BTW: BE02.231.123
+          </p>
+          <p>
+            <b class="grid grid-flow-col items-center justify-start gap-1">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
+                />
+              </svg>Press</b
+            >
+            Styling kit
+          </p>
+          <div />
         </article>
       </div>
     </section>

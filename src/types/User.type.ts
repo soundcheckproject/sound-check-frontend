@@ -1,4 +1,5 @@
 import type { Role } from './Role.type'
+import type { TrackType } from './Track.type';
 export interface Link {
   type?: string
   uuid?:string
@@ -10,6 +11,12 @@ export interface UserLink {
   link?: Link
   linkAddress?: string
 }
+
+// export interface ArtistTrack {
+//   uuid?: string
+//   track?: TrackType
+//   isApproved?:boolean
+// }
 
 export interface UserType {
   uuid?: string
@@ -29,6 +36,7 @@ export interface UserType {
   role?: Role
   userLinks?: UserLink[]
   royaltyPercentage?: number
+  // tracks?: ArtistTrack[]
 }
 
 export interface ArtistType extends UserType {

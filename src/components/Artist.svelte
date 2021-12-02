@@ -10,10 +10,9 @@
   export let artist: ArtistType = undefined
   export let size: 'xs' | 'sm' | 'md' = 'sm'
   let hover: boolean = false
-  
+
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
-
 </script>
 
 {#if artist}
@@ -25,8 +24,8 @@
   >
     <div
       class="relative mshadow-xs {theme == 'dark'
-        ? 'bg-gray-300'
-        : 'bg-white'} bg-opacity-40 rounded-full group {size == 'md'
+        ? 'bg-gray-300 bg-opacity-40'
+        : 'bg-white'}  rounded-full group {size == 'md'
         ? 'text-md'
         : 'text-sm'} {className} {size == 'md'
         ? 'pr-5'
@@ -42,7 +41,7 @@
             alt="Artist {artist.nickName ?? ''}"
             src={artist.logo ??
               'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Ferror-icon-vector-illustration-vector-id922024216%3Fk%3D6%26m%3D922024216%26s%3D612x612%26w%3D0%26h%3DocSXgfV-7FlzSDe9LwBFoGTWAcfR6ES09hAl8OTe5Tw%3D&f=1&nofb=1'}
-            class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
+            class="object-cover w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
               ? 'mr-3'
               : ''} {size == 'md' ? ' w-12 h-12' : ''}"
           />
@@ -89,7 +88,10 @@
         <div
           in:fly={{ y: 25, opacity: 0 }}
           out:fade={{ duration: 200 }}
-          class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-gray-200 mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start"
+          class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
+          'dark'
+            ? 'bg-opacity-20 backdrop-blur-lg text-white'
+            : 'bg-white'} "
         >
           {#if size == 'xs'}
             <p class="font-bold">{artist.nickName}</p>
@@ -107,7 +109,7 @@
                 </a>
               </div>
             {/each}
-            {:else}
+          {:else}
             <p>No links found 😥</p>
           {/if}
           <!-- <a

@@ -16,10 +16,6 @@
   >
     <slot />
 
-    <!-- on:click={() => {
-        display = false
-        if(onClose) onClose()
-      }} -->
     {#if onClose}
       <div
         on:click|preventDefault={onClose}

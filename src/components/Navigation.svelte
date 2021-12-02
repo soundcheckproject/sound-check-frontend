@@ -6,7 +6,7 @@
 
 <nav class="flex py-8 flex-row justify-between items-center">
   {#if $labelStore}
-    <a href="/#home" id="home">
+    <a href="/" id="home">
       <h1 class="text-xl font-bold">{$labelStore.name}</h1></a
     >
   {:else}
@@ -16,7 +16,7 @@
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >
     <a href="/">Home</a>
-    <a href="/#releases">releases</a>
+    <a href="/releases">releases</a>
     <a href="/artists">artists</a>
     <a href="/#info">info</a>
     <a href="/#contact">contact</a>
@@ -35,18 +35,18 @@
   </div>
 
   <div
-    class="transition-all sm:hidden cursor-pointer p-2 bg-gray-200 backdrop-blur-sm rounded-full"
+    class="transition-all sm:hidden cursor-pointer p-2 text-white bg-gray-200 bg-opacity-20 backdrop-blur-sm rounded-full"
     on:click={() => (toggleMenu = true)}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
       height="16"
-      class="text-gray-900"
+      class=""
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="3"
+      stroke-width="2.5"
       stroke-linecap="round"
       stroke-linejoin="round"
       ><line x1="3" y1="12" x2="21" y2="12" /><line
@@ -75,7 +75,7 @@
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        stroke-width="3"
+        stroke-width="2.5"
         stroke-linecap="round"
         stroke-linejoin="round"
         ><line x1="18" y1="6" x2="6" y2="18" /><line

@@ -9,7 +9,7 @@
 <div class="grid gap-2">
   {#each Array(lines) as i}
     <p
-      class="{width} h-{height} opacity-80 rounded-md {loading && 'animate-pulse'} {theme ==
+      class="{width} h-{height} opacity-50 rounded-md {loading && 'animate-pulse'} {theme ==
       'white'
         ? 'bg-white'
         : theme == 'light'

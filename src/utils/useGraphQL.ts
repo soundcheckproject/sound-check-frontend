@@ -29,8 +29,8 @@ export const query = async (
 
     return gqlReqponse.data[name]
   } catch (err) {
-    return err
     console.log({ err })
+    return err
   }
 }
 
@@ -142,6 +142,30 @@ export const createTrack = async (track: any): Promise<{ uuid: string }> => {
 }
 
 export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
+  const response = await query(
+    `getTracksByArtist`,
+    `query GetTracksByArtist($artistId: String!) {
+      getTracksByArtist(artistId: $artistId) {
+        uuid
+        title
+        description
+        lyrics
+        isSigned
+        prefferdReleaseDate
+        genre {
+          name
+        }
+        artwork{
+          designer
+          resource
+        }
+      }
+    }`,
+    { artistId: artistId },
+  )
+  return response
+}
+export const getTracksReleasedByUserId = async (artistId: string): Promise<any[]> => {
   const response = await query(
     `getTracksByArtist`,
     `query GetTracksByArtist($artistId: String!) {

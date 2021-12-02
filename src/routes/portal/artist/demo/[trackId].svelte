@@ -59,7 +59,7 @@
             <p class="text-sm">
               {new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(
                 new Date(track.prefferdReleaseDate),
-              )} - 
+              )} -
               {formatDate(new Date(track.prefferdReleaseDate))}
             </p>
             <p class="mt-4 font-semibold ">Description</p>
@@ -81,7 +81,7 @@
               {/each}
             </div>
           {:else}
-            No artists found..
+            <p class="text-sm">No artists found..</p>
           {/if}
           <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
         </div>

@@ -1,7 +1,7 @@
-html, body {
+html,
+body {
   scroll-behavior: smooth;
 }
-
 
 .mshadow-xs {
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
@@ -27,7 +27,7 @@ section {
 }
 
 .input {
-  @apply rounded-sm mt-2 w-full border-2 border-gray-200 px-4 py-3 outline-none transition-colors bg-gray-50;
+  @apply rounded-sm mt-2 w-full border-2 border-gray-200 px-4 py-3 outline-none transition-colors bg-white text-sm;
 }
 .input:hover,
 .input:focus,
@@ -45,7 +45,7 @@ section {
   @apply border-opacity-100;
 }
 
-.input.error{
+.input.error {
   @apply hover:border-red-600 border-red-600 text-red-800;
 }
 
@@ -60,11 +60,7 @@ label.portal,
 }
 
 .input.portal {
-  @apply text-xs;
-  @apply text-gray-700;
-  @apply border-2;
-  @apply bg-gray-100;
-  @apply border-gray-100;
+  @apply text-xs text-gray-700  border-2 bg-gray-100 bg-opacity-25 border-gray-200 border-opacity-50;
 }
 
 .input.portal:hover,

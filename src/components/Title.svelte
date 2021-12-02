@@ -8,7 +8,7 @@
 		? 'text-blue-900 '
 		: theme == 'dark'
 		? 'text-gray-700'
-		: 'text-white text-opacity-90'} {className}"
+		: 'text-white text-opacity-90'} {className} {$$props.class}"
 >
 	<slot />
 </h2>
