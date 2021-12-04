@@ -4,7 +4,7 @@
 
   import { onMount } from 'svelte'
 
-  import { getTrackById } from '../../../../utils/useGraphQL'
+  import { getTrackById, query } from '../../../../utils/useGraphQL'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
@@ -18,7 +18,10 @@
     signTrack,
   } from '../../../../utils/useTrack'
   import { goto } from '$app/navigation'
-  import { uploadContract } from '../../../../utils/useRest'
+  import {
+    getContractFromTrackId,
+    uploadContract,
+  } from '../../../../utils/useRest'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -42,20 +45,23 @@
   //     },
   //   }
   //   let contractAvailable = false
-  const downloadContractFile = () => {}
+
+  const downloadContractFile = async () => {
+    var a = document.createElement('a') //Create <a>
+    a.href = track.contractFile //Image Base64 Goes here
+    a.download = track.title + '-contract' //File name Here
+    a.click() //Downloaded file
+  }
   let contractFileBlob: any
   let contractFileUploadClick: HTMLInputElement
   const uploadContractFile = async () => {
     if (contractFileBlob) {
-      await uploadContract(
-        contractFileBlob[0],
-        'contract.pdf',
-        track.uuid,
-      )
-        .then(() => {
+      await uploadContract(contractFileBlob[0], 'contract.pdf', track.uuid)
+        .then(async () => {
           loadingStatus.contractUpload = false
           // goto('/track/' + track.uuid)
           console.log('uploaded contract file')
+          track = await getTrackById($page.params.trackId)
         })
         .catch(err => {
           loadingStatus.contractUpload = false
@@ -66,6 +72,7 @@
       console.log('no contract file')
     }
   }
+
   let reloadTrack: boolean = false
   onMount(async () => {
     track = await getTrackById($page.params.trackId)
@@ -88,48 +95,11 @@
         Make contract available
         <Toggle bind:value={contractAvailable} />
       </div> -->
-      {#if contractFileBlob}
+      <!-- {#if contractFileBlob}
         <p on:click={() => goto('/')}>View uploaded contract <u>here</u>..</p>
-      {/if}
-      <div class="flex space-x-4">
-        <Button
-          size="sm"
-          color="bg-teal-700"
-          onClick={() => {
-            contractFileUploadClick.click()
-            loadingStatus.contractUpload = true
-          }}
-          disabled={track.isSigned == false}
-          loading={loadingStatus.contractUpload ? 'Uploading contract..' : null}
-        >
-          <div class="download">
-            <svg
-              class="-mt-px"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            <div>Upload new contract</div>
-          </div>
-        </Button>
-        <input
-          type="file"
-          accept=".pdf"
-          bind:this={contractFileUploadClick}
-          bind:files={contractFileBlob}
-          class="hidden"
-          placeholder=""
-        />
+      {/if} -->
+
+      {#if !track.contractFile}
         <Button
           size="sm"
           color="bg-gray-500"
@@ -147,38 +117,85 @@
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
+              <path
+                d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
+              />
+              <polyline points="14 2 14 8 20 8" />
+              <path d="M9 15l2 2 4-4" />
             </svg>
-            <div>Download unsigned contract</div>
+            <div>Make contract available</div>
           </div>
         </Button>
-        <Button
-          size="sm"
-          color="bg-gray-700"
-          disabled={track.isSigned == false}
-        >
-          <div class="download ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <div>Download signed contract</div>
-          </div>
-        </Button>
-      </div>
+      {:else}
+        <div class="flex space-x-4">
+          <Button
+            size="sm"
+            color="bg-teal-700"
+            onClick={() => {
+              contractFileUploadClick.click()
+              loadingStatus.contractUpload = true
+            }}
+            disabled={track.isSigned == false}
+            loading={loadingStatus.contractUpload
+              ? 'Uploading contract..'
+              : null}
+          >
+            <div class="download">
+              <svg
+                class="-mt-px"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <div>Upload new contract</div>
+            </div>
+          </Button>
+          <input
+            type="file"
+            accept=".pdf"
+            bind:this={contractFileUploadClick}
+            bind:files={contractFileBlob}
+            class="hidden"
+            placeholder=""
+          />
+
+          <Button
+            size="sm"
+            color="bg-gray-700"
+            disabled={track.isSigned == false}
+            onClick={() => downloadContractFile()}
+          >
+            <div class="download ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <div>Download signed contract</div>
+            </div>
+          </Button>
+        </div>
+      {/if}
       <hr />
       <!-- Todo: check if track has been released or not
       <Error>Track has already been released..</Error> -->

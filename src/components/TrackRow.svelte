@@ -57,7 +57,7 @@
       {#if $$props.background && track.artwork}
         <div
           class="absolute w-full z-1 inset-0 blur-2xl h-full filter opacity-25"
-          style={`background:url('${track.artwork.resource}') center center no-repeat;`}
+          style="background:url('{track.artwork.resource}') center center no-repeat;"
         />
       {/if}
       {#if $$props.slot}

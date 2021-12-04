@@ -8,7 +8,7 @@
     getArtistsByNickName,
     createTrack,
   } from '../../../../utils/useGraphQL'
- 
+
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Box from '../../../../components/Box.svelte'
@@ -254,6 +254,7 @@
             /></label
           > -->
             <Input
+              required={true}
               bind:value={newTrack.title}
               title="Create a title"
               errorInput="title"
@@ -300,6 +301,7 @@
               /></label
             > -->
               <Input
+                required={true}
                 errorInput="date"
                 bind:value={newTrack.prefferdReleaseDate}
                 on:input={() => {
@@ -311,8 +313,9 @@
               />
             </div>
             <Input
-              bind:value={newTrack.description}
+              required={true}
               errorInput="description"
+              bind:value={newTrack.description}
               on:input={() => {
                 checkValidation('description')
               }}
@@ -323,8 +326,9 @@
             />
 
             <Input
-              bind:value={newTrack.lyrics}
+              required={true}
               errorInput="lyrics"
+              bind:value={newTrack.lyrics}
               on:input={() => {
                 checkValidation('lyrics')
               }}
@@ -545,6 +549,7 @@
                     <p>Click to upload or drag your artwork here..</p>
                   {/if}
                   <input
+                    required={true}
                     type="file"
                     accept=".jpg, .jpeg, .png"
                     bind:this={artworkClick}
@@ -597,6 +602,7 @@
                 <!-- {trackBlob ?? trackBlob[0].name ?? ''} -->
                 Click to upload or drag your track here..
                 <input
+                  required={true}
                   type="file"
                   accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}

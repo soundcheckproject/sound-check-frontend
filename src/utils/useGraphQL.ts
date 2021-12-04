@@ -165,7 +165,9 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
   )
   return response
 }
-export const getTracksReleasedByUserId = async (artistId: string): Promise<any[]> => {
+export const getTracksReleasedByUserId = async (
+  artistId: string,
+): Promise<any[]> => {
   const response = await query(
     `getTracksByArtist`,
     `query GetTracksByArtist($artistId: String!) {

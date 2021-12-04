@@ -26,6 +26,7 @@
           storeUserInfoInLocalStorage().then(() => {
             storeRole(user)
           })
+          console.log(user.accessToken)
       }
     })
   })
