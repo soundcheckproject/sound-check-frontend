@@ -58,32 +58,32 @@
       {/each}
     </div>
   </Box>
-  <div class="grid grid-cols-3 gap-8">
+  <div class="grid md:grid-cols-3 gap-8">
     {#if totalTracks.accepted}
-      <Box>
+      <Box class="flex items-center justify-center lg:justify-start">
         <a href="/portal/artist/demo">
-          <p class="uppercase font-semibold text-accepted">Accepted</p>
-          <p class="text-3xl font-medium text-gray-600 mt-1">
+          <p class="uppercase text-sm lg:text-lg font-semibold text-accepted">Accepted</p>
+          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
             {totalTracks.accepted} track{#if totalTracks.accepted > 1}s{/if}
           </p>
         </a>
       </Box>
     {/if}
     {#if totalTracks.pending}
-      <Box>
+      <Box class="flex items-center justify-center lg:justify-start">
         <a href="/portal/artist/demo">
-          <p class="uppercase font-semibold text-pending">Pending</p>
-          <p class="text-3xl font-medium text-gray-600 mt-1">
+          <p class="uppercase text-sm lg:text-lg font-semibold text-pending">Pending</p>
+          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
             {totalTracks.pending} track{#if totalTracks.pending > 1}s{/if}
           </p>
         </a>
       </Box>
     {/if}
     {#if totalTracks.denied}
-      <Box>
+      <Box class="flex items-center justify-center lg:justify-start">
         <a href="/portal/artist/demo">
-          <p class="uppercase font-semibold text-denied">Denied</p>
-          <p class="text-3xl font-medium text-gray-600 mt-1">
+          <p class="uppercase text-sm lg:text-lg font-semibold text-denied">Denied</p>
+          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
             {totalTracks.denied} track{#if totalTracks.denied > 1}s{/if}
           </p>
         </a>

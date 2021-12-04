@@ -22,15 +22,17 @@ export interface TrackType {
   description?: string
   lyrics?: string
   contractFile?: string
+  contractResource?: string
   resource?: string
   previewStart?: number
   previewStop?: number
-  isSigned?: boolean|null
+  isSigned?: boolean | null
   prefferdReleaseDate?: string | Date
   genreId?: string
   genre?: Genre
   artwork?: ArtworkType
+  labelId?: string
   label?: string
   artistIds?: string[]
-  artistTracks?: { user: UserType|ArtistType }[]
+  artistTracks?: { user: UserType | ArtistType }[]
 }

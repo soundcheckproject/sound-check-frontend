@@ -435,12 +435,12 @@
                     class="group cursor-pointer"
                   >
                     <div
-                      class="opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
+                      class="backdrop-blur-xl opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
                     >
                       {formatTimeForPlayer(feedback.timeStampSong)}
                     </div>
                     <div
-                      class="opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
+                      class="backdrop-blur-xl opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

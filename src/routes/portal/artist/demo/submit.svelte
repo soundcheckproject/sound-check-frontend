@@ -21,7 +21,7 @@
 
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
-  import { uploadTrack } from '../../../../utils/useRest'
+  import { uploadArtwork, uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
   import userStore from '../../../../stores/userStore'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
@@ -45,6 +45,7 @@
     lyrics: 'I hate to admit it',
     artistIds: [$userStore.uuid],
     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
+    labelId: '6db99699-7b78-4f7e-8104-ea0fbdcfa810',
     prefferdReleaseDate: '2022-01-01',
     artwork: {
       designer: 'nielsonderbeke2',
@@ -103,6 +104,7 @@
     newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
     console.log(newTrack)
     if ($validationStore.length == 0) {
+      // Create track in database
       await createTrack(newTrack)
         .then(async resCreateTrack => {
           console.log(resCreateTrack)
@@ -117,10 +119,18 @@
               .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
               .split('.')
               .pop()
+          // Upload track to blob
           await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
-            .then(res => {
+            .then(async res => {
               console.log(res)
-              goto('/portal/artist/demo/' + resCreateTrack.uuid)
+              // Upload artwork to blob
+              await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
+                .then(res => {
+                  console.log(res)
+                  // goto('/')
+                  goto('/portal/artist/demo/' + resCreateTrack.uuid)
+                })
+                .catch(error => console.log(error))
             })
             .catch(error => console.log(error))
         })

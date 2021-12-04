@@ -6,7 +6,7 @@
   export let rounded: '' | 'rounded-md' | 'rounded-sm' = 'rounded-md'
   export let container = false
   export let artist: UserType
-  export let logo: string
+  export let logo: string = artist.logo??''
 </script>
 
 <div
