@@ -19,7 +19,7 @@
   let artistTracks: TrackType[] = []
   onMount(async () => {
     artist = await getArtistByUserId($page.params.userId)
-    artistTracks = await getTracksByArtistId(artist.uuid)
+    if (artist) artistTracks = await getTracksByArtistId(artist.uuid)
   })
   $: {
     console.log(artistTracks)
