@@ -12,6 +12,7 @@
   import Button from '../../../../components/Button.svelte'
   import Toggle from '../../../../components/Toggle.svelte'
   import Error from '../../../../components/Error.svelte'
+  import Artist from '../../../../components/Artist.svelte'
   import {
     denyTrack,
     pendingTrack,
@@ -73,7 +74,22 @@
     }
   }
 
-  let reloadTrack: boolean = false
+  const contractAvailable = async () => {
+    const contractFile = await query(
+      `getTrackById`,
+      `query GetTrackById($trackId: String!) {
+        getTrackById(trackId: $trackId) {
+          contractFile
+        }
+      }`,
+      {
+        trackId: track.uuid,
+      },
+    ).then(res => {
+      console.log(res)
+    })
+  }
+
   onMount(async () => {
     track = await getTrackById($page.params.trackId)
   })
@@ -89,8 +105,22 @@
     <TrackPlayer feedback={true} {track} />
     <Box
       ><Title>Contract</Title>
-
+      <SubTitle>👨🏼‍🎨 Artists</SubTitle>
+      {#if track.artistTracks && track.artistTracks.length > 0}
+        <div class="flex space-x-2">
+          {#each track.artistTracks as artist}
+            <Artist
+              onClick={() => goto('/portal/staff/users/' + artist.user.uuid)}
+              artist={artist.user}
+              theme="dark">{artist.user.nickName}</Artist
+            >
+          {/each}
+        </div>
+      {:else}
+        <p class="text-sm">No artists found..</p>
+      {/if}
       <SubTitle>📝 Manage contract</SubTitle>
+
       <!-- <div class="justify-between flex items-center">
         Make contract available
         <Toggle bind:value={contractAvailable} />
@@ -104,6 +134,9 @@
           size="sm"
           color="bg-gray-500"
           disabled={track.isSigned == false}
+          onClick={() => {
+            contractAvailable()
+          }}
         >
           <div class="download">
             <svg
@@ -191,7 +224,7 @@
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <div>Download signed contract</div>
+              <div>Download contract</div>
             </div>
           </Button>
         </div>

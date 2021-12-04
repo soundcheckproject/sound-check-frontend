@@ -13,6 +13,7 @@
 
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
+  export let socials = false
 </script>
 
 {#if artist}
@@ -31,7 +32,7 @@
         ? 'pr-5'
         : size == 'sm'
         ? 'pr-3'
-        : ''}"
+        : ''} transition-all hover:bg-opacity-75"
     >
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
@@ -84,13 +85,13 @@
         {/if}
       </div>
 
-      {#if hover}
+      {#if hover && socials}
         <div
           in:fly={{ y: 25, opacity: 0 }}
           out:fade={{ duration: 200 }}
           class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
           'dark'
-            ? 'bg-opacity-20 backdrop-blur-lg text-white'
+            ? 'bg-black bg-opacity-50 backdrop-blur-lg text-white'
             : 'bg-white'} "
         >
           {#if size == 'xs'}

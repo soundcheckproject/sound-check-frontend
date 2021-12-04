@@ -1,7 +1,7 @@
 <script lang="ts">
   import SubTitle from './SubTitle.svelte'
 
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import type FeedbackType from '../types/Feedback.type'
   import {
     addFeedbackToTrack,
@@ -110,6 +110,10 @@
       responsive: true,
       height: 80,
     })
+  })
+
+  onDestroy(() => {
+    wavesurfer.destroy()
   })
 
   $: {
@@ -360,27 +364,18 @@
         transition:slide|local={{ delay: 400, duration: 200 }}
         class="z-10 p-8 grid gap-6 bg-black bg-opacity-20"
       >
-        <SubTitle theme="light">Add feedback</SubTitle>
-        <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex">
-          <input
-            bind:value={trackInfo.currentTime}
-            type="text"
-            class="bg-opacity-0 bg-white w-10 outline-none opacity-40 mx-3"
-          />
-          <input
-            type="text"
-            bind:value={feedbackInput}
-            class="bg-opacity-0 bg-white outline-none w-full mr-2 text-white text-opacity-75"
-            placeholder="Write a comment.."
-          />
-          <Button onClick={() => addComment()} type="glass">Post</Button>
-        </div>
         <SubTitle theme="light"
           ><div class="flex w-full justify-between ">
             <div>Feedback</div>
-            <div>
+            <div
+              class="flex space-x-2"
+              on:click={() => (showFeedback = !showFeedback)}
+            >
+              <p class="text-sm font-base">
+                {#if showFeedback}Close{:else}Open{/if}
+              </p>
+
               <svg
-                on:click={() => (showFeedback = !showFeedback)}
                 class:active={showFeedback}
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -401,10 +396,27 @@
           </div></SubTitle
         >
         {#if showFeedback}
+          <!-- <SubTitle theme="light">Add feedback</SubTitle> -->
           <div
             transition:slide|local
             class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
           >
+            <div
+              class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex mx-8"
+            >
+              <input
+                bind:value={trackInfo.currentTime}
+                type="text"
+                class="bg-opacity-0 bg-white w-10 outline-none opacity-40 mx-3"
+              />
+              <input
+                type="text"
+                bind:value={feedbackInput}
+                class="bg-opacity-0 bg-white outline-none w-full mr-2 text-white text-opacity-75"
+                placeholder="Write a comment.."
+              />
+              <Button onClick={() => addComment()} type="glass">Post</Button>
+            </div>
             {#each sortByDate(feedbacks, true) as feedback}
               <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm mx-8">
                 <div class="text-sm py-3 flex items-center w-full relative ">
