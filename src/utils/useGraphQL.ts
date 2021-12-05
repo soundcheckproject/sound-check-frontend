@@ -238,6 +238,7 @@ export const getTrackById = async (trackId: string): Promise<any> => {
     `query GetTrackById($trackId: String!) {
       getTrackById(trackId: $trackId) {
         artwork {
+          uuid
           resource
           designer
         }
