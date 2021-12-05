@@ -1,6 +1,7 @@
 import type { ArtistType, UserType } from './User.type'
 
 export interface ArtworkType {
+  uuid?: string
   designer?: string
   resource?: string
 }

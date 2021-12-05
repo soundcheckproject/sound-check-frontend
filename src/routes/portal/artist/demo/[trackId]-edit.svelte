@@ -183,7 +183,7 @@
       //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
       //     .split('.')
       //     .pop()
-      await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.uuid)
+      await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.artwork.uuid)
         .then(res => {
           console.log(res)
           loadingStatus.artwork = false
