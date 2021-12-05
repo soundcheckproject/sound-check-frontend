@@ -30,6 +30,7 @@
                     resource
                     designer
                 }
+         
                 artistTracks {
                     user {
                         logo
