@@ -15,6 +15,7 @@
   import Skeleton from '../../components/Skeleton.svelte'
   import SubTitle from '../../components/SubTitle.svelte'
   import LinkIcon from '../../components/LinkIcon.svelte'
+  import { capitalize } from '../../utils/capitalize'
 
   let artist: UserType
 
@@ -122,40 +123,44 @@
 <Header type="split" />
 <main>
   <FadeBox>
-    <Container className="py-16 ">
+    <Container className="py-16 grid gap-12">
       {#if artist}
         <ProfileBanner container {artist} logo={artist.logo} />
       {/if}
       <div
-        class="grid gap-16 lg:grid-cols-2"
+        class="grid gap-8 lg:grid-cols-2 "
         style="grid-template-columns:auto 1fr"
       >
-        <div class="grid gap-6 items-start">
-          <SubTitle class="mt-12">Social media</SubTitle>
+        <div class="flex flex-col  ">
+          <SubTitle>Socials</SubTitle>
           <!-- {#if artist && artist.userLinks}
             {#each artist.userLinks as userLink}
               jow
             {/each}
           {/if} -->
-          {#if artist && artist.userLinks && artist.userLinks.length > 0}
-            {#each artist.userLinks as userLink}
-              <div class="flex items-center">
-                <LinkIcon className="mr-2" type={userLink.link.type} />
-                <a
-                  href={'https://' + userLink.linkAddress}
-                  target="_blank"
-                  class="hover:underline grid grid-flow-col gap-2 items-center "
+          <div class="text-sm   mt-6 grid gap-2">
+            {#if artist && artist.userLinks && artist.userLinks.length > 0}
+              {#each artist.userLinks as userLink}
+                <div
+                  class="flex items-center bg-white rounded-full mshadow-xs px-3 py-2 text-xs "
                 >
-                  {userLink.link.type}
-                </a>
-              </div>
-            {/each}
-          {:else}
-            <p class="text-sm ">No links found 😥</p>
-          {/if}
+                  <LinkIcon className="mr-2" type={userLink.link.type} />
+                  <a
+                    href={'https://' + userLink.linkAddress}
+                    target="_blank"
+                    class="hover:underline grid grid-flow-col gap-2 items-center text-gray-700"
+                  >
+                    {capitalize(userLink.link.type)}
+                  </a>
+                </div>
+              {/each}
+            {:else}
+              <p class="text-sm ">No links found 😥</p>
+            {/if}
+          </div>
         </div>
         <div class="grid gap-6 items-start">
-          <SubTitle class="mt-12">Tracks</SubTitle>
+          <SubTitle>Tracks</SubTitle>
           {#if tracks}
             <div class="grid gap-4 ">
               {#if tracks.length != 0}

@@ -14,4 +14,4 @@
 </script>
 
 
-<img class="w-4 h-4 {className}" src={displayIcon} alt={type} />
+<img class="w-3 h-3 {className} {$$props.class}" src={displayIcon} alt={type} />
