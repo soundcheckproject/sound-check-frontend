@@ -1,10 +1,11 @@
 <script lang="ts">
   import Container from './Container.svelte'
   import Navigation from './Navigation.svelte'
+import FadeBox from './portal/FadeBox.svelte';
 
   export let type: 'split' | 'full' = 'full'
 </script>
-
+<!-- <FadeBox> -->
 <div
   class="w-screen {type == 'full'
     ? ' h-full sm:h-screen'
@@ -21,3 +22,4 @@
     </div>
   </Container>
 </div>
+<!-- </FadeBox> -->

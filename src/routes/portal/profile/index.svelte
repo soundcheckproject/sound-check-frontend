@@ -31,6 +31,7 @@
     getArtistByUserId,
     getArtists,
     getLinks,
+    getRoles,
     getUserViaFirebase,
     query,
     updateUserInfoByUserId,
@@ -45,6 +46,9 @@
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
   import { capitalize } from '../../../utils/capitalize'
+  import RoleLayer from '../../../components/RoleLayer.svelte'
+  import { roleStore } from '../../../stores/stores'
+  import type { RoleType } from '../../../types/Role.type'
 
   // let artist: UserType = $userStore
   let artist: UserType
@@ -187,25 +191,22 @@
       validateErrorTime('general', 'errors', errors)
     }
   }
-  // update userlinks Query
-  // als er een link anders is dan een vorige link, moet deze worden gewijzigd in de database
-  // als er een niet meer is, dan moet deze worden verwijdert in de database
-  // als er een nieuwe link is, dan moet deze worden toegevoegd in de database
 
-  // const updateUserLinks = async () => {
-  //   //todo send new userlinks to database
-  //   console.log(newArtist.userLinks)
-  //   for (let userLink of newArtist.userLinks) {
-  //     let newUserLink = {
-  //       userId: artist.uuid,
-  //       linkId: userLink.link.uuid,
-  //       linkAddress: userLink.linkAddress,
-  //     }
+  let newRole: RoleType
+  // Todo make backend queries work with frontend
+  const updateUserRole = async () => {
+    loadingStatus.role = true
 
-  //     console.log(userLink)
-  //   }
-  //   // await updateUserLinksByUserId(artist.uuid, newArtist.userLinks)
-  // }
+    await query(``, ``, { newRole: newRole })
+      .then(result => {
+        console.log(result)
+        loadingStatus.role = false
+      })
+      .catch(error => {
+        console.log(error)
+        loadingStatus.role = false
+      })
+  }
 
   const addUserLink = async () => {
     loadingStatus.addLink = true
@@ -341,11 +342,6 @@
     }
   }
 
-  const checkIfEmailIsAvailable = () => {
-    if (isEmailAvailable(artist, newArtist.email)) {
-    }
-  }
-
   let logoPreview: any = ''
   let logoBlob: any = ''
   const previewLogo = (e: any) => {
@@ -365,9 +361,14 @@
     }
   }
 
+  let roles: RoleType[] = null
+
   onMount(async () => {
     links = await getLinks()
     getArtist()
+    if ($roleStore == 'label-manager') {
+      roles = await getRoles()
+    }
 
     // Admin update
   })
@@ -766,6 +767,43 @@
           </div>
         </form>
       </Box>
+    {:else}
+      <!-- <RoleLayer allowedForRoles={['label-manager']}> -->
+      <Box
+        ><Title>Roles</Title>
+        <form class="grid gap-6">
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div class="grid gap-6 auto-rows-min items-start">
+              <SubTitle>Change role</SubTitle>
+
+              {#if roles.length}
+                <select
+                  bind:value={newRole}
+                  on:change={e => console.log(newRole)}
+                  class="input portal text-red-300"
+                  placeholder="For example: Instagram, facebook, .."
+                >
+                  <option selected disabled>Pick a role</option>
+                  {#each roles as role}
+                    <option value={role.slug}>{role.name}</option>
+                  {/each}</select
+                >
+              {/if}
+              <div class="flex justify-end">
+                <Button
+                  color="bg-teal-700"
+                  loading={loadingStatus.role ? 'Updating role..' : null}
+                  onClick={() => {
+                    updateUserRole()
+                  }}>Update role</Button
+                >
+              </div>
+            </div>
+            <div />
+          </div>
+        </form>
+      </Box>
+      <!-- </RoleLayer> -->
     {/if}
   {/if}
 </div>

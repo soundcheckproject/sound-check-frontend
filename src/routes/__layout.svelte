@@ -8,6 +8,7 @@
   import authStore from '../stores/authStore'
   import Popup from '../components/Popup.svelte'
   import { goto } from '$app/navigation'
+import Footer from '../components/Footer.svelte';
 
   const firebaseConfig = {
     apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
@@ -94,6 +95,7 @@
 </script>
 
 <div class="font-roboto c-app relative ">
+  
   {#if graphQLconnection}
     <slot />
   {:else}

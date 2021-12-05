@@ -14,6 +14,7 @@
   import TrackSkeleton from '../components/skeleton/TrackSkeleton.svelte'
   import { labelStore } from '../stores/stores'
   import { goto } from '$app/navigation'
+import FadeBox from '../components/portal/FadeBox.svelte';
 
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
@@ -136,6 +137,7 @@
     </div>
   </article>
 </Header>
+<FadeBox>
 <div class="py-16">
   <Container>
     <section>
@@ -144,7 +146,7 @@
         <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
           {#if latestReleases.length > 0}
             {#each latestReleases as track}
-              <Track {track} />
+              <Track on:click={()=>{goto('/releases/'+track.uuid)}} {track} />
             {/each}
           {:else}
             {#each Array(3) as i}
@@ -313,7 +315,7 @@
     </section>
   </Container>
 </div>
-
+</FadeBox>
 <Footer />
 
 <style>

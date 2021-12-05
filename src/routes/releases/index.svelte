@@ -65,7 +65,7 @@
       <div class="grid gap-6">
         <Title class="mt-12">Tracks</Title>
         {#if tracks}
-          <div class="grid gap-4 lg:grid-cols-2">
+          <div class="grid gap-4 ">
             {#if tracks.length != 0}
               {#each tracks as track}
                 <TrackRow

@@ -133,11 +133,7 @@
       >
         <div class="flex flex-col  ">
           <SubTitle>Socials</SubTitle>
-          <!-- {#if artist && artist.userLinks}
-            {#each artist.userLinks as userLink}
-              jow
-            {/each}
-          {/if} -->
+     
           <div class="text-sm   mt-6 grid gap-2">
             {#if artist && artist.userLinks && artist.userLinks.length > 0}
               {#each artist.userLinks as userLink}

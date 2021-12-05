@@ -6,7 +6,7 @@ export enum RoleName {
   User = 'user',
 }
 
-export interface Role {
+export interface RoleType {
   slug?: string
   name?: RoleName
 }

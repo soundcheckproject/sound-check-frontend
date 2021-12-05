@@ -1,4 +1,4 @@
-import type { Role } from './Role.type'
+import type { RoleType } from './Role.type'
 import type { TrackType } from './Track.type';
 export interface Link {
   type?: string
@@ -33,7 +33,7 @@ export interface UserType {
   birthdate?: string|Date
   uid?: string
   biography?: string
-  role?: Role
+  role?: RoleType
   userLinks?: UserLink[]
   royaltyPercentage?: number
   // tracks?: ArtistTrack[]

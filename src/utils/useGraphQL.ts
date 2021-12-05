@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase/auth'
+import type { RoleType } from '../types/Role.type'
 import type FeedbackType from '../types/Feedback.type'
 import type { TrackType } from '../types/Track.type'
 import type { Link, UserType, ArtistType } from '../types/User.type'
@@ -440,5 +441,10 @@ export const toggleSigned = async (
     }`,
     { isSigned: isSigned, trackId: trackId },
   )
+  return response
+}
+
+export const getRoles = async (): Promise<RoleType[]> => {
+  const response = await query(``, ``)
   return response
 }

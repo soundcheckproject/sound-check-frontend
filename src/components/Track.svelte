@@ -46,6 +46,7 @@
     class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
+    on:click
   >
     <img
       alt="Trackname"
@@ -71,9 +72,9 @@
             : size == 'lg'
             ? ' h-64 w-64'
             : ''
-        } flex absolute justify-center items-center bg-gray-800 bg-opacity-25 backdrop-filter backdrop-blur-sm rounded-md text-white flex-col`}
+        } flex absolute justify-end p-4 bg-gray-800 bg-opacity-25 backdrop-filter backdrop-blur-lg rounded-md text-white flex-col`}
       >
-        <div class="mb-4 grid grid-flow-col items-center gap-2">
+        <!-- <div class="mb-4 grid grid-flow-col items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -88,7 +89,7 @@
             <circle cx="12" cy="12" r="10" />
             <polygon points="10 8 16 12 10 16 10 8" />
           </svg>
-        </div>
+        </div> -->
         <div class="text-xs">
           {#each track.artistTracks as at, i}
             {i > 0 ? ` & ${at.user.nickName}` : at.user.nickName}
