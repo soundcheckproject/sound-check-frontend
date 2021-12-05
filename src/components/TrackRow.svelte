@@ -83,8 +83,8 @@
         </div>
       {/if}
 
-      <div class="grid grid-flow-col gap-3 items-center">
-        <div class="hidden lg:flex text-xs text-gray-500">
+      <div class="grid grid-flow-col gap-3 items-center ">
+        <div class="hidden lg:flex text-xs text-gray-500 text-right">
           {#if size == 'lg'}Released on {/if}
           {formatDate(new Date(track.prefferdReleaseDate)) ?? ''}
         </div>

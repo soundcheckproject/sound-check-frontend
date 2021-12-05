@@ -23,6 +23,7 @@ module.exports = {
       gridTemplateColumns: {
         'min-auto': 'min-content auto;',
         '1fr-auto': '1fr auto',
+        'auto-1fr': 'auto 1fr',
         '150-auto-fr': '150px auto 1fr',
         '150-fr': '150px 1fr',
         'repeat-min-12rem': 'repeat(auto-fill, minmax(12rem, 1fr))',

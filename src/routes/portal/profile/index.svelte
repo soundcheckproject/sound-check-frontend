@@ -31,6 +31,7 @@
     getArtistByUserId,
     getLinks,
     getUserViaFirebase,
+    query,
     updateUserInfoByUserId,
     updateUserLinksByUserId,
   } from '../../../utils/useGraphQL'
@@ -42,6 +43,7 @@
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
+  import { capitalize } from '../../../utils/capitalize'
 
   // let artist: UserType = $userStore
   let artist: UserType
@@ -64,6 +66,8 @@
     password: false,
     email: false,
     socials: false,
+    addLink: false,
+    removeLink: false,
   }
 
   const updateUser = async () => {
@@ -187,51 +191,119 @@
   // als er een niet meer is, dan moet deze worden verwijdert in de database
   // als er een nieuwe link is, dan moet deze worden toegevoegd in de database
 
-  const updateUserLinks = async () => {
-    //todo send new userlinks to database
-    console.log(newArtist.userLinks)
-    for (let userLink of newArtist.userLinks) {
-      let newUserLink = {
-        userId: artist.uuid,
-        linkId: userLink.link.uuid,
-        linkAddress: userLink.linkAddress,
-      }
+  // const updateUserLinks = async () => {
+  //   //todo send new userlinks to database
+  //   console.log(newArtist.userLinks)
+  //   for (let userLink of newArtist.userLinks) {
+  //     let newUserLink = {
+  //       userId: artist.uuid,
+  //       linkId: userLink.link.uuid,
+  //       linkAddress: userLink.linkAddress,
+  //     }
 
-      console.log(userLink)
-    }
-    // await updateUserLinksByUserId(artist.uuid, newArtist.userLinks)
-  }
+  //     console.log(userLink)
+  //   }
+  //   // await updateUserLinksByUserId(artist.uuid, newArtist.userLinks)
+  // }
 
-  const addUserLink = () => {
+  const addUserLink = async () => {
+    loadingStatus.addLink = true
     if (newUserLink.linkAddress.length > 0) {
       if (
         newArtist.userLinks.filter(
-          link => link.link.type == newUserLink.link.type,
+          link => link.link.uuid == newUserLink.link.uuid,
         ).length == 0
       ) {
-        if (newUserLink.link.type != 'Pick a channel') {
-          newArtist.userLinks = [
-            ...newArtist.userLinks,
+        if (newUserLink.link.uuid != 'Pick a channel') {
+          await query(
+            `createUserLink`,
+            `mutation Mutation($createUserLinkInput: CreateUserLinkInput!) {
+                  createUserLink(createUserLinkInput: $createUserLinkInput) {
+                    linkAddress
+                    userId
+                    linkId
+                  }
+                }`,
             {
-              link: { type: newUserLink.link.type },
-              linkAddress: newUserLink.linkAddress,
+              createUserLinkInput: {
+                userId: $userStore.uuid,
+                linkId: newUserLink.link.uuid,
+                linkAddress: newUserLink.linkAddress,
+              },
             },
-          ]
+          ).then(async () => {
+            loadingStatus.addLink = false
+
+            // newArtist.userLinks = [
+            //   ...newArtist.userLinks,
+            //   {
+            //     link: { type: newUserLink.link.type },
+            //     linkAddress: newUserLink.linkAddress,
+            //   },
+            // ]
+            getArtist()
+            console.log(artist.userLinks)
+          })
         } else {
+          loadingStatus.addLink = false
           validateErrorTime('update', 'linktype', errors)
         }
       } else {
+        loadingStatus.addLink = false
         validateErrorTime('update', 'linkexcist', errors)
       }
     } else {
+      loadingStatus.addLink = false
       validateErrorTime('update', 'linkempty', errors)
     }
   }
 
-  const deleteUserLink = (linkAddress: string) => {
-    newArtist.userLinks = newArtist.userLinks.filter(
-      userLink => userLink.linkAddress != linkAddress,
+  const deleteUserLink = async (linkId: string) => {
+    await query(
+      `removeUserLink`,
+      `mutation RemoveUserLink($linkId: String!, $userId: String!) {
+        removeUserLink(linkId: $linkId, userId: $userId) {
+          linkId
+          userId
+        }
+      }`,
+      {
+        linkId: linkId,
+        userId: artist.uuid,
+      },
     )
+      .then(async () => {
+        // artist = await getArtistByUserId($page.params.userId)
+        // console.log(artist.userLinks)
+        // newArtist.userLinks = newArtist.userLinks.filter(
+        //   userLink => userLink.link.uuid != linkId,
+        // )
+        getArtist()
+      })
+      .catch(error => console.log(error))
+  }
+
+  const updateUserLink = async (linkId: string, linkAddress: string) => {
+    await query(
+      `updateUserLink`,
+      `mutation UpdateUserLink($updateUserLinkInput: UpdateUserLinkInput!, $linkId: String!, $userId: String!) {
+        updateUserLink(updateUserLinkInput: $updateUserLinkInput, linkId: $linkId, userId: $userId) {
+          userId
+          linkId
+        }
+      }`,
+      {
+        updateUserLinkInput: {
+          linkAddress: linkAddress,
+        },
+        linkId: linkId,
+        userId: artist.uuid,
+      },
+    )
+      .then(res => {
+        console.log(res, 'ja')
+      })
+      .catch(error => console.log(error))
   }
 
   const checkNickNameAvailability = () => {}
@@ -297,15 +369,19 @@
     }
   }
 
-  onMount(async () => {
-    links = await getLinks()
-
-    // Admin update
+  const getArtist = async () => {
     if ($page.params.userId) {
       artist = await getArtistByUserId($page.params.userId)
     } else {
-      artist = $userStore
+      artist = await getUserViaFirebase()
     }
+  }
+
+  onMount(async () => {
+    links = await getLinks()
+    getArtist()
+
+    // Admin update
   })
 
   $: {
@@ -540,13 +616,14 @@
               >Pick a channel
 
               <select
-                bind:value={newUserLink.link.type}
+                bind:value={newUserLink.link}
+                on:change={e => console.log(newUserLink.link)}
                 class="input portal text-red-300 capitalize"
                 placeholder="For example: Instagram, facebook, .."
               >
                 <option selected disabled>Pick a channel</option>
                 {#each links as link}
-                  <option value={link.type}>{link.type}</option>
+                  <option value={link}>{link.type}</option>
                 {/each}</select
               >
             </label>
@@ -558,6 +635,7 @@
             <div class="flex justify-end">
               <Button
                 color="bg-gray-400"
+                loading={loadingStatus.addLink ? 'Adding link..' : null}
                 onClick={() => {
                   addUserLink()
                 }}>Add link</Button
@@ -571,20 +649,21 @@
               </div>
             {/if}
             {#each newArtist.userLinks as userLink, i}
-              <div class="relative">
+              <div class="relative group">
                 <Input
-                  title={newArtist.userLinks[i].link.type}
+                  title={capitalize(newArtist.userLinks[i].link.type)}
                   bind:value={newArtist.userLinks[i].linkAddress}
                   placeholder="Link address.."
                 />
                 <div
-                  class="absolute bottom-3 right-3 opacity-50 hover:opacity-75 bg-opacity-0 transition-all hover:bg-opacity-100 bg-gray-300 cursor-pointer p-1 rounded-full"
-                  on:click={() => deleteUserLink(userLink.linkAddress)}
+                  class="group-hover:opacity-50 absolute flex bottom-3 right-3 opacity-0 hover:opacity-75 "
                 >
                   <svg
+                    class="bg-opacity-0 transition-all hover:bg-opacity-100 bg-gray-300 cursor-pointer p-1 rounded-full"
+                    on:click={() => deleteUserLink(userLink.link.uuid)}
                     xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
+                    width="22"
+                    height="22"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -599,12 +678,32 @@
                     <line x1="10" y1="11" x2="10" y2="17" />
                     <line x1="14" y1="11" x2="14" y2="17" />
                   </svg>
+                  <svg
+                    class="bg-opacity-0 transition-all hover:bg-opacity-100 bg-gray-300 cursor-pointer p-1 rounded-full"
+                    on:click={() =>
+                      updateUserLink(
+                        userLink.link.uuid,
+                        newArtist.userLinks[i].linkAddress,
+                      )}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                 </div>
               </div>
             {/each}
+            <p class="text-xs text-gray-400">* Click on the bin to delete and on the check icon to update.</p>
           </div>
         </div>
-        <div class="flex justify-end">
+        <!-- <div class="flex justify-end">
           <Button
             color="bg-teal-700"
             loading={loadingStatus.socials ? 'Updating socials..' : null}
@@ -612,7 +711,7 @@
               updateUserLinks()
             }}>Update socials</Button
           >
-        </div>
+        </div> -->
       </div>
     </Box>
     {#if artist.uuid == $userStore.uuid}

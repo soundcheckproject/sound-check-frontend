@@ -20,15 +20,14 @@
     validateNumbers,
     validateErrors,
     validateError,
-validateErrorTime,
+    validateErrorTime,
   } from './../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import type ErrorType from '../types/Error.type'
   import userStore from '../stores/userStore'
-  import { roleStore } from '../stores/stores'
+  import { labelStore, roleStore } from '../stores/stores'
   import Artist from '../components/Artist.svelte'
   import Input from '../components/Input.svelte'
-
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
@@ -42,7 +41,6 @@ validateErrorTime,
         type,
         errors,
       )
- 
     }
     if (type == 'password') {
       errors = validateErrors(
@@ -68,10 +66,9 @@ validateErrorTime,
         .catch(e => {
           validateErrorTime('connection', 'graphql', errors)
         })
-    }else{
+    } else {
       validateErrorTime('general', 'errors', errors)
     }
-
   }
 
   authStore.subscribe(async ({ isLoggedIn, firebaseControlled }) => {
@@ -95,17 +92,14 @@ validateErrorTime,
       >
         <div class="grid gap-4 py-12 ">
           <SubTitle theme="dark">📝 Create account</SubTitle>
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-          <a href="/register" class="font-semibold">Create account!</a>
+          If you want to submit your music to {$labelStore.name}, then you'll
+          need to create an account. It's free!<br /><br />Our team will review your track as soon as possible
+          and you'll be able to see if your track has been accepted for a release on the label.
+          <a href="/register" class="font-semibold hover:underline">Create account!</a>
         </div>
-    
+
         <div
-          class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full box-content justify-self-end"
+          class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full lg:w-96 box-content justify-self-end"
         >
           <SubTitle theme="dark">⌛️ Login with account</SubTitle>
           <InputError errorInput="general" />
@@ -122,7 +116,7 @@ validateErrorTime,
             }}
             placeholder="Email address.."
           />
-            <!-- on:change={() => {
+          <!-- on:change={() => {
               checkValidation('email')
             }} -->
           <Input
@@ -140,7 +134,6 @@ validateErrorTime,
             placeholder="Enter password.."
             autocomplete="current-password"
           />
-
 
           <div class="flex justify-between items-center">
             <label

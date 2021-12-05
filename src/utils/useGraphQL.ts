@@ -74,6 +74,7 @@ export const getLinks = async (): Promise<Link[]> => {
     `getLinks`,
     `query GetLinks {
       getLinks {
+        uuid
         type
       }
     }`,
@@ -117,6 +118,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
           name
         }
         userLinks {
+
           linkAddress
           link {
             type

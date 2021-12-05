@@ -4,7 +4,7 @@
   import Container from '../../components/Container.svelte'
   import Header from '../../components/Header.svelte'
   import { getTracksByArtistId, query } from '../../utils/useGraphQL'
-  import type { UserType } from '../../types/User.type'
+  import type { UserLink, UserType } from '../../types/User.type'
   import { onMount } from 'svelte'
   import type { TrackType } from '../../types/Track.type'
   import TrackPlayer from '../../components/TrackPlayer.svelte'
@@ -13,6 +13,8 @@
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Footer from '../../components/Footer.svelte'
   import Skeleton from '../../components/Skeleton.svelte'
+  import SubTitle from '../../components/SubTitle.svelte'
+  import LinkIcon from '../../components/LinkIcon.svelte'
 
   let artist: UserType
 
@@ -68,15 +70,21 @@
             role {
               name
             }
+            userLinks {
+              link {
+                type
+              }
+              linkAddress
+            }
      
           }
         }`,
       { userId: $page.params.artistId },
     )
 
-    console.log({ artistData })
     if (artistData) {
       artist = artistData
+
       const trackData = await query(
         `getTracksReleasedByUserId`,
         `query Query($userId: String!) {
@@ -118,29 +126,58 @@
       {#if artist}
         <ProfileBanner container {artist} logo={artist.logo} />
       {/if}
-      <div class="grid gap-6">
-        <Title class="mt-12">Tracks</Title>
-        {#if tracks}
-          <div class="grid gap-4 lg:grid-cols-2">
-            {#if tracks.length != 0}
-              {#each tracks as track}
-                <TrackRow
-                  actions={false}
-                  background
-                  artists
-                  href="/releases/{track.uuid}"
-                  size="lg"
-                  {track}
-                />
-                <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->
-              {/each}
-            {:else}
-              <div class="col-span-2">
-                <Skeleton loading={true}>Loading tracks..</Skeleton>
+      <div
+        class="grid gap-16 lg:grid-cols-2"
+        style="grid-template-columns:auto 1fr"
+      >
+        <div class="grid gap-6 items-start">
+          <SubTitle class="mt-12">Social media</SubTitle>
+          <!-- {#if artist && artist.userLinks}
+            {#each artist.userLinks as userLink}
+              jow
+            {/each}
+          {/if} -->
+          {#if artist && artist.userLinks && artist.userLinks.length > 0}
+            {#each artist.userLinks as userLink}
+              <div class="flex items-center">
+                <LinkIcon className="mr-2" type={userLink.link.type} />
+                <a
+                  href={'https://' + userLink.linkAddress}
+                  target="_blank"
+                  class="hover:underline grid grid-flow-col gap-2 items-center "
+                >
+                  {userLink.link.type}
+                </a>
               </div>
-            {/if}
-          </div>
-        {/if}
+            {/each}
+          {:else}
+            <p class="text-sm ">No links found 😥</p>
+          {/if}
+        </div>
+        <div class="grid gap-6 items-start">
+          <SubTitle class="mt-12">Tracks</SubTitle>
+          {#if tracks}
+            <div class="grid gap-4 ">
+              {#if tracks.length != 0}
+                {#each tracks as track}
+                  <TrackRow
+                    actions={false}
+                    background
+                    artists
+                    href="/releases/{track.uuid}"
+                    size="lg"
+                    {track}
+                  />
+                  <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->
+                {/each}
+              {:else}
+                <div class="col-span-2">
+                  <Skeleton loading={true}>Loading tracks..</Skeleton>
+                </div>
+              {/if}
+            </div>
+          {/if}
+        </div>
       </div>
     </Container>
   </FadeBox>

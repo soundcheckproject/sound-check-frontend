@@ -92,11 +92,13 @@
         </div>
       </div>
       <div class="flex justify-between items-center">
+        {#if artist.role}
         <div
           class="mshadow-md text-sm rounded-full flex h-8 text-center bg-opacity-10 bg-white  px-4 justify-center items-center"
         >
           {artist.role.name}
         </div>
+        {/if}
 
         <p class="text-sm capitalize opacity-50 text-right">
           {artist.country}, {artist.city}

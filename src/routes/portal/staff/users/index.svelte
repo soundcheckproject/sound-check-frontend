@@ -78,7 +78,8 @@
       {#each filteredUsers as user}
         <div
           on:click={() => goto(`/portal/staff/users/${user.uuid}`)}
-          class="flex space-x-4 "
+          class="grid grid-flow-col justify-start gap-4 "
+          style="grid-template-columns:auto 1fr"
         >
           <div
             class="h-24 w-24 bg-gray-100 rounded-md flex justify-center items-center"
@@ -87,7 +88,7 @@
               <img
                 src={user.logo}
                 alt={user.nickName}
-                class="bg-gray-100 w-full h-full rounded-md  object-cover "
+                class="bg-gray-100 h-full w-full rounded-md  object-cover "
               />
             {:else}
               <svg
@@ -108,7 +109,7 @@
               </svg>{/if}
           </div>
           <div
-            class="bg-gray-100 border-2 border-gray-100 hover:border-gray-300 transition-colors w-full grid gap-6 grid-flow-col items-center px-8 rounded-md cursor-pointer grid-template-columns-150-fr lg:grid-template-columns-150-auto-fr"
+            class=" bg-gray-100 border-2 border-gray-100 hover:border-gray-300 transition-colors w-full grid gap-6 grid-flow-col items-center px-8 rounded-md cursor-pointer grid-template-columns-150-fr lg:grid-template-columns-150-auto-fr"
           >
             <div>
               <p class="font-semibold">{user.nickName}</p>
