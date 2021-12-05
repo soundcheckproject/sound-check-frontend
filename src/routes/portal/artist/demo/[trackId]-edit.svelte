@@ -40,11 +40,14 @@
   import InputError from '../../../../components/InputError.svelte'
   import { page } from '$app/stores'
   import { roleStore } from '../../../../stores/stores'
+  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
 
   let artistSearch = { nickName: '', hover: false }
 
   let track: TrackType
   let newTrack: TrackType
+
+  let prefferedReleaseDateString: string
 
   let artistsArray: { [key: string]: any }[] = []
 
@@ -104,57 +107,34 @@
   }
 
   const postTrack = async () => {
+    loadingStatus.track = true
     if ($validationStore.length == 0) {
-      // newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
-      let updatedTrack: TrackType = {}
-
-      const oldTrack = await getTrackById($page.params.trackId)
-
-      for (const objectKey of [
-        'title',
-        'description',
-        'lyrics',
-        'genreId',
-        'prefferdReleaseDate',
-      ]) {
-        if (newTrack[objectKey] != oldTrack[objectKey]) {
-          updatedTrack[objectKey] = newTrack[objectKey]
-        }
+      const updatedTrack: TrackType = {
+        prefferdReleaseDate: new Date(prefferedReleaseDateString),
+        title: newTrack.title,
+        description: newTrack.description,
+        genreId: newTrack.genreId,
       }
 
-      // Todo: update track artists
-      // updatedTrack.artistIds = []
-      // for (const artist of artistsArray) {
-      //   updatedTrack.artistIds = [...updatedTrack.artistIds, artist.user.uuid]
-      // }
-      // console.log(updatedTrack)
+      await updateTrack(track.uuid, updatedTrack)
+        .then(err => {
+          loadingStatus.track = false
+          errors = validateError('connection', 'graphql', true, errors)
+          if (err) {
+            console.log(err)
+            //   if (err[0].extensions.response.statusCode == 403) {
+            //     errors = validateError('update', '403', false, errors)
+            //   }
+            // } else {
+            //   errors = validateError('update', '403', true, errors)
 
-      if (Object.keys(updatedTrack).length > 0) {
-        await updateTrack(track.uuid, updatedTrack)
-          .then(err => {
-            errors = validateError('connection', 'graphql', true, errors)
-            if (err) {
-              console.log(err)
-              if (err[0].extensions.response.statusCode == 403) {
-                errors = validateError('update', '403', false, errors)
-              }
-            } else {
-              errors = validateError('update', '403', true, errors)
-
-              goto($page.path)
-            }
-          })
-          .catch(e => {
-            // errors = validateError('connection', 'graphql', false, errors)
-            validateErrorTime('connection', 'graphql', errors)
-          })
-      } else {
-        // errors = validateError('general', 'change', false, errors)
-        // setTimeout(() => {
-        //   errors = validateError('general', 'change', true, errors)
-        // }, 3000)
-        validateErrorTime('general', 'change', errors)
-      }
+            //   goto($page.path)
+          }
+        })
+        .catch(e => {
+          // errors = validateError('connection', 'graphql', false, errors)
+          validateErrorTime('connection', 'graphql', errors)
+        })
     }
   }
 
@@ -183,7 +163,11 @@
       //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
       //     .split('.')
       //     .pop()
-      await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.artwork.uuid)
+      await uploadArtwork(
+        artworkBlob[0],
+        artworkBlob[0].name,
+        track.artwork.uuid,
+      )
         .then(res => {
           console.log(res)
           loadingStatus.artwork = false
@@ -221,6 +205,8 @@
         .catch(error => {
           loadingStatus.track = false
           validateErrorTime('track', 'upload', errors)
+        }).finally(()=>{
+          loadingStatus.trackfile = false;
         })
     } else {
       loadingStatus.track = false
@@ -247,8 +233,10 @@
     if ($page.params.trackId) {
       track = await getTrackById($page.params.trackId)
 
+      prefferedReleaseDateString = formatDateToDDMMJJJJ(
+        new Date(track.prefferdReleaseDate),
+      )
       artistsArray = track.artistTracks
-      console.log(artistsArray)
       artwork = track.artwork
       newArtwork = artwork
       newTrack = track
@@ -261,7 +249,6 @@
     // console.log(track)
   }
 </script>
-
 
 <div class="grid gap-8">
   {#if newTrack}
@@ -310,7 +297,7 @@
 
             <Input
               errorInput="date"
-              bind:value={newTrack.prefferdReleaseDate}
+              bind:value={prefferedReleaseDateString}
               type="date"
               title="Preferred release date"
               placeholder="For example: August 8th, 2021"
@@ -470,16 +457,16 @@
 
         <div class="flex justify-end space-x-2">
           <Button
-          color="bg-gray-600"
-          onClick={() => {
-            goto($page.path)
-          }}>Cancel changes</Button
-        >
+            color="bg-gray-600"
+            onClick={() => {
+              goto($page.path)
+            }}>Cancel changes</Button
+          >
           <Button
             color="bg-teal-700"
             onClick={postTrack}
             size="sm"
-            loading={loadingStatus.track ? loadingStatus.track : null}
+            loading={loadingStatus.track ? "Updating track.." : null}
             >Update track</Button
           >
         </div>
@@ -541,7 +528,7 @@
               <Button
                 color="bg-teal-700"
                 size="sm"
-                loading={loadingStatus.artwork ? "Updating artwork.." : null}
+                loading={loadingStatus.artwork ? 'Updating artwork..' : null}
                 onClick={() => {
                   updateArtwork()
                 }}>Update artwork</Button
@@ -614,9 +601,7 @@
               <Button
                 color="bg-teal-700"
                 size="sm"
-                loading={loadingStatus.trackfile
-                  ? "Updating track.."
-                  : null}
+                loading={loadingStatus.trackfile ? 'Updating audio..' : null}
                 onClick={() => {
                   updateTrackFile()
                 }}>Update audio</Button

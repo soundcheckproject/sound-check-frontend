@@ -15,3 +15,15 @@ export const formatTimeForPlayer = (seconds: number): string => {
     .filter(a => a)
     .join(':')
 }
+
+export const formatDateToDDMMJJJJ = (date: Date): string => {
+  let month = date.getMonth().toString(),
+    day = date.getDate().toString(),
+    // eslint-disable-next-line prefer-const
+    year = date.getFullYear().toString()
+
+  if (month.length < 2) month = '0' + month
+  if (day.length < 2) day = '0' + day
+
+  return [year, month, day].join('-')
+}

@@ -101,8 +101,9 @@
 
             <p class="text-sm">{track.description}</p>
             <p class="mt-4 font-semibold  ">Lyrics</p>
-
-            <p class="text-sm">{track.lyrics}</p>
+            <p class="text-sm">
+              {track.lyrics ? track.lyrics : 'No lyrics for this track yet.'}
+            </p>
           </div>
         </div>
         <div class="grid gap-4">
