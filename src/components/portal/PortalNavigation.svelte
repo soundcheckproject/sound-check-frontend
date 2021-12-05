@@ -53,7 +53,7 @@
               out:fade|local
               class="absolute left-0 right-0 text-center"
             >
-            {#if $labelStore}{$labelStore.shortName}{:else}SC{/if}
+              {#if $labelStore}{$labelStore.shortName}{:else}SC{/if}
             </div>{/if}
         </a>
       </h1>
@@ -87,51 +87,49 @@
           $menuState ? ' ml-4' : ''
         }`}
       >
-        <NavLink href="/portal/artist" name="Overview"
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-        </NavLink>
+        <RoleLayer allowedForRoles={['label-artist', 'user']}>
+          <NavLink href="/portal/artist" name="Overview"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+          </NavLink>
 
-        <NavLink
-          href=""
-          name="Music"
-          routes={[
-            { path: '/portal/artist/demo/submit', pathName: 'Submit' },
-            { path: '/portal/artist/demo', pathName: 'All tracks' },
-            { path: '/portal/artist/demo', pathName: 'Pending' },
-            { path: '/portal/artist/demo', pathName: 'Approved' },
-            { path: '/portal/artist/demo', pathName: 'Denied' },
-          ]}
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 18V5l12-2v13" />
-            <circle cx="6" cy="18" r="3" />
-            <circle cx="18" cy="16" r="3" />
-          </svg>
-        </NavLink>
-
-        <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
+          <NavLink
+            href="/portal/artist/demo"
+            name="Music"
+            routes={[
+              { path: '/portal/artist/demo/submit', pathName: 'Submit' },
+              { path: '/portal/artist/demo', pathName: 'All tracks' },
+            ]}
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          </NavLink>
+        </RoleLayer>
+        <!-- <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
           <NavLink href="" name="Royalties" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -149,8 +147,8 @@
               <path d="M16 12a2 2 0 00-2 2c0 1.1.9 2 2 2h4v-4h-4z" />
             </svg>
           </NavLink>
-        </RoleLayer>
-        <NavLink href="" name="Notifications" class="">
+        </RoleLayer> -->
+        <!-- <NavLink href="" name="Notifications" class="">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -165,9 +163,9 @@
             <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 01-3.46 0" />
           </svg>
-        </NavLink>
+        </NavLink> -->
         <RoleLayer allowedForRoles={['label-ar', 'label-manager']}>
-          <NavLink href="/portal/staff" name="Todo" class="">
+          <NavLink href="/portal/staff" name="Overview" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -185,6 +183,31 @@
               <polyline points="3 6 4 7 6 5" />
               <polyline points="3 12 4 13 6 11" />
               <polyline points="3 18 4 19 6 17" />
+            </svg>
+          </NavLink>
+
+          <!-- routes={[
+            { path: '/portal/staff/demo', pathName: 'New ' },
+            { path: '/portal/staff/demo', pathName: 'Pending ' },
+            { path: '/portal/staff/demo', pathName: 'Approved ' },
+            { path: '/portal/staff/demo', pathName: 'Denied' },
+          ]} -->
+          <NavLink href="/portal/staff/demo" name="Demos"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 18v-6a9 9 0 0118 0v6" />
+              <path
+                d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"
+              />
             </svg>
           </NavLink>
           <NavLink href="/portal/staff/users" name="Artists" class="">
@@ -208,34 +231,6 @@
               <path d="M17 18.5c-1.4-1-3.1-1.5-5-1.5s-3.6.6-5 1.5" />
             </svg>
           </NavLink>
-
-          <NavLink
-            href=""
-            name="Demos"
-            routes={[
-              { path: '/portal/staff/demo', pathName: 'New ' },
-              { path: '/portal/staff/demo', pathName: 'Pending ' },
-              { path: '/portal/staff/demo', pathName: 'Approved ' },
-              { path: '/portal/staff/demo', pathName: 'Denied' },
-            ]}
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M3 18v-6a9 9 0 0118 0v6" />
-              <path
-                d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"
-              />
-            </svg>
-          </NavLink>
-
           <!-- <SubLink /> -->
           <NavLink href="/portal/staff/tracks" name="Tracks" class="">
             <svg

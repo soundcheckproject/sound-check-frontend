@@ -5,7 +5,12 @@
   import { fade, slide } from 'svelte/transition'
 
   import type { UserType } from '../types/User.type'
-  import { toggleSigned, getAllTracks, updateTrack } from '../utils/useGraphQL'
+  import {
+    toggleSigned,
+    getAllTracks,
+    updateTrack,
+    query,
+  } from '../utils/useGraphQL'
   import demoTracksStore from '../stores/demoTracksStore'
   import {
     formatDate,
@@ -32,15 +37,15 @@
 
   let artistTracks: { user: UserType }[] = track.artistTracks ?? []
 
-  const blobToBase64 = (blob: Blob) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(blob)
-    // let readerFile: string | ArrayBuffer
+  // const blobToBase64 = (blob: Blob) => {
+  //   const reader = new FileReader()
+  //   reader.readAsDataURL(blob)
+  //   // let readerFile: string | ArrayBuffer
 
-    reader.onloadend = () => {
-      audioFile = reader.result
-    }
-  }
+  //   reader.onloadend = () => {
+  //     audioFile = reader.result
+  //   }
+  // }
 
   let loadTrack = false
   let trackPlayable = false
@@ -69,20 +74,30 @@
   })
 
   const loadTrackBlob = async () => {
-    blobToBase64(await getTrackFileFromTrackId(track.uuid))
+    // blobToBase64(await getTrackFileFromTrackId(track.uuid))
+    const encodedFile = await query(
+      'getTrackById',
+      `query Query($trackId: String!) {
+          getTrackById(trackId: $trackId) {
+            encodedFile
+          }
+        }`,
+      { trackId: track.uuid },
+    )
+    track.encodedFile = encodedFile.encodedFile
   }
 
   $: {
-    if (loadTrack) loadTrackBlob()
-    if (audioFile) {
-      loadTrackInfo(audio)
-    }
+    if (loadTrack)
+      if (track.encodedFile) {
+        loadTrackInfo(audio)
+      }
   }
 </script>
 
-{#if audioFile}
+{#if track.encodedFile}
   <audio hidden bind:this={audio} preload="auto" controls>
-    <source src={audioFile} type="audio/mpeg" />
+    <source src={track.encodedFile} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 {/if}
@@ -90,10 +105,13 @@
   class="relative flex space-x-4 h-32 "
   in:slide|local={{ duration: 200, delay: 200 }}
   out:slide|local={{ duration: 200 }}
-  on:mouseenter={() => (loadTrack = true)}
+  on:mouseenter={() => {
+    loadTrackBlob()
+    loadTrack = true
+  }}
 >
   <img
-    class="h-32 w-32 bg-gray-100 rounded-sm"
+    class="h-32 w-32 bg-gray-100 rounded-sm cursor-pointer hover:opacity-75 transition-opacity"
     src={track.artwork.resource}
     alt="artwork"
     on:click={() => goto('demo/' + track.uuid)}
@@ -249,9 +267,7 @@
               class="w-28 text-xs text-right font-medium hover:underline"
               >Learn more..</a
             >
-          {:else}<p class="text-xs">
-              Track is not playable. Audio cannot be found on the server.
-            </p>
+          {:else}<p class="text-xs">Audio is not loaded yet.</p>
           {/if}
         </div>
       </div>
