@@ -121,6 +121,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
 
           linkAddress
           link {
+            uuid
             type
           }
         }

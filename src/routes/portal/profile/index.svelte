@@ -29,6 +29,7 @@
   import { onMount } from 'svelte'
   import {
     getArtistByUserId,
+    getArtists,
     getLinks,
     getUserViaFirebase,
     query,
@@ -226,23 +227,15 @@
                 }`,
             {
               createUserLinkInput: {
-                userId: $userStore.uuid,
+                userId: artist.uuid,
                 linkId: newUserLink.link.uuid,
                 linkAddress: newUserLink.linkAddress,
               },
             },
-          ).then(async () => {
-            loadingStatus.addLink = false
-
-            // newArtist.userLinks = [
-            //   ...newArtist.userLinks,
-            //   {
-            //     link: { type: newUserLink.link.type },
-            //     linkAddress: newUserLink.linkAddress,
-            //   },
-            // ]
-            getArtist()
-            console.log(artist.userLinks)
+          ).then(() => {
+            getArtist().then(() => {
+              loadingStatus.addLink = false
+            })
           })
         } else {
           loadingStatus.addLink = false
@@ -272,12 +265,7 @@
         userId: artist.uuid,
       },
     )
-      .then(async () => {
-        // artist = await getArtistByUserId($page.params.userId)
-        // console.log(artist.userLinks)
-        // newArtist.userLinks = newArtist.userLinks.filter(
-        //   userLink => userLink.link.uuid != linkId,
-        // )
+      .then(() => {
         getArtist()
       })
       .catch(error => console.log(error))
@@ -300,8 +288,8 @@
         userId: artist.uuid,
       },
     )
-      .then(res => {
-        console.log(res, 'ja')
+      .then(() => {
+        getArtists()
       })
       .catch(error => console.log(error))
   }
@@ -700,7 +688,9 @@
                 </div>
               </div>
             {/each}
-            <p class="text-xs text-gray-400">* Click on the bin to delete and on the check icon to update.</p>
+            <p class="text-xs text-gray-400">
+              * Click on the bin to delete and on the check icon to update.
+            </p>
           </div>
         </div>
         <!-- <div class="flex justify-end">
