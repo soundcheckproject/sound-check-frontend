@@ -40,7 +40,7 @@
   import InputError from '../../../../components/InputError.svelte'
   import { page } from '$app/stores'
   import { roleStore } from '../../../../stores/stores'
-import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
+  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -107,6 +107,7 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
   }
 
   const postTrack = async () => {
+    loadingStatus.track = true
     if ($validationStore.length == 0) {
       const updatedTrack: TrackType = {
         prefferdReleaseDate: new Date(prefferedReleaseDateString),
@@ -117,16 +118,17 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
 
       await updateTrack(track.uuid, updatedTrack)
         .then(err => {
+          loadingStatus.track = false
           errors = validateError('connection', 'graphql', true, errors)
           if (err) {
             console.log(err)
-          //   if (err[0].extensions.response.statusCode == 403) {
-          //     errors = validateError('update', '403', false, errors)
-          //   }
-          // } else {
-          //   errors = validateError('update', '403', true, errors)
+            //   if (err[0].extensions.response.statusCode == 403) {
+            //     errors = validateError('update', '403', false, errors)
+            //   }
+            // } else {
+            //   errors = validateError('update', '403', true, errors)
 
-          //   goto($page.path)
+            //   goto($page.path)
           }
         })
         .catch(e => {
@@ -203,6 +205,8 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
         .catch(error => {
           loadingStatus.track = false
           validateErrorTime('track', 'upload', errors)
+        }).finally(()=>{
+          loadingStatus.trackfile = false;
         })
     } else {
       loadingStatus.track = false
@@ -229,7 +233,9 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
     if ($page.params.trackId) {
       track = await getTrackById($page.params.trackId)
 
-      prefferedReleaseDateString = formatDateToDDMMJJJJ(new Date(track.prefferdReleaseDate))
+      prefferedReleaseDateString = formatDateToDDMMJJJJ(
+        new Date(track.prefferdReleaseDate),
+      )
       artistsArray = track.artistTracks
       artwork = track.artwork
       newArtwork = artwork
@@ -460,7 +466,7 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
             color="bg-teal-700"
             onClick={postTrack}
             size="sm"
-            loading={loadingStatus.track ? loadingStatus.track : null}
+            loading={loadingStatus.track ? "Updating track.." : null}
             >Update track</Button
           >
         </div>
@@ -595,7 +601,7 @@ import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
               <Button
                 color="bg-teal-700"
                 size="sm"
-                loading={loadingStatus.trackfile ? 'Updating track..' : null}
+                loading={loadingStatus.trackfile ? 'Updating audio..' : null}
                 onClick={() => {
                   updateTrackFile()
                 }}>Update audio</Button
