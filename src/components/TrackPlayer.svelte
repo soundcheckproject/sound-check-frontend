@@ -417,53 +417,63 @@
               />
               <Button onClick={() => addComment()} type="glass">Post</Button>
             </div>
-            {#each sortByDate(feedbacks, true) as feedback}
-              <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm mx-8">
-                <div class="text-sm py-3 flex items-center w-full relative ">
-                  <img
-                    alt="Logo of {feedback.user.nickName}"
-                    src={feedback.user.logo}
-                    class="object-cover h-8 w-8 rounded-full -ml-4 mshadow-md"
-                  />
-                  <p class="font-medium pl-2 pr-1">{feedback.user.nickName}</p>
-                  <p class="opacity-50">
-                    wrote on {formatDateTime(new Date(feedback.date))}
-                  </p>
-                  <!-- Todo: make weird cursor pointer smooth -->
-                  <div
-                    on:click={() => changeTrackTime(feedback.timeStampSong)}
-                    class="group cursor-pointer"
-                  >
+            {#if feedbacks.length == 0}
+              <div
+                class="bg-opacity-10 rounded-md bg-gray-50  mx-8 text-sm p-5 flex items-center"
+              >
+                This track doesn't have any comments yet.
+              </div>
+            {:else}
+              {#each sortByDate(feedbacks, true) as feedback}
+                <div class="bg-opacity-10 rounded-md bg-gray-50 text-sm mx-8">
+                  <div class="text-sm py-3 flex items-center w-full relative ">
+                    <img
+                      alt="Logo of {feedback.user.nickName}"
+                      src={feedback.user.logo}
+                      class="object-cover h-8 w-8 rounded-full -ml-4 mshadow-md"
+                    />
+                    <p class="font-medium pl-2 pr-1">
+                      {feedback.user.nickName}
+                    </p>
+                    <p class="opacity-50">
+                      wrote on {formatDateTime(new Date(feedback.date))}
+                    </p>
+                    <!-- Todo: make weird cursor pointer smooth -->
                     <div
-                      class="backdrop-blur-xl opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
+                      on:click={() => changeTrackTime(feedback.timeStampSong)}
+                      class="group cursor-pointer"
                     >
-                      {formatTimeForPlayer(feedback.timeStampSong)}
-                    </div>
-                    <div
-                      class="backdrop-blur-xl opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                      <div
+                        class="backdrop-blur-xl opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
                       >
-                        <circle cx="12" cy="12" r="10" />
-                        <polygon points="10 8 16 12 10 16 10 8" />
-                      </svg>
+                        {formatTimeForPlayer(feedback.timeStampSong)}
+                      </div>
+                      <div
+                        class="backdrop-blur-xl opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <polygon points="10 8 16 12 10 16 10 8" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
+                  <p class="pl-6 pb-4 opacity-80 -mt-2">
+                    {feedback.description}
+                  </p>
                 </div>
-                <p class="pl-6 pb-4 opacity-80 -mt-2">
-                  {feedback.description}
-                </p>
-              </div>
-            {/each}
+              {/each}
+            {/if}
           </div>
         {/if}
       </div>

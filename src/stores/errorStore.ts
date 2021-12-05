@@ -203,6 +203,30 @@ const errorStore = readable<{
       message: 'Royalty total should be equal to 100%',
     },
   ],
+  artwork: [
+    {
+      display: false,
+      errorName: 'artwork_upload',
+      message: 'Error while uploading artwork',
+    },
+    {
+      display: false,
+      errorName: 'artwork_empty',
+      message: 'Please upload a track first',
+    },
+  ],
+  track: [
+    {
+      display: false,
+      errorName: 'track_empty',
+      message: 'Please upload a track first',
+    },
+    {
+      display: false,
+      errorName: 'track_upload',
+      message: 'Error while uploading artwork',
+    },
+  ],
 })
 
 export default {

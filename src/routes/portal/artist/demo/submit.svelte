@@ -30,6 +30,7 @@
     validateEmpty,
     validateError,
     validateErrors,
+    validateErrorTime,
     validateLength,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
@@ -58,6 +59,10 @@
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
     newTrack.artistIds = newTrack.artistIds.filter(id => id != uuid)
+  }
+
+  let loadingStatus: { [key: string]: boolean } = {
+    submit: false,
   }
 
   let artworkBlob: any = '',
@@ -101,6 +106,7 @@
   }
 
   const postTrack = async () => {
+    loadingStatus.submit = true
     newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
     console.log(newTrack)
     if ($validationStore.length == 0) {
@@ -126,18 +132,28 @@
               // Upload artwork to blob
               await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
                 .then(res => {
+                  loadingStatus.submit = false
                   console.log(res)
-                  // goto('/')
+
                   goto('/portal/artist/demo/' + resCreateTrack.uuid)
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                  loadingStatus.submit = false
+                  validateErrorTime('artwork', 'upload', errors)
+                })
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+              loadingStatus.submit = false
+              validateErrorTime('track', 'upload', errors)
+            })
         })
         .catch(e => {
-          errors = validateError('connection', 'graphql', e, errors)
-          console.log(e)
+          loadingStatus.submit = false
+          validateErrorTime('connection', 'graphql', errors)
         })
+    } else {
+      loadingStatus.submit = false
+      validateErrorTime('general', 'errors', errors)
     }
   }
 
@@ -182,8 +198,6 @@
 
   $: {
     validationStore.set(errors)
-    // validationStore.set(errors)
-    // console.log($validationStore)
   }
 </script>
 
@@ -654,8 +668,11 @@
             team.
           </p>
           <div class="flex justify-end">
-            <Button color="bg-teal-700" onClick={postTrack} size="md"
-              >Submit track</Button
+            <Button
+              loading={loadingStatus.submit ? loadingStatus.submit : null}
+              color="bg-teal-700"
+              onClick={postTrack}
+              size="md">Submit track</Button
             >
           </div>
         </FlyBox>

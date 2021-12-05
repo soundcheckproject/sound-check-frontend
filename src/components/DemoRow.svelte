@@ -35,12 +35,14 @@
   const blobToBase64 = (blob: Blob) => {
     const reader = new FileReader()
     reader.readAsDataURL(blob)
-    let readerFile: string | ArrayBuffer
+    // let readerFile: string | ArrayBuffer
 
     reader.onloadend = () => {
       audioFile = reader.result
     }
   }
+
+  let loadTrack = false
   let trackPlayable = false
   const loadTrackInfo = (media: HTMLAudioElement) => {
     if (media) {
@@ -62,12 +64,16 @@
   }
 
   onMount(async () => {
-    if (track.uuid) {
-      blobToBase64(await getTrackFileFromTrackId(track.uuid))
+    if (track.uuid && loadTrack) {
     }
   })
 
+  const loadTrackBlob = async () => {
+    blobToBase64(await getTrackFileFromTrackId(track.uuid))
+  }
+
   $: {
+    if (loadTrack) loadTrackBlob()
     if (audioFile) {
       loadTrackInfo(audio)
     }
@@ -81,9 +87,10 @@
   </audio>
 {/if}
 <div
-  class={`relative flex space-x-4 h-32 `}
+  class="relative flex space-x-4 h-32 "
   in:slide|local={{ duration: 200, delay: 200 }}
   out:slide|local={{ duration: 200 }}
+  on:mouseenter={() => (loadTrack = true)}
 >
   <img
     class="h-32 w-32 bg-gray-100 rounded-sm"
@@ -101,13 +108,12 @@
             <p class="font-medium text-lg text-gray-700 ">
               {track.title ?? 'No title'}
             </p>
-            <div class="flex space-x-3">
+            <div class="flex space-x-2">
               {#if artistTracks.length > 0 && artistTracks}
                 {#each artistTracks as artist}
-                  {artist.user.nickName}
+                  <div>{artist.user.nickName}</div>
                 {/each}
               {/if}
-              <!-- {console.log(track.artistTracks)} -->
             </div>
             <p class="mt-2 text-gray-400 text-xs">
               Preffered release date: {formatDate(
@@ -116,41 +122,44 @@
             </p>
           </div>
 
-          <div class="justify-self-end flex flex-col justify-between items-end">
-            <svg
-              on:click={() => denyTrack(track)}
-              class="text-red-700 m-2"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
-
-            <svg
-              on:click={() => signTrack(track)}
-              class="text-green-700 m-2"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
+          <div class="justify-self-end flex flex-col justify-around items-end">
+            {#if track.isSigned != false}
+              <svg
+                on:click={() => denyTrack(track)}
+                class="text-red-700 mx-2"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            {/if}
+            {#if track.isSigned != true}
+              <svg
+                on:click={() => signTrack(track)}
+                class="text-green-700 mx-2"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            {/if}
           </div>
         </div>
 

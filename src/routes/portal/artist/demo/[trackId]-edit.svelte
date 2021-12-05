@@ -24,7 +24,7 @@
 
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
-  import { uploadTrack } from '../../../../utils/useRest'
+  import { uploadArtwork, uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
   import userStore from '../../../../stores/userStore'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
@@ -33,6 +33,7 @@
     validateEmpty,
     validateError,
     validateErrors,
+    validateErrorTime,
     validateLength,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
@@ -50,6 +51,12 @@
   let artwork: ArtworkType
   let newArtwork: ArtworkType
 
+  let loadingStatus: { [key: string]: boolean } = {
+    artwork: false,
+    trackfile: false,
+    track: false,
+  }
+
   const removeArtist = (uuid: string) => {
     let newArtistsArray = []
     for (const artist of artistsArray) {
@@ -62,10 +69,11 @@
 
   let artworkBlob: any = '',
     artworkPreview: any = '',
-    trackPreview: any = ''
+    trackPreview: any = '',
+    artworkClick: HTMLInputElement
 
   let trackDataClick: HTMLInputElement
-  let trackData: any = { info: {}, blob: {} }
+  let trackData: any = { info: {}, blob: null }
 
   let royaltySplitotal: number = 0
   const calcRoyaltySplitotal = () => {
@@ -73,8 +81,8 @@
     for (let artist of artistsArray) {
       royaltySplitotal += artist.royaltySplit
     }
-    if(royaltySplitotal > 100) {
-     errors = validateError('artist', 'royalty_high', false, errors)
+    if (royaltySplitotal > 100) {
+      errors = validateError('artist', 'royalty_high', false, errors)
     }
   }
 
@@ -113,6 +121,7 @@
           updatedTrack[objectKey] = newTrack[objectKey]
         }
       }
+
       // Todo: update track artists
       // updatedTrack.artistIds = []
       // for (const artist of artistsArray) {
@@ -134,43 +143,18 @@
 
               goto($page.path)
             }
-
           })
           .catch(e => {
             // errors = validateError('connection', 'graphql', false, errors)
+            validateErrorTime('connection', 'graphql', errors)
           })
       } else {
-        errors = validateError('general', 'change', false, errors)
-        setTimeout(() => {
-          errors = validateError('general', 'change', true, errors)
-        }, 3000)
+        // errors = validateError('general', 'change', false, errors)
+        // setTimeout(() => {
+        //   errors = validateError('general', 'change', true, errors)
+        // }, 3000)
+        validateErrorTime('general', 'change', errors)
       }
-
-      // await updateTrack(track.uuid, newTrack)
-      //   .then(async updatedTrack => {
-      //     // console.log(resCreateTrack)
-      //     // const uploadName = trackData.blob[0].name
-      //     // const fileName =
-      //     //   newTrack.title
-      //     //     .replace(/ /g, '')
-      //     //     .replace(/[^a-zA-Z ]/g, '')
-      //     //     .toLowerCase() +
-      //     //   '.' +
-      //     //   uploadName
-      //     //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-      //     //     .split('.')
-      //     //     .pop()
-      //     // await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
-      //     //   .then(res => {
-      //     //     console.log(res)
-      //     //     goto('/portal/artist/demo/' + resCreateTrack.uuid)
-      //     //   })
-      //     //   .catch(error => console.log(error))
-      //   })
-      //   .catch(e => {
-      //     errors = validateError('connection', 'graphql', e, errors)
-      //     console.log(e)
-      //   })
     }
   }
 
@@ -182,6 +166,65 @@
     if (artistSearch.nickName.length > 0) {
       artists = await getArtistsByNickName(artistSearch.nickName)
       artists = artists.filter(artist => artist.uuid !== artistsArray[0].uuid)
+    }
+  }
+
+  const updateArtwork = async () => {
+    loadingStatus.artwork = true
+    if (artworkBlob) {
+      // const uploadName = artworkBlob[0].name
+      // const fileName =
+      //   track.title
+      //     .replace(/ /g, '')
+      //     .replace(/[^a-zA-Z ]/g, '')
+      //     .toLowerCase() +
+      //   '.' +
+      //   uploadName
+      //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
+      //     .split('.')
+      //     .pop()
+      await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.uuid)
+        .then(res => {
+          console.log(res)
+          loadingStatus.artwork = false
+          // goto('/')
+          // goto('/portal/artist/demo/' + resCreateTrack.uuid)
+        })
+        .catch(error => {
+          loadingStatus.artwork = false
+          validateErrorTime('artwork', 'upload', errors)
+        })
+    } else {
+      loadingStatus.artwork = false
+      validateErrorTime('artwork', 'empty', errors)
+    }
+  }
+
+  const updateTrackFile = async () => {
+    loadingStatus.trackfile = true
+    if (trackData.blob) {
+      // const uploadName = trackData.blob[0].name
+      // const fileName =
+      //   track.title
+      //     .replace(/ /g, '')
+      //     .replace(/[^a-zA-Z ]/g, '')
+      //     .toLowerCase() +
+      //   '.' +
+      //   uploadName
+      //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
+      //     .split('.')
+      //     .pop()
+      await uploadTrack(trackData.blob[0], trackData.blob[0].name, track.uuid)
+        .then(async res => {
+          console.log(res)
+        })
+        .catch(error => {
+          loadingStatus.track = false
+          validateErrorTime('track', 'upload', errors)
+        })
+    } else {
+      loadingStatus.track = false
+      validateErrorTime('track', 'empty', errors)
     }
   }
 
@@ -218,6 +261,7 @@
     // console.log(track)
   }
 </script>
+
 
 <div class="grid gap-8">
   {#if newTrack}
@@ -267,7 +311,6 @@
             <Input
               errorInput="date"
               bind:value={newTrack.prefferdReleaseDate}
-            
               type="date"
               title="Preferred release date"
               placeholder="For example: August 8th, 2021"
@@ -354,8 +397,7 @@
               </div>
               <div class="grid gap-4">
                 {#if artistsArray.length > 0}
-                
-                <InputError errorInput="artist"></InputError>
+                  <InputError errorInput="artist" />
                   <div
                     class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
                     transition:fade
@@ -426,8 +468,18 @@
           {/if}
         </div>
 
-        <div class="flex justify-end">
-          <Button color="bg-teal-700" onClick={postTrack} size="md"
+        <div class="flex justify-end space-x-2">
+          <Button
+          color="bg-gray-600"
+          onClick={() => {
+            goto($page.path)
+          }}>Cancel changes</Button
+        >
+          <Button
+            color="bg-teal-700"
+            onClick={postTrack}
+            size="sm"
+            loading={loadingStatus.track ? loadingStatus.track : null}
             >Update track</Button
           >
         </div>
@@ -435,7 +487,7 @@
         <div class="grid gap-8 lg:grid-cols-2">
           <!-- <figure /> -->
 
-          <div class="grid gap-4 ">
+          <form class="grid gap-4 ">
             <SubTitle>🖼 Artwork</SubTitle>
 
             <Input
@@ -443,33 +495,42 @@
               placeholder="For example: Picasso"
               bind:value={newArtwork.designer}
             />
+            <InputError errorInput="artwork" />
             <div class="label portal">
               Upload Artwork
               <div
                 class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
-                on:click={() => artworkBlob.click()}
+                on:click={() => artworkClick.click()}
               >
-                <svg
-                  class="-mt-px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                <p>Click to upload or drag your artwork here..</p>
+                {#if artworkBlob}
+                  <p class="text-teal-700 font-medium">
+                    Artwork has been selected.
+                  </p>
+                {:else}
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload or drag your artwork here..</p>
+                {/if}
                 <input
+                  required={true}
                   type="file"
                   accept=".jpg, .jpeg, .png"
-                  bind:this={artworkBlob}
+                  bind:this={artworkClick}
+                  bind:files={artworkBlob}
                   on:change={e => previewArtwork(e)}
                   class="hidden"
                   placeholder=""
@@ -477,11 +538,16 @@
               </div>
             </div>
             <div class="flex justify-end">
-              <Button color="bg-teal-700" size="sm" onClick={() => {}}
-                >Update artwork</Button
+              <Button
+                color="bg-teal-700"
+                size="sm"
+                loading={loadingStatus.artwork ? "Updating artwork.." : null}
+                onClick={() => {
+                  updateArtwork()
+                }}>Update artwork</Button
               >
             </div>
-          </div>
+          </form>
 
           <div class="grid gap-4 ">
             <SubTitle>💽 Upload track</SubTitle>
@@ -508,6 +574,7 @@
                 />
               </div>
             </div>
+            <InputError errorInput="track" />
             <div class="label portal">
               Upload track
               <div
@@ -532,7 +599,9 @@
                 </svg>
                 <p>Click to upload or drag your track here..</p>
                 <input
+                  required={true}
                   type="file"
+                  accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}
                   bind:files={trackData.blob}
                   on:change={e => previewTrack(e)}
@@ -542,8 +611,15 @@
               </div>
             </div>
             <div class="flex justify-end">
-              <Button color="bg-teal-700" size="sm" onClick={() => {}}
-                >Update audio</Button
+              <Button
+                color="bg-teal-700"
+                size="sm"
+                loading={loadingStatus.trackfile
+                  ? "Updating track.."
+                  : null}
+                onClick={() => {
+                  updateTrackFile()
+                }}>Update audio</Button
               >
             </div>
           </div>
