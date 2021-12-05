@@ -21,6 +21,7 @@ export interface TrackType {
   title?: string
   description?: string
   lyrics?: string
+  encodedFile?:string
   contractFile?: string
   contractResource?: string
   resource?: string

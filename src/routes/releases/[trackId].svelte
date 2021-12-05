@@ -18,9 +18,9 @@
   onMount(async () => {
     if ($page.params.trackId)
       track = await query(
-        'getTrackById',
-        `query GetTrackById($trackId: String!) {
-            getTrackById(trackId: $trackId) {
+        'getReleasedTrackById',
+        `query GetReleasedTrackById($trackId: String!) {
+          getReleasedTrackById(trackId: $trackId) {
                 title
                 description
                 lyrics
@@ -28,8 +28,9 @@
                 prefferdReleaseDate
                 genre {
                 name
-             
-                }
+                  
+                }       
+                encodedFile
                 artwork {
                     designer
                     resource
@@ -48,7 +49,7 @@
     <section>
       <article class="grid gap-6">
         {#if track}
-          <TrackPlayer feedback={true} {track} />
+          <TrackPlayer feedback={false} {track} />
           <Box>
             <div class="grid gap-6 lg:grid-cols-2 items-start">
               <div class="grid gap-4">

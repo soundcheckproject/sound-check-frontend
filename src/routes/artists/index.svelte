@@ -29,10 +29,10 @@
             firstName
             surName
             logo
-            }
-        }`,
+          }
+      }`,
     )
-
+      console.log(data)
     if (data) {
       artists = data
       artistsDisplay = artists
