@@ -29,7 +29,7 @@ export interface TrackType {
   previewStart?: number
   previewStop?: number
   isSigned?: boolean | null
-  prefferdReleaseDate?: string | Date
+  prefferdReleaseDate?: Date
   genreId?: string
   genre?: Genre
   artwork?: ArtworkType
