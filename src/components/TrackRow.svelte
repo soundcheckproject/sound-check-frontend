@@ -1,7 +1,7 @@
 <script lang="ts">
   import { validateStatusTrack } from '../utils/useValidation'
 
-  import { fade } from 'svelte/transition'
+
   import TrackStatus from './TrackStatus.svelte'
   import { formatDate } from '../utils/useFormat'
   import { roleStore } from '../stores/stores'
@@ -16,7 +16,7 @@
   export let artists = false
   export let actions = false
   export let status = true
-  // $:{ console.log(track.isSigned)}
+
 </script>
 
 {#if track}

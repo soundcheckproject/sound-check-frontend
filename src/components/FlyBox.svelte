@@ -1,5 +1,5 @@
 <script>
-  import { fly, slide } from 'svelte/transition'
+  import { slide } from 'svelte/transition'
 </script>
 
 <!-- <div

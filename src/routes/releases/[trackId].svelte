@@ -58,17 +58,21 @@
                 <div class="grid ">
                   <p class="font-semibold ">Releasedate</p>
                   <p class="text-sm">
-                    <!-- {new Intl.DateTimeFormat('en-US', {
+                    {new Intl.DateTimeFormat('en-US', {
                       weekday: 'long',
                     }).format(new Date(track.prefferdReleaseDate))} -
-                    {formatDate(new Date(track.prefferdReleaseDate))} -->
+                    {formatDate(new Date(track.prefferdReleaseDate))}
                   </p>
                   <p class="mt-4 font-semibold ">Description</p>
 
-                  <p class="text-sm">{track.description}</p>
+                  <p class="text-sm">
+                    {track.description ?? "Track doesn't have a description"}
+                  </p>
                   <p class="mt-4 font-semibold  ">Lyrics</p>
 
-                  <p class="text-sm">{track.lyrics}</p>
+                  <p class="text-sm">
+                    {track.lyrics ?? "Track doesn't have any lyrics"}
+                  </p>
                 </div>
               </div>
               <div class="grid gap-4">
@@ -84,7 +88,6 @@
                 {:else}
                   <p class="text-sm">No artists found..</p>
                 {/if}
-                <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
               </div>
             </div>
           </Box>

@@ -1,13 +1,11 @@
 <script lang="ts">
-  import { page } from '$app/stores'
-  import ProfileBanner from '../../components/ProfileBanner.svelte'
   import Container from '../../components/Container.svelte'
   import Header from '../../components/Header.svelte'
-  import { getTracksByArtistId, query } from '../../utils/useGraphQL'
-  import type { UserType } from '../../types/User.type'
+  import { query } from '../../utils/useGraphQL'
+
   import { onMount } from 'svelte'
   import type { TrackType } from '../../types/Track.type'
-  import TrackPlayer from '../../components/TrackPlayer.svelte'
+
   import TrackRow from '../../components/TrackRow.svelte'
   import Title from '../../components/Title.svelte'
   import FadeBox from '../../components/portal/FadeBox.svelte'

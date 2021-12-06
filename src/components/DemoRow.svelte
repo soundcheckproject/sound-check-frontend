@@ -6,19 +6,17 @@
 
   import type { UserType } from '../types/User.type'
   import {
-    toggleSigned,
-    getAllTracks,
-    updateTrack,
+
     query,
   } from '../utils/useGraphQL'
-  import demoTracksStore from '../stores/demoTracksStore'
+
   import {
     formatDate,
-    formatDateTime,
+
     formatTimeForPlayer,
   } from '../utils/useFormat'
   import { onMount } from 'svelte'
-  import { getTrackFileFromTrackId } from '../utils/useRest'
+
   import { denyTrack, signTrack } from '../utils/useTrack'
 
   export let artworkSource = ''

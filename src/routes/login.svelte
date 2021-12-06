@@ -7,7 +7,7 @@
   import Button from '../components/Button.svelte'
   import Container from '../components/Container.svelte'
   import Footer from '../components/Footer.svelte'
-  import Error from '../components/Error.svelte'
+
   import InputError from '../components/InputError.svelte'
 
   import authStore from '../stores/authStore'
@@ -21,12 +21,13 @@
     validateErrors,
     validateError,
     validateErrorTime,
+    validateEmpty,
   } from './../utils/useValidation'
   import validationStore from '../stores/validationStore'
-  import type ErrorType from '../types/Error.type'
+
   import userStore from '../stores/userStore'
   import { labelStore, roleStore } from '../stores/stores'
-  import Artist from '../components/Artist.svelte'
+
   import Input from '../components/Input.svelte'
   import FadeBox from '../components/portal/FadeBox.svelte'
 
@@ -37,24 +38,15 @@
   let errors: string[] = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
-      errors = validateErrors(
-        [validateEmailValid(user.email), validateLength(user.email, 12)],
-        type,
-        errors,
-      )
+      // errors = validateErrors(
+      //   [validateEmailValid(user.email), validateLength(user.email, 12)],
+      //   type,
+      //   errors,
+      //   )
+      errors = validateErrors([validateEmpty(user.email)], type, errors)
     }
     if (type == 'password') {
-      errors = validateErrors(
-        [
-          validateLength(user.password, 5),
-          // Todo: .Match in usevalidation not working
-          validateNumbers(user.password),
-          validateCapital(user.password),
-          validateLower(user.password),
-        ],
-        type,
-        errors,
-      )
+      errors = validateErrors([validateEmpty(user.password)], type, errors)
     }
   }
 

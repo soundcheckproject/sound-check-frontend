@@ -3,8 +3,6 @@
 
   import NavLink from './NavLink.svelte'
 
-  import { goto } from '$app/navigation'
-
   import RoleLayer from '../RoleLayer.svelte'
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'

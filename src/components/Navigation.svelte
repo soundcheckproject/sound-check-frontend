@@ -1,5 +1,6 @@
 <script lang="ts">
   import { labelStore } from '../stores/stores'
+  import NavigationLink from './NavigationLink.svelte'
 
   let toggleMenu: Boolean = false
 </script>
@@ -15,19 +16,27 @@
   <div
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >
-    <a href="/">Home</a>
+    <NavigationLink href="/">Home</NavigationLink>
+    <NavigationLink href="/releases">Releases</NavigationLink>
+    <NavigationLink href="/artists">Artists</NavigationLink>
+    <NavigationLink href="/info">Info</NavigationLink>
+    <NavigationLink href="/contact">Contact</NavigationLink>
+
+    <!-- <a href="/">Home</a>
     <a href="/releases">releases</a>
     <a href="/artists">artists</a>
     <a href="/#info">info</a>
-    <a href="/#contact">contact</a>
+    <a href="/#contact">contact</a> -->
     <div class="relative group">
-      <a href="/login">portal </a>
+      <NavigationLink href="/login">Portal</NavigationLink>
       <div class=" absolute hidden group-hover:block pt-3 ">
         <div
           class="bg-gray-100 bg-opacity-25 grid gap-2 text-xs backdrop-blur-3xl px-5 py-4 rounded-md -ml-4"
         >
-          <a href="/login">login</a>
-          <a href="/register">register</a>
+          <NavigationLink href="/login">login</NavigationLink>
+          <NavigationLink href="/register">register</NavigationLink>
+          <!-- <a href="/login">login</a>
+          <a href="/register">register</a> -->
         </div>
       </div>
     </div>
@@ -90,17 +99,23 @@
       class="grid gap-8 text-center font-bold"
       on:click={() => (toggleMenu = false)}
     >
-      <a href="/">Home</a>
+      <NavigationLink href="/">Home</NavigationLink>
+      <NavigationLink href="/releases">Releases</NavigationLink>
+      <NavigationLink href="/artists">Artists</NavigationLink>
+      <NavigationLink href="/info">Info</NavigationLink>
+      <NavigationLink href="/contact">Contact</NavigationLink>
+      <NavigationLink href="/login">Portal</NavigationLink>
+      <!-- <a href="/">Home</a>
       <a href="#releases">releases</a>
       <a href="/artists">artists</a>
       <a href="#info">info</a>
       <a href="#contact">contact</a>
-      <a href="/login">portal</a>
+      <a href="/login">portal</a> -->
     </ul>
   </aside>
 </nav>
 
-<style>
+<!-- <style lang="postcss">
   a {
     @apply transition-all uppercase text-white text-opacity-75;
   }
@@ -108,4 +123,4 @@
     @apply text-opacity-100
 		/* text-shadow: 1px 0 rgba(255, 255, 255, 0.75); */;
   }
-</style>
+</style> -->

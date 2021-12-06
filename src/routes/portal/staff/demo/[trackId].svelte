@@ -10,8 +10,7 @@
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Box from '../../../../components/Box.svelte'
   import Button from '../../../../components/Button.svelte'
-  import Toggle from '../../../../components/Toggle.svelte'
-  import Error from '../../../../components/Error.svelte'
+
   import Artist from '../../../../components/Artist.svelte'
   import { validateStatusTrack } from '../../../../utils/useValidation'
   import {

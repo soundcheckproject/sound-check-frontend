@@ -10,16 +10,12 @@
   import Button from './Button.svelte'
   import userStore from '../stores/userStore'
   import { sortByDate } from '../utils/useSorting'
-  import { fade, fly, slide } from 'svelte/transition'
+  import { fade, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
   import type { TrackInfoType, TrackType } from '../types/Track.type'
   import { getTrackFileFromTrackId } from '../utils/useRest'
-  import {
-    formatDate,
-    formatDateTime,
-    formatTimeForPlayer,
-  } from '../utils/useFormat'
+  import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
   import WaveSurfer from 'wavesurfer.js'
 
@@ -74,28 +70,12 @@
 
   let feedbacks: FeedbackType[] = []
 
-  // export let track.encodedFile = null
   export let artworkFile = null
   export let track: TrackType
 
-  // const blobToBase64 = (blob: Blob) => {
-  //   const reader = new FileReader()
-  //   reader.readAsDataURL(blob)
-  //   let readerFile: string | ArrayBuffer
-
-  //   reader.onloadend = () => {
-  //     track.encodedFile = reader.result
-  //   }
-  // }
   let trackPlayable = false
 
   onMount(async () => {
-    // if (track.uuid) {
-    //   // blobToBase64(track.encodedFile)
-
-    //   console.log(track.encodedFile)
-    // }
-
     if (feedback) {
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }

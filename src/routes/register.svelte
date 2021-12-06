@@ -10,7 +10,7 @@
   import Footer from '../components/Footer.svelte'
 
   import authStore from '../stores/authStore'
-  import { loginUser, registerUser } from '../utils/useFirebase'
+  import { registerUser } from '../utils/useFirebase'
   import Input from '../components/Input.svelte'
   import {
     isNickNameAvailable,
@@ -24,13 +24,11 @@
     validateLower,
     validateMatch,
     validateNumbers,
-    validateOld,
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import userStore from '../stores/userStore'
   import { roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
-  import { getAuth } from '@firebase/auth'
 
   let userRegister: UserType = {
     email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
@@ -46,7 +44,7 @@
   }
   let passwordCheck: string = ''
   let errors: string[] = []
-  // Todo: validation
+
   const checkValidation = (type: string = null) => {
     if (type == 'nickname') {
       isNickNameAvailable(userRegister.nickName).then(result => {
@@ -109,7 +107,7 @@
           // await goto('/portal')
           loadingStatus.register = false
         })
-        .catch(e => {
+        .catch(() => {
           loadingStatus.register = false
           validateErrorTime('connection', 'graphql', errors)
         })

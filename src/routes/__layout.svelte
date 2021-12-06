@@ -2,13 +2,13 @@
   import { initializeApp } from 'firebase/app'
 
   import { getAuth, User } from 'firebase/auth'
-  import { query } from '../utils/useGraphQL'
+
   import { onMount } from 'svelte'
 
   import authStore from '../stores/authStore'
   import Popup from '../components/Popup.svelte'
   import { goto } from '$app/navigation'
-import Footer from '../components/Footer.svelte';
+  import Footer from '../components/Footer.svelte'
 
   const firebaseConfig = {
     apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
@@ -21,7 +21,7 @@ import Footer from '../components/Footer.svelte';
   }
   const app = initializeApp(firebaseConfig)
 
-  let graphQLconnection=true
+  let graphQLconnection = true
   //todo: check if graphql can make connection
 
   onMount(async () => {
@@ -34,68 +34,13 @@ import Footer from '../components/Footer.svelte';
       }
       authStore.set(authInfo)
     })
-
-    // graphQLconnection = await query(
-    //   'getLabelById',
-    // `query GetLabelById($labelId: String!) {
-    //     getLabelById(labelId: $labelId) {
-    //       name
-    //       description
-    //       founded
-    //       email
-    //       country
-    //       state
-    //       logo
-    //       city
-    //     }
-    //   }`,
-    //   { labelId: import.meta.env.VITE_LABEL_ID },
-    // )
-    // try {
-    // graphQLconnection = await fetch(import.meta.env.VITE_BACKEND_URL).catch(
-    //   err => console.log(err),
-    // )
-    // console.log(graphQLconnection.status)
-
-    // var xhttp = new XMLHttpRequest()
-    // try {
-    //   xhttp.onreadystatechange = function () {
-    //     console.log(xhttp.response)
-    //     if (xhttp.readyState == 4 && xhttp.status == 0) {
-    //       // alert('Unknown Error Occured. Server response not received.')
-    //       graphQLconnection = false
-    //     }
-    //   }
-    //   xhttp.open('POST', import.meta.env.VITE_BACKEND_URL, true)
-    //   xhttp.setRequestHeader('Content-Type', 'application/json')
-    //   xhttp.send(
-    //     JSON.stringify({
-    //       body: JSON.stringify({
-    //         query: `query GetLabelById($labelId: String!) {
-    //                   getLabelById(labelId: $labelId) {
-    //                     name
-    //                     description
-    //                     founded
-    //                     email
-    //                     country
-    //                     state
-    //                     logo
-    //                     city
-    //                   }
-    //                 }`,
-    //         variables:  JSON.stringify({ labelId: `${import.meta.env.VITE_LABEL_ID}` }),
-    //       }),
-    //     }),
-    //   )
-    //   xhttp.send()
-    // } catch (e) {
-    //   console.log('catch', e)
-    // }
   })
 </script>
 
-<div class="font-roboto c-app relative ">
-  
+<div
+  class="font-gotham relative bg-gray-50 bg-opacity-75 grid h-screen overflow-x-hidden"
+  style="grid-template-rows: auto 1fr auto;"
+>
   {#if graphQLconnection}
     <slot />
   {:else}
@@ -121,13 +66,4 @@ import Footer from '../components/Footer.svelte';
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
-
-  .c-app {
-    /* background: red; */
-    @apply bg-gray-50 bg-opacity-75;
-    display: grid;
-    height: 100vh;
-    grid-template-rows: auto 1fr auto;
-    overflow-x: hidden;
-  }
 </style>
