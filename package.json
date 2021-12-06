@@ -33,6 +33,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@lottiefiles/svelte-lottie-player": "^0.2.0",
     "@tailwindcss/aspect-ratio": "^0.3.0",
     "animate.css": "^4.1.1",
     "dotenv": "^10.0.0",
