@@ -153,7 +153,7 @@
       <div class="flex flex-col items-center">
         {#if LottiePlayer}
           <LottiePlayer
-            src="./static/lottie/check-animation.json"
+            src="/lottie/check-animation.json"
             autoplay={true}
             loop={true}
             controls={false}
