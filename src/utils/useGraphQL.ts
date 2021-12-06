@@ -25,13 +25,13 @@ export const query = async (
     const gqlReqponse = await res.json()
 
     if (gqlReqponse.errors) {
-      throw gqlReqponse.errors
+      throw gqlReqponse.errors;
     }
 
     return gqlReqponse.data[name]
   } catch (err) {
     console.log({ err })
-    return err
+    throw err
   }
 }
 
