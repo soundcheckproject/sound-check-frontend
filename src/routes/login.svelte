@@ -75,6 +75,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>{$labelStore.name} - Login</title>
+</svelte:head>
+
 <Header type="split" />
 <FadeBox>
   <Container>
