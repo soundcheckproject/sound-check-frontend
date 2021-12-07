@@ -82,7 +82,7 @@ export const getLinks = async (): Promise<Link[]> => {
   )
   return response
 }
-export const getArtistsByNickName = async (
+export const getUsersByNickname = async (
   nickname: string,
 ): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
   const response = await query(
@@ -98,6 +98,24 @@ export const getArtistsByNickName = async (
   )
   return response
 }
+
+export const getArtistsByNickName = async (
+  nickname: string,
+): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
+  const response = await query(
+    `getArtistsByNickname`,
+    `query getArtistsByNickname($nickname: String!) {
+  getArtistsByNickname(nickname: $nickname) {
+  uuid
+  nickName
+  logo  
+  }
+}`,
+    { nickname: nickname },
+  )
+  return response
+}
+
 export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   const response = await query(
     `getUser`,

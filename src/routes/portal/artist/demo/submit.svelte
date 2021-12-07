@@ -35,8 +35,12 @@
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
+  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
 
   let artistSearch = { nickName: '', hover: false }
+
+  
+  let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
   let newTrack: TrackType = {
     title: '',
@@ -45,9 +49,9 @@
     previewStop: 0,
     lyrics: '',
     artistIds: [$userStore.uuid],
-    genreId: '',
+    genreId: 'Pick a genre',
     labelId: '',
-    prefferdReleaseDate: new Date(),
+    prefferdReleaseDate: undefined,
     artwork: {
       designer: '',
     },
@@ -319,7 +323,7 @@
                   class="input portal text-red-300"
                   placeholder="For example: Future House, Bass House"
                 >
-                  <option selected disabled>Pick a genre</option>
+                  <option disabled selected>Pick a genre</option>
                   {#each genres as genre}
                     <option value={genre.uuid}>{genre.name}</option>
                   {/each}</select
@@ -336,7 +340,7 @@
               <Input
                 required={true}
                 errorInput="date"
-                bind:value={newTrack.prefferdReleaseDate}
+                bind:value={prefferedReleaseDateString}
                 on:input={() => {
                   checkValidation('date')
                 }}
