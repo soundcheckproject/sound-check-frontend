@@ -39,17 +39,17 @@
   let artistSearch = { nickName: '', hover: false }
 
   let newTrack: TrackType = {
-    title: 'Miss you so feat. Jebroer',
-    description: 'Niels his new hit song',
-    previewStart: 20,
-    previewStop: 35,
-    lyrics: 'I hate to admit it',
+    title: '',
+    description: '',
+    previewStart: 0,
+    previewStop: 0,
+    lyrics: '',
     artistIds: [$userStore.uuid],
-    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-    labelId: '6db99699-7b78-4f7e-8104-ea0fbdcfa810',
-    prefferdReleaseDate: '2022-01-01',
+    genreId: '',
+    labelId: '',
+    prefferdReleaseDate: new Date(),
     artwork: {
-      designer: 'nielsonderbeke2',
+      designer: '',
     },
   }
   let user = $userStore
@@ -68,12 +68,11 @@
   let artworkBlob: any = '',
     artworkPreview: any = '',
     trackPreview: any = '',
-    artworkClick: HTMLInputElement
+    artworkClick: HTMLInputElement,
+    trackDataClick: HTMLInputElement,
+    trackBlob: any,
+    royaltyPercentageTotal: number = 0
 
-  let trackDataClick: HTMLInputElement
-  let trackData: any = { info: {}, blob: {} }
-
-  let royaltyPercentageTotal: number = 0
   const calcRoyaltyPercentageTotal = () => {
     royaltyPercentageTotal = 0
     for (let artist of artistsArray) {
@@ -81,12 +80,13 @@
     }
   }
 
-  let uploadPageStatus = parseInt(localStorage.getItem('uploadPageStatus')) ?? 1
-
   const setUploadPageStatus = (i: number) => {
     uploadPageStatus = i
     localStorage.setItem('uploadPageStatus', uploadPageStatus.toString())
   }
+
+  // ! initial
+  let uploadPageStatus = 1
 
   const previewArtwork = (e: any) => {
     let image = e.target.files[0]
@@ -105,57 +105,71 @@
     }
   }
 
-  const postTrack = async () => {
-    loadingStatus.submit = true
-    newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
-    console.log(newTrack)
-    if ($validationStore.length == 0) {
-      // Create track in database
-      await createTrack(newTrack)
-        .then(async resCreateTrack => {
-          console.log(resCreateTrack)
-          const uploadName = trackData.blob[0].name
-          const fileName =
-            newTrack.title
-              .replace(/ /g, '')
-              .replace(/[^a-zA-Z ]/g, '')
-              .toLowerCase() +
-            '.' +
-            uploadName
-              .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-              .split('.')
-              .pop()
-          // Upload track to blob
-          await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
-            .then(async res => {
-              console.log(res)
-              // Upload artwork to blob
-              await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
-                .then(res => {
-                  loadingStatus.submit = false
-                  console.log(res)
+  const handleSubmit = async () => {}
 
-                  goto('/portal/artist/demo/' + resCreateTrack.uuid)
-                })
-                .catch(error => {
-                  loadingStatus.submit = false
-                  validateErrorTime('artwork', 'upload', errors)
-                })
-            })
-            .catch(error => {
-              loadingStatus.submit = false
-              validateErrorTime('track', 'upload', errors)
-            })
-        })
-        .catch(e => {
-          loadingStatus.submit = false
-          validateErrorTime('connection', 'graphql', errors)
-        })
-    } else {
-      loadingStatus.submit = false
-      validateErrorTime('general', 'errors', errors)
-    }
+  const createTrack = async () => {
+    // ! Create track mutation uitvoeren in de backend
   }
+
+  const uploadTrackFile = async () => {
+    // ! Uplaod the track blob file to rest api
+  }
+
+  const uploadArtworkFile = async () => {
+    // ! Uplaod the artwork blob file to rest api
+  }
+
+  // const postTrack = async () => {
+  //   loadingStatus.submit = true
+  //   newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
+  //   console.log(newTrack)
+  //   if ($validationStore.length == 0) {
+  //     // Create track in database
+  //     await createTrack(newTrack)
+  //       .then(async resCreateTrack => {
+  //         console.log(resCreateTrack)
+  //         const uploadName = trackBlob[0].name
+  //         const fileName =
+  //           newTrack.title
+  //             .replace(/ /g, '')
+  //             .replace(/[^a-zA-Z ]/g, '')
+  //             .toLowerCase() +
+  //           '.' +
+  //           uploadName
+  //             .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
+  //             .split('.')
+  //             .pop()
+  //         // Upload track to blob
+  //         await uploadTrack(trackBlob[0], fileName, resCreateTrack.uuid)
+  //           .then(async res => {
+  //             console.log(res)
+  //             // Upload artwork to blob
+  //             await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
+  //               .then(res => {
+  //                 loadingStatus.submit = false
+  //                 console.log(res)
+
+  //                 goto('/portal/artist/demo/' + resCreateTrack.uuid)
+  //               })
+  //               .catch(error => {
+  //                 loadingStatus.submit = false
+  //                 validateErrorTime('artwork', 'upload', errors)
+  //               })
+  //           })
+  //           .catch(error => {
+  //             loadingStatus.submit = false
+  //             validateErrorTime('track', 'upload', errors)
+  //           })
+  //       })
+  //       .catch(e => {
+  //         loadingStatus.submit = false
+  //         validateErrorTime('connection', 'graphql', errors)
+  //       })
+  //   } else {
+  //     loadingStatus.submit = false
+  //     validateErrorTime('general', 'errors', errors)
+  //   }
+  // }
 
   let genres: GenreType[] = []
 
@@ -170,16 +184,6 @@
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
-    // if (type == 'title') {
-    //   errors = validateErrors(
-    //     [validateEmailValid(user.email), validateEmpty(user.email)],
-    //     type,
-    //     errors,
-    //   )
-    // }
-    // if (type == 'description') {
-    //   errors = validateErrors([validateLength(user.password, 5)], type, errors)
-    // }
     for (const errorType of [
       'title',
       'description',
@@ -189,10 +193,17 @@
     ]) {
       errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
     }
-    // console.log(errors)
   }
 
   onMount(async () => {
+    const pageStatus: string | undefined =
+      localStorage.getItem('uploadPageStatus')
+    if (localStorage.getItem('uploadPageStatus')) {
+      setUploadPageStatus(parseInt(pageStatus))
+    } else {
+      setUploadPageStatus(1)
+    }
+
     genres = await getGenres()
   })
 
@@ -204,9 +215,10 @@
 <div class="grid gap-8">
   <FadeBox>
     <div class="flex space-x-2">
-      <ButtonBox
+      {#if uploadPageStatus > 1}
+         <ButtonBox
         on:click={() => {
-          uploadPageStatus > 1 ? uploadPageStatus-- : () => {}
+          uploadPageStatus > 1 && setUploadPageStatus(uploadPageStatus - 1)
         }}
       >
         <svg
@@ -224,7 +236,7 @@
           <polyline points="9 18 15 12 9 6" />
         </svg>
       </ButtonBox>
-
+      {/if}
       {#each [1, 2, 3, 4] as i}
         <ButtonBox
           active={uploadPageStatus == i ? true : false}
@@ -234,10 +246,10 @@
         >
           {i}
         </ButtonBox>{/each}
-      {#if uploadPageStatus != 4}
+      {#if uploadPageStatus < 4}
         <ButtonBox
           on:click={() => {
-            uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
+            uploadPageStatus < 4 && setUploadPageStatus(uploadPageStatus + 1)
           }}
         >
           Next
@@ -261,14 +273,11 @@
   <Box>
     <div class="z-10 absolute -top-4 left-12 flex space-x-2" />
     <Title>Submit a new track</Title>
-
     <form class="" enctype="multipart/form-data">
-      {#if uploadPageStatus == 1}
+      {#if uploadPageStatus === 1}
         <FlyBox>
           <InputError errorInput="connection" />
-
           <SubTitle>📝 Information about your track</SubTitle>
-
           <div class="grid lg:grid-cols-2 gap-4">
             <!-- <label class="portal"
             >Create a title<input
@@ -630,7 +639,7 @@
                   type="file"
                   accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}
-                  bind:files={trackData.blob}
+                  bind:files={trackBlob}
                   on:change={e => previewTrack(e)}
                   class="hidden"
                   placeholder=""
@@ -671,7 +680,7 @@
             <Button
               loading={loadingStatus.submit ? loadingStatus.submit : null}
               color="bg-teal-700"
-              onClick={postTrack}
+              onClick={handleSubmit}
               size="md">Submit track</Button
             >
           </div>
