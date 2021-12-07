@@ -92,11 +92,8 @@ export const getTrackFileFromTrackId = async (
           Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
         },
       },
-    ).then(res => res.blob())
+    ).then(res => res.json())
     // Todo: error voor unloaded tracks
-    // .then(res => {
-    //   if (res.status === 500) throw new Error('Internal server error')
-    // })
 
     return response
   } catch (err) {

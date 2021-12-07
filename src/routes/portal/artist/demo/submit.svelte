@@ -35,11 +35,10 @@
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
-  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat';
+  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
 
   let artistSearch = { nickName: '', hover: false }
 
-  
   let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
   let newTrack: TrackType = {
@@ -70,8 +69,8 @@
   }
 
   let artworkBlob: any = '',
-    artworkPreview: any = '',
-    trackPreview: any = '',
+    artworkBase64String: any = '',
+    trackBase64String: any = '',
     artworkClick: HTMLInputElement,
     trackDataClick: HTMLInputElement,
     trackBlob: any,
@@ -97,15 +96,18 @@
     let reader = new FileReader()
     reader.readAsDataURL(image)
     reader.onload = e => {
-      artworkPreview = e.target.result
+      artworkBase64String = e.target.result
+      console.log({ artworkBase64String })
     }
   }
   const previewTrack = (e: any) => {
     let track = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(track)
+
     reader.onload = e => {
-      trackPreview = e.target.result
+      trackBase64String = e.target.result
+      console.log({ trackBase64String })
     }
   }
 
@@ -220,26 +222,26 @@
   <FadeBox>
     <div class="flex space-x-2">
       {#if uploadPageStatus > 1}
-         <ButtonBox
-        on:click={() => {
-          uploadPageStatus > 1 && setUploadPageStatus(uploadPageStatus - 1)
-        }}
-      >
-        <svg
-          class="rotate-180 "
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <ButtonBox
+          on:click={() => {
+            uploadPageStatus > 1 && setUploadPageStatus(uploadPageStatus - 1)
+          }}
         >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </ButtonBox>
+          <svg
+            class="rotate-180 "
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </ButtonBox>
       {/if}
       {#each [1, 2, 3, 4] as i}
         <ButtonBox
@@ -287,7 +289,7 @@
             >Create a title<input
               bind:value={newTrack.title}
               class="input portal"
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
             /></label
           > -->
             <Input
@@ -298,11 +300,11 @@
               on:input={() => {
                 checkValidation('title')
               }}
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
             />
             <!-- <Input
               title="Create a title"
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
               bind:value={newTrack.title}
             /> -->
 
@@ -312,7 +314,7 @@
                 <!-- <select
                 bind:value={newTrack.genreId}
                 class="input portal"
-                placeholder="For example: Future House, Bass House"
+                placeholder="e.g. Future House, Bass House"
               >
                 {#each ['Future House', 'Bass House', 'Pop House', 'Dubstep'] as genre, index}
                   <option value={genre}>{genre}</option>
@@ -321,7 +323,7 @@
                 <select
                   bind:value={newTrack.genreId}
                   class="input portal text-red-300"
-                  placeholder="For example: Future House, Bass House"
+                  placeholder="e.g. Future House, Bass House"
                 >
                   <option disabled selected>Pick a genre</option>
                   {#each genres as genre}
@@ -334,7 +336,7 @@
                 bind:value={newTrack.prefferdReleaseDate}
                 type="date"
                 class="input portal"
-                placeholder="For example: August 8th, 2021"
+                placeholder="e.g. August 8th, 2021"
               /></label
             > -->
               <Input
@@ -346,7 +348,7 @@
                 }}
                 type="date"
                 title="Preferred release date"
-                placeholder="For example: August 8th, 2021"
+                placeholder="e.g. August 8th, 2021"
               />
             </div>
             <Input
@@ -359,7 +361,7 @@
               textarea
               rows="5"
               title="Describe your track"
-              placeholder="This track is about.. It was created in .. The main theme of the track is.."
+              placeholder="e.g. “This track is about...“"
             />
 
             <Input
@@ -372,7 +374,7 @@
               textarea
               rows="5"
               title="Lyrics of your track"
-              placeholder="For example: “I’m in love with the shape of you..“"
+              placeholder="e.g. “I’m in love with the shape of you...“"
             />
           </div>
           <div class="flex justify-end">
@@ -400,7 +402,7 @@
                     on:input={() => searchArtistByNickName()}
                     on:blur={() => searchArtistByNickName()}
                     class="input portal"
-                    placeholder="Search by name.."
+                    placeholder="Search by nickname..."
                   /></label
                 >
                 {#if artistSearch.hover}
@@ -520,16 +522,16 @@
           <div class="grid gap-8 lg:grid-cols-min-auto ">
             <!-- <figure /> -->
             <div
-              class="bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer {artworkPreview.length >
+              class="bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
               0
                 ? 'mshadow-sm '
                 : ''}"
-              style={artworkPreview.length > 0
-                ? `background:url('${artworkPreview}') center center;background-size:cover`
+              style={artworkBase64String.length > 0
+                ? `background:url('${artworkBase64String}') center center;background-size:cover`
                 : ''}
               on:click={() => artworkClick.click()}
             >
-              {#if artworkPreview.length <= 0}
+              {#if artworkBase64String.length <= 0}
                 <svg
                   class="text-teal-700 opacity-90"
                   xmlns="http://www.w3.org/2000/svg"
@@ -553,7 +555,7 @@
 
               <Input
                 title="Artwork designer"
-                placeholder="For example: Picasso"
+                placeholder="e.g. Picasso"
                 bind:value={newTrack.artwork.designer}
               />
               <div class="label portal">
@@ -583,7 +585,7 @@
                       <polyline points="17 8 12 3 7 8" />
                       <line x1="12" y1="3" x2="12" y2="15" />
                     </svg>
-                    <p>Click to upload or drag your artwork here..</p>
+                    <p>Click to upload your artwork here...</p>
                   {/if}
                   <input
                     required={true}
@@ -597,16 +599,6 @@
                   />
                 </div>
               </div>
-              <!-- <label class="portal"
-              >Upload Artwork<input
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                bind:this={artworkBlob}
-                on:change={e => previewArtwork(e)}
-                class="input portal"
-                placeholder="Click to upload or drag your artwork here.."
-              />
-            </label> -->
             </div>
           </div>
           <div class="flex justify-end">
@@ -620,11 +612,11 @@
       {/if}
       {#if uploadPageStatus == 4}
         <FlyBox>
-          {#if trackPreview}
+          {#if trackBase64String}
             <TrackPlayer
               track={newTrack}
-              artworkFile={artworkPreview}
-              audioFile={trackPreview}
+              artworkFile={artworkBase64String}
+              audio={trackBase64String}
             />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>
@@ -633,11 +625,32 @@
             <div class="label portal">
               Upload track
               <div
-                class="input portal w-full justify-center items-center cursor-pointer"
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
                 on:click={() => trackDataClick.click()}
               >
-                <!-- {trackBlob ?? trackBlob[0].name ?? ''} -->
-                Click to upload or drag your track here..
+                {#if trackBlob}
+                  <p class="text-teal-700 font-medium">
+                    Track has been selected.
+                  </p>
+                {:else}
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload your track here...</p>
+                {/if}
                 <input
                   required={true}
                   type="file"
@@ -651,7 +664,9 @@
               </div>
             </div>
             <div
-              class="label portal {trackPreview ? 'opacity-100' : 'opacity-40'}"
+              class="label portal {trackBase64String
+                ? 'opacity-100'
+                : 'opacity-40'}"
             >
               Preview part *
               <div
@@ -663,7 +678,7 @@
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
                   min="0"
-                  disabled={trackPreview ? false : true}
+                  disabled={trackBase64String ? false : true}
                 />
                 <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
                 <input
@@ -671,7 +686,7 @@
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
                   min="30"
-                  disabled={trackPreview ? false : true}
+                  disabled={trackBase64String ? false : true}
                 />
               </div>
             </div>

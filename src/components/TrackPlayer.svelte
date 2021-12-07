@@ -6,6 +6,7 @@
   import {
     addFeedbackToTrack,
     getTrackFeedbacksByTrackId,
+query,
   } from '../utils/useGraphQL'
   import Button from './Button.svelte'
   import userStore from '../stores/userStore'
@@ -17,18 +18,17 @@
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
-  // import WaveSurfer from 'wavesurfer.js'
+  import WaveSurfer from 'wavesurfer.js'
 
-  
-  export let theme: 'light' | 'dark' = 'dark'
+  // export let theme: 'light' | 'dark' = 'dark'
   export let feedback: boolean = false
   export let rounded: '' | 'rounded-md' | 'rounded-sm' = 'rounded-md'
-  
+
   let showFeedback: boolean =
-  JSON.parse(localStorage.getItem('showFeedback')) ?? true
-  
-  let audio: HTMLAudioElement
-  
+    JSON.parse(localStorage.getItem('showFeedback')) ?? true
+
+  export let audio: HTMLAudioElement = undefined
+
   let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
@@ -36,7 +36,7 @@
     playerBar: null,
     muted: false,
   }
-  
+
   let WaveSurfer: any
   let wavesurfer: any
   let feedbackInput = ''
@@ -82,9 +82,13 @@
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
 
-      const module: any = await import('wavesurfer.js')
-      WaveSurfer = module.WaveSurfer
+    // const WaveSurfer = await import('wavesurfer.js')
+    //   console.log({module})
+    // WaveSurfer = module.WaveSurfer
 
+    console.log({WaveSurfer})
+
+    // @ts-ignore
     wavesurfer = WaveSurfer.create({
       container: '#waveform',
       waveColor: 'white',
@@ -98,6 +102,13 @@
       responsive: true,
       height: 80,
     })
+
+    // ! not tested yet
+    if(track.uuid){
+      const data = await getTrackFileFromTrackId(track.uuid)
+      console.log({data})
+      audio = data.encodedFile
+    }
   })
 
   onDestroy(() => {
@@ -105,9 +116,10 @@
   })
 
   $: {
-    if (track.encodedFile) {
+    if (audio) {
+      console.log({audio})
       if (wavesurfer) {
-        wavesurfer.load(track.encodedFile)
+        wavesurfer.load(audio)
         wavesurfer.on('ready', () => {
           // console.log(trackPlayable)
           trackPlayable = true
@@ -131,12 +143,12 @@
 </script>
 
 {#if track}
-  {#if track.encodedFile}
+  <!-- {#if audio}
     <audio hidden bind:this={audio} preload="auto" controls>
-      <source src={track.encodedFile} type="audio/mpeg" />
+      <source src={audio} type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
-  {/if}
+  {/if} -->
   <div class="relative">
     <div
       in:fade|local={{ duration: 200, delay: 200 }}
