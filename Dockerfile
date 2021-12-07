@@ -1,18 +1,26 @@
-FROM node:14.17-alpine
+FROM node:latest
 
+# install dependencies
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm ci
 
+# Copy all local files into the image.
 COPY . .
 
 RUN npm run build
 
-FROM node:14.17-slim
+CMD ["ls"]
 
-WORKDIR /app
-COPY --from=0 /app .
-COPY . .
+# ###
+# # Only copy over the Node pieces we need
+# # ~> Saves 35MB
+# ###
+# FROM node:latest
 
-EXPOSE 8888
-CMD ["node", "./build"]
+# WORKDIR /app
+# COPY --from=0 /app .
+# COPY . .
+
+# EXPOSE 3000
+# CMD ["node", "./build"]
