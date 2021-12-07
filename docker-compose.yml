@@ -2,10 +2,10 @@ version: '3.4'
 
 services:
   soundcheckapp:
-    image: soundcheckapp
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: nielsonderbeke/soundcheckapp:latest
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
     env_file:
       - .env
     ports:
