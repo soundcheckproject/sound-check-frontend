@@ -19,7 +19,7 @@
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
 
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { uploadArtwork, uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
@@ -38,22 +38,30 @@
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import variables from '../../../../utils/variables'
 
+  const inputFields: string[] = [
+    'title',
+    'description',
+    'lyrics',
+    'genreId',
+    'prefferdReleaseDate',
+  ]
+
   let artistSearch = { nickName: '', hover: false }
 
   let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
   let newTrack: TrackType = {
-    title: 'You and i',
-    description: 'Heavy bass track for clubing and raves',
+    title: '',
+    description: '',
     previewStart: 0,
     previewStop: 20,
-    lyrics: 'You and iiiiiiiiii',
+    lyrics: '',
     artistIds: [$userStore.uuid],
     genreId: 'Pick a genre',
     labelId: variables.labelId as string,
     prefferdReleaseDate: undefined,
     artwork: {
-      designer: 'Niels Onderbeke',
+      designer: '',
     },
   }
   let user = $userStore
@@ -117,7 +125,7 @@
     loadingStatus.submit = true
     newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
     console.log(newTrack)
-    if ($validationStore.length == 0) {
+    if ($validationStore.length === 0) {
       // Create track in database
       try {
         const { uuid } = await createTrack(newTrack)
@@ -128,71 +136,41 @@
     }
   }
 
-  const handleSubmit = async () => {
-    try {
-      const trackId: string = await postTrack()
-      await uploadTrack(trackBlob[0], track.name, trackId)
-      await uploadArtwork(artworkBlob[0], artwork.name, trackId)
-       goto(`/portal/artist/demo/${trackId}`)
-    } catch (error) {
-      console.error('Something went wrong on posting the track.', error)
-      validateErrorTime('general', 'submit', errors)
-    } finally {
-      loadingStatus.submit = false
+  let errors: string[] = []
+  const checkValidation = (type: string) => {
+    for (const errorType of inputFields) {
+      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
     }
   }
 
-  // const postTrack = async () => {
-  //   loadingStatus.submit = true
-  //   newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
-  //   console.log(newTrack)
-  //   if ($validationStore.length == 0) {
-  //     // Create track in database
-  //     await createTrack(newTrack)
-  //       .then(async resCreateTrack => {
-  //         console.log(resCreateTrack)
-  //         const uploadName = trackBlob[0].name
-  //         const fileName =
-  //           newTrack.title
-  //             .replace(/ /g, '')
-  //             .replace(/[^a-zA-Z ]/g, '')
-  //             .toLowerCase() +
-  //           '.' +
-  //           uploadName
-  //             .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-  //             .split('.')
-  //             .pop()
-  //         // Upload track to blob
-  //         await uploadTrack(trackBlob[0], fileName, resCreateTrack.uuid)
-  //           .then(async res => {
-  //             console.log(res)
-  //             // Upload artwork to blob
-  //             await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
-  //               .then(res => {
-  //                 loadingStatus.submit = false
-  //                 console.log(res)
+  const checkAllInputs = async () => {
+    return new Promise(resolve => {
+      inputFields.map((field: string) => {
+        checkValidation(field)
+      })
+      resolve(true)
+    })
+  }
 
-  //                 goto('/portal/artist/demo/' + resCreateTrack.uuid)
-  //               })
-  //               .catch(error => {
-  //                 loadingStatus.submit = false
-  //                 validateErrorTime('artwork', 'upload', errors)
-  //               })
-  //           })
-  //           .catch(error => {
-  //             loadingStatus.submit = false
-  //             validateErrorTime('track', 'upload', errors)
-  //           })
-  //       })
-  //       .catch(e => {
-  //         loadingStatus.submit = false
-  //         validateErrorTime('connection', 'graphql', errors)
-  //       })
-  //   } else {
-  //     loadingStatus.submit = false
-  //     validateErrorTime('general', 'errors', errors)
-  //   }
-  // }
+  const handleSubmit = async () => {
+    if (await checkAllInputs()) {
+      if ($validationStore.length === 0)
+        try {
+          const trackId: string = await postTrack()
+          await uploadTrack(trackBlob[0], track.name, trackId)
+          await uploadArtwork(artworkBlob[0], artwork.name, trackId)
+          goto(`/portal/artist/demo/${trackId}`)
+        } catch (error) {
+          console.error('Something went wrong on posting the track.', error)
+          validateErrorTime('general', 'submit', errors)
+        } finally {
+          loadingStatus.submit = false
+        }
+      else {
+        validateErrorTime('general', 'errors', errors)
+      }
+    }
+  }
 
   let genres: GenreType[] = []
 
@@ -202,19 +180,6 @@
     if (artistSearch.nickName.length > 0) {
       artists = await getArtistsByNickName(artistSearch.nickName)
       artists = artists.filter(artist => artist.uuid !== artistsArray[0].uuid)
-    }
-  }
-
-  let errors: string[] = []
-  const checkValidation = (type: string) => {
-    for (const errorType of [
-      'title',
-      'description',
-      'lyrics',
-      'genreId',
-      'prefferdReleaseDate',
-    ]) {
-      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
     }
   }
 
@@ -228,6 +193,13 @@
     }
 
     genres = await getGenres()
+    if (genres) {
+      newTrack.genreId = genres[0].uuid
+    }
+  })
+
+  onDestroy(() => {
+    setUploadPageStatus(1)
   })
 
   $: {
@@ -296,6 +268,7 @@
   <Box>
     <div class="z-10 absolute -top-4 left-12 flex space-x-2" />
     <Title>Submit a new track</Title>
+    <InputError errorInput="general" />
     <form class="" enctype="multipart/form-data">
       {#if uploadPageStatus === 1}
         <FlyBox>
