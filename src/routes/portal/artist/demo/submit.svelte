@@ -67,7 +67,7 @@
 
   let artworkBlob: any = '',
     artworkPreview: any = '',
-    trackPreview: any = '',
+    trackPreview: any = null,
     artworkClick: HTMLInputElement
 
   let trackDataClick: HTMLInputElement
@@ -198,6 +198,11 @@
 
   $: {
     validationStore.set(errors)
+  }
+
+  $:{
+    newTrack.encodedFile = previewTrack.toString()
+    console.log(newTrack.encodedFile)
   }
 </script>
 
@@ -611,7 +616,7 @@
             <TrackPlayer
               track={newTrack}
               artworkFile={artworkPreview}
-              audioFile={trackPreview}
+          
             />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>

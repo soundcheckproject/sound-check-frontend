@@ -4,7 +4,7 @@
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
   import { onMount } from 'svelte'
-  import { getArtists } from '../../../../utils/useGraphQL'
+  import { getArtists, query } from '../../../../utils/useGraphQL'
   import type { UserType, ArtistType } from 'src/types/User.type'
   import { goto } from '$app/navigation'
 
@@ -34,7 +34,24 @@
     else filterUsers()
   }
   onMount(async () => {
-    users = await getArtists()
+    users = await query(
+      'getUsers',
+      `query GetUsers {
+        getUsers {
+          uuid
+          nickName
+          firstName
+          surName
+          birthdate
+          email
+          country
+          role{
+            slug
+            name
+          }
+        }
+      }`,
+    )
   })
   $: {
     // console.log(searchValue)

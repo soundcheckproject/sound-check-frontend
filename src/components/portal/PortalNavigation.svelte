@@ -208,7 +208,7 @@
               />
             </svg>
           </NavLink>
-          <NavLink href="/portal/staff/users" name="Artists" class="">
+          <NavLink href="/portal/staff/users" name="Users" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

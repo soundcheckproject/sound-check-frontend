@@ -116,6 +116,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
         state
         logo
         role {
+          uuid
           name
         }
         userLinks {
@@ -445,6 +446,17 @@ export const toggleSigned = async (
 }
 
 export const getRoles = async (): Promise<RoleType[]> => {
-  const response = await query(``, ``)
+  const response = await query(
+    `getRoles`,
+    `query Query {
+        getRoles {
+          uuid
+          name
+          slug
+          description
+        }
+      }
+  `,
+  )
   return response
 }

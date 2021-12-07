@@ -7,6 +7,7 @@ export enum RoleName {
 }
 
 export interface RoleType {
+  uuid:string
   slug?: string
   name?: RoleName
 }
