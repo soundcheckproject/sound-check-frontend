@@ -18,8 +18,6 @@ query,
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
-  import WaveSurfer from 'wavesurfer.js'
-
   // export let theme: 'light' | 'dark' = 'dark'
   export let feedback: boolean = false
   export let rounded: '' | 'rounded-md' | 'rounded-sm' = 'rounded-md'
@@ -37,7 +35,6 @@ query,
     muted: false,
   }
 
-  let WaveSurfer: any
   let wavesurfer: any
   let feedbackInput = ''
 
@@ -82,13 +79,10 @@ query,
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
 
-    // const WaveSurfer = await import('wavesurfer.js')
-    //   console.log({module})
-    // WaveSurfer = module.WaveSurfer
+    // ! Problems with ssr if import on top level
+    const ws: any = await import('wavesurfer.js')
+    const WaveSurfer = ws.default
 
-    console.log({WaveSurfer})
-
-    // @ts-ignore
     wavesurfer = WaveSurfer.create({
       container: '#waveform',
       waveColor: 'white',
