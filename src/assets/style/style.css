@@ -1,0 +1,96 @@
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+.mshadow-xs {
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.05);
+}
+.mshadow-sm {
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.1);
+}
+.mshadow-md {
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.15);
+}
+.mshadow-lg {
+  box-shadow: 0 0 6rem rgba(0, 0, 0, 0.2);
+}
+.mshadow-xl {
+  box-shadow: 0 0 8rem rgba(0, 0, 0, 0.25);
+}
+
+article {
+  @apply py-6 grid gap-4;
+}
+section {
+  @apply py-6 mb-8;
+}
+
+.input {
+  @apply rounded-sm mt-2 w-full border-2 border-gray-200 px-4 py-3 outline-none transition-colors bg-white text-sm;
+}
+.input:hover,
+.input:focus,
+.input:active {
+  @apply border-teal-700;
+}
+
+.input.glass {
+  @apply border-gray-200 bg-opacity-20 border-opacity-20 placeholder-gray-100 placeholder-opacity-50;
+}
+
+.input.glass:hover,
+.input.glass:focus,
+.input.glass:active {
+  @apply border-opacity-100;
+}
+
+.input.error {
+  @apply hover:border-red-600 border-red-600 text-red-800;
+}
+
+.appHeaderGrid {
+  grid-template-rows: min-content auto;
+}
+
+label.portal,
+.label.portal {
+  @apply text-sm;
+  @apply text-gray-700;
+}
+
+.input.portal {
+  @apply text-xs text-gray-700  border-2 bg-gray-100 bg-opacity-25 border-gray-200 border-opacity-50;
+}
+
+.input.portal:hover,
+.input.portal:focus,
+.input.portal:active {
+  @apply border-gray-300;
+}
+
+.gradientBlueGreen {
+  background: hsla(185, 40%, 20%, 1);
+
+  background: linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    -200deg,
+    hsla(185, 40%, 20%, 1) 0%,
+    hsla(215, 32%, 17%, 1) 100%
+  );
+}
+
+.download {
+  @apply flex space-x-2 items-center;
+}
