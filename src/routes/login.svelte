@@ -75,6 +75,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>{$labelStore.name} - Login</title>
+</svelte:head>
+
 <Header type="split" />
 <FadeBox>
   <Container>
@@ -131,7 +135,12 @@
               placeholder="Enter password.."
               autocomplete="current-password"
             />
-
+            <a
+              href="/forgotpassword"
+              target="_blank"
+              class="text-sm underline text-teal-700 cursor-pointer"
+              >Forgot password ?</a
+            >
             <div class="flex justify-between items-center">
               <label
                 class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"

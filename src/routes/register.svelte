@@ -27,7 +27,7 @@
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import userStore from '../stores/userStore'
-  import { roleStore } from '../stores/stores'
+  import { labelStore, roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
 
   let userRegister: UserType = {
@@ -127,6 +127,10 @@
     validationStore.set(errors)
   }
 </script>
+
+<svelte:head>
+	<title>{$labelStore.name} - Register</title>
+</svelte:head>
 
 <Header type="split" />
 <Container>

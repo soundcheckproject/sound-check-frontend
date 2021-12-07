@@ -12,6 +12,7 @@
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Title from '../../components/Title.svelte'
   import ButtonBox from '../../components/ButtonBox.svelte'
+import { labelStore } from '../../stores/stores';
 
   let searchNickname: string = ''
   let artists: UserType[] = []
@@ -53,6 +54,10 @@
     getLabelArtists()
   })
 </script>
+
+<svelte:head>
+	<title>{$labelStore.name} - Artists</title>
+</svelte:head>
 
 <Header type="split" />
 <main class="py-8 ">

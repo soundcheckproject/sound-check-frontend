@@ -77,7 +77,7 @@ export const validateLength = (input: string, length: number): Error => {
 }
 export const validateEmpty = (input: string): Error => {
   const errorName = 'empty'
-  if (input.length > 0) return { error: errorName, status: true }
+  if (input && input.length > 0) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
 
@@ -163,7 +163,7 @@ export const validateErrorTime = (
   type: string,
   validation: string,
   errors: Error[],
-) => {
+): void => {
   const errorsReturn: Error[] = errors
   const errorName = type + '_' + validation
 
@@ -172,7 +172,7 @@ export const validateErrorTime = (
     validationStore.set([...errorsReturn, errorName])
     setTimeout(() => {
       validationStore.set(errors.filter((v: string) => v !== errorName))
-    }, 3000)
+    }, 10000)
   }
 }
 

@@ -1,15 +1,16 @@
 import { getAuth } from 'firebase/auth'
+import type { ArtworkType, TrackType } from 'src/types/Track.type'
 
 export const uploadArtwork = async (
-  file: any,
+  file: File,
   fileName: string,
   trackId: string,
-): Promise<any> => {
+): Promise<ArtworkType> => {
   const formData = new FormData()
   formData.append('imageFile', file, fileName)
 
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL_REST}/artworks/upload/` + trackId,
+    `${import.meta.env.VITE_BACKEND_URL_REST}/tracks/upload/artwork/` + trackId,
     {
       method: 'POST',
       headers: {
@@ -18,13 +19,13 @@ export const uploadArtwork = async (
       body: formData,
     },
   )
-  return response
+  return response as ArtworkType
 }
 export const uploadTrack = async (
-  file: any,
+  file: File,
   fileName: string,
   trackId: string,
-): Promise<any> => {
+): Promise<TrackType> => {
   const formData = new FormData()
   formData.append('audioFile', file, fileName)
 
@@ -38,8 +39,9 @@ export const uploadTrack = async (
       body: formData,
     },
   )
-  return response
+  return response as TrackType
 }
+
 export const uploadLogo = async (
   file: any,
   fileName: string,
@@ -92,11 +94,8 @@ export const getTrackFileFromTrackId = async (
           Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
         },
       },
-    ).then(res => res.blob())
+    ).then(res => res.json())
     // Todo: error voor unloaded tracks
-    // .then(res => {
-    //   if (res.status === 500) throw new Error('Internal server error')
-    // })
 
     return response
   } catch (err) {

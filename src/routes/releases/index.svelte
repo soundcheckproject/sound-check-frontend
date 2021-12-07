@@ -10,6 +10,7 @@
   import Title from '../../components/Title.svelte'
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Footer from '../../components/Footer.svelte'
+import { labelStore } from '../../stores/stores';
 
   let tracks: TrackType[] = []
 
@@ -55,6 +56,10 @@
     getTracks()
   })
 </script>
+
+<svelte:head>
+	<title>{$labelStore.name} - Releases</title>
+</svelte:head>
 
 <Header type="split" />
 <main>

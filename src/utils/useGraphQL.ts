@@ -25,13 +25,13 @@ export const query = async (
     const gqlReqponse = await res.json()
 
     if (gqlReqponse.errors) {
-      throw gqlReqponse.errors
+      throw gqlReqponse.errors;
     }
 
     return gqlReqponse.data[name]
   } catch (err) {
     console.log({ err })
-    return err
+    throw err
   }
 }
 
@@ -82,7 +82,7 @@ export const getLinks = async (): Promise<Link[]> => {
   )
   return response
 }
-export const getArtistsByNickName = async (
+export const getUsersByNickname = async (
   nickname: string,
 ): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
   const response = await query(
@@ -98,6 +98,24 @@ export const getArtistsByNickName = async (
   )
   return response
 }
+
+export const getArtistsByNickName = async (
+  nickname: string,
+): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
+  const response = await query(
+    `getArtistsByNickname`,
+    `query getArtistsByNickname($nickname: String!) {
+  getArtistsByNickname(nickname: $nickname) {
+  uuid
+  nickName
+  logo  
+  }
+}`,
+    { nickname: nickname },
+  )
+  return response
+}
+
 export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   const response = await query(
     `getUser`,
@@ -133,7 +151,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   )
   return response
 }
-export const createTrack = async (track: any): Promise<{ uuid: string }> => {
+export const createTrack = async (track: TrackType): Promise<{ uuid: string }> => {
   const response = await query(
     'createTrack',
     `mutation createTrack($data: CreateTrackInput!) {
