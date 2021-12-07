@@ -6,7 +6,7 @@
   import {
     addFeedbackToTrack,
     getTrackFeedbacksByTrackId,
-query,
+    query,
   } from '../utils/useGraphQL'
   import Button from './Button.svelte'
   import userStore from '../stores/userStore'
@@ -28,18 +28,18 @@ query,
   export let audio: HTMLAudioElement = undefined
 
   let trackInfo: TrackInfoType = {
-    duration: '0:00',
-    currentTime: '0:00',
-    playing: true,
-    playerBar: null,
-    muted: false,
-  }
-
-  let wavesurfer: any
-  let feedbackInput = ''
+      duration: '0:00',
+      currentTime: '0:00',
+      playing: true,
+      playerBar: null,
+      muted: false,
+    },
+    wavesurfer: any,
+    feedbackInput = '',
+    isMuted: Boolean = false
 
   const changeTrackTime = (timeStampSong: number) => {
-    audio.currentTime = timeStampSong
+    // audio.currentTime = timeStampSong
     wavesurfer.stop()
     wavesurfer.skip(timeStampSong)
     wavesurfer.play()
@@ -98,9 +98,8 @@ query,
     })
 
     // ! not tested yet
-    if(track.uuid){
+    if (track.uuid) {
       const data = await getTrackFileFromTrackId(track.uuid)
-      console.log({data})
       audio = data.encodedFile
     }
   })
@@ -110,12 +109,11 @@ query,
   })
 
   $: {
+    console.log('change')
     if (audio) {
-      console.log({audio})
       if (wavesurfer) {
         wavesurfer.load(audio)
         wavesurfer.on('ready', () => {
-          // console.log(trackPlayable)
           trackPlayable = true
 
           const trackDuration = parseInt(wavesurfer.getDuration().toFixed(0))
@@ -132,17 +130,14 @@ query,
         })
       }
     }
+  }
+
+  $: {
     localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
   }
 </script>
 
 {#if track}
-  <!-- {#if audio}
-    <audio hidden bind:this={audio} preload="auto" controls>
-      <source src={audio} type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-  {/if} -->
   <div class="relative">
     <div
       in:fade|local={{ duration: 200, delay: 200 }}
@@ -313,13 +308,13 @@ query,
             </div>
             <div
               on:click={() => {
-                if (wavesurfer) wavesurfer.setMute(!wavesurfer.getMute())
+                if (wavesurfer) {isMuted = !isMuted; wavesurfer.setMute(isMuted)}
               }}
             >
               {#if wavesurfer}
-                {#if !wavesurfer.getMute()}
+                {#if !isMuted}
                   <svg
-                    class:active={!wavesurfer.getMute()}
+                    class:active={!isMuted}
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
                     height="20"
@@ -337,7 +332,7 @@ query,
                   </svg>
                 {:else}
                   <svg
-                    class:active={!wavesurfer.getMute()}
+                    class:active={isMuted}
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
                     height="20"
@@ -441,16 +436,15 @@ query,
                         wrote on {formatDateTime(new Date(feedback.date))}
                       </p>
                       <!-- Todo: make weird cursor pointer smooth -->
-                      <div
-                        on:click={() => changeTrackTime(feedback.timeStampSong)}
-                        class="group cursor-pointer"
-                      >
+                      <!-- ! Feature -->
+                      <!-- on:click={() => changeTrackTime(feedback.timeStampSong)} -->
+                      <div class="group cursor-pointer">
                         <div
-                          class="backdrop-blur-xl opacity-100 transition-opacity group-hover:opacity-0 px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
+                          class="backdrop-blur-xl opacity-100 transition-opacity px-3 py-1 text-xs rounded-full bg-opacity-10 bg-white absolute right-4 top-4 flex  "
                         >
                           {formatTimeForPlayer(feedback.timeStampSong)}
                         </div>
-                        <div
+                        <!-- <div
                           class="backdrop-blur-xl opacity-0 transition-opacity group-hover:opacity-100 absolute right-4  rounded-full bg-opacity-10 bg-white p-2 justify-center top-4 items-center"
                         >
                           <svg
@@ -467,7 +461,7 @@ query,
                             <circle cx="12" cy="12" r="10" />
                             <polygon points="10 8 16 12 10 16 10 8" />
                           </svg>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                     <p class="pl-6 pb-4 opacity-80 -mt-2">

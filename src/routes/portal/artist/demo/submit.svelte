@@ -36,23 +36,24 @@
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
+  import variables from '../../../../utils/variables'
 
   let artistSearch = { nickName: '', hover: false }
 
   let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
   let newTrack: TrackType = {
-    title: '',
-    description: '',
+    title: 'You and i',
+    description: 'Heavy bass track for clubing and raves',
     previewStart: 0,
-    previewStop: 0,
-    lyrics: '',
+    previewStop: 20,
+    lyrics: 'You and iiiiiiiiii',
     artistIds: [$userStore.uuid],
     genreId: 'Pick a genre',
-    labelId: '',
+    labelId: variables.labelId as string,
     prefferdReleaseDate: undefined,
     artwork: {
-      designer: '',
+      designer: 'Niels Onderbeke',
     },
   }
   let user = $userStore
@@ -74,7 +75,9 @@
     artworkClick: HTMLInputElement,
     trackDataClick: HTMLInputElement,
     trackBlob: any,
-    royaltyPercentageTotal: number = 0
+    royaltyPercentageTotal: number = 0,
+    track: File,
+    artwork: File
 
   const calcRoyaltyPercentageTotal = () => {
     royaltyPercentageTotal = 0
@@ -92,37 +95,51 @@
   let uploadPageStatus = 1
 
   const previewArtwork = (e: any) => {
-    let image = e.target.files[0]
+    artwork = e.target.files[0]
     let reader = new FileReader()
-    reader.readAsDataURL(image)
+    reader.readAsDataURL(artwork)
     reader.onload = e => {
       artworkBase64String = e.target.result
-      console.log({ artworkBase64String })
     }
   }
   const previewTrack = (e: any) => {
-    let track = e.target.files[0]
+    track = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(track)
 
     reader.onload = e => {
       trackBase64String = e.target.result
-      console.log({ trackBase64String })
     }
   }
 
-  const handleSubmit = async () => {}
-
-  const createTrack = async () => {
+  const postTrack = async (): Promise<string> => {
     // ! Create track mutation uitvoeren in de backend
+    loadingStatus.submit = true
+    newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
+    console.log(newTrack)
+    if ($validationStore.length == 0) {
+      // Create track in database
+      try {
+        const { uuid } = await createTrack(newTrack)
+        return uuid
+      } catch (error) {
+        console.error('Could not post track data to gql api', error)
+      }
+    }
   }
 
-  const uploadTrackFile = async () => {
-    // ! Uplaod the track blob file to rest api
-  }
-
-  const uploadArtworkFile = async () => {
-    // ! Uplaod the artwork blob file to rest api
+  const handleSubmit = async () => {
+    try {
+      const trackId: string = await postTrack()
+      await uploadTrack(trackBlob[0], track.name, trackId)
+      await uploadArtwork(artworkBlob[0], artwork.name, trackId)
+       goto(`/portal/artist/demo/${trackId}`)
+    } catch (error) {
+      console.error('Something went wrong on posting the track.', error)
+      validateErrorTime('general', 'submit', errors)
+    } finally {
+      loadingStatus.submit = false
+    }
   }
 
   // const postTrack = async () => {
@@ -285,13 +302,6 @@
           <InputError errorInput="connection" />
           <SubTitle>📝 Information about your track</SubTitle>
           <div class="grid lg:grid-cols-2 gap-4">
-            <!-- <label class="portal"
-            >Create a title<input
-              bind:value={newTrack.title}
-              class="input portal"
-              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
-            /></label
-          > -->
             <Input
               required={true}
               bind:value={newTrack.title}
@@ -302,24 +312,10 @@
               }}
               placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
             />
-            <!-- <Input
-              title="Create a title"
-              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
-              bind:value={newTrack.title}
-            /> -->
 
             <div class="grid grid-cols-2 gap-4">
               <label class="portal"
                 >Pick a genre
-                <!-- <select
-                bind:value={newTrack.genreId}
-                class="input portal"
-                placeholder="e.g. Future House, Bass House"
-              >
-                {#each ['Future House', 'Bass House', 'Pop House', 'Dubstep'] as genre, index}
-                  <option value={genre}>{genre}</option>
-                {/each}</select
-              > -->
                 <select
                   bind:value={newTrack.genreId}
                   class="input portal text-red-300"
@@ -331,14 +327,6 @@
                   {/each}</select
                 >
               </label>
-              <!-- <label class="portal"
-              >Preferred release date<input
-                bind:value={newTrack.prefferdReleaseDate}
-                type="date"
-                class="input portal"
-                placeholder="e.g. August 8th, 2021"
-              /></label
-            > -->
               <Input
                 required={true}
                 errorInput="date"
@@ -566,7 +554,7 @@
                 >
                   {#if artworkBlob}
                     <p class="text-teal-700 font-medium">
-                      Artwork has been selected.
+                      {artwork ? artwork.name : ''} has been selected.
                     </p>
                   {:else}
                     <svg
@@ -630,7 +618,7 @@
               >
                 {#if trackBlob}
                   <p class="text-teal-700 font-medium">
-                    Track has been selected.
+                    {track ? track.name : ''} has been selected.
                   </p>
                 {:else}
                   <svg
@@ -697,7 +685,7 @@
           </p>
           <div class="flex justify-end">
             <Button
-              loading={loadingStatus.submit ? loadingStatus.submit : null}
+              loading={loadingStatus.submit ? 'Submitting track...' : null}
               color="bg-teal-700"
               onClick={handleSubmit}
               size="md">Submit track</Button

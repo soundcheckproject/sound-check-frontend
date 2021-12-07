@@ -150,7 +150,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   )
   return response
 }
-export const createTrack = async (track: any): Promise<{ uuid: string }> => {
+export const createTrack = async (track: TrackType): Promise<{ uuid: string }> => {
   const response = await query(
     'createTrack',
     `mutation createTrack($data: CreateTrackInput!) {
