@@ -17,17 +17,18 @@
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
-  import WaveSurfer from 'wavesurfer.js'
+  // import WaveSurfer from 'wavesurfer.js'
 
+  
   export let theme: 'light' | 'dark' = 'dark'
   export let feedback: boolean = false
   export let rounded: '' | 'rounded-md' | 'rounded-sm' = 'rounded-md'
-
+  
   let showFeedback: boolean =
-    JSON.parse(localStorage.getItem('showFeedback')) ?? true
-
+  JSON.parse(localStorage.getItem('showFeedback')) ?? true
+  
   let audio: HTMLAudioElement
-
+  
   let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
@@ -35,7 +36,8 @@
     playerBar: null,
     muted: false,
   }
-
+  
+  let WaveSurfer: any
   let wavesurfer: any
   let feedbackInput = ''
 
@@ -79,6 +81,10 @@
     if (feedback) {
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
     }
+
+      const module: any = await import('wavesurfer.js')
+      WaveSurfer = module.WaveSurfer
+
     wavesurfer = WaveSurfer.create({
       container: '#waveform',
       waveColor: 'white',

@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:16-alpine3.14
 
 # install dependencies
 WORKDIR /app
@@ -10,17 +10,19 @@ COPY . .
 
 RUN npm run build
 
-CMD ["ls"]
 
-# ###
-# # Only copy over the Node pieces we need
-# # ~> Saves 35MB
-# ###
-# FROM node:latest
+###
+# Only copy over the Node pieces we need
+# ~> Saves 35MB
+###
+FROM node:16-slim
+WORKDIR /app
+COPY --from=0 /app .
+COPY . .
 
-# WORKDIR /app
-# COPY --from=0 /app .
-# COPY . .
+EXPOSE 8888
 
-# EXPOSE 3000
-# CMD ["node", "./build"]
+ENV NODE_HOST=localhost
+ENV NODE_PORT=8888
+
+CMD ["node", "build"]
