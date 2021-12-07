@@ -197,9 +197,28 @@
   const updateUserRole = async () => {
     loadingStatus.role = true
 
-    await query(``, ``, { newRole: newRole })
+    console.log({
+      userId: artist.uuid,
+      roleId: newRole.uuid,
+    })
+
+    await query(
+      `updateUserRole`,
+      `mutation UpdateUserRole($updateUserRoleInput: UpdateUserRoleInput!) {
+        updateUserRole(updateUserRoleInput: $updateUserRoleInput) {
+          uuid
+        }
+      }`,
+      {
+        updateUserRoleInput: {
+          userId: artist.uuid,
+          roleId: newRole.uuid,
+        },
+      },
+    )
       .then(result => {
         console.log(result)
+        getArtist()
         loadingStatus.role = false
       })
       .catch(error => {
@@ -368,6 +387,7 @@
     getArtist()
     if ($roleStore == 'label-manager') {
       roles = await getRoles()
+      // console.log(roles)
     }
 
     // Admin update
@@ -785,7 +805,7 @@
                 >
                   <option selected disabled>Pick a role</option>
                   {#each roles as role}
-                    <option value={role.slug}>{role.name}</option>
+                    <option value={role}>{role.name}</option>
                   {/each}</select
                 >
               {/if}

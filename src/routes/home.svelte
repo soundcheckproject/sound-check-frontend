@@ -1,5 +1,5 @@
 <script>
-	import Navigation from '../components/Navigation.svelte';
+	import HomePage from './index.svelte';
 </script>
 
-<Navigation />
+<HomePage />

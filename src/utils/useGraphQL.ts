@@ -82,7 +82,7 @@ export const getLinks = async (): Promise<Link[]> => {
   )
   return response
 }
-export const getArtistsByNickName = async (
+export const getUsersByNickname = async (
   nickname: string,
 ): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
   const response = await query(
@@ -98,6 +98,24 @@ export const getArtistsByNickName = async (
   )
   return response
 }
+
+export const getArtistsByNickName = async (
+  nickname: string,
+): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
+  const response = await query(
+    `getArtistsByNickname`,
+    `query getArtistsByNickname($nickname: String!) {
+  getArtistsByNickname(nickname: $nickname) {
+  uuid
+  nickName
+  logo  
+  }
+}`,
+    { nickname: nickname },
+  )
+  return response
+}
+
 export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   const response = await query(
     `getUser`,
@@ -116,6 +134,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
         state
         logo
         role {
+          uuid
           name
         }
         userLinks {
@@ -132,7 +151,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   )
   return response
 }
-export const createTrack = async (track: any): Promise<{ uuid: string }> => {
+export const createTrack = async (track: TrackType): Promise<{ uuid: string }> => {
   const response = await query(
     'createTrack',
     `mutation createTrack($data: CreateTrackInput!) {
@@ -445,6 +464,17 @@ export const toggleSigned = async (
 }
 
 export const getRoles = async (): Promise<RoleType[]> => {
-  const response = await query(``, ``)
+  const response = await query(
+    `getRoles`,
+    `query Query {
+        getRoles {
+          uuid
+          name
+          slug
+          description
+        }
+      }
+  `,
+  )
   return response
 }

@@ -19,7 +19,7 @@
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
 
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { uploadArtwork, uploadTrack } from '../../../../utils/useRest'
   import ButtonBox from '../../../../components/ButtonBox.svelte'
@@ -35,21 +35,33 @@
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
+  import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
+  import variables from '../../../../utils/variables'
+
+  const inputFields: string[] = [
+    'title',
+    'description',
+    'lyrics',
+    'genreId',
+    'prefferdReleaseDate',
+  ]
 
   let artistSearch = { nickName: '', hover: false }
 
+  let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
+
   let newTrack: TrackType = {
-    title: 'Miss you so feat. Jebroer',
-    description: 'Niels his new hit song',
-    previewStart: 20,
-    previewStop: 35,
-    lyrics: 'I hate to admit it',
+    title: '',
+    description: '',
+    previewStart: 0,
+    previewStop: 20,
+    lyrics: '',
     artistIds: [$userStore.uuid],
-    genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-    labelId: '6db99699-7b78-4f7e-8104-ea0fbdcfa810',
-    prefferdReleaseDate: '2022-01-01',
+    genreId: 'Pick a genre',
+    labelId: variables.labelId as string,
+    prefferdReleaseDate: undefined,
     artwork: {
-      designer: 'nielsonderbeke2',
+      designer: '',
     },
   }
   let user = $userStore
@@ -66,14 +78,15 @@
   }
 
   let artworkBlob: any = '',
-    artworkPreview: any = '',
-    trackPreview: any = '',
-    artworkClick: HTMLInputElement
+    artworkBase64String: any = '',
+    trackBase64String: any = '',
+    artworkClick: HTMLInputElement,
+    trackDataClick: HTMLInputElement,
+    trackBlob: any,
+    royaltyPercentageTotal: number = 0,
+    track: File,
+    artwork: File
 
-  let trackDataClick: HTMLInputElement
-  let trackData: any = { info: {}, blob: {} }
-
-  let royaltyPercentageTotal: number = 0
   const calcRoyaltyPercentageTotal = () => {
     royaltyPercentageTotal = 0
     for (let artist of artistsArray) {
@@ -81,79 +94,81 @@
     }
   }
 
-  let uploadPageStatus = parseInt(localStorage.getItem('uploadPageStatus')) ?? 1
-
   const setUploadPageStatus = (i: number) => {
     uploadPageStatus = i
     localStorage.setItem('uploadPageStatus', uploadPageStatus.toString())
   }
 
+  // ! initial
+  let uploadPageStatus = 1
+
   const previewArtwork = (e: any) => {
-    let image = e.target.files[0]
+    artwork = e.target.files[0]
     let reader = new FileReader()
-    reader.readAsDataURL(image)
+    reader.readAsDataURL(artwork)
     reader.onload = e => {
-      artworkPreview = e.target.result
+      artworkBase64String = e.target.result
     }
   }
   const previewTrack = (e: any) => {
-    let track = e.target.files[0]
+    track = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(track)
+
     reader.onload = e => {
-      trackPreview = e.target.result
+      trackBase64String = e.target.result
     }
   }
 
-  const postTrack = async () => {
+  const postTrack = async (): Promise<string> => {
+    // ! Create track mutation uitvoeren in de backend
     loadingStatus.submit = true
-    newTrack.prefferdReleaseDate = new Date(newTrack.prefferdReleaseDate)
+    newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
     console.log(newTrack)
-    if ($validationStore.length == 0) {
+    if ($validationStore.length === 0) {
       // Create track in database
-      await createTrack(newTrack)
-        .then(async resCreateTrack => {
-          console.log(resCreateTrack)
-          const uploadName = trackData.blob[0].name
-          const fileName =
-            newTrack.title
-              .replace(/ /g, '')
-              .replace(/[^a-zA-Z ]/g, '')
-              .toLowerCase() +
-            '.' +
-            uploadName
-              .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-              .split('.')
-              .pop()
-          // Upload track to blob
-          await uploadTrack(trackData.blob[0], fileName, resCreateTrack.uuid)
-            .then(async res => {
-              console.log(res)
-              // Upload artwork to blob
-              await uploadArtwork(artworkBlob[0], fileName, resCreateTrack.uuid)
-                .then(res => {
-                  loadingStatus.submit = false
-                  console.log(res)
+      try {
+        const { uuid } = await createTrack(newTrack)
+        return uuid
+      } catch (error) {
+        console.error('Could not post track data to gql api', error)
+      }
+    }
+  }
 
-                  goto('/portal/artist/demo/' + resCreateTrack.uuid)
-                })
-                .catch(error => {
-                  loadingStatus.submit = false
-                  validateErrorTime('artwork', 'upload', errors)
-                })
-            })
-            .catch(error => {
-              loadingStatus.submit = false
-              validateErrorTime('track', 'upload', errors)
-            })
-        })
-        .catch(e => {
+  let errors: string[] = []
+  const checkValidation = (type: string) => {
+    for (const errorType of inputFields) {
+      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+    }
+  }
+
+  const checkAllInputs = async () => {
+    return new Promise(resolve => {
+      inputFields.map((field: string) => {
+        checkValidation(field)
+      })
+      resolve(true)
+    })
+  }
+
+  const handleSubmit = async () => {
+    if (await checkAllInputs()) {
+      if ($validationStore.length === 0)
+        try {
+          const trackId: string = await postTrack()
+          await uploadTrack(trackBlob[0], track.name, trackId)
+          await uploadArtwork(artworkBlob[0], artwork.name, trackId)
+          goto(`/portal/artist/demo/${trackId}`)
+        } catch (error) {
+          console.error('Something went wrong on posting the track.', error)
+          validateErrorTime('general', 'submit', errors)
+        } finally {
           loadingStatus.submit = false
-          validateErrorTime('connection', 'graphql', errors)
-        })
-    } else {
-      loadingStatus.submit = false
-      validateErrorTime('general', 'errors', errors)
+        }
+      else {
+        validateErrorTime('general', 'errors', errors)
+      }
     }
   }
 
@@ -168,32 +183,23 @@
     }
   }
 
-  let errors: string[] = []
-  const checkValidation = (type: string) => {
-    // if (type == 'title') {
-    //   errors = validateErrors(
-    //     [validateEmailValid(user.email), validateEmpty(user.email)],
-    //     type,
-    //     errors,
-    //   )
-    // }
-    // if (type == 'description') {
-    //   errors = validateErrors([validateLength(user.password, 5)], type, errors)
-    // }
-    for (const errorType of [
-      'title',
-      'description',
-      'lyrics',
-      'genreId',
-      'prefferdReleaseDate',
-    ]) {
-      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
-    }
-    // console.log(errors)
-  }
-
   onMount(async () => {
+    const pageStatus: string | undefined =
+      localStorage.getItem('uploadPageStatus')
+    if (localStorage.getItem('uploadPageStatus')) {
+      setUploadPageStatus(parseInt(pageStatus))
+    } else {
+      setUploadPageStatus(1)
+    }
+
     genres = await getGenres()
+    if (genres) {
+      newTrack.genreId = genres[0].uuid
+    }
+  })
+
+  onDestroy(() => {
+    setUploadPageStatus(1)
   })
 
   $: {
@@ -204,27 +210,28 @@
 <div class="grid gap-8">
   <FadeBox>
     <div class="flex space-x-2">
-      <ButtonBox
-        on:click={() => {
-          uploadPageStatus > 1 ? uploadPageStatus-- : () => {}
-        }}
-      >
-        <svg
-          class="rotate-180 "
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+      {#if uploadPageStatus > 1}
+        <ButtonBox
+          on:click={() => {
+            uploadPageStatus > 1 && setUploadPageStatus(uploadPageStatus - 1)
+          }}
         >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </ButtonBox>
-
+          <svg
+            class="rotate-180 "
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </ButtonBox>
+      {/if}
       {#each [1, 2, 3, 4] as i}
         <ButtonBox
           active={uploadPageStatus == i ? true : false}
@@ -234,10 +241,10 @@
         >
           {i}
         </ButtonBox>{/each}
-      {#if uploadPageStatus != 4}
+      {#if uploadPageStatus < 4}
         <ButtonBox
           on:click={() => {
-            uploadPageStatus < 4 ? uploadPageStatus++ : () => {}
+            uploadPageStatus < 4 && setUploadPageStatus(uploadPageStatus + 1)
           }}
         >
           Next
@@ -261,22 +268,13 @@
   <Box>
     <div class="z-10 absolute -top-4 left-12 flex space-x-2" />
     <Title>Submit a new track</Title>
-
+    <InputError errorInput="general" />
     <form class="" enctype="multipart/form-data">
-      {#if uploadPageStatus == 1}
+      {#if uploadPageStatus === 1}
         <FlyBox>
           <InputError errorInput="connection" />
-
           <SubTitle>📝 Information about your track</SubTitle>
-
           <div class="grid lg:grid-cols-2 gap-4">
-            <!-- <label class="portal"
-            >Create a title<input
-              bind:value={newTrack.title}
-              class="input portal"
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
-            /></label
-          > -->
             <Input
               required={true}
               bind:value={newTrack.title}
@@ -285,55 +283,33 @@
               on:input={() => {
                 checkValidation('title')
               }}
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
             />
-            <!-- <Input
-              title="Create a title"
-              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
-              bind:value={newTrack.title}
-            /> -->
 
             <div class="grid grid-cols-2 gap-4">
               <label class="portal"
                 >Pick a genre
-                <!-- <select
-                bind:value={newTrack.genreId}
-                class="input portal"
-                placeholder="For example: Future House, Bass House"
-              >
-                {#each ['Future House', 'Bass House', 'Pop House', 'Dubstep'] as genre, index}
-                  <option value={genre}>{genre}</option>
-                {/each}</select
-              > -->
                 <select
                   bind:value={newTrack.genreId}
                   class="input portal text-red-300"
-                  placeholder="For example: Future House, Bass House"
+                  placeholder="e.g. Future House, Bass House"
                 >
-                  <option selected disabled>Pick a genre</option>
+                  <option disabled selected>Pick a genre</option>
                   {#each genres as genre}
                     <option value={genre.uuid}>{genre.name}</option>
                   {/each}</select
                 >
               </label>
-              <!-- <label class="portal"
-              >Preferred release date<input
-                bind:value={newTrack.prefferdReleaseDate}
-                type="date"
-                class="input portal"
-                placeholder="For example: August 8th, 2021"
-              /></label
-            > -->
               <Input
                 required={true}
                 errorInput="date"
-                bind:value={newTrack.prefferdReleaseDate}
+                bind:value={prefferedReleaseDateString}
                 on:input={() => {
                   checkValidation('date')
                 }}
                 type="date"
                 title="Preferred release date"
-                placeholder="For example: August 8th, 2021"
+                placeholder="e.g. August 8th, 2021"
               />
             </div>
             <Input
@@ -346,7 +322,7 @@
               textarea
               rows="5"
               title="Describe your track"
-              placeholder="This track is about.. It was created in .. The main theme of the track is.."
+              placeholder="e.g. “This track is about...“"
             />
 
             <Input
@@ -359,7 +335,7 @@
               textarea
               rows="5"
               title="Lyrics of your track"
-              placeholder="For example: “I’m in love with the shape of you..“"
+              placeholder="e.g. “I’m in love with the shape of you...“"
             />
           </div>
           <div class="flex justify-end">
@@ -387,7 +363,7 @@
                     on:input={() => searchArtistByNickName()}
                     on:blur={() => searchArtistByNickName()}
                     class="input portal"
-                    placeholder="Search by name.."
+                    placeholder="Search by nickname..."
                   /></label
                 >
                 {#if artistSearch.hover}
@@ -507,16 +483,16 @@
           <div class="grid gap-8 lg:grid-cols-min-auto ">
             <!-- <figure /> -->
             <div
-              class="bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer {artworkPreview.length >
+              class="bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
               0
                 ? 'mshadow-sm '
                 : ''}"
-              style={artworkPreview.length > 0
-                ? `background:url('${artworkPreview}') center center;background-size:cover`
+              style={artworkBase64String.length > 0
+                ? `background:url('${artworkBase64String}') center center;background-size:cover`
                 : ''}
               on:click={() => artworkClick.click()}
             >
-              {#if artworkPreview.length <= 0}
+              {#if artworkBase64String.length <= 0}
                 <svg
                   class="text-teal-700 opacity-90"
                   xmlns="http://www.w3.org/2000/svg"
@@ -540,7 +516,7 @@
 
               <Input
                 title="Artwork designer"
-                placeholder="For example: Picasso"
+                placeholder="e.g. Picasso"
                 bind:value={newTrack.artwork.designer}
               />
               <div class="label portal">
@@ -551,7 +527,7 @@
                 >
                   {#if artworkBlob}
                     <p class="text-teal-700 font-medium">
-                      Artwork has been selected.
+                      {artwork ? artwork.name : ''} has been selected.
                     </p>
                   {:else}
                     <svg
@@ -570,7 +546,7 @@
                       <polyline points="17 8 12 3 7 8" />
                       <line x1="12" y1="3" x2="12" y2="15" />
                     </svg>
-                    <p>Click to upload or drag your artwork here..</p>
+                    <p>Click to upload your artwork here...</p>
                   {/if}
                   <input
                     required={true}
@@ -584,16 +560,6 @@
                   />
                 </div>
               </div>
-              <!-- <label class="portal"
-              >Upload Artwork<input
-                type="file"
-                accept=".jpg, .jpeg, .png"
-                bind:this={artworkBlob}
-                on:change={e => previewArtwork(e)}
-                class="input portal"
-                placeholder="Click to upload or drag your artwork here.."
-              />
-            </label> -->
             </div>
           </div>
           <div class="flex justify-end">
@@ -607,11 +573,11 @@
       {/if}
       {#if uploadPageStatus == 4}
         <FlyBox>
-          {#if trackPreview}
+          {#if trackBase64String}
             <TrackPlayer
               track={newTrack}
-              artworkFile={artworkPreview}
-              audioFile={trackPreview}
+              artworkFile={artworkBase64String}
+              audio={trackBase64String}
             />
           {/if}
           <SubTitle>💽 Upload track</SubTitle>
@@ -620,17 +586,38 @@
             <div class="label portal">
               Upload track
               <div
-                class="input portal w-full justify-center items-center cursor-pointer"
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
                 on:click={() => trackDataClick.click()}
               >
-                <!-- {trackBlob ?? trackBlob[0].name ?? ''} -->
-                Click to upload or drag your track here..
+                {#if trackBlob}
+                  <p class="text-teal-700 font-medium">
+                    {track ? track.name : ''} has been selected.
+                  </p>
+                {:else}
+                  <svg
+                    class="-mt-px"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <p>Click to upload your track here...</p>
+                {/if}
                 <input
                   required={true}
                   type="file"
                   accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}
-                  bind:files={trackData.blob}
+                  bind:files={trackBlob}
                   on:change={e => previewTrack(e)}
                   class="hidden"
                   placeholder=""
@@ -638,7 +625,9 @@
               </div>
             </div>
             <div
-              class="label portal {trackPreview ? 'opacity-100' : 'opacity-40'}"
+              class="label portal {trackBase64String
+                ? 'opacity-100'
+                : 'opacity-40'}"
             >
               Preview part *
               <div
@@ -650,7 +639,7 @@
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
                   min="0"
-                  disabled={trackPreview ? false : true}
+                  disabled={trackBase64String ? false : true}
                 />
                 <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
                 <input
@@ -658,7 +647,7 @@
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
                   min="30"
-                  disabled={trackPreview ? false : true}
+                  disabled={trackBase64String ? false : true}
                 />
               </div>
             </div>
@@ -669,9 +658,9 @@
           </p>
           <div class="flex justify-end">
             <Button
-              loading={loadingStatus.submit ? loadingStatus.submit : null}
+              loading={loadingStatus.submit ? 'Submitting track...' : null}
               color="bg-teal-700"
-              onClick={postTrack}
+              onClick={handleSubmit}
               size="md">Submit track</Button
             >
           </div>

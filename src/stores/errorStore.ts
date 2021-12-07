@@ -173,6 +173,11 @@ const errorStore = readable<{
       errorName: 'general_change',
       message: 'Nothing has changed, please only submit changes',
     },
+    {
+      display: false,
+      errorName: 'general_submit',
+      message: 'Something went wrong while submitting your track',
+    },
   ],
   update: [
     {

@@ -148,7 +148,7 @@ import FadeBox from '../components/portal/FadeBox.svelte';
       <article id="releases">
         <Title className="">Latest releases</Title>
         <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
-          {#if latestReleases.length > 0}
+          {#if latestReleases && latestReleases.length > 0}
             {#each latestReleases as track}
               <Track on:click={()=>{goto('/releases/'+track.uuid)}} {track} />
             {/each}
