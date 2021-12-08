@@ -74,45 +74,36 @@
       {/each}
     </div>
   </Box>
-  <div class="grid md:grid-cols-3 gap-8">
+  <div class="flex items-center">
     {#if totalTracks.accepted}
-      <Box class="flex items-center justify-center lg:justify-start">
-        <a href="/portal/artist/demo">
-          <p class="uppercase text-sm lg:text-lg font-semibold text-accepted">
-            Accepted
+      <a href="/portal/artist/demo">
+        <Box size="sm" class="bg-accepted">
+          <p class="uppercase text-sm lg:text-md font-semibold text-white">
+            Pending ({totalTracks.pending})
           </p>
-          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
-            {totalTracks.accepted} track{#if totalTracks.accepted > 1}s{/if}
-          </p>
-        </a>
-      </Box>
+        </Box>
+      </a>
     {/if}
     {#if totalTracks.pending}
-      <Box class="flex items-center justify-center lg:justify-start">
-        <a href="/portal/artist/demo">
-          <p class="uppercase text-sm lg:text-lg font-semibold text-pending">
-            Pending
+      <a href="/portal/artist/demo">
+        <Box size="sm" class="bg-pending">
+          <p class="uppercase text-sm lg:text-md font-semibold text-white">
+            Pending ({totalTracks.pending})
           </p>
-          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
-            {totalTracks.pending} track{#if totalTracks.pending > 1}s{/if}
-          </p>
-        </a>
-      </Box>
+        </Box>
+      </a>
     {/if}
     {#if totalTracks.denied}
-      <Box class="flex items-center justify-center lg:justify-start">
-        <a href="/portal/artist/demo">
-          <p class="uppercase text-sm lg:text-lg font-semibold text-denied">
-            Denied
+      <a href="/portal/artist/demo">
+        <Box size="sm" class="bg-denied">
+          <p class="uppercase text-sm lg:text-md font-semibold text-white">
+            Pending ({totalTracks.pending})
           </p>
-          <p class="text-xl lg:text-3xl font-medium text-gray-600 mt-1">
-            {totalTracks.denied} track{#if totalTracks.denied > 1}s{/if}
-          </p>
-        </a>
-      </Box>
+        </Box>
+      </a>
     {/if}
   </div>
-</div>
+</div>    
 
 <style>
   .snap {
