@@ -380,7 +380,7 @@
     }
   }
 
-  let roles: RoleType[] = null
+  let roles: RoleType[] = []
 
   onMount(async () => {
     links = await getLinks()
