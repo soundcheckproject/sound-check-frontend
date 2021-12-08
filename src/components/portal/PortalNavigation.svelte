@@ -7,12 +7,15 @@
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
+
+  let toggleMenu: Boolean = false
 </script>
 
+<div class="block sm:hidden"></div>
 <aside
   in:fly|local={{ x: -300, duration: 200 }}
-  class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 ${
-    $menuState ? ' w-24 px-6' : 'w-72'
+  class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 hidden sm:block ${
+    $menuState ? 'w-24 px-6' : 'w-72'
   }`}
 >
   <div class="flex flex-col justify-between h-full space-y-12 ">
