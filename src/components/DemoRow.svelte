@@ -101,12 +101,14 @@
     loadTrack = true
   }}
 >
-  <img
-    class="h-32 w-32 bg-gray-100 rounded-sm cursor-pointer hover:opacity-75 transition-opacity"
-    src={track.artwork.resource}
-    alt="artwork"
-    on:click={() => goto('demo/' + track.uuid)}
-  />
+  <a href={`demo/${track.uuid}`}>
+    <img
+      class="h-32 w-32 bg-gray-100 rounded-sm hover:opacity-75 transition-opacity"
+      src={track.artwork.resource}
+      alt="artwork"
+    />
+  </a>
+
   <div
     class={`w-full justify-between flex  rounded-md text-sm transition-colors `}
   >
