@@ -463,6 +463,21 @@ export const toggleSigned = async (
   return response
 }
 
+export const toggleSignedPending = async (
+  trackId: string,
+): Promise<string> => {
+  const response = await query(
+    'toggleSigned',
+    `mutation toggleSigned($trackId: String!) {
+      toggleSigned(trackId: $trackId) {
+        uuid
+      }
+    }`,
+    { trackId: trackId },
+  )
+  return response
+}
+
 export const getRoles = async (): Promise<RoleType[]> => {
   const response = await query(
     `getRoles`,
