@@ -102,9 +102,9 @@
 
 <Box>
   <Title>
-    <div class="flex justify-between items-center">
-      <div>All demos</div>
-      <div class="flex space-x-2">
+    <div class="grid sm:grid-cols-2 items-center">
+      <div>Demos</div>
+      <div class="flex space-x-2 sm:ml-auto">
         <select class="portal input w-32" bind:value={filterType}>
           <option value="pending">Pending</option>
           <option value="accepted">Accepted</option>
@@ -166,7 +166,7 @@
       <div class="flex justify-between items-center">
         <SubTitle>Pending demos</SubTitle>
       </div>
-      <div class="grid gap-4 ">
+      <div class="grid gap-8 ">
         {#each filteredDemos.pending as track}
           <DemoRow {track} />
         {/each}
