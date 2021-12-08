@@ -103,7 +103,7 @@
 <Box>
   <Title>
     <div class="grid sm:grid-cols-2 items-center">
-      <div>Demos</div>
+      <h1>Demos</h1>
       <div class="flex space-x-2 sm:ml-auto">
         <select class="portal input w-32" bind:value={filterType}>
           <option value="pending">Pending</option>
