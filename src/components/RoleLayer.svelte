@@ -1,6 +1,6 @@
 <script lang="ts">
   import { roleStore } from '../stores/stores'
-  export let allowedForRoles: string[] = ['member']
+  export let allowedForRoles: string[] = ['user']
   export let popup: boolean = false
   import Popup from '../components/Popup.svelte'
 

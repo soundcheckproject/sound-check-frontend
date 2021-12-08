@@ -5,16 +5,9 @@
   import { fade, slide } from 'svelte/transition'
 
   import type { UserType } from '../types/User.type'
-  import {
+  import { query } from '../utils/useGraphQL'
 
-    query,
-  } from '../utils/useGraphQL'
-
-  import {
-    formatDate,
-
-    formatTimeForPlayer,
-  } from '../utils/useFormat'
+  import { formatDate, formatTimeForPlayer } from '../utils/useFormat'
   import { onMount } from 'svelte'
 
   import { denyTrack, signTrack } from '../utils/useTrack'
@@ -100,7 +93,7 @@
   </audio>
 {/if}
 <div
-  class="relative flex space-x-4 h-32 "
+  class="relative grid grid-cols-auto-1fr grid-rows-auto-auto gap-4"
   in:slide|local={{ duration: 200, delay: 200 }}
   out:slide|local={{ duration: 200 }}
   on:mouseenter={() => {
@@ -108,14 +101,16 @@
     loadTrack = true
   }}
 >
-  <img
-    class="h-32 w-32 bg-gray-100 rounded-sm cursor-pointer hover:opacity-75 transition-opacity"
-    src={track.artwork.resource}
-    alt="artwork"
-    on:click={() => goto('demo/' + track.uuid)}
-  />
+  <a href={`demo/${track.uuid}`}>
+    <img
+      class="h-32 w-32 bg-gray-100 rounded-sm hover:opacity-75 transition-opacity"
+      src={track.artwork.resource}
+      alt="artwork"
+    />
+  </a>
+
   <div
-    class={` w-full justify-between flex  rounded-md text-sm transition-colors `}
+    class={`w-full justify-between flex  rounded-md text-sm transition-colors `}
   >
     <div class="flex space-x-4 w-full justify-between">
       <div class="grid w-full">
@@ -178,98 +173,97 @@
             {/if}
           </div>
         </div>
-
-        <div
-          class="h-10 px-4 py-2 self-end flex rounded-md bg-gray-700 text-gray-100 items-center"
-        >
-          {#if trackPlayable}
-            <svg
-              on:click={() => {
-                trackInfo.playing = false
-                audio.pause()
-              }}
-              class="mr-1"
-              class:active={!trackInfo.playing}
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="10" y1="15" x2="10" y2="9" />
-              <line x1="14" y1="15" x2="14" y2="9" />
-            </svg>
-            <svg
-              on:click={() => {
-                trackInfo.playing = true
-                audio.play()
-              }}
-              class="mr-1 "
-              xmlns="http://www.w3.org/2000/svg"
-              class:active={trackInfo.playing}
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polygon points="10 8 16 12 10 16 10 8" />
-            </svg>
-            <svg
-              on:click={() => {
-                audio.currentTime += 5
-              }}
-              class="mr-3"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polygon points="13 19 22 12 13 5 13 19" />
-              <polygon points="2 19 11 12 2 5 2 19" />
-            </svg>
-            <div class="text-xs mr-2">00:00</div>
-            <div class="flex ml-2 mr-4 items-center w-full">
-              <div
-                class="bg-gray-400 transition-all h-0.5 rounded-sm "
-                bind:this={trackInfo.playerBar}
-              />
-              <div
-                class="-ml-2 bg-gray-400 group cursor-pointer h-3 w-3 relative rounded-full "
-                style=""
-              >
-                <div
-                  class="opacity-0 transition-opacity hover:bg-gray-400 rounded-full py-1 px-2 group-hover:opacity-100 absolute text-xs top-[6px] ml-1.5 -translate-y-1/2 -translate-x-1/2	text-shadow-lg filter drop-shadow-md"
-                >
-                  {trackInfo.currentTime}
-                </div>
-              </div>
-            </div>
-            <div class="text-xs ml-auto">{trackInfo.duration}</div>
-            <a
-              href="/portal/staff/demo/{track.uuid}"
-              class="w-28 text-xs text-right font-medium hover:underline"
-              >Learn more..</a
-            >
-          {:else}<p class="text-xs">Audio is not loaded yet.</p>
-          {/if}
-        </div>
       </div>
     </div>
+  </div>
+  <div
+    class="h-10 px-4 py-2 self-end flex rounded-md bg-gray-700 text-gray-100 items-center col-span-2 shadow-md"
+  >
+    {#if trackPlayable}
+      <svg
+        on:click={() => {
+          trackInfo.playing = false
+          audio.pause()
+        }}
+        class="mr-1"
+        class:active={!trackInfo.playing}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <line x1="10" y1="15" x2="10" y2="9" />
+        <line x1="14" y1="15" x2="14" y2="9" />
+      </svg>
+      <svg
+        on:click={() => {
+          trackInfo.playing = true
+          audio.play()
+        }}
+        class="mr-1 "
+        xmlns="http://www.w3.org/2000/svg"
+        class:active={trackInfo.playing}
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <polygon points="10 8 16 12 10 16 10 8" />
+      </svg>
+      <svg
+        on:click={() => {
+          audio.currentTime += 5
+        }}
+        class="mr-3"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polygon points="13 19 22 12 13 5 13 19" />
+        <polygon points="2 19 11 12 2 5 2 19" />
+      </svg>
+      <div class="text-xs mr-2">00:00</div>
+      <div class="flex ml-2 mr-4 items-center w-full">
+        <div
+          class="bg-gray-400 transition-all h-0.5 rounded-sm "
+          bind:this={trackInfo.playerBar}
+        />
+        <div
+          class="-ml-2 bg-gray-400 group cursor-pointer h-3 w-3 relative rounded-full "
+          style=""
+        >
+          <div
+            class="opacity-0 transition-opacity hover:bg-gray-400 rounded-full py-1 px-2 group-hover:opacity-100 absolute text-xs top-[6px] ml-1.5 -translate-y-1/2 -translate-x-1/2	text-shadow-lg filter drop-shadow-md"
+          >
+            {trackInfo.currentTime}
+          </div>
+        </div>
+      </div>
+      <div class="text-xs ml-auto">{trackInfo.duration}</div>
+      <a
+        href="/portal/staff/demo/{track.uuid}"
+        class="w-28 text-xs text-right font-medium hover:underline"
+        >Learn more..</a
+      >
+    {:else}<p class="text-xs">Audio is not loaded yet.</p>
+    {/if}
   </div>
 </div>
 

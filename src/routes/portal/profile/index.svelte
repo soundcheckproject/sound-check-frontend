@@ -380,7 +380,7 @@
     }
   }
 
-  let roles: RoleType[] = null
+  let roles: RoleType[] = []
 
   onMount(async () => {
     links = await getLinks()
@@ -410,7 +410,7 @@
       <SubTitle>Personal information</SubTitle>
       <InputError errorInput="general" />
       <form class="grid gap-6">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid sm:grid-cols-2 gap-4">
           <!-- <InputError errorInput={'nickname'} /> -->
           <Input
             errorInput="nickname"
@@ -429,7 +429,7 @@
             on:input={() => checkValidation('birthdate')}
           />
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid sm:grid-cols-2 gap-4">
           <Input
             title="First name"
             errorInput={'firstName'}
@@ -493,7 +493,7 @@
         </div>
         <SubTitle>🖼 Images</SubTitle>
         <InputError errorInput="logo" />
-        <div class="grid gap-4 grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-2">
           <div class="grid gap-6">
             <div class="label portal w-full">
               Upload logo

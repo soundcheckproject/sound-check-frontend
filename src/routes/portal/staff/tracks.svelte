@@ -46,10 +46,8 @@
 </script>
 
 <Box>
-  <Title>All tracks</Title>
-  <SubTitle>
-    <div class="flex justify-between w-full items-center">
-      <div>The archive</div>
+  <Title><div class="grid sm:grid-cols-2 items-center">
+      <h1>All tracks</h1>
       <label>
         <input
           bind:value={searchInput}
@@ -58,9 +56,8 @@
           placeholder="Search.."
         />
       </label>
-    </div>
-  </SubTitle>
-
+    </div></Title>
+    
   {#if tracks.length == 0}
     <Skeleton>Loading tracks..</Skeleton>
   {:else if filteredTracks.length == 0}

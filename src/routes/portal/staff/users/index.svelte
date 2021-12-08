@@ -45,6 +45,7 @@
           birthdate
           email
           country
+          logo
           role{
             slug
             name
@@ -60,11 +61,10 @@
 </script>
 
 <Box>
-  <Title>All users</Title>
-  <SubTitle>
-    <div class="flex justify-between w-full items-center">
-      <div>Filters</div>
-      <div class="flex space-x-2">
+  <Title>
+    <div class="grid sm:grid-cols-2 items-center">
+      <h1>Users</h1>
+      <div class="flex space-x-2 sm:ml-auto">
         <select
           class="portal input w-32"
           bind:value={filterValue}
@@ -87,16 +87,15 @@
         </label>
       </div>
     </div>
-  </SubTitle>
+  </Title>
   <div class="grid gap-4">
     {#if users.length === 0}
       <Skeleton loading={true}>Loading users..</Skeleton>
     {:else}
       {#each filteredUsers as user}
-        <div
-          on:click={() => goto(`/portal/staff/users/${user.uuid}`)}
-          class="grid grid-flow-col justify-start gap-4 "
-          style="grid-template-columns:auto 1fr"
+        <a
+          href={`/portal/staff/users/${user.uuid}`}
+          class="grid grid-cols-auto-1fr justify-start gap-4"
         >
           <div
             class="h-24 w-24 bg-gray-100 rounded-md flex justify-center items-center"
@@ -126,11 +125,11 @@
               </svg>{/if}
           </div>
           <div
-            class=" bg-gray-100 border-2 border-gray-100 hover:border-gray-300 transition-colors w-full grid gap-6 grid-flow-col items-center px-8 rounded-md cursor-pointer grid-template-columns-150-fr lg:grid-template-columns-150-auto-fr"
+            class=" bg-gray-100 border-gray-100 hover:border-gray-300 transition-colors w-full grid sm:gap-6 grid-cols-1 sm:grid-cols-2 items-center p-4 rounded-md cursor-pointer lg:grid-cols-150-auto-fr"
           >
             <div>
               <p class="font-semibold">{user.nickName}</p>
-              <div class="text-sm">{user.firstName} {user.surName}</div>
+              <p class="text-sm">{user.firstName} {user.surName}</p>
             </div>
             <div
               class="hidden lg:grid grid-flow-col items-center justify-start gap-4 text-gray-400"
@@ -145,7 +144,7 @@
               >
                 {user.role.name}
               </div>
-              <a href={`/portal/staff/users/${user.uuid}-edit`}>
+              <a class="hidden sm:block" href={`/portal/staff/users/${user.uuid}-edit`}>
                 <svg
                   class="text-gray-700"
                   xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +167,7 @@
               </a>
             </div>
           </div>
-        </div>
+        </a>
       {/each}
     {/if}
   </div>

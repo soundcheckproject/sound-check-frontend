@@ -10,7 +10,7 @@
 
 <FadeBox>
   <div
-    class="relative overflow-hidden  backdrop-blur-sm text-gray-50 grid  bg-gray-800 {rounded}"
+    class="relative overflow-hidden backdrop-blur-sm text-gray-50 grid  bg-gray-800 {rounded}"
   >
     {#if logo}
       <div
@@ -21,7 +21,7 @@
 
     <div class="z-10 grid grid-cols-min-auto p-6 lg:p-12 gap-6 lg:gap-12">
       <div
-        class="w-32 h-32 lg:h-64 lg:w-64 mshadow-md bg-opacity-10 bg-gray-200 rounded-md overflow-hidden flex justify-center items-center"
+        class="w-24 h-24 sm:w-32 sm:h-32 lg:h-64 lg:w-64 mshadow-md bg-opacity-10 bg-gray-200 rounded-md overflow-hidden flex justify-center items-center"
       >
         {#if logo}
           <img
@@ -90,13 +90,13 @@
         <div class="flex justify-between items-center">
           {#if artist.role}
             <div
-              class="mshadow-md text-sm rounded-full flex h-8 text-center bg-opacity-10 bg-white  px-4 justify-center items-center"
+              class="mshadow-md text-sm rounded-full flex text-center bg-opacity-10 bg-white px-4 py-2 justify-center items-center"
             >
               {artist.role.name}
             </div>
           {/if}
 
-          <p class="text-sm capitalize opacity-50 text-right">
+          <p class="hidden sm:block text-sm capitalize opacity-50 text-right">
             {artist.country}, {artist.city}
           </p>
         </div>

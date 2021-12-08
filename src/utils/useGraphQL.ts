@@ -136,6 +136,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
         role {
           uuid
           name
+          slug
         }
         userLinks {
 
@@ -459,6 +460,21 @@ export const toggleSigned = async (
       }
     }`,
     { isSigned: isSigned, trackId: trackId },
+  )
+  return response
+}
+
+export const toggleSignedPending = async (
+  trackId: string,
+): Promise<string> => {
+  const response = await query(
+    'toggleSigned',
+    `mutation toggleSigned($trackId: String!) {
+      toggleSigned(trackId: $trackId) {
+        uuid
+      }
+    }`,
+    { trackId: trackId },
   )
   return response
 }

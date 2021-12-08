@@ -7,18 +7,47 @@
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
+
+  $:{
+    console.log($menuState)
+  }
 </script>
 
+<div class={
+    $menuState ? 'block sm:hidden' : 'hidden'
+  }>
+   <div
+        class={`absolute right-6 top-6 transition-all delay-200 cursor-pointer bg-gray-700 backdrop-blur-sm z-10 p-2 rounded-full transform ${
+          $menuState && 'rotate-180'
+        }`}
+        on:click={() => menuState.set(!$menuState)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          class="-ml-px"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </div>
+</div>
 <aside
   in:fly|local={{ x: -300, duration: 200 }}
-  class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200 ${
-    $menuState ? ' w-24 px-6' : 'w-72'
+  class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200  ${
+    $menuState ? 'w-[calc(100vw-2.5rem)] sm:w-24 px-6 hidden sm:block' : 'w-[calc(100vw-2.5rem)] sm:w-72'
   }`}
 >
   <div class="flex flex-col justify-between h-full space-y-12 ">
     <div class="flex gap-6 flex-col items-start relative">
       <div
-        class={`transition-all delay-200 opacity-0 group-hover:opacity-100 cursor-pointer bg-gray-700 backdrop-blur-sm absolute  z-10 p-2 right-0 -mt-1 rounded-full transform ${
+        class={`transition-all delay-200 lg:opacity-0 lg:group-hover:opacity-100 cursor-pointer bg-gray-700 backdrop-blur-sm absolute z-10 p-2 right-0 -mt-6 sm:-mt-1 rounded-full transform ${
           $menuState ? 'rotate-180  -mr-10' : ' -mr-16'
         }`}
         on:click={() => menuState.set(!$menuState)}
@@ -38,7 +67,7 @@
           <polyline points="15 18 9 12 15 6" />
         </svg>
       </div>
-      <h1 class="text-3xl font-bold -mt-2   ">
+      <h1 class="text-3xl font-bold -mt-2">
         <a href="/portal" class="opacity-25  h-8 mb-1 flex ">
           {#if !$menuState}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
@@ -309,6 +338,7 @@
 </aside>
 
 <style>
+
   hr {
     background: white;
     border: 1px solid white;
