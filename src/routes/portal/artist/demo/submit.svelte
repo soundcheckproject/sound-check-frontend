@@ -43,7 +43,6 @@
     'description',
     'lyrics',
     'genreId',
-    'prefferdReleaseDate',
   ]
 
   let artistSearch = { nickName: '', hover: false }
@@ -304,12 +303,8 @@
                 required={true}
                 errorInput="date"
                 bind:value={prefferedReleaseDateString}
-                on:input={() => {
-                  checkValidation('date')
-                }}
                 type="date"
                 title="Preferred release date"
-                placeholder="e.g. August 8th, 2021"
               />
             </div>
             <Input

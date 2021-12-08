@@ -45,6 +45,7 @@
           birthdate
           email
           country
+          logo
           role{
             slug
             name
