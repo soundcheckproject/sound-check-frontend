@@ -136,6 +136,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
         role {
           uuid
           name
+          slug
         }
         userLinks {
 

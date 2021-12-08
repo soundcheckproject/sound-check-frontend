@@ -74,12 +74,12 @@
       {/each}
     </div>
   </Box>
-  <div class="flex items-center">
+  <div class="flex gap-4 items-center">
     {#if totalTracks.accepted}
       <a href="/portal/artist/demo">
         <Box size="sm" class="bg-accepted">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
-            Pending ({totalTracks.pending})
+            Accepted ({totalTracks.pending})
           </p>
         </Box>
       </a>
@@ -97,7 +97,7 @@
       <a href="/portal/artist/demo">
         <Box size="sm" class="bg-denied">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
-            Pending ({totalTracks.pending})
+            Denied ({totalTracks.pending})
           </p>
         </Box>
       </a>
