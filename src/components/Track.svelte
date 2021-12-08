@@ -1,18 +1,16 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
   import type { TrackType } from '../types/Track.type'
 
   import { fade } from 'svelte/transition'
 
-  export let track: TrackType
+  export let track: TrackType = undefined
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
   let hover = false
-
 </script>
 
 {#if add}
-  <div
+  <a
     class={`${
       size == 'sm'
         ? ' h-32 w-32'
@@ -22,7 +20,7 @@
         ? ' h-64 w-64'
         : ''
     } bg-gray-100 relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md`}
-    on:click={() => goto('/portal/artist/demo/submit')}
+    href="/portal/artist/demo/submit"
   >
     <svg
       class="opacity-80"
@@ -40,13 +38,13 @@
       <line x1="12" y1="8" x2="12" y2="16" />
       <line x1="8" y1="12" x2="16" y2="12" />
     </svg>
-  </div>
+  </a>
 {:else if track}
-  <div
+  <a
     class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
-    on:click
+    href={`/portal/artist/demo/${track.uuid}`}
   >
     <img
       alt="Trackname"
@@ -98,7 +96,7 @@
         <b class={`${size == 'sm' ? 'text-xs' : ''}`}>{track.title}</b>
       </div>
     {/if}
-  </div>
+  </a>
 
   <style>
     .snap-start {

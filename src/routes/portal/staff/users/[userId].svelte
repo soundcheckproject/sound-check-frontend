@@ -14,14 +14,19 @@
   import type { TrackType } from '../../../../types/Track.type'
   import TrackRow from '../../../../components/TrackRow.svelte'
   import EditButton from '../../../../components/portal/EditButton.svelte'
+  import { RoleName } from '../../../../types/Role.type'
+import FadeBox from '../../../../components/portal/FadeBox.svelte';
 
-  let artist: UserType
+  let artist: UserType = undefined
   let artistTracks: TrackType[] = []
+
   onMount(async () => {
     artist = await getArtistByUserId($page.params.userId)
+    console.log({ artist })
     if (
       artist &&
-      (artist.role.slug == 'user' || artist.role.slug == 'label-artist')
+      (artist.role.slug === RoleName.User ||
+        artist.role.slug === RoleName.LabelArtist)
     )
       artistTracks = await getTracksByArtistId(artist.uuid)
   })
@@ -30,8 +35,9 @@
   }
 </script>
 
-<div class="grid gap-8">
-  {#if artist}
+{#if artist}
+ <FadeBox>
+    <div class="grid gap-8">
     <ProfileBanner {artist} />
     <Box
       ><Title>
@@ -75,5 +81,6 @@
         </div>
       {/if}
     </Box>
-  {/if}
-</div>
+  </div>
+ </FadeBox>
+{/if}

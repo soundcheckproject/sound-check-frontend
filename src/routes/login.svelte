@@ -32,8 +32,8 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
 
   // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
-  // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
-  let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
+ let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
   const checkValidation = (type: string) => {

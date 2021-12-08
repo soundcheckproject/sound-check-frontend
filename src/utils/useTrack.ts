@@ -1,6 +1,6 @@
 import type { TrackType } from '../types/Track.type'
 import demoTracksStore from '../stores/demoTracksStore'
-import { getAllTracks, toggleSigned } from './useGraphQL'
+import { getAllTracks, toggleSigned, toggleSignedPending } from './useGraphQL'
 
 export const denyTrack = async (track: TrackType): Promise<void> => {
   if (track.isSigned != false) {
@@ -16,5 +16,6 @@ export const signTrack = async (track: TrackType): Promise<void> => {
 }
 //Todo: make track pending again
 export const pendingTrack = async (track: TrackType): Promise<void> => {
-  await toggleSigned(null, track.uuid)
+  await toggleSignedPending(track.uuid)
+  demoTracksStore.set(await getAllTracks())
 }
