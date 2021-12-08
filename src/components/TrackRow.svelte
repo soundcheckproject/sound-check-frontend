@@ -22,14 +22,15 @@
 {#if track}
   <a
     href={$$props.href ? $$props.href : `/portal/${portal}/demo/${track.uuid}`}
-    class="relative flex space-x-3 {size == 'sm'
-      ? 'h-12'
+    class="relative grid grid-cols-auto-1fr gap-4 items-center sm:items-stretch"
+  >
+  <!-- {size == 'sm'
+      ? 'h-16'
       : size == 'md'
       ? 'h-20'
       : size == 'lg'
       ? 'h-28'
-      : ''} "
-  >
+      : ''}  -->
     {#if track.artwork && track.artwork.resource}
       <img
         class="mshadow-sm  rounded-sm object-cover {size == 'sm'
@@ -45,11 +46,11 @@
     {/if}
     <div
       class="{size == 'sm'
-        ? 'px-4'
+        ? 'p-4'
         : size == 'md'
-        ? 'px-6'
+        ? 'p-6'
         : size == 'lg'
-        ? 'px-10'
+        ? 'p-10'
         : ''}  items-center justify-between flex w-full rounded-sm text-sm bg-gray-100 relative {$$props.background
         ? 'overflow-hidden bg-opacity-0'
         : ''}"

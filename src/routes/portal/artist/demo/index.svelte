@@ -89,9 +89,9 @@
 <div class="grid gap-8">
   <Box>
     <Title>
-      <div class="flex justify-between items-center">
+      <div class="grid sm:grid-cols-2 items-center">
         <div>All tracks</div>
-        <div class="flex space-x-2  ">
+        <div class="flex space-x-2 sm:ml-auto">
           <select class="portal input w-32" bind:value={filterType}>
             <option value="all">All</option>
             <option value="pending">Pending</option>
@@ -133,12 +133,15 @@
           {#if tracks.pending.length <= 0}
             <Skeleton>Loading pending tracks..</Skeleton>
           {:else}
-            {#each tracks.pending as track}
+            <!-- {#each tracks.pending as track}
               <TrackRow {track} size="lg" slot={true}
                 ><div>
                   Your track "<b>{track.title}</b>" hasn't been reviewed yet.
                 </div>
               </TrackRow>
+            {/each} -->
+             {#each tracks.pending as track}
+              <TrackRow {track} size="md" />
             {/each}
           {/if}
         </div>
