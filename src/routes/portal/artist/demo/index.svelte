@@ -90,7 +90,7 @@
   <Box>
     <Title>
       <div class="grid sm:grid-cols-2 items-center">
-        <div>All tracks</div>
+        <h1>All tracks</h1>
         <div class="flex space-x-2 sm:ml-auto">
           <select class="portal input w-32" bind:value={filterType}>
             <option value="all">All</option>
