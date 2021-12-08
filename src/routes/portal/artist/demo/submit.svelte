@@ -285,7 +285,7 @@
               placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
             />
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
               <label class="portal"
                 >Pick a genre
                 <select
@@ -475,10 +475,10 @@
       {/if}
       {#if uploadPageStatus == 3}
         <FlyBox>
-          <div class="grid gap-8 lg:grid-cols-min-auto ">
+          <div class="grid gap-8 sm:grid-cols-min-auto ">
             <!-- <figure /> -->
             <div
-              class="bg-gray-100 rounded-md  h-56 lg:w-52 lg:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
+              class="bg-gray-100 rounded-md m-auto w-64 h-64 sm:w-52 sm:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
               0
                 ? 'mshadow-sm '
                 : ''}"
@@ -577,7 +577,7 @@
           {/if}
           <SubTitle>💽 Upload track</SubTitle>
 
-          <div class="grid gap-4 grid-cols-2">
+          <div class="grid gap-4 sm:grid-cols-2">
             <div class="label portal">
               Upload track
               <div

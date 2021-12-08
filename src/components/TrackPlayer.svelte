@@ -109,7 +109,6 @@
   })
 
   $: {
-    console.log('change')
     if (audio) {
       if (wavesurfer) {
         wavesurfer.load(audio)
@@ -163,11 +162,10 @@
       />
 
       <div
-        class="z-10 grid grid-flow-col gap-8 justify-start p-8"
-        style="grid-template-columns: auto 1fr"
+        class="z-10 grid gap-8  p-8 sm:grid-cols-auto-1fr w-full"
       >
         <div
-          class="overflow-hidden h-32 w-32 lg:h-64 lg:w-64 bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
+          class="overflow-hidden w-48 h-48 lg:h-64 lg:w-64 m-auto bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
         >
           {#if artworkFile || (track.artwork && track.artwork.resource)}
             <img
@@ -194,7 +192,7 @@
             </svg>{/if}
         </div>
         <div
-          class=" grid gap-4 items-start "
+          class=" grid gap-4 items-start"
           style="grid-template-rows:auto repeat(2,min-content) "
         >
           <div class="flex justify-between items-center ">
