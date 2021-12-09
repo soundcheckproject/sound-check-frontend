@@ -2,8 +2,7 @@
   import type { ArtistType, UserType } from '../types/User.type'
 
   import { fade, fly } from 'svelte/transition'
-  import { onMount } from 'svelte'
-  import { query } from '../utils/useGraphQL'
+
   import LinkIcon from './LinkIcon.svelte'
 
   export let className = ''
