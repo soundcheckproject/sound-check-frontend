@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { getAuth } from 'firebase/auth'
 import type { RoleType } from '../types/Role.type'
 import type FeedbackType from '../types/Feedback.type'
 import type { TrackType } from '../types/Track.type'
-import type { Link, UserType, ArtistType } from '../types/User.type'
+import type { Link, UserType, ArtistType, UserLink } from '../types/User.type'
+import logger, { LogType } from './logger'
+import type { GenreType } from 'src/types/Genre.type'
+import type Uuid from 'src/types/Uuid'
 
 export const query = async (
   name: string,
   query: string,
-  variables?: any,
+  variables?: Object,
 ): Promise<any> => {
   try {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
@@ -25,40 +29,17 @@ export const query = async (
     const gqlReqponse = await res.json()
 
     if (gqlReqponse.errors) {
-      throw gqlReqponse.errors;
+      logger(LogType.ERROR, name, gqlReqponse.errors)
     }
 
     return gqlReqponse.data[name]
   } catch (err) {
-    console.log({ err })
-    throw err
+    logger(LogType.ERROR, 'query', err)
   }
 }
 
-export const uploadQuery = async (
-  name: string,
-  query: string,
-  variables?: Object,
-) => {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
-    .then(res => res.json())
-    .catch(error => console.error({ error }))
-  return res.data[name]
-}
-export const getGenres = async (): Promise<
-  { uuid: string; name: string; description: string }[]
-> => {
-  const response = await query(
+export const getGenres = async (): Promise<GenreType[]> => {
+  return await query(
     `getGenres`,
     `query Query {
         getGenres {
@@ -68,10 +49,10 @@ export const getGenres = async (): Promise<
         }
       }`,
   )
-  return response
 }
+
 export const getLinks = async (): Promise<Link[]> => {
-  const response = await query(
+  return await query(
     `getLinks`,
     `query GetLinks {
       getLinks {
@@ -80,12 +61,11 @@ export const getLinks = async (): Promise<Link[]> => {
       }
     }`,
   )
-  return response
 }
 export const getUsersByNickname = async (
   nickname: string,
-): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
-  const response = await query(
+): Promise<UserType[]> => {
+  return await query(
     `getUsersByNickname`,
     `query getUsersByNicknameQuery($nickname: String!) {
       getUsersByNickname(nickname: $nickname) {
@@ -96,12 +76,11 @@ export const getUsersByNickname = async (
     }`,
     { nickname: nickname },
   )
-  return response
 }
 
 export const getArtistsByNickName = async (
   nickname: string,
-): Promise<{ uuid: string; nickName: string; logo: string }[]> => {
+): Promise<UserType[]> => {
   const response = await query(
     `getArtistsByNickname`,
     `query getArtistsByNickname($nickname: String!) {
@@ -117,7 +96,7 @@ export const getArtistsByNickName = async (
 }
 
 export const getArtistByUserId = async (userId: string): Promise<UserType> => {
-  const response = await query(
+  return await query(
     `getUser`,
     `query GetUser($userId: String!) {
       getUser(userId: $userId) {
@@ -150,10 +129,10 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
     }`,
     { userId: userId },
   )
-  return response
 }
-export const createTrack = async (track: TrackType): Promise<{ uuid: string }> => {
-  const response = await query(
+
+export const createTrack = async (track: TrackType): Promise<Uuid> => {
+  return await query(
     'createTrack',
     `mutation createTrack($data: CreateTrackInput!) {
         createTrack(data: $data) {
@@ -162,11 +141,12 @@ export const createTrack = async (track: TrackType): Promise<{ uuid: string }> =
       }`,
     { data: track },
   )
-  return response
 }
 
-export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
-  const response = await query(
+export const getTracksByArtistId = async (
+  artistId: string,
+): Promise<TrackType[]> => {
+  return await query(
     `getTracksByArtist`,
     `query GetTracksByArtist($artistId: String!) {
       getTracksByArtist(artistId: $artistId) {
@@ -187,12 +167,11 @@ export const getTracksByArtistId = async (artistId: string): Promise<any[]> => {
     }`,
     { artistId: artistId },
   )
-  return response
 }
 export const getTracksReleasedByUserId = async (
   artistId: string,
-): Promise<any[]> => {
-  const response = await query(
+): Promise<TrackType[]> => {
+  return await query(
     `getTracksByArtist`,
     `query GetTracksByArtist($artistId: String!) {
       getTracksByArtist(artistId: $artistId) {
@@ -213,11 +192,10 @@ export const getTracksReleasedByUserId = async (
     }`,
     { artistId: artistId },
   )
-  return response
 }
 
 export const getAllTracks = async (): Promise<TrackType[]> => {
-  const response = await query(
+  return await query(
     `getTracks`,
     `query GetTracks {
       getTracks {
@@ -253,11 +231,10 @@ export const getAllTracks = async (): Promise<TrackType[]> => {
       }
     }`,
   )
-  return response
 }
 
-export const getTrackById = async (trackId: string): Promise<any> => {
-  const response = await query(
+export const getTrackById = async (trackId: string): Promise<TrackType> => {
+  return await query(
     'getTrackById',
     `query GetTrackById($trackId: String!) {
       getTrackById(trackId: $trackId) {
@@ -302,7 +279,6 @@ export const getTrackById = async (trackId: string): Promise<any> => {
     }`,
     { trackId: trackId },
   )
-  return response
 }
 
 // Todo: role {name} toevoegen
@@ -322,7 +298,6 @@ export const getTrackFeedbacksByTrackId = async (
           user {
             nickName
             logo
-           
           }
         }
       }
@@ -334,8 +309,10 @@ export const getTrackFeedbacksByTrackId = async (
 }
 
 // todo: post to database
-export const addFeedbackToTrack = async (feedback: FeedbackType) => {
-  const response = await query(
+export const addFeedbackToTrack = async (
+  feedback: FeedbackType,
+): Promise<Uuid> => {
+  return await query(
     'createFeedback',
     `mutation Mutation($createFeedbackInput: CreateFeedbackInput!) {
         createFeedback(createFeedbackInput: $createFeedbackInput) {
@@ -345,11 +322,10 @@ export const addFeedbackToTrack = async (feedback: FeedbackType) => {
     `,
     { createFeedbackInput: feedback },
   )
-  return response
 }
 
 export const getUserViaFirebase = async (): Promise<UserType> => {
-  const response = await query(
+  return await query(
     `getUserViaFirebase`,
     `query GetUserViaFirebase {
       getUserViaFirebase {
@@ -380,13 +356,13 @@ export const getUserViaFirebase = async (): Promise<UserType> => {
       }
     }`,
   )
-  return response
 }
-export const updateUserInfoByUserId = (
+
+export const updateUserInfoByUserId = async (
   userId: string,
   data: UserType,
-): Promise<UserType> => {
-  return query(
+): Promise<Uuid> => {
+  return await query(
     `updateUser`,
     `mutation UpdateUser($data: UpdateUserInput!, $userId: String!) {
       updateUser(data: $data, userId: $userId) {
@@ -396,11 +372,12 @@ export const updateUserInfoByUserId = (
     { data: data, userId: userId },
   )
 }
-export const updateUserLinksByUserId = (
+
+export const updateUserLinksByUserId = async (
   userId: string,
-  linkData: any,
+  linkData: UserLink,
 ): Promise<UserType> => {
-  return query(
+  return await query(
     `updateUserLinksByUserId`,
     `mutation CreateUserLink($createUserLinkInput: CreateUserLinkInput!, $data: CreateUserInput!) {
       createUserLink(createUserLinkInput: $createUserLinkInput) {
@@ -411,7 +388,7 @@ export const updateUserLinksByUserId = (
   )
 }
 export const getArtists = async (): Promise<ArtistType[]> => {
-  const response = await query(
+  return await query(
     `getArtists`,
     `query GetArtists{
       getArtists {
@@ -429,14 +406,13 @@ export const getArtists = async (): Promise<ArtistType[]> => {
       }
     }`,
   )
-  return response
 }
 
 export const updateTrack = async (
   trackId: string,
   data: TrackType,
 ): Promise<TrackType> => {
-  const response = await query(
+  return await query(
     'updateTrack',
     `mutation UpdateTrack($data: UpdateTrackInput!, $trackId: String!) {
       updateTrack(data: $data, trackId: $trackId) {
@@ -445,14 +421,13 @@ export const updateTrack = async (
     }`,
     { data: data, trackId: trackId },
   )
-  return response
 }
 
 export const toggleSigned = async (
   isSigned: boolean | null,
   trackId: string,
-): Promise<string> => {
-  const response = await query(
+): Promise<Uuid> => {
+  return await query(
     'toggleSigned',
     `mutation toggleSigned($isSigned: Boolean!, $trackId: String!) {
       toggleSigned(isSigned: $isSigned, trackId: $trackId) {
@@ -461,13 +436,10 @@ export const toggleSigned = async (
     }`,
     { isSigned: isSigned, trackId: trackId },
   )
-  return response
 }
 
-export const toggleSignedPending = async (
-  trackId: string,
-): Promise<string> => {
-  const response = await query(
+export const toggleSignedPending = async (trackId: string): Promise<Uuid> => {
+  return await query(
     'toggleSigned',
     `mutation toggleSigned($trackId: String!) {
       toggleSigned(trackId: $trackId) {
@@ -476,11 +448,10 @@ export const toggleSignedPending = async (
     }`,
     { trackId: trackId },
   )
-  return response
 }
 
 export const getRoles = async (): Promise<RoleType[]> => {
-  const response = await query(
+  return await query(
     `getRoles`,
     `query Query {
         getRoles {
@@ -492,5 +463,4 @@ export const getRoles = async (): Promise<RoleType[]> => {
       }
   `,
   )
-  return response
 }
