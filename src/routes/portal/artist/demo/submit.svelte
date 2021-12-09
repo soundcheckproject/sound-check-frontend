@@ -37,13 +37,9 @@
   import InputError from '../../../../components/InputError.svelte'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import variables from '../../../../utils/variables'
+  import log, { LogType } from '../../../../utils/logger'
 
-  const inputFields: string[] = [
-    'title',
-    'description',
-    'lyrics',
-    'genreId',
-  ]
+  const inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -156,11 +152,16 @@
       if ($validationStore.length === 0)
         try {
           const trackId: string = await postTrack()
-          await uploadTrack(trackBlob[0], track.name, trackId)
+          await uploadTrack(trackBlob[0], track.name, 'trackId')
           await uploadArtwork(artworkBlob[0], artwork.name, trackId)
           goto(`/portal/artist/demo/${trackId}`)
         } catch (error) {
-          console.error('Something went wrong on posting the track.', error)
+          log(
+            LogType.ERROR,
+            'handleSubmitTrack',
+            'Something went wrong while processing submit of track',
+            true,
+          )
           validateErrorTime('general', 'submit', errors)
         } finally {
           loadingStatus.submit = false

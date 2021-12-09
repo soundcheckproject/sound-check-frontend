@@ -123,7 +123,6 @@
       </div>
     </div>
   </Title>
-
   {#if demos.all.length == 0}
     <SubTitle>Demos</SubTitle>
     <Skeleton loading={true}>Loading demos..</Skeleton>

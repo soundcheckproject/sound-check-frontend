@@ -34,8 +34,9 @@ export const query = async (
     } else {
       return gqlReqponse.data[name]
     }
-  } catch (err) {
-    log(LogType.ERROR, 'query', err)
+  } catch (error) {
+    log(LogType.ERROR, 'query', error)
+    throw error
   }
 }
 
