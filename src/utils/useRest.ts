@@ -32,7 +32,7 @@ const post = async (uri: string, data: any = {}) => {
         response.statusText,
         response.status,
       )
-      return undefined
+      throw `Something went wrong with ${RestMethodType.GET} to ${response.url}`
     } else {
       return await response.json()
     }
@@ -61,7 +61,7 @@ const get = async (uri: string) => {
         response.statusText,
         response.status,
       )
-      return undefined
+      throw `Could not ${RestMethodType.GET} ${response.url}`
     } else {
       return await response.json()
     }
@@ -120,7 +120,7 @@ export const uploadContract = async (
 export const getTrackFileFromTrackId = async (
   trackId: string,
 ): Promise<TrackType> => {
-  return await get(`tracks/fidle/${trackId}`)
+  return await get(`tracks/file/${trackId}`)
 }
 
 export const getContractFromTrackId = async (trackId: string): Promise<any> => {

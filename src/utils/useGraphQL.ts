@@ -12,7 +12,7 @@ export const query = async (
   name: string,
   query: string,
   variables?: Object,
-): Promise<any | undefined> => {
+): Promise<any> => {
   try {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
       method: 'POST',
@@ -30,7 +30,7 @@ export const query = async (
 
     if (gqlReqponse.errors) {
       logGraphQLError(name, gqlReqponse.errors)
-      return undefined
+      throw `Could not ${name}`
     } else {
       return gqlReqponse.data[name]
     }

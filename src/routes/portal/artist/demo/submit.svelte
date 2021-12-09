@@ -152,7 +152,7 @@
       if ($validationStore.length === 0)
         try {
           const trackId: string = await postTrack()
-          await uploadTrack(trackBlob[0], track.name, 'trackId')
+          await uploadTrack(trackBlob[0], track.name, trackId)
           await uploadArtwork(artworkBlob[0], artwork.name, trackId)
           goto(`/portal/artist/demo/${trackId}`)
         } catch (error) {
