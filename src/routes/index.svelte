@@ -157,7 +157,7 @@ import FadeBox from '../components/portal/FadeBox.svelte';
               <TrackSkeleton loading={false} />
             {/each}
           {/if}
-          {#if latestReleases.length < 4}
+          {#if latestReleases && latestReleases.length < 4}
             {#each Array(3) as i}
               <TrackSkeleton loading={false} />
             {/each}

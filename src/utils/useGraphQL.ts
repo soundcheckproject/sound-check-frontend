@@ -4,7 +4,7 @@ import type { RoleType } from '../types/Role.type'
 import type FeedbackType from '../types/Feedback.type'
 import type { TrackType } from '../types/Track.type'
 import type { Link, UserType, ArtistType, UserLink } from '../types/User.type'
-import logger, { LogType } from './logger'
+import log, { logGraphQLError, LogType } from './logger'
 import type { GenreType } from 'src/types/Genre.type'
 import type Uuid from 'src/types/Uuid'
 
@@ -12,7 +12,7 @@ export const query = async (
   name: string,
   query: string,
   variables?: Object,
-): Promise<any> => {
+): Promise<any | undefined> => {
   try {
     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}`, {
       method: 'POST',
@@ -29,12 +29,13 @@ export const query = async (
     const gqlReqponse = await res.json()
 
     if (gqlReqponse.errors) {
-      logger(LogType.ERROR, name, gqlReqponse.errors)
+      logGraphQLError(name, gqlReqponse.errors)
+      return undefined
+    } else {
+      return gqlReqponse.data[name]
     }
-
-    return gqlReqponse.data[name]
   } catch (err) {
-    logger(LogType.ERROR, 'query', err)
+    log(LogType.ERROR, 'query', err)
   }
 }
 
