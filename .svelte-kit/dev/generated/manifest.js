@@ -1,39 +1,40 @@
 const c = [
-	() => import("..\\..\\..\\src\\routes\\__layout.svelte"),
-	() => import("..\\..\\..\\src\\routes\\__error.svelte"),
-	() => import("..\\..\\..\\src\\routes\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\forgotpassword\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\register.svelte"),
-	() => import("..\\..\\..\\src\\routes\\releases\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\releases\\[trackId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\artists\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\artists\\[artistId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\logout.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\__layout.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\profile\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\__layout.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\royalties\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\royalties\\[trackId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\tracks.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\demo\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\demo\\submit.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\demo\\[trackId]-finance.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\demo\\[trackId]-edit.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\artist\\demo\\[trackId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\__layout.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\tracks.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\users\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\users\\[userId]-edit.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\users\\[userId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\demo\\index.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\demo\\[trackId]-finance.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\demo\\[trackId]-edit.svelte"),
-	() => import("..\\..\\..\\src\\routes\\portal\\staff\\demo\\[trackId].svelte"),
-	() => import("..\\..\\..\\src\\routes\\login.svelte"),
-	() => import("..\\..\\..\\src\\routes\\home.svelte")
+	() => import("../../../src/routes/__layout.svelte"),
+	() => import("../../../src/routes/__error.svelte"),
+	() => import("../../../src/routes/index.svelte"),
+	() => import("../../../src/routes/forgotpassword/index.svelte"),
+	() => import("../../../src/routes/register.svelte"),
+	() => import("../../../src/routes/releases/index.svelte"),
+	() => import("../../../src/routes/releases/[trackId].svelte"),
+	() => import("../../../src/routes/artists/index.svelte"),
+	() => import("../../../src/routes/artists/[artistId].svelte"),
+	() => import("../../../src/routes/logout.svelte"),
+	() => import("../../../src/routes/portal/__layout.svelte"),
+	() => import("../../../src/routes/portal/index.svelte"),
+	() => import("../../../src/routes/portal/profile/index.svelte"),
+	() => import("../../../src/routes/portal/artist/__layout.svelte"),
+	() => import("../../../src/routes/portal/artist/index.svelte"),
+	() => import("../../../src/routes/portal/artist/royalties/index.svelte"),
+	() => import("../../../src/routes/portal/artist/royalties/[trackId].svelte"),
+	() => import("../../../src/routes/portal/artist/tracks.svelte"),
+	() => import("../../../src/routes/portal/artist/demo/index.svelte"),
+	() => import("../../../src/routes/portal/artist/demo/submit.svelte"),
+	() => import("../../../src/routes/portal/artist/demo/[trackId]-finance.svelte"),
+	() => import("../../../src/routes/portal/artist/demo/[trackId]-edit.svelte"),
+	() => import("../../../src/routes/portal/artist/demo/[trackId].svelte"),
+	() => import("../../../src/routes/portal/staff/__layout.svelte"),
+	() => import("../../../src/routes/portal/staff/index.svelte"),
+	() => import("../../../src/routes/portal/staff/tracks.svelte"),
+	() => import("../../../src/routes/portal/staff/users/index.svelte"),
+	() => import("../../../src/routes/portal/staff/users/[userId]-edit.svelte"),
+	() => import("../../../src/routes/portal/staff/users/[userId].svelte"),
+	() => import("../../../src/routes/portal/staff/demo/index.svelte"),
+	() => import("../../../src/routes/portal/staff/demo/[trackId]-finance.svelte"),
+	() => import("../../../src/routes/portal/staff/demo/[trackId]-edit.svelte"),
+	() => import("../../../src/routes/portal/staff/demo/[trackId].svelte"),
+	() => import("../../../src/routes/login.svelte"),
+	() => import("../../../src/routes/home.svelte"),
+	() => import("../../../src/routes/test.svelte")
 ];
 
 const d = decodeURIComponent;
@@ -44,6 +45,8 @@ export const routes = [
 
 	// src/routes/forgotpassword/index.svelte
 	[/^\/forgotpassword\/?$/, [c[0], c[3]], [c[1]]],
+
+	,
 
 	// src/routes/register.svelte
 	[/^\/register\/?$/, [c[0], c[4]], [c[1]]],
@@ -127,7 +130,10 @@ export const routes = [
 	[/^\/login\/?$/, [c[0], c[33]], [c[1]]],
 
 	// src/routes/home.svelte
-	[/^\/home\/?$/, [c[0], c[34]], [c[1]]]
+	[/^\/home\/?$/, [c[0], c[34]], [c[1]]],
+
+	// src/routes/test.svelte
+	[/^\/test\/?$/, [c[0], c[35]], [c[1]]]
 ];
 
 // we import the root layout/error components eagerly, so that
