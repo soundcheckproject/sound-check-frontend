@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import type { ArtworkType, TrackType } from '../../../../types/Track.type'
+  import type { ArtworkType, TrackType, TrackUpdateType } from '../../../../types/Track.type'
   import type { ArtistType, UserType } from '../../../../types/User.type'
 
   import {
@@ -49,7 +49,7 @@
 
   let prefferedReleaseDateString: string
 
-  let artistsArray: { [key: string]: any }[] = []
+  let artistsArray: {uuid?: string, user: UserType; royaltySplit: number }[] = []
 
   let artwork: ArtworkType
   let newArtwork: ArtworkType
@@ -109,12 +109,21 @@
   const postTrack = async () => {
     loadingStatus.track = true
     if ($validationStore.length == 0) {
-      const updatedTrack: TrackType = {
+      const updatedTrack: TrackUpdateType = {
         prefferdReleaseDate: new Date(prefferedReleaseDateString),
         title: newTrack.title,
         description: newTrack.description,
         genreId: newTrack.genreId,
+        artistTracks: []
       }
+
+      artistsArray.map((at) =>{
+        updatedTrack.artistTracks.push({uuid: at.uuid, userId: at.user.uuid, royaltySplit: at.royaltySplit})
+      })
+
+      console.log({updatedTrack})
+
+      return
 
       await updateTrack(track.uuid, updatedTrack)
         .then(err => {
@@ -240,8 +249,13 @@
       artwork = track.artwork
       newArtwork = artwork
       newTrack = track
+      calcRoyaltySplitotal()
     }
   })
+
+  $:{
+    console.log({artistsArray})
+  }
 
   $: {
     validationStore.set(errors)
@@ -250,8 +264,9 @@
   }
 </script>
 
+
 <svelte:head>
-	<title>{`${track ? track.title: '' + ' - ' }Track edit`}</title>
+  <title>{`${track ? track.title : ''} - Track edit`}</title>
 </svelte:head>
 
 <div class="grid gap-8">
@@ -399,7 +414,7 @@
                     </p>
                   </div>
 
-                  {#if royaltySplitotal != 100 && false}
+                  {#if royaltySplitotal != 100}
                     <SubTitle theme="error"
                       >Total royalties should be equal to 100</SubTitle
                     >
