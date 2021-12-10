@@ -25,9 +25,9 @@
     contractDownload: false,
   }
 
-  let track: TrackType
-  let contractFileBlob: any
-  let contractFileUploadClick: HTMLInputElement
+  let track: TrackType = undefined
+  let contractFileBlob: any = undefined
+  let contractFileUploadClick: HTMLInputElement = undefined
 
   const downloadContractFile = async (contractFile: string) => {
     loadingStatus.contractDownload = true
@@ -68,8 +68,8 @@
   }
 </script>
 
-<div class="grid gap-8">
-  {#if track}
+{#if track}
+  <div class="grid gap-8">
     <TrackPlayer feedback={true} {track} />
     <Box>
       <Title
@@ -123,82 +123,87 @@
         </div>
       </div>
     </Box>
-    <Box
-      ><Title>Contract</Title>
+    {#if track.contractResource}
+      <Box
+        ><Title>Contract</Title>
+        <SubTitle>📝 Manage contract</SubTitle>
 
-      <SubTitle>📝 Manage contract</SubTitle>
+        <!-- {/if} -->
+        <div class="flex space-x-4">
+          <Button
+            size="sm"
+            color="bg-teal-700"
+            onClick={() => {
+              contractFileUploadClick.click()
+            }}
+            disabled={track.isSigned == false}
+            loading={loadingStatus.contractUpload
+              ? 'Uploading contract..'
+              : null}
+          >
+            <div class="download">
+              <svg
+                class="-mt-px"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <div>Upload new contract</div>
+            </div>
+          </Button>
+          <input
+            type="file"
+            accept=".pdf"
+            bind:this={contractFileUploadClick}
+            bind:files={contractFileBlob}
+            class="hidden"
+            placeholder=""
+          />
 
-      <!-- {/if} -->
-      <div class="flex space-x-4">
-        <Button
-          size="sm"
-          color="bg-teal-700"
-          onClick={() => {
-            contractFileUploadClick.click()
-          }}
-          disabled={track.isSigned == false}
-          loading={loadingStatus.contractUpload ? 'Uploading contract..' : null}
-        >
-          <div class="download">
-            <svg
-              class="-mt-px"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            <div>Upload new contract</div>
-          </div>
-        </Button>
-        <input
-          type="file"
-          accept=".pdf"
-          bind:this={contractFileUploadClick}
-          bind:files={contractFileBlob}
-          class="hidden"
-          placeholder=""
-        />
+          <Button
+            size="sm"
+            color="bg-gray-700"
+            disabled={track.isSigned == false}
+            onClick={() => downloadContractFile(track.contractFile)}
+            loading={loadingStatus.contractDownload
+              ? 'Downloading contract..'
+              : null}
+          >
+            <div class="download ">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <div>Download contract</div>
+            </div>
+          </Button>
+        </div>
+      </Box>
+    {/if}
+  </div>
 
-        <Button
-          size="sm"
-          color="bg-gray-700"
-          disabled={track.isSigned == false}
-          onClick={() => downloadContractFile(track.contractFile)}
-          loading={loadingStatus.contractDownload
-            ? 'Downloading contract..'
-            : null}
-        >
-          <div class="download ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <div>Download contract</div>
-          </div>
-        </Button>
-      </div>
-
-      <!-- <div class="flex space-x-4">
+  <!-- <div class="flex space-x-4">
         <Button size="sm" color="bg-teal-700">
           <div class="download">
             <svg
@@ -259,6 +264,4 @@
           <div>Download signed contract</div>
         </div>
       </div> -->
-    </Box>
-  {/if}
-</div>
+{/if}
