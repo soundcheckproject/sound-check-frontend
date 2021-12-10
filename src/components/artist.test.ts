@@ -38,7 +38,7 @@ describe('Artist component', () => {
       artist: artistObj,
     },
   })
-  test('Test if image has alt & source', () => {
+  test('Test if image has alt & source, links', () => {
     const displayedImage = document.querySelector('img') as HTMLImageElement
 
     expect(displayedImage.src).toContain(artistObj.logo)

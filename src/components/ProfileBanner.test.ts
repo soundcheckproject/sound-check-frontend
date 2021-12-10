@@ -40,7 +40,7 @@ describe('ProfileBanner component', () => {
       logo: artistObj.logo,
     },
   })
-  test('Test if image has alt, source, userlinks', () => {
+  test('Test if banner has logo, nickname, bio, artistname, surname, role', () => {
     const displayedImage = document.querySelector('img') as HTMLImageElement
     expect(displayedImage.src).toContain(artistObj.logo)
     expect(displayedImage.alt).toContain(`logo`)
