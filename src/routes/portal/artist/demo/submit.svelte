@@ -78,7 +78,7 @@
     artworkClick: HTMLInputElement,
     trackDataClick: HTMLInputElement,
     trackBlob: any,
-    royaltyPercentageTotal: number = 0,
+    royaltyPercentageTotal: number = 100,
     track: File,
     artwork: File
 
@@ -421,7 +421,7 @@
                     </p>
                   </div>
 
-                  {#if royaltyPercentageTotal != 100 && false}
+                  {#if royaltyPercentageTotal != 100}
                     <SubTitle theme="error"
                       >Total royalties should be equal to 100</SubTitle
                     >
