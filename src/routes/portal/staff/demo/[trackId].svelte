@@ -42,7 +42,7 @@
     loadingStatus.contractDownload = true
     let a = document.createElement('a') //Create <a>
     a.href = contractFile //Image Base64 Goes here
-    a.download = track.title + '-contract.pdf' //File name Here
+    a.download = `${track.title}-${track.uuid}-contract.pdf`//File name Here
     a.click() //Downloaded file
     loadingStatus.contractDownload = false
   }
@@ -81,13 +81,12 @@
         trackId: track.uuid,
       },
     )
-      .then(res => {
-        loadingStatus.contractAvailable = false
-        console.log(res)
-      })
       .catch(() => {
         loadingStatus.contractAvailable = false
       })
+      .finally(() => (loadingStatus.contractAvailable = false))
+
+    if (contractFile) track.contractFile = contractFile
   }
 
   onMount(async () => {
@@ -166,7 +165,8 @@
         <SubTitle>📝 Manage contract</SubTitle>
 
         {#if !track.contractFile}
-          <div class="flex">
+          <div>
+            <p class="mb-2">There isn't a contract yet.</p>
             <Button
               size="sm"
               color="bg-gray-500"
@@ -194,15 +194,15 @@
                   <polyline points="14 2 14 8 20 8" />
                   <path d="M9 15l2 2 4-4" />
                 </svg>
-                <div>Make contract available</div>
+                <div>Generate contract</div>
               </div>
             </Button>
           </div>
         {:else}
           <!-- {/if} -->
-          {#if track.isSigned == false || track.isSigned == null}
+          {#if !track.isSigned}
             <p class="text-sm -my-2">
-              Contracts are not available if the track is not signed.
+              Contracts are not available for the artist if the track is not signed.
             </p>
           {/if}
           <div class="flex space-x-4">
@@ -350,9 +350,13 @@
             color="bg-pending"
             class="button"
             disabled={track.isSigned == null}
-            onClick={() => {
-              pendingTrack(track)
-              goto($page.path)
+            loading={loadingStatus.pendingTrack ? 'Pending track..' : null}
+            onClick={async () => {
+              loadingStatus.pendingTrack = true
+              pendingTrack(track).then(async () => {
+                track = await getTrackById($page.params.trackId)
+                loadingStatus.pendingTrack = false
+              })
             }}
             ><svg
               xmlns="http://www.w3.org/2000/svg"
