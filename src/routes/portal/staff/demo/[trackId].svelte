@@ -12,7 +12,10 @@
   import Button from '../../../../components/Button.svelte'
 
   import Artist from '../../../../components/Artist.svelte'
-  import { validateStatusTrack } from '../../../../utils/useValidation'
+  import {
+    validateErrorTime,
+    validateStatusTrack,
+  } from '../../../../utils/useValidation'
   import {
     denyTrack,
     pendingTrack,
@@ -27,6 +30,8 @@
   import EditButton from '../../../../components/portal/EditButton.svelte'
   import { formatDate } from '../../../../utils/useFormat'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
+  import validationStore from '../../../../stores/validationStore'
+  import InputError from '../../../../components/InputError.svelte'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -35,6 +40,8 @@
     denyTrack: false,
     signTrack: false,
   }
+
+  let errors: string[] = []
 
   let track: TrackType
   let contract: File = undefined
@@ -68,7 +75,7 @@
         })
         .catch(err => {
           loadingStatus.contractUpload = false
-          // ! todo popup at error
+          validateErrorTime('contract', 'failed', errors)
         })
     } else {
       loadingStatus.contractUpload = false
@@ -93,13 +100,16 @@
         loadingStatus.contractAvailable = false
       })
       .finally(() => (loadingStatus.contractAvailable = false))
-
-    if (contractFile) track.contractFile = contractFile
+    if (contractFile) track.contractFile = contractFile.contractFile
   }
 
   onMount(async () => {
     track = await getTrackById($page.params.trackId)
   })
+
+  $: {
+    validationStore.set(errors)
+  }
 </script>
 
 {#if track}
@@ -131,12 +141,12 @@
               </p>
               <p class="mt-4 font-semibold  ">Description</p>
 
-              <p class="text-sm max-h-48 overflow-y-scroll">
+              <p class="text-sm max-h-48 overflow-y-auto">
                 {track.description}
               </p>
               <p class="mt-4 font-semibold ">Lyrics</p>
 
-              <p class="text-sm  max-h-48 overflow-y-scroll">
+              <p class="text-sm  max-h-48 overflow-y-auto">
                 {track.lyrics ? track.lyrics : 'No lyrics for this track yet.'}
               </p>
             </div>
@@ -166,7 +176,7 @@
         <Title>Contract</Title>
 
         <SubTitle>📝 Manage contract</SubTitle>
-
+        <InputError errorInput="contract" />
         {#if !track.contractFile}
           <div>
             <p class="mb-2">There isn't a contract yet.</p>
@@ -203,12 +213,6 @@
           </div>
         {:else}
           <!-- {/if} -->
-          {#if !track.isSigned}
-            <p class="text-sm -my-2">
-              Contracts are not available if the track is not
-              signed.
-            </p>
-          {/if}
           <div class="max-w-max">
             <div
               class="input portal w-full justify-center items-center cursor-pointer flex mb-4"

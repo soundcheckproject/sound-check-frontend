@@ -81,9 +81,9 @@
             {#if track.isSigned == null}
               <EditButton href={$page.path + '-edit'} />
             {/if}
-            {#if track.isSigned == true}
+            <!-- {#if track.isSigned == true}
               <FinanceButton href={$page.path + '-finance'} />
-            {/if}
+            {/if} -->
           </div>
         </div></Title
       >
@@ -113,9 +113,11 @@
           {#if track.artistTracks && track.artistTracks.length > 0}
             <div class="flex space-x-2">
               {#each track.artistTracks as artist}
+                <a href={`/artists/${artist.user.uuid}`} target="_blank">
                 <Artist artist={artist.user} socials theme="dark"
                   >{artist.user.nickName}</Artist
-                >
+                ></a>
+                
               {/each}
             </div>
           {:else}

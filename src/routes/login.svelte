@@ -32,7 +32,7 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
 
   // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
- let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+   let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
@@ -76,7 +76,7 @@
 </script>
 
 <svelte:head>
-	<title>{$labelStore.name} - Login</title>
+  <title>{$labelStore.name} - Login</title>
 </svelte:head>
 
 <Header type="split" />
@@ -137,7 +137,6 @@
             />
             <a
               href="/forgotpassword"
-              target="_blank"
               class="text-sm underline text-teal-700 cursor-pointer"
               >Forgot password ?</a
             >
