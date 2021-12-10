@@ -205,7 +205,7 @@
           <!-- {/if} -->
           {#if !track.isSigned}
             <p class="text-sm -my-2">
-              Contracts are not available for the artist if the track is not
+              Contracts are not available if the track is not
               signed.
             </p>
           {/if}
