@@ -399,6 +399,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>{`${$userStore.nickName} - Profile`}</title>
+</svelte:head>
+
 <div class="grid gap-8">
   {#if artist}
     <ProfileBanner

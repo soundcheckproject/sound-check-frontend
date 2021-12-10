@@ -56,9 +56,13 @@
   })
 </script>
 
+<svelte:head>
+	<title>Portal overview</title>
+</svelte:head>
+
 <div class="grid gap-8">
   <Box>
-    <Title>Portal</Title>
+    <Title>Portal overview</Title>
     Welcome to the portal. <br />Here you can find all the information about
     your tracks, submissions and finances.
     <SubTitle>

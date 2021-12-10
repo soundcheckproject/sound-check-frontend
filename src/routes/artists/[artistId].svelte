@@ -120,6 +120,10 @@
   })
 </script>
 
+<svelte:head>
+	<title>{`${artist && artist.nickName + ' - ' }Artist detail`}</title>
+</svelte:head>
+
 <Header type="split" />
 <main>
   <FadeBox>

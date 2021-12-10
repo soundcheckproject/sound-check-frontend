@@ -4,6 +4,9 @@
   import { page } from '$app/stores'
 </script>
 
+<svelte:head>
+	<title>404 - Not Found</title>
+</svelte:head>
 
 <Header>
   <article class="flex justify-center items-center">

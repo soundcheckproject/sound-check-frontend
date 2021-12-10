@@ -207,6 +207,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Submit new track</title>
+</svelte:head>
+
 <div class="grid gap-8">
   <FadeBox>
     <div class="flex space-x-2">

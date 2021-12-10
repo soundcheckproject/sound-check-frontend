@@ -250,6 +250,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>{`${track && track.title + ' - ' }Track edit`}</title>
+</svelte:head>
+
 <div class="grid gap-8">
   {#if newTrack}
     <TrackPlayer

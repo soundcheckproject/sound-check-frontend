@@ -70,6 +70,10 @@
   })
 </script>
 
+<svelte:head>
+	<title>{`${track && track.title + ' - ' }Track detail`}</title>
+</svelte:head>
+
 {#if track}
   <div class="grid gap-8">
     <TrackPlayer feedback={true} {track} />

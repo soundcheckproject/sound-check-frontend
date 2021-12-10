@@ -76,7 +76,7 @@
 </script>
 
 <svelte:head>
-  <title>{$labelStore.name} - Login</title>
+  <title>Login</title>
 </svelte:head>
 
 <Header type="split" />
