@@ -52,8 +52,5 @@ describe('ProfileBanner component', () => {
     ).toBeInTheDocument()
     expect(getByText(artistObj.role.name)).toBeInTheDocument()
   })
-  test('Test if user has links', () => {
-    // const button = screen.getByText('soundcloud');
-    // const aboutAnchorNode =
-  })
+
 })
