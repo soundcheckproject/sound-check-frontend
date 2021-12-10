@@ -10,15 +10,19 @@ export enum RestMethodType {
   DELETE = 'DELETE',
 }
 
+export enum ContentType {
+  JSON = 'application/json',
+  PDF = 'application/pdf',
+}
+
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-const post = async (uri: string, data: any = {}) => {
+const post = async (uri: string, data: any | string) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL_REST}/${uri}`,
       {
         method: RestMethodType.POST,
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${await getAuth().currentUser?.getIdToken()}`,
         },
         body: data,
@@ -110,7 +114,8 @@ export const uploadContract = async (
 ): Promise<TrackType> => {
   const formData = new FormData()
   formData.append('pdfFile', file, fileName)
-  return await post(`tracks/upload/contract/${trackId}`, formData)
+  console.log({formData})
+  return await post(`tracks/upload/contract/${trackId}`,formData)
 }
 
 //#endregion

@@ -46,12 +46,14 @@
     a.click() //Downloaded file
     loadingStatus.contractDownload = false
   }
+
+  
   let contractFileBlob: any
   let contractFileUploadClick: HTMLInputElement
   const uploadContractFile = async () => {
     if (contractFileBlob) {
       loadingStatus.contractUpload = true
-      await uploadContract(contractFileBlob[0], 'contract.pdf', track.uuid)
+      await uploadContract(contractFileBlob[0], `${track.title}-${track.uuid}-contract.pdf`, track.uuid)
         .then(async () => {
           loadingStatus.contractUpload = false
           // goto('/track/' + track.uuid)
