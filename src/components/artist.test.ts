@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
- import {screen} from '@testing-library/dom'
+import { screen } from '@testing-library/dom'
 import { render } from '@testing-library/svelte'
 import Artist from './Artist.svelte'
 
@@ -40,15 +40,15 @@ describe('Artist component', () => {
   })
   test('Test if image has alt & source', () => {
     const displayedImage = document.querySelector('img') as HTMLImageElement
+
     expect(displayedImage.src).toContain(artistObj.logo)
     expect(displayedImage.alt).toContain(`Artist ${artistObj.nickName}`)
 
-    // expect(getByText('mave')).toBeInTheDocument()
-  })
-  test('Test if user has links', () => {
-    // const socialLink = document.querySelector('a') as HTMLAnchorElement
-    // const button = screen.getByText('soundcloud');
-    // const aboutAnchorNode =
-    // expect(socialLink.href).toContain('https://soundcloud.com/mavesound')
+    const socialLinks = document.querySelectorAll('a') as any
+    let i = 0
+    for (const socialLink of socialLinks) {
+      expect(socialLink.href).toContain(artistObj.userLinks[i].linkAddress)
+      i += 1
+    }
   })
 })
