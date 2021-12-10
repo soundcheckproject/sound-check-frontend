@@ -28,7 +28,7 @@ const post = async (uri: string, data: any = {}) => {
     if (!response.ok) {
       logRestError(
         response.url,
-        RestMethodType.GET,
+        RestMethodType.POST,
         response.statusText,
         response.status,
       )
