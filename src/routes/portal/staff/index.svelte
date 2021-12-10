@@ -11,6 +11,11 @@
   
 </script>
 
+<svelte:head>
+	<title>Portal overview</title>
+</svelte:head>
+
+
 <!-- <Demos /> -->
 <Box>
   <Title>Staff overview</Title>

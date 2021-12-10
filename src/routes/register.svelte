@@ -129,7 +129,7 @@
 </script>
 
 <svelte:head>
-	<title>{$labelStore.name} - Register</title>
+	<title>Register</title>
 </svelte:head>
 
 <Header type="split" />

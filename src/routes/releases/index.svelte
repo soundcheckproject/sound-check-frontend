@@ -58,7 +58,7 @@ import { labelStore } from '../../stores/stores';
 </script>
 
 <svelte:head>
-	<title>{$labelStore.name} - Releases</title>
+	<title>Releases</title>
 </svelte:head>
 
 <Header type="split" />
