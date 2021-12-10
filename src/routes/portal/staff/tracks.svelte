@@ -45,6 +45,11 @@
   }
 </script>
 
+<svelte:head>
+	<title>Tracks</title>
+</svelte:head>
+
+
 <Box>
   <Title><div class="grid sm:grid-cols-2 items-center">
       <h1>All tracks</h1>

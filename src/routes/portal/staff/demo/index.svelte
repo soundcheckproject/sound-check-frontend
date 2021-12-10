@@ -100,6 +100,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>Demos</title>
+</svelte:head>
+
 <Box>
   <Title>
     <div class="grid sm:grid-cols-2 items-center">
@@ -123,7 +127,6 @@
       </div>
     </div>
   </Title>
-
   {#if demos.all.length == 0}
     <SubTitle>Demos</SubTitle>
     <Skeleton loading={true}>Loading demos..</Skeleton>

@@ -37,13 +37,9 @@
   import InputError from '../../../../components/InputError.svelte'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import variables from '../../../../utils/variables'
+  import log, { LogType } from '../../../../utils/logger'
 
-  const inputFields: string[] = [
-    'title',
-    'description',
-    'lyrics',
-    'genreId',
-  ]
+  const inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -160,7 +156,12 @@
           await uploadArtwork(artworkBlob[0], artwork.name, trackId)
           goto(`/portal/artist/demo/${trackId}`)
         } catch (error) {
-          console.error('Something went wrong on posting the track.', error)
+          log(
+            LogType.ERROR,
+            'handleSubmitTrack',
+            'Something went wrong while processing submit of track',
+            true,
+          )
           validateErrorTime('general', 'submit', errors)
         } finally {
           loadingStatus.submit = false
@@ -205,6 +206,10 @@
     validationStore.set(errors)
   }
 </script>
+
+<svelte:head>
+  <title>Submit new track</title>
+</svelte:head>
 
 <div class="grid gap-8">
   <FadeBox>
