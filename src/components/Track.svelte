@@ -6,7 +6,7 @@
   export let track: TrackType = undefined
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
-  let hover = false
+  export let hover = false
 </script>
 
 {#if add}

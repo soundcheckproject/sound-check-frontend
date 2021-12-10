@@ -124,9 +124,9 @@ export const validateOld = (input: string, input2: string): Error => {
 export const validateErrors = (
   validations: Error[],
   type: string,
-  errors: Error[],
-): Error[] => {
-  let errorReturn: Error[] = errors
+  errors: string[],
+): string[] => {
+  let errorReturn: string[] = errors
   for (const validation of validations) {
     const errorName = type + '_' + validation.error
 
@@ -145,9 +145,9 @@ export const validateError = (
   type: string,
   validation: string,
   status: boolean,
-  errors: Error[],
-): Error[] => {
-  let errorsReturn: Error[] = errors
+  errors: string[],
+): string[] => {
+  let errorsReturn: string[] = errors
   const errorName = type + '_' + validation
 
   if (status != true) {
@@ -162,9 +162,9 @@ export const validateError = (
 export const validateErrorTime = (
   type: string,
   validation: string,
-  errors: Error[],
+  errors: string[],
 ): void => {
-  const errorsReturn: Error[] = errors
+  const errorsReturn: string[] = errors
   const errorName = type + '_' + validation
 
   // if not found in array Add to array

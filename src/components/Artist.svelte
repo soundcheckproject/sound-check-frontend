@@ -2,14 +2,13 @@
   import type { ArtistType, UserType } from '../types/User.type'
 
   import { fade, fly } from 'svelte/transition'
-  import { onMount } from 'svelte'
-  import { query } from '../utils/useGraphQL'
+
   import LinkIcon from './LinkIcon.svelte'
 
   export let className = ''
   export let artist: ArtistType = undefined
   export let size: 'xs' | 'sm' | 'md' = 'sm'
-  let hover: boolean = false
+  export let hover: boolean = false
 
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'

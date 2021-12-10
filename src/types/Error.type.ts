@@ -1,4 +1,4 @@
-export default interface Error {
+export  interface Error {
     error: string
     status: boolean
   }
