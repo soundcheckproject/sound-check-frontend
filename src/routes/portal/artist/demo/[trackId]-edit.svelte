@@ -251,7 +251,7 @@
 </script>
 
 <svelte:head>
-	<title>{`${track && track.title + ' - ' }Track edit`}</title>
+	<title>{`${track ? track.title: '' + ' - ' }Track edit`}</title>
 </svelte:head>
 
 <div class="grid gap-8">

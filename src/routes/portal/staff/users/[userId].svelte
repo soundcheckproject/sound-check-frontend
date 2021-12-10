@@ -35,6 +35,10 @@ import FadeBox from '../../../../components/portal/FadeBox.svelte';
   }
 </script>
 
+<svelte:head>
+	<title>{`${artist ? artist.nickName : ''} - Profile`}</title>
+</svelte:head>
+
 {#if artist}
  <FadeBox>
     <div class="grid gap-8">

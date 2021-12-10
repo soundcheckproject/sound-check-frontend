@@ -400,7 +400,7 @@
 </script>
 
 <svelte:head>
-	<title>{`${$userStore.nickName} - Profile`}</title>
+	<title>{`${artist ? artist.nickName : ''} - Profile`}</title>
 </svelte:head>
 
 <div class="grid gap-8">

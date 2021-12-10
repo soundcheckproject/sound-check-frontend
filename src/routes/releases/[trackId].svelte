@@ -44,7 +44,7 @@
 </script>
 
 <svelte:head>
-	<title>{`${track && track.title + ' - ' }Track detail`}</title>
+	<title>{`${track ? track.title : ''} - Track detail`}</title>
 </svelte:head>
 
 <Header type="split" />

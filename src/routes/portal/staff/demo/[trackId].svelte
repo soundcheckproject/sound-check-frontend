@@ -112,6 +112,11 @@
   }
 </script>
 
+<svelte:head>
+	<title>{`${track ? track.title : ''} - Track detail`}</title>
+</svelte:head>
+
+
 {#if track}
   <FadeBox
     ><div class="grid gap-8">

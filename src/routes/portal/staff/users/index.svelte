@@ -60,6 +60,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>Users</title>
+</svelte:head>
+
 <Box>
   <Title>
     <div class="grid sm:grid-cols-2 items-center">
