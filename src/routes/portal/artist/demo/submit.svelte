@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import type { TrackType } from '../../../../types/Track.type'
+  import type { TrackInputType } from '../../../../types/Track.type'
   import type { ArtistType } from '../../../../types/User.type'
 
   import {
@@ -45,13 +45,13 @@
 
   let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
-  let newTrack: TrackType = {
+  let newTrack: TrackInputType = {
     title: '',
     description: '',
     previewStart: 0,
     previewStop: 20,
     lyrics: '',
-    artistIds: [$userStore.uuid],
+    artistTracks: [],
     genreId: 'Pick a genre',
     labelId: variables.labelId as string,
     prefferdReleaseDate: undefined,
@@ -65,7 +65,7 @@
 
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
-    newTrack.artistIds = newTrack.artistIds.filter(id => id != uuid)
+    newTrack.artistTracks = newTrack.artistTracks.filter(x => x.userId != uuid)
   }
 
   let loadingStatus: { [key: string]: boolean } = {
@@ -119,6 +119,14 @@
     // ! Create track mutation uitvoeren in de backend
     loadingStatus.submit = true
     newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
+
+    artistsArray.map(a => {
+      newTrack.artistTracks.push({
+        userId: a.uuid,
+        royaltySplit: a.royaltyPercentage,
+      })
+    })
+
     console.log(newTrack)
     if ($validationStore.length === 0) {
       // Create track in database
@@ -152,8 +160,10 @@
       if ($validationStore.length === 0)
         try {
           const trackId: string = await postTrack()
-          await uploadTrack(trackBlob[0], track.name, trackId)
-          await uploadArtwork(artworkBlob[0], artwork.name, trackId)
+
+          if (trackBlob) await uploadTrack(trackBlob[0], track.name, trackId)
+          if (artworkBlob)
+            await uploadArtwork(artworkBlob[0], artwork.name, trackId)
           goto(`/portal/artist/demo/${trackId}`)
         } catch (error) {
           log(
@@ -386,12 +396,7 @@
                                 {artist}
                                 onClick={() => {
                                   artist.royaltyPercentage = 0
-
                                   artistsArray = [...artistsArray, artist]
-                                  newTrack.artistIds = [
-                                    ...newTrack.artistIds,
-                                    artist.uuid,
-                                  ]
                                 }}>{artist.nickName}</Artist
                               >
                             {/each}

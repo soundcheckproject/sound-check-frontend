@@ -38,3 +38,18 @@ export interface TrackType {
   artistIds?: string[]
   artistTracks?: { user: UserType | ArtistType }[]
 }
+
+export interface TrackInputType {
+  uuid?: string
+  title?: string
+  description?: string
+  lyrics?: string
+  resource?: string
+  previewStart?: number
+  previewStop?: number
+  prefferdReleaseDate?: Date
+  genreId?: string
+  artwork?: ArtworkType
+  labelId?: string
+  artistTracks?: { userId: string; royaltySplit: number }[]
+}
