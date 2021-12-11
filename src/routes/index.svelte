@@ -62,11 +62,16 @@
     }
   }
 
-  let refs = ['info', 'contact']
+  const options = {
+    show: 50,
+    threshold: 100,
+    style: 'opacity: 1;',
+  }
 
+  let refs = ['info', 'contact']
+ 
   onMount(async () => {
     const location = window.location.href
-    console.log({ location })
     const [url, subnav] = location.split('#')
     if (subnav) {
       refs[subnav].scrollIntoView()
@@ -81,7 +86,7 @@
 </svelte:head>
 
 <Header>
-  <article
+  <article 
     class=" {spotlightTrack
       ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
@@ -184,11 +189,15 @@
       </section>
     </Container>
   </div>
-  <div bind:this={refs['info']} id='info' class="gradientBlueGreen">
+  <div
+    bind:this={refs['info']}
+    id="info"
+    class="gradientBlueGreen py-4"
+  >
     <Container>
-      <section>
+      <section class="p-16">
         <article
-          class="flex justify-between flex-col md:flex-row items-center gap-8"
+          class="flex justify-between flex-col md:flex-row items-center gap-8 p-0"
         >
           <div class="w-full grid gap-4">
             <Title theme="light"
@@ -218,7 +227,7 @@
       </section></Container
     >
   </div>
-  <div bind:this={refs['contact']} id='contact' class="py-16">
+  <div bind:this={refs['contact']} id="contact" class="py-16">
     <Container>
       <section class="grid gap-6">
         <Title>Contact</Title>
