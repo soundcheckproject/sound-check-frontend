@@ -25,7 +25,7 @@
   let showFeedback: boolean =
     JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
-  export let audio: HTMLAudioElement = undefined
+  export let audio: HTMLAudioElement | string = undefined
 
   let trackInfo: TrackInfoType = {
       duration: '0:00',
