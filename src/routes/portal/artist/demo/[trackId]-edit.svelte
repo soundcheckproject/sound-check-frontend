@@ -123,26 +123,13 @@
 
       console.log({updatedTrack})
 
-      return
-
       await updateTrack(track.uuid, updatedTrack)
-        .then(err => {
-          loadingStatus.track = false
-          errors = validateError('connection', 'graphql', true, errors)
-          if (err) {
-            console.log(err)
-            //   if (err[0].extensions.response.statusCode == 403) {
-            //     errors = validateError('update', '403', false, errors)
-            //   }
-            // } else {
-            //   errors = validateError('update', '403', true, errors)
-
-            //   goto($page.path)
-          }
-        })
         .catch(e => {
           // errors = validateError('connection', 'graphql', false, errors)
           validateErrorTime('connection', 'graphql', errors)
+        })
+        .finally(()=>{
+            loadingStatus.track = false
         })
     }
   }
@@ -350,57 +337,7 @@
         <SubTitle>👨🏼‍🎨 Artists</SubTitle>
         <div class="grid gap-4">
           {#if track.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
-            <div class="grid lg:grid-cols-2 gap-4">
-              <div
-                class="relative"
-                on:mouseenter={() => (artistSearch.hover = true)}
-                on:mouseleave={() => (artistSearch.hover = false)}
-              >
-                <label class="portal"
-                  >Search collaborator<input
-                    bind:value={artistSearch.nickName}
-                    on:input={() => searchArtistByNickName()}
-                    on:blur={() => searchArtistByNickName()}
-                    class="input portal"
-                    placeholder="Search by name.."
-                  /></label
-                >
-                {#if artistSearch.hover}
-                  <div
-                    in:fly={{ y: 25, opacity: 0 }}
-                    out:fade={{ duration: 200 }}
-                    class="absolute left-0 right-0 w-full z-10 "
-                  >
-                    <div
-                      class=" mt-2 mshadow-md p-4 bg-white rounded-sm grid gap-2"
-                    >
-                      <p class="text-xs font-semibold ">Select artist</p>
-                      {#if artistSearch.nickName.length > 0}
-                        <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
-                          {#if artists.length == 0}
-                            <p class="text-sm animate-pulse	">
-                              No artists found..
-                            </p>{:else}
-                            {#each artists as artist}
-                              <Artist
-                                {artist}
-                                onClick={() => {
-                                  artistsArray = [
-                                    ...artistsArray,
-                                    { user: artist, royaltySplit: 0 },
-                                  ]
-                                }}>{artist.nickName}</Artist
-                              >
-                            {/each}
-                          {/if}
-                        </div>
-                      {:else}
-                        <p class="text-sm animate-pulse	">Loading artists..</p>
-                      {/if}
-                    </div>
-                  </div>
-                {/if}
-              </div>
+            <div class="grid gap-4">
               <div class="grid gap-4">
                 {#if artistsArray.length > 0}
                   <InputError errorInput="artist" />
@@ -430,9 +367,8 @@
                     <Artist
                       artist={artist.user}
                       size="md"
-                      remove={() => {
-                        removeArtist(artist.user.uuid)
-                      }}>{artist.user.nickName}</Artist
+                      pointer={false}
+                      >{artist.user.nickName}</Artist
                     >
                     <div class="relative flex items-center justify-end group">
                       <input
