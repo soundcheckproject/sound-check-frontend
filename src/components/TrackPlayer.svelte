@@ -97,10 +97,13 @@
       height: 80,
     })
 
-    // ! not tested yet
-    if (track.uuid) {
-      const data = await getTrackFileFromTrackId(track.uuid)
-      audio = data.encodedFile
+    if (!audio) {
+      if (track.encodedFile) {
+        audio = track.encodedFile
+      } else if (track.uuid) {
+        const data = await getTrackFileFromTrackId(track.uuid)
+        audio = data.encodedFile
+      }
     }
   })
 
@@ -161,9 +164,7 @@
         }') center center no-repeat;background-size:cover`}
       />
 
-      <div
-        class="z-10 grid gap-8  p-8 sm:grid-cols-auto-1fr w-full"
-      >
+      <div class="z-10 grid gap-8  p-8 sm:grid-cols-auto-1fr w-full">
         <div
           class="overflow-hidden w-48 h-48 lg:h-64 lg:w-64 m-auto bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
         >
@@ -306,7 +307,10 @@
             </div>
             <div
               on:click={() => {
-                if (wavesurfer) {isMuted = !isMuted; wavesurfer.setMute(isMuted)}
+                if (wavesurfer) {
+                  isMuted = !isMuted
+                  wavesurfer.setMute(isMuted)
+                }
               }}
             >
               {#if wavesurfer}

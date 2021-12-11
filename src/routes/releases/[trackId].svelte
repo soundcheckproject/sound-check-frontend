@@ -21,6 +21,7 @@
         'getReleasedTrackById',
         `query GetReleasedTrackById($trackId: String!) {
           getReleasedTrackById(trackId: $trackId) {
+                uuid
                 title
                 description
                 lyrics
@@ -52,6 +53,7 @@
         }`,
         { trackId: $page.params.trackId },
       )
+      console.log({track})
   })
 </script>
 
