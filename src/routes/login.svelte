@@ -94,9 +94,11 @@
             need to create an account. It's free!<br /><br />Our team will
             review your track as soon as possible and you'll be able to see if
             your track has been accepted for a release on the label.
-            <a href="/register" class="font-semibold hover:underline"
-              >Create account!</a
-            >
+            <Button
+                onClick={() => goto('/register')}
+                rounded="none"
+                color="bg-teal-700"
+                className="justify-self-start">Create account</Button>
           </div>
 
           <div

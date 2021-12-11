@@ -26,6 +26,18 @@
                 lyrics
                 isSigned
                 prefferdReleaseDate
+                artistTracks{
+                  user{
+                    nickName
+                    logo
+                    userLinks{
+                      link{
+                        type
+                      }
+                      linkAddress
+                    }
+                  }
+                }
                 genre {
                 name
                   

@@ -19,8 +19,8 @@
     <NavigationLink href="/">Home</NavigationLink>
     <NavigationLink href="/releases">Releases</NavigationLink>
     <NavigationLink href="/artists">Artists</NavigationLink>
-    <NavigationLink href="/info">Info</NavigationLink>
-    <NavigationLink href="/contact">Contact</NavigationLink>
+    <NavigationLink href="/#info">Info</NavigationLink>
+    <NavigationLink href="/#contact">Contact</NavigationLink>
 
     <!-- <a href="/">Home</a>
     <a href="/releases">releases</a>
@@ -102,8 +102,8 @@
       <NavigationLink href="/">Home</NavigationLink>
       <NavigationLink href="/releases">Releases</NavigationLink>
       <NavigationLink href="/artists">Artists</NavigationLink>
-      <NavigationLink href="/info">Info</NavigationLink>
-      <NavigationLink href="/contact">Contact</NavigationLink>
+      <NavigationLink href="/#info">Info</NavigationLink>
+      <NavigationLink href="/#contact">Contact</NavigationLink>
       <NavigationLink href="/login">Portal</NavigationLink>
       <!-- <a href="/">Home</a>
       <a href="#releases">releases</a>
