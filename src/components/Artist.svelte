@@ -13,14 +13,19 @@
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
   export let socials = false
+  export let pointer: boolean = true
 </script>
 
 {#if artist}
   <div
     on:click={onClick}
     class="inline"
-    on:mouseenter={() => (hover = true)}
-    on:mouseleave={() => (hover = false)}
+    on:mouseenter={() => {
+      hover = true
+    }}
+    on:mouseleave={() => {
+      hover = false
+    }}
   >
     <div
       class="relative mshadow-xs {theme == 'dark'
@@ -35,7 +40,7 @@
     >
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
-      <div class="cursor-pointer flex items-center group">
+      <div class={`${pointer && "cursor-pointer"} flex items-center group`}>
         {#if artist.logo}
           <img
             alt="Artist {artist.nickName ?? ''}"

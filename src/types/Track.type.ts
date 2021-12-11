@@ -22,7 +22,7 @@ export interface TrackType {
   title?: string
   description?: string
   lyrics?: string
-  encodedFile?:string
+  encodedFile?: string
   contractFile?: string
   contractResource?: string
   resource?: string
@@ -36,5 +36,35 @@ export interface TrackType {
   labelId?: string
   label?: string
   artistIds?: string[]
-  artistTracks?: { user: UserType | ArtistType }[]
+  artistTracks?: { user: UserType | ArtistType; royaltySplit: number }[]
+}
+
+export interface TrackInputType {
+  uuid?: string
+  title?: string
+  description?: string
+  lyrics?: string
+  resource?: string
+  previewStart?: number
+  previewStop?: number
+  prefferdReleaseDate?: Date
+  genreId?: string
+  artwork?: ArtworkType
+  labelId?: string
+  artistTracks?: { userId: string; royaltySplit: number }[]
+}
+
+export interface TrackUpdateType {
+  uuid?: string
+  title?: string
+  description?: string
+  lyrics?: string
+  resource?: string
+  previewStart?: number
+  previewStop?: number
+  prefferdReleaseDate?: Date
+  genreId?: string
+  artwork?: ArtworkType
+  labelId?: string
+  artistTracks?: {uuid?: string, userId: string; royaltySplit: number }[]
 }
