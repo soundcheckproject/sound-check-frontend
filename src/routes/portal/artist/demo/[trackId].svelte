@@ -18,6 +18,7 @@
   import FinanceButton from '../../../../components/portal/FinanceButton.svelte'
   import { formatDate } from '../../../../utils/useFormat'
   import { uploadContract } from '../../../../utils/useRest'
+  import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -66,7 +67,11 @@
   }
 
   onMount(async () => {
-    track = await getTrackById($page.params.trackId)
+    try {
+      track = await getTrackById('$page.params.trackId')
+    } catch (error) {
+      track = null
+    }
   })
 </script>
 
@@ -304,4 +309,9 @@
           <div>Download signed contract</div>
         </div>
       </div> -->
+{:else if track === undefined}
+  <Skeleton theme="white" loading={true} height="h-[22rem]" className="mb-8" />
+  <Skeleton theme="white" loading={true} height="h-[18rem]" />
+{:else if track === null}
+  <ErrorBanner message="Error while fetching the track data." />
 {/if}

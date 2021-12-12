@@ -96,5 +96,5 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
   <Skeleton theme="white" loading={true} height="h-[22rem]" className="mb-8" />
   <Skeleton theme="white" loading={true} height="h-[18rem]" />
 {:else if artist === null}
- <ErrorBanner message="Error while fetching the user." />
+ <ErrorBanner message="Error while fetching the user data." />
 {/if}

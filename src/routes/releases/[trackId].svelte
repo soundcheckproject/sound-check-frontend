@@ -25,7 +25,7 @@
           `query GetReleasedTrackById($trackId: String!) {
           getReleasedTrackById(trackId: $trackId) {
                 uuid
-                tidtle
+                title
                 description
                 lyrics
                 isSigned
@@ -124,7 +124,7 @@
           />
           <Skeleton theme="white" loading={true} height="h-[18rem]" />
         {:else if track === null}
-          <ErrorBanner message="Error while fetching the track." />
+          <ErrorBanner message="Error while fetching the track data." />
         {/if}
       </article>
     </section>
