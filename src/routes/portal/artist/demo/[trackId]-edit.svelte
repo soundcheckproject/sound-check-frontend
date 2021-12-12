@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import type { ArtworkType, TrackType, TrackUpdateType } from '../../../../types/Track.type'
+  import type {
+    ArtworkType,
+    TrackType,
+    TrackUpdateType,
+  } from '../../../../types/Track.type'
   import type { ArtistType, UserType } from '../../../../types/User.type'
 
   import {
@@ -41,6 +45,8 @@
   import { page } from '$app/stores'
   import { roleStore } from '../../../../stores/stores'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
+  import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import Skeleton from '../../../../components/Skeleton.svelte'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -49,7 +55,8 @@
 
   let prefferedReleaseDateString: string
 
-  let artistsArray: {uuid?: string, user: UserType; royaltySplit: number }[] = []
+  let artistsArray: { uuid?: string; user: UserType; royaltySplit: number }[] =
+    []
 
   let artwork: ArtworkType
   let newArtwork: ArtworkType
@@ -114,22 +121,26 @@
         title: newTrack.title,
         description: newTrack.description,
         genreId: newTrack.genreId,
-        artistTracks: []
+        artistTracks: [],
       }
 
-      artistsArray.map((at) =>{
-        updatedTrack.artistTracks.push({uuid: at.uuid, userId: at.user.uuid, royaltySplit: at.royaltySplit})
+      artistsArray.map(at => {
+        updatedTrack.artistTracks.push({
+          uuid: at.uuid,
+          userId: at.user.uuid,
+          royaltySplit: at.royaltySplit,
+        })
       })
 
-      console.log({updatedTrack})
+      console.log({ updatedTrack })
 
       await updateTrack(track.uuid, updatedTrack)
         .catch(e => {
           // errors = validateError('connection', 'graphql', false, errors)
           validateErrorTime('connection', 'graphql', errors)
         })
-        .finally(()=>{
-            loadingStatus.track = false
+        .finally(() => {
+          loadingStatus.track = false
         })
     }
   }
@@ -201,8 +212,9 @@
         .catch(error => {
           loadingStatus.track = false
           validateErrorTime('track', 'upload', errors)
-        }).finally(()=>{
-          loadingStatus.trackfile = false;
+        })
+        .finally(() => {
+          loadingStatus.trackfile = false
         })
     } else {
       loadingStatus.track = false
@@ -227,21 +239,25 @@
   onMount(async () => {
     genres = await getGenres()
     if ($page.params.trackId) {
-      track = await getTrackById($page.params.trackId)
+      try {
+        track = await getTrackById($page.params.trackId)
 
-      prefferedReleaseDateString = formatDateToDDMMJJJJ(
-        new Date(track.prefferdReleaseDate),
-      )
-      artistsArray = track.artistTracks
-      artwork = track.artwork
-      newArtwork = artwork
-      newTrack = track
-      calcRoyaltySplitotal()
+        prefferedReleaseDateString = formatDateToDDMMJJJJ(
+          new Date(track.prefferdReleaseDate),
+        )
+        artistsArray = track.artistTracks
+        artwork = track.artwork
+        newArtwork = artwork
+        newTrack = track
+        calcRoyaltySplitotal()
+      } catch (error) {
+        newTrack = null
+      }
     }
   })
 
-  $:{
-    console.log({artistsArray})
+  $: {
+    console.log({ artistsArray })
   }
 
   $: {
@@ -250,7 +266,6 @@
     // console.log(track)
   }
 </script>
-
 
 <svelte:head>
   <title>{`${track ? track.title : ''} - Track edit`}</title>
@@ -364,10 +379,7 @@
                     class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
                     transition:fade
                   >
-                    <Artist
-                      artist={artist.user}
-                      size="md"
-                      pointer={false}
+                    <Artist artist={artist.user} size="md" pointer={false}
                       >{artist.user.nickName}</Artist
                     >
                     <div class="relative flex items-center justify-end group">
@@ -421,7 +433,7 @@
             color="bg-teal-700"
             onClick={postTrack}
             size="sm"
-            loading={loadingStatus.track ? "Updating track.." : null}
+            loading={loadingStatus.track ? 'Updating track..' : null}
             >Update track</Button
           >
         </div>
@@ -571,5 +583,15 @@
         You cannot edit your track if the track is already signed or denied.</Box
       >
     {/if}
+  {:else if newTrack === undefined}
+    <Skeleton
+      theme="light"
+      loading={true}
+      height="h-[22rem]"
+      className="mb-8"
+    />
+    <Skeleton theme="light" loading={true} height="h-[18rem]" />
+  {:else if newTrack === null}
+    <ErrorBanner message="Error while fetching the track data." />
   {/if}
 </div>

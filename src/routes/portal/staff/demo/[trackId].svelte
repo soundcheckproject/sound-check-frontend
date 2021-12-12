@@ -32,6 +32,8 @@
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
+  import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import Skeleton from '../../../../components/Skeleton.svelte'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -104,7 +106,11 @@
   }
 
   onMount(async () => {
-    track = await getTrackById($page.params.trackId)
+    try {
+      track = await getTrackById($page.params.trackId)
+    } catch (error) {
+      track = null
+    }
   })
 
   $: {
@@ -113,9 +119,8 @@
 </script>
 
 <svelte:head>
-	<title>{`${track ? track.title : ''} - Track detail`}</title>
+  <title>{`${track ? track.title : ''} - Track detail`}</title>
 </svelte:head>
-
 
 {#if track}
   <FadeBox
@@ -427,6 +432,11 @@
       </Box>
     </div></FadeBox
   >
+{:else if track === undefined}
+  <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
+  <Skeleton theme="light" loading={true} height="h-[18rem]" />
+{:else if track === null}
+  <ErrorBanner message="Error while fetching the track data." />
 {/if}
 
 <style lang="postcss">

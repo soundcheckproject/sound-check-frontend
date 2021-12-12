@@ -12,14 +12,17 @@
   import { formatDate } from '../../utils/useFormat'
   import SubTitle from '../../components/SubTitle.svelte'
   import Artist from '../../components/Artist.svelte'
+  import Skeleton from '../../components/Skeleton.svelte'
+  import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
   let track: TrackType
 
   onMount(async () => {
-    if ($page.params.trackId)
-      track = await query(
-        'getReleasedTrackById',
-        `query GetReleasedTrackById($trackId: String!) {
+    try {
+      if ($page.params.trackId)
+        track = await query(
+          'getReleasedTrackById',
+          `query GetReleasedTrackById($trackId: String!) {
           getReleasedTrackById(trackId: $trackId) {
                 uuid
                 title
@@ -41,24 +44,26 @@
                 }
                 genre {
                 name
-                  
-                }       
+
+                }
                 encodedFile
                 artwork {
                     designer
                     resource
                 }
-            
+
             }
         }`,
-        { trackId: $page.params.trackId },
-      )
-      console.log({track})
+          { trackId: $page.params.trackId },
+        )
+    } catch (error) {
+      track = null
+    }
   })
 </script>
 
 <svelte:head>
-	<title>{`${track ? track.title : ''} - Track detail`}</title>
+  <title>{`${track ? track.title : ''} - Track detail`}</title>
 </svelte:head>
 
 <Header type="split" />
@@ -109,6 +114,16 @@
               </div>
             </div>
           </Box>
+        {:else if track === undefined}
+          <Skeleton
+            theme="light"
+            loading={true}
+            height="h-[24rem]"
+            className="mb-8"
+          />
+          <Skeleton theme="light" loading={true} height="h-[18rem]" />
+        {:else if track === null}
+          <ErrorBanner message="Error while fetching the track data." />
         {/if}
       </article>
     </section>
