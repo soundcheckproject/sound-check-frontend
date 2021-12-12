@@ -4,6 +4,8 @@
   export let popup: boolean = false
   import Popup from '../components/Popup.svelte'
 
+  console.log({popup})
+
   // requiredRoles.some((role: string) => authUser.roles.includes(role))
 </script>
 

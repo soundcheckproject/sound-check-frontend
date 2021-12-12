@@ -85,7 +85,7 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
         {:else}
           <div class="grid gap-4 lg:grid-cols-2">
             {#each artistTracks as track}
-              <TrackRow {track}>{track.title}</TrackRow>
+              <TrackRow portal='staff' {track}>{track.title}</TrackRow>
             {/each}
           </div>
         {/if}

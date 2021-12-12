@@ -13,13 +13,7 @@
   import authStore from '../stores/authStore'
   import { loginUser } from './../utils/useFirebase'
   import {
-    validateEmailValid,
-    validateLength,
-    validateCapital,
-    validateLower,
-    validateNumbers,
     validateErrors,
-    validateError,
     validateErrorTime,
     validateEmpty,
   } from './../utils/useValidation'
@@ -31,8 +25,8 @@
   import Input from '../components/Input.svelte'
   import FadeBox from '../components/portal/FadeBox.svelte'
 
-  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
-   let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []

@@ -10,7 +10,7 @@
     pageBread = $page.path.split('/')
     pageBread.splice(0, 2)
   }
-  let nav: HTMLDivElement
+  let nav: any
   const scrollUp = () => {
     nav.scrollTop = 0
     // Todo: smooth scroll to top
@@ -21,11 +21,11 @@
 <AuthLayer>
   <div class="c-portal" transition:fade|local={{ duration: 200 }}>
     <PortalNavigation />
-    <div
+    <main
       class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll"
       bind:this={nav}
     >
-      <div style="max-width:1000px " class="mx-auto">
+      <div class="mx-auto max-w-[62rem]">
         <p
           class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
         >
@@ -64,9 +64,9 @@
             </a>
           {/each}
         </p>
-        <div class=""><slot /></div>
+        <section class="p-0 m-0"><slot /></section>
       </div>
-    </div>
+    </main>
 
     <!-- <div
       on:click={() => scrollUp()}
