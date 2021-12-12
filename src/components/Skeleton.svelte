@@ -2,6 +2,8 @@
   export let theme: 'white' | 'light' | 'dark' = 'light'
   export let opacity = 100
   export let loading = false
+  export let height = 'h-24'
+  export let className = ''
 </script>
 
 <div
@@ -14,7 +16,7 @@
     ? 'bg-gray-100'
     : theme == 'dark'
     ? 'bg-gray-700'
-    : ''} opacity-{opacity} "
+    : ''} opacity-{opacity} {height} {className}"
 >
   <div class="text-sm"><slot /></div>
   <!-- <div> </div> -->

@@ -9,8 +9,11 @@
 </script>
 
 <FadeBox>
+
+
+
   <div
-    class="relative overflow-hidden backdrop-blur-sm text-gray-50 grid  bg-gray-800 {rounded}"
+    class="relative overflow-hidden backdrop-blur-sm text-gray-50 grid bg-gray-800 {rounded}"
   >
     {#if logo}
       <div
