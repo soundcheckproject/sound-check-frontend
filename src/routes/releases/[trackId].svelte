@@ -56,7 +56,6 @@
         }`,
           { trackId: $page.params.trackId },
         )
-      console.log({ track })
     } catch (error) {
       track = null
     }
@@ -117,12 +116,12 @@
           </Box>
         {:else if track === undefined}
           <Skeleton
-            theme="white"
+            theme="light"
             loading={true}
             height="h-[24rem]"
             className="mb-8"
           />
-          <Skeleton theme="white" loading={true} height="h-[18rem]" />
+          <Skeleton theme="light" loading={true} height="h-[18rem]" />
         {:else if track === null}
           <ErrorBanner message="Error while fetching the track data." />
         {/if}

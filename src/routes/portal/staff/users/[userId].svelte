@@ -93,8 +93,8 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
     </div>
   </FadeBox>
 {:else if artist === undefined}
-  <Skeleton theme="white" loading={true} height="h-[22rem]" className="mb-8" />
-  <Skeleton theme="white" loading={true} height="h-[18rem]" />
+  <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
+  <Skeleton theme="light" loading={true} height="h-[18rem]" />
 {:else if artist === null}
  <ErrorBanner message="Error while fetching the user data." />
 {/if}

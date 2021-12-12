@@ -16,6 +16,7 @@
   import SubTitle from '../../components/SubTitle.svelte'
   import LinkIcon from '../../components/LinkIcon.svelte'
   import { capitalize } from '../../utils/capitalize'
+  import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
   let artist: UserType
 
@@ -52,10 +53,52 @@
   //   },
   // ]
 
+  const getArtistTracks = async (userId: string) => {
+    try {
+      tracks = await query(
+        `getTracksReleasedByUserId`,
+        `query Query($userId: String!) {
+          getTracksReleasedByUserId(userId: $userId) {
+            uuid
+            title
+            description
+            lyrics
+            isSigned
+            genreId
+            artistTracks
+            {
+              user{
+                nickName
+                logo
+                userLinks{
+                  link{
+                    type
+                  }
+                  linkAddress
+                }
+              }
+            }
+            label {
+              name
+            }
+            artwork {
+              resource
+              designer
+            }
+          }
+        }`,
+        { userId: artist.uuid },
+      )
+    } catch (error) {
+      tracks = []
+    }
+  }
+
   const getArtist = async () => {
-    const artistData = await query(
-      `getUser`,
-      `query GetUser($userId: String!) {
+    try {
+      artist = await query(
+        `getUser`,
+        `query GetUser($userId: String!) {
         getUser(userId: $userId) {
             uuid
             nickName
@@ -77,41 +120,13 @@
               }
               linkAddress
             }
-     
           }
         }`,
-      { userId: $page.params.artistId },
-    )
-
-    if (artistData) {
-      artist = artistData
-
-      const trackData = await query(
-        `getTracksReleasedByUserId`,
-        `query Query($userId: String!) {
-          getTracksReleasedByUserId(userId: $userId) {
-            uuid
-            title
-            description
-            lyrics
-            isSigned
-            genreId
-            
-            label {
-              name
-            }
-            artwork {
-              resource
-              designer
-            }
-          }
-        }`,
-        { userId: artist.uuid },
+        { userId: $page.params.artistId },
       )
-      console.log({ trackData })
-      if (trackData) {
-        // tracks = trackData
-      }
+      getArtistTracks(artist.uuid)
+    } catch (error) {
+      artist = null
     }
   }
 
@@ -121,7 +136,7 @@
 </script>
 
 <svelte:head>
-	<title>{`${artist && artist.nickName + ' - ' }Artist detail`}</title>
+  <title>{`${artist && artist.nickName + ' - '}Artist detail`}</title>
 </svelte:head>
 
 <Header type="split" />
@@ -130,60 +145,70 @@
     <Container className="py-16 grid gap-12">
       {#if artist}
         <ProfileBanner container {artist} logo={artist.logo} />
-      {/if}
-      <div
-        class="grid gap-8 lg:grid-cols-2 "
-        style="grid-template-columns:auto 1fr"
-      >
-        <div class="flex flex-col  ">
-          <SubTitle>Socials</SubTitle>
-     
-          <div class="text-sm   mt-6 grid gap-2">
-            {#if artist && artist.userLinks && artist.userLinks.length > 0}
-              {#each artist.userLinks as userLink}
-                <div
-                  class="flex items-center bg-white rounded-full mshadow-xs px-3 py-2 text-xs "
-                >
-                  <LinkIcon className="mr-2" type={userLink.link.type} />
-                  <a
-                    href={'https://' + userLink.linkAddress}
-                    target="_blank"
-                    class="hover:underline grid grid-flow-col gap-2 items-center text-gray-700"
+
+        <div
+          class="grid gap-8 lg:grid-cols-2 "
+          style="grid-template-columns:auto 1fr"
+        >
+          <div class="flex flex-col  ">
+            <SubTitle>Socials</SubTitle>
+
+            <div class="text-sm   mt-6 grid gap-2">
+              {#if artist && artist.userLinks && artist.userLinks.length > 0}
+                {#each artist.userLinks as userLink}
+                  <div
+                    class="flex items-center bg-white rounded-full mshadow-xs px-3 py-2 text-xs "
                   >
-                    {capitalize(userLink.link.type)}
-                  </a>
-                </div>
-              {/each}
-            {:else}
-              <p class="text-sm ">No links found 😥</p>
+                    <LinkIcon className="mr-2" type={userLink.link.type} />
+                    <a
+                      href={'https://' + userLink.linkAddress}
+                      target="_blank"
+                      class="hover:underline grid grid-flow-col gap-2 items-center text-gray-700"
+                    >
+                      {capitalize(userLink.link.type)}
+                    </a>
+                  </div>
+                {/each}
+              {:else}
+                <p class="text-sm ">No links found 😥</p>
+              {/if}
+            </div>
+          </div>
+          <div class="grid gap-6 items-start">
+            <SubTitle>Tracks</SubTitle>
+            {#if tracks}
+              <div class="grid gap-4 ">
+                {#if tracks.length != 0}
+                  {#each tracks as track}
+                    <TrackRow
+                      actions={false}
+                      background
+                      artists
+                      href="/releases/{track.uuid}"
+                      size="lg"
+                      {track}
+                    />
+                    <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->
+                  {/each}
+                {:else}
+                  <div class="col-span-2">
+                    <Skeleton loading={true}>Loading tracks..</Skeleton>
+                  </div>
+                {/if}
+              </div>
             {/if}
           </div>
         </div>
-        <div class="grid gap-6 items-start">
-          <SubTitle>Tracks</SubTitle>
-          {#if tracks}
-            <div class="grid gap-4 ">
-              {#if tracks.length != 0}
-                {#each tracks as track}
-                  <TrackRow
-                    actions={false}
-                    background
-                    artists
-                    href="/releases/{track.uuid}"
-                    size="lg"
-                    {track}
-                  />
-                  <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->
-                {/each}
-              {:else}
-                <div class="col-span-2">
-                  <Skeleton loading={true}>Loading tracks..</Skeleton>
-                </div>
-              {/if}
-            </div>
-          {/if}
-        </div>
-      </div>
+      {:else if artist === undefined}
+        <Skeleton
+          theme="light"
+          loading={true}
+          height="h-[22rem]"
+        />
+        <Skeleton theme="light" loading={true} height="h-[18rem]" />
+      {:else if artist === null}
+        <ErrorBanner message="Error while fetching the user data." />
+      {/if}
     </Container>
   </FadeBox>
 </main>

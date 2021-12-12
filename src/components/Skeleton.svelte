@@ -13,7 +13,7 @@
     : ''} rounded-md justify-center items-center py-12 {theme == 'white'
     ? 'bg-white'
     : theme == 'light'
-    ? 'bg-gray-100'
+    ? 'bg-gray-400'
     : theme == 'dark'
     ? 'bg-gray-700'
     : ''} opacity-{opacity} {height} {className}"

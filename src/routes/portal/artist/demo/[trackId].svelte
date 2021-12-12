@@ -68,7 +68,7 @@
 
   onMount(async () => {
     try {
-      track = await getTrackById('$page.params.trackId')
+      track = await getTrackById($page.params.trackId)
     } catch (error) {
       track = null
     }
@@ -310,8 +310,8 @@
         </div>
       </div> -->
 {:else if track === undefined}
-  <Skeleton theme="white" loading={true} height="h-[22rem]" className="mb-8" />
-  <Skeleton theme="white" loading={true} height="h-[18rem]" />
+  <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
+  <Skeleton theme="light" loading={true} height="h-[18rem]" />
 {:else if track === null}
   <ErrorBanner message="Error while fetching the track data." />
 {/if}
