@@ -1,12 +1,12 @@
 <script lang="ts">
   import Box from '../../../../components/Box.svelte'
   import Title from '../../../../components/Title.svelte'
-  import SubTitle from '../../../../components/SubTitle.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
   import { onMount } from 'svelte'
-  import { getArtists, query } from '../../../../utils/useGraphQL'
+  import { query } from '../../../../utils/useGraphQL'
   import type { UserType, ArtistType } from 'src/types/User.type'
-  import { goto } from '$app/navigation'
+  import FadeBox from '../../../../components/portal/FadeBox.svelte';
+
 
   let users: ArtistType[] = []
   let filterValue: string,
@@ -64,6 +64,7 @@
 	<title>Users</title>
 </svelte:head>
 
+<FadeBox>
 <Box>
   <Title>
     <div class="grid sm:grid-cols-2 items-center">
@@ -176,3 +177,5 @@
     {/if}
   </div>
 </Box>
+</FadeBox>
+

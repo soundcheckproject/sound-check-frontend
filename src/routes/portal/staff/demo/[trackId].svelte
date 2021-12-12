@@ -122,9 +122,9 @@
   <title>{`${track ? track.title : ''} - Track detail`}</title>
 </svelte:head>
 
-{#if track}
-  <FadeBox
-    ><div class="grid gap-8">
+<FadeBox>
+  {#if track}
+    <div class="grid gap-8">
       <TrackPlayer feedback={true} {track} />
       <Box>
         <Title
@@ -430,14 +430,19 @@
           >
         </div>
       </Box>
-    </div></FadeBox
-  >
-{:else if track === undefined}
-  <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
-  <Skeleton theme="light" loading={true} height="h-[18rem]" />
-{:else if track === null}
-  <ErrorBanner message="Error while fetching the track data." />
-{/if}
+    </div>
+  {:else if track === undefined}
+    <Skeleton
+      theme="light"
+      loading={true}
+      height="h-[22rem]"
+      className="mb-8"
+    />
+    <Skeleton theme="light" loading={true} height="h-[18rem]" />
+  {:else if track === null}
+    <ErrorBanner message="Error while fetching the track data." />
+  {/if}
+</FadeBox>
 
 <style lang="postcss">
   .button {

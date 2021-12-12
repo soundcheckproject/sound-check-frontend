@@ -16,7 +16,7 @@
   import EditButton from '../../../../components/portal/EditButton.svelte'
   import { RoleName } from '../../../../types/Role.type'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
-import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
+  import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
 
   let artist: UserType = undefined
   let artistTracks: TrackType[] = []
@@ -44,8 +44,8 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
   <title>{`${artist ? artist.nickName : ''} - Profile`}</title>
 </svelte:head>
 
-{#if artist}
-  <FadeBox>
+<FadeBox>
+  {#if artist}
     <div class="grid gap-8">
       <ProfileBanner {artist} />
       <Box
@@ -85,16 +85,21 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte';
         {:else}
           <div class="grid gap-4 lg:grid-cols-2">
             {#each artistTracks as track}
-              <TrackRow portal='staff' {track}>{track.title}</TrackRow>
+              <TrackRow portal="staff" {track}>{track.title}</TrackRow>
             {/each}
           </div>
         {/if}
       </Box>
     </div>
-  </FadeBox>
-{:else if artist === undefined}
-  <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
-  <Skeleton theme="light" loading={true} height="h-[18rem]" />
-{:else if artist === null}
- <ErrorBanner message="Error while fetching the user data." />
-{/if}
+  {:else if artist === undefined}
+    <Skeleton
+      theme="light"
+      loading={true}
+      height="h-[22rem]"
+      className="mb-8"
+    />
+    <Skeleton theme="light" loading={true} height="h-[18rem]" />
+  {:else if artist === null}
+    <ErrorBanner message="Error while fetching the user data." />
+  {/if}
+</FadeBox>

@@ -8,6 +8,7 @@
   import type { TrackType } from '../../../types/Track.type'
   import { onMount } from 'svelte'
   import { getAllTracks } from '../../../utils/useGraphQL'
+  import FadeBox from '../../../components/portal/FadeBox.svelte'
 
   let tracks: TrackType[] = []
   let filteredTracks: TrackType[] = []
@@ -46,32 +47,36 @@
 </script>
 
 <svelte:head>
-	<title>Tracks</title>
+  <title>Tracks</title>
 </svelte:head>
 
+<FadeBox>
+  <Box>
+    <Title
+      ><div class="grid sm:grid-cols-2 items-center">
+        <h1>All tracks</h1>
+        <label>
+          <input
+            bind:value={searchInput}
+            on:input={() =>
+              (filteredTracks = searchTracks(tracks, searchInput))}
+            class="input portal"
+            placeholder="Search.."
+          />
+        </label>
+      </div></Title
+    >
 
-<Box>
-  <Title><div class="grid sm:grid-cols-2 items-center">
-      <h1>All tracks</h1>
-      <label>
-        <input
-          bind:value={searchInput}
-          on:input={() => (filteredTracks = searchTracks(tracks, searchInput))}
-          class="input portal"
-          placeholder="Search.."
-        />
-      </label>
-    </div></Title>
-    
-  {#if tracks.length == 0}
-    <Skeleton>Loading tracks..</Skeleton>
-  {:else if filteredTracks.length == 0}
-    <Skeleton>No tracks found..</Skeleton>
-  {:else}
-    <div class="grid gap-4 lg:grid-cols-2 ">
-      {#each filteredTracks as track}
-        <TrackRow portal="staff" {track}>{track.title}</TrackRow>
-      {/each}
-    </div>
-  {/if}
-</Box>
+    {#if tracks.length == 0}
+      <Skeleton>Loading tracks..</Skeleton>
+    {:else if filteredTracks.length == 0}
+      <Skeleton>No tracks found..</Skeleton>
+    {:else}
+      <div class="grid gap-4 lg:grid-cols-2 ">
+        {#each filteredTracks as track}
+          <TrackRow portal="staff" {track}>{track.title}</TrackRow>
+        {/each}
+      </div>
+    {/if}
+  </Box>
+</FadeBox>
