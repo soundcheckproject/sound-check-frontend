@@ -359,7 +359,7 @@
                     <InputError errorInput="artist" />
                     <div
                       class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                      transition:fade
+                      transition:fade|local
                     >
                       <p class="">Artist(s)</p>
                       <p class="font-semibold text-right ">
@@ -372,13 +372,13 @@
                         >Total royalties should be equal to 100</SubTitle
                       >
                     {/if}
-                  {:else}<div class="label portal grid  gap-2 " transition:fade>
+                  {:else}<div class="label portal grid  gap-2 " transition:fade|local>
                       <p class="">Add a collaborator</p>
                     </div>{/if}
                   {#each artistsArray as artist}
                     <div
                       class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                      transition:fade
+                      transition:fade|local
                     >
                       <Artist artist={artist.user} size="md" pointer={false}
                         >{artist.user.nickName}</Artist

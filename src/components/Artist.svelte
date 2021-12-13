@@ -91,8 +91,8 @@
 
       {#if hover && socials}
         <div
-          in:fly={{ y: 25, opacity: 0 }}
-          out:fade={{ duration: 200 }}
+          in:fly|local={{ y: 25, opacity: 0 }}
+          out:fade|local={{ duration: 200 }}
           class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
           'dark'
             ? 'bg-black bg-opacity-50 backdrop-blur-lg text-white'

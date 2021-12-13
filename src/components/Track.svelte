@@ -61,7 +61,7 @@
     />
     {#if hover}
       <div
-        transition:fade={{ duration: 100 }}
+        transition:fade|local={{ duration: 100 }}
         class={`${
           size == 'sm'
             ? ' h-32 w-32'

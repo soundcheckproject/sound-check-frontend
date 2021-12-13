@@ -46,15 +46,7 @@
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             {/if}
-            <!-- <a
-            class="hover:underline"
-            in:fly={{ x: -50, duration: 200 }}
-            out:fade={{ duration: 200 }}
-            href=""
-            on:click={() =>
-              goto(`/portal/${pageBread.slice(0, index + 1).join('/')}`)}
-            >{bread}
-          </a> -->
+
             <a
               class="hover:underline"
               in:fly|local={{ x: -50, duration: 200 }}
@@ -68,7 +60,7 @@
       </div>
     </main>
 
-    <!-- <div
+    <div
       on:click={() => scrollUp()}
       class="backdrop-blur-2xl absolute right-12 bottom-12 rounded-full bg-opacity-25 bg-gray-500 p-4 text-white cursor-pointer hover:bg-opacity-75 transition-all"
     >
@@ -85,7 +77,7 @@
       >
         <polyline points="18 15 12 9 6 15" />
       </svg>
-    </div> -->
+    </div>
   </div>
 </AuthLayer>
 

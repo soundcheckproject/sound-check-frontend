@@ -15,8 +15,8 @@
     {#if error.split('_').includes(errorInput)}
       {#if $errorStore[errorInput]}
         <div
-          in:fade={{ duration: 200, delay: 200 }}
-          out:fade={{ duration: 200 }}
+          in:fade|local={{ duration: 200, delay: 200 }}
+          out:fade|local={{ duration: 200 }}
         >
           <Error
             onClose={error == errorInput + '_available'

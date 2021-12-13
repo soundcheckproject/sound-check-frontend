@@ -378,8 +378,8 @@
                 >
                 {#if artistSearch.hover}
                   <div
-                    in:fly={{ y: 25, opacity: 0 }}
-                    out:fade={{ duration: 200 }}
+                    in:fly|local={{ y: 25, opacity: 0 }}
+                    out:fade|local={{ duration: 200 }}
                     class="absolute left-0 right-0 w-full z-10 "
                   >
                     <div
@@ -413,7 +413,7 @@
                 {#if artistsArray.length > 0}
                   <div
                     class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                    transition:fade
+                    transition:fade|local
                   >
                     <p class="">Artist(s)</p>
                     <p class="font-semibold text-right ">
@@ -432,7 +432,7 @@
                 {#each artistsArray as artist}
                   <div
                     class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                    transition:fade
+                    transition:fade|local
                   >
                     <Artist
                       {artist}

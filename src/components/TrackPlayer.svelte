@@ -143,8 +143,7 @@
 {#if track}
   <div class="relative">
     <div
-      in:fade|local={{ duration: 200, delay: 200 }}
-      out:fade={{ duration: 200 }}
+  
       class="overflow-hidden relative grid bg-gray-800 {rounded} backdrop-blur-sm text-gray-100"
     >
       <div
@@ -354,7 +353,6 @@
             </div>
           </div>
 
-          <!-- <div>show more</div> -->
         </div>
       </div>
       {#if audio && feedback && (track.isSigned == null || track.isSigned == true)}
@@ -394,7 +392,7 @@
             </div></SubTitle
           >
           {#if showFeedback}
-            <!-- <SubTitle theme="light">Add feedback</SubTitle> -->
+
             <div
               transition:slide|local
               class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
