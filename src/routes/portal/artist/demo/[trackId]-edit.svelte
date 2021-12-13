@@ -276,7 +276,7 @@
     {#if newTrack}
       <TrackPlayer
         track={newTrack}
-        audioFile={trackPreview ? trackPreview : null}
+        audio={trackPreview ? trackPreview : null}
         artworkFile={artworkPreview ? artworkPreview : null}
         feedback={false}
       />

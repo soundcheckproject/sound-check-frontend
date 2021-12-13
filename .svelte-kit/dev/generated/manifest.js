@@ -45,9 +45,6 @@ export const routes = [
 	// src/routes/forgotpassword/index.svelte
 	[/^\/forgotpassword\/?$/, [c[0], c[3]], [c[1]]],
 
-	// src/routes/test.test.ts
-	[/^\/test\.test$/],
-
 	// src/routes/register.svelte
 	[/^\/register\/?$/, [c[0], c[4]], [c[1]]],
 
