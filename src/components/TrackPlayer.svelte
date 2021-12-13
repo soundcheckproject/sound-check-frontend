@@ -61,6 +61,7 @@
         await addFeedbackToTrack(feedbackData)
         feedbackData.user = $userStore
         feedbacks = [...feedbacks, feedbackData]
+        feedbackInput = ''
       } catch (e) {
         console.log(e)
       }
@@ -409,7 +410,7 @@
                 <input
                   type="text"
                   bind:value={feedbackInput}
-                  class="bg-opacity-0 bg-white outline-none w-full mr-2 text-white text-opacity-75"
+                  class="bg-opacity-0 bg-white outline-none w-full mr-2  placeholder-white placeholder-opacity-50 text-white text-opacity-75"
                   placeholder="Write a comment.."
                 />
                 <Button onClick={() => addComment()} type="glass">Post</Button>
