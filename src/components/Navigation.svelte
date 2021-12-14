@@ -3,13 +3,14 @@
   import NavigationLink from './NavigationLink.svelte'
 
   import _ from '../stores/languageStore'
+  import { goto } from '$app/navigation'
 
   let toggleMenu: Boolean = false
 </script>
 
 <nav class="flex py-8 flex-row justify-between items-center">
   {#if $labelStore}
-    <a href="/" id="home">
+    <a href="/" id="home" class="outline-none focus:scale-125">
       <h1 class="text-xl font-bold">{$labelStore.name}</h1></a
     >
   {:else}
@@ -29,9 +30,12 @@
     <a href="/artists">artists</a>
     <a href="/#info">info</a>
     <a href="/#contact">contact</a> -->
-    <div class="relative group">
+    <button
+      on:click={() => goto('/login')}
+      class="relative group outline-none focus:scale-150"
+    >
       <NavigationLink href="/login">Portal</NavigationLink>
-      <div class=" absolute hidden group-hover:block pt-3 ">
+      <div class="absolute hidden group-focus:block group-hover:block pt-3">
         <div
           class="bg-gray-100 bg-opacity-25 grid gap-2 text-xs backdrop-blur-3xl px-5 py-4 rounded-md -ml-4"
         >
@@ -41,7 +45,7 @@
           <a href="/register">register</a> -->
         </div>
       </div>
-    </div>
+    </button>
     <div class="grid sm:hidden">=</div>
   </div>
 
@@ -75,7 +79,7 @@
       : 'translate-x-screen-w'} ease-out duration-200 fixed w-screen h-screen z-50 inset-0 bg-gray-900 grid place-items-center"
   >
     <div
-      class=" absolute top-8 right-6 cursor-pointer p-2 bg-gray-200 backdrop-blur-sm rounded-full"
+      class="absolute top-8 right-6 cursor-pointer p-2 bg-gray-200 backdrop-blur-sm rounded-full"
       on:click={() => (toggleMenu = false)}
     >
       <svg
