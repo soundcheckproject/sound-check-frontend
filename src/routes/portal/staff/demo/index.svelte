@@ -116,10 +116,10 @@
           <h1>Demos</h1>
           <div class="flex space-x-2 sm:ml-auto">
             <select class="portal input w-32" bind:value={filterType}>
+              <option value="all">All</option>
               <option value="pending">Pending</option>
               <option value="accepted">Accepted</option>
               <option value="denied">Denied</option>
-              <option value="all">All</option>
             </select>
 
             <label>
@@ -150,37 +150,50 @@
         {/if}
       {:else}
         {#if filterType == 'accepted' || filterType == 'all'}
-          <div class="flex justify-between items-center">
-            <SubTitle>Accepted demos</SubTitle>
+          <SubTitle>Accepted demos</SubTitle>
+          <div class="grid gap-8 ">
+            {#if filteredDemos.accepted.length <= 0 && demosLoaded}
+              <div class="col-span-2">
+                <Skeleton>There are no accepted tracks.</Skeleton>
+              </div>
+            {:else if filteredDemos.accepted.length <= 0}
+              <Skeleton loading>Loading accepted tracks..</Skeleton>
+            {:else}
+              {#each filteredDemos.accepted as track}
+                <DemoRow {track} />
+              {/each}
+            {/if}
           </div>
-          {#each filteredDemos.accepted as track}
-            <DemoRow {track} />
-          {/each}
-          {#if filteredDemos.accepted.length == 0}
-            <Skeleton>No demos found..</Skeleton>
-          {/if}
         {/if}
         {#if filterType == 'denied' || filterType == 'all'}
-          <div class="flex justify-between items-center">
-            <SubTitle>Denied demos</SubTitle>
+          <SubTitle>Denied demos</SubTitle>
+          <div class="grid gap-8 ">
+            {#if filteredDemos.denied.length <= 0 && demosLoaded}
+              <div class="col-span-2">
+                <Skeleton>There are no denied tracks.</Skeleton>
+              </div>
+            {:else if filteredDemos.denied.length <= 0}
+              <Skeleton loading>Loading denied tracks..</Skeleton>
+            {:else}
+              {#each filteredDemos.pending as track}
+                <DemoRow {track} />
+              {/each}
+            {/if}
           </div>
-          {#each filteredDemos.denied as track}
-            <DemoRow {track} />
-          {/each}
-          {#if filteredDemos.denied.length == 0}
-            <Skeleton>No demos found..</Skeleton>
-          {/if}
         {/if}
         {#if filterType == 'pending' || filterType == 'all'}
-          <div class="flex justify-between items-center">
-            <SubTitle>Pending demos</SubTitle>
-          </div>
+          <SubTitle>Pending demos</SubTitle>
           <div class="grid gap-8 ">
-            {#each filteredDemos.pending as track}
-              <DemoRow {track} />
-            {/each}
-            {#if filteredDemos.pending.length == 0}
-              <Skeleton>No demos found..</Skeleton>
+            {#if filteredDemos.pending.length <= 0 && demosLoaded}
+              <div class="col-span-2">
+                <Skeleton>There are no pending tracks.</Skeleton>
+              </div>
+            {:else if filteredDemos.pending.length <= 0}
+              <Skeleton loading>Loading pending tracks..</Skeleton>
+            {:else}
+              {#each filteredDemos.pending as track}
+                <DemoRow {track} />
+              {/each}
             {/if}
           </div>
         {/if}

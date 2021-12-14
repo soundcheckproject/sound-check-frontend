@@ -262,6 +262,7 @@
         class="w-28 text-xs text-right font-medium hover:underline"
         >Learn more..</a
       >
+    {:else if loadTrack}<p class="text-xs">Fetching the track..</p>
     {:else}<p class="text-xs">Audio is not loaded yet.</p>
     {/if}
   </div>
