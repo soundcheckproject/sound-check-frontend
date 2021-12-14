@@ -41,7 +41,7 @@
   in:fly|local={{ x: -300, duration: 200 }}
   class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200  ${
     $menuState
-      ? 'w-[calc(100vw-2.5rem)] sm:w-24 px-6 hidden sm:block'
+      ? 'w-[calc(100vw-2.5rem)] sm:w-28 px-6 hidden sm:block'
       : 'w-[calc(100vw-2.5rem)] sm:w-72'
   }`}
 >
@@ -111,9 +111,7 @@
       </a>
       <hr />
       <div
-        class={`text-sm grid gap-1   w-full transition-all delay-200 ${
-          $menuState ? ' ml-4' : ''
-        }`}
+        class="text-sm grid gap-1 w-full transition-all delay-200"
       >
         <RoleLayer allowedForRoles={[RoleName.LabelArtist, RoleName.User]}>
           <NavLink href="/portal/artist" name="Overview"
@@ -292,9 +290,7 @@
       </div>
       <hr />
       <div
-        class={`text-sm grid gap-4 w-full transition-all delay-200 ${
-          $menuState ? ' ml-4' : ''
-        }`}
+        class="text-sm grid gap-4 w-full transition-all delay-200"
       >
         <NavLink href="/" name="Home">
           <svg
