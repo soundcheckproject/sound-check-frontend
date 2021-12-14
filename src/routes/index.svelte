@@ -17,6 +17,8 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import { page } from '$app/stores'
 
+  import _ from '../stores/languageStore'
+
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
 
@@ -69,7 +71,7 @@
   }
 
   let refs = ['info', 'contact']
- 
+
   onMount(async () => {
     const location = window.location.href
     const [url, subnav] = location.split('#')
@@ -86,7 +88,8 @@
 </svelte:head>
 
 <Header>
-  <article 
+
+  <article
     class=" {spotlightTrack
       ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
@@ -102,7 +105,7 @@
         </h1>
         <h3 class="text-white text-opacity-50 text-sm sm:text-md">
           {#if spotlightTrack}
-            by {#each spotlightTrack.artistTracks as at, i}
+            {$_.home.by} {#each spotlightTrack.artistTracks as at, i}
               {i > 0 ? `, ${at.user.nickName}` : at.user.nickName}
             {/each}
           {:else}
@@ -137,7 +140,7 @@
           <Button
             onClick={() => goto('/releases/' + spotlightTrack.uuid)}
             type="glass"
-            rounded="none">Learn more</Button
+            rounded="none">{$_.home.learnmore}</Button
           >
         {/if}
       </div>
@@ -163,7 +166,7 @@
     <Container>
       <section>
         <article id="releases">
-          <Title className="">Latest releases</Title>
+          <Title className="">{$_.home.latest}</Title>
           <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
             {#if latestReleases && latestReleases.length > 0}
               {#each latestReleases as track}
@@ -189,11 +192,7 @@
       </section>
     </Container>
   </div>
-  <div
-    bind:this={refs['info']}
-    id="info"
-    class="gradientBlueGreen py-4"
-  >
+  <div bind:this={refs['info']} id="info" class="gradientBlueGreen py-4">
     <Container>
       <section class="p-16">
         <article
@@ -201,7 +200,7 @@
         >
           <div class="w-full grid gap-4">
             <Title theme="light"
-              >What is {$labelStore ? $labelStore.name : 'this label'}?</Title
+              >{$_.home.what} {$labelStore ? $labelStore.name : 'this label'}?</Title
             >
             {#if $labelStore}
               <SubTitle theme="light">🚨 Letsgo!</SubTitle>
@@ -230,71 +229,35 @@
   <div bind:this={refs['contact']} id="contact" class="py-16">
     <Container>
       <section class="grid gap-6">
-        <Title>Contact</Title>
+        <Title>{$_.header.contact}</Title>
         <div class="md:flex items-center">
           <article
             class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
           >
             <form class="grid gap-4 ">
               <label
-                >Topic<input
+                >{$_.contact.form.topic}<input
                   class="input"
-                  placeholder="Royalties, demo, promo, .."
+                  placeholder={$_.contact.form.topic_placeholder}
                 /></label
               >
               <label
-                >What's your question?<textarea
+                >{$_.contact.form.question}<textarea
                   class="input "
-                  placeholder="For example: I'm interested to know how.."
+                  placeholder={$_.contact.form.question_placeholder}
                 /></label
               >
 
-              <label for="file">
-                Attachment
-                <div class="relative flex items-center justify-end group">
-                  <div class="input peer text-gray-500">
-                    Drag & drop your file!
-                  </div>
-                  <!-- 
-								
-								<input
-								id="file"
-								type="file"
-								value="Drag & drop!"
-								class="hidden"
-								placeholder="Drag & drop!"
-							/> -->
-                  <svg
-                    class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
-                    />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                    <line x1="10" y1="9" x2="8" y2="9" />
-                  </svg>
-                </div>
-              </label>
-              <Button color="bg-teal-700" size="md">Learn more!</Button>
+      
+              <Button color="bg-teal-700" size="md">{$_.contact.form.submit}</Button>
             </form>
           </article>
           <article class="py-12 md:w-1/2 lg:w-3/5 lg:left ">
-            <SubTitle>📩 Get in touch with us!</SubTitle>
+            <SubTitle>📩 {$_.contact.touch}</SubTitle>
             <p>
-              As a label we like to interact with our fans and future artists.
-              If you have any questions or suggestions, don't hesitate to
-              contact us!
+              {$_.contact.description[0]}<br>
+              {$_.contact.description[1]}
+            
             </p>
             <p>
               <b class="grid grid-flow-col  items-center justify-start gap-1">
@@ -314,7 +277,7 @@
                   <polygon
                     points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
                   />
-                </svg> Company</b
+                </svg> {$_.contact.company}</b
               >
               Ethereal<br />
               Deinzestraat 175, 9700 Oudenaarde<br />
@@ -336,9 +299,9 @@
                   <path
                     d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
                   />
-                </svg>Press</b
+                </svg>{$_.contact.press}</b
               >
-              Styling kit
+              {$_.contact.stylingkit}
             </p>
             <div />
           </article>

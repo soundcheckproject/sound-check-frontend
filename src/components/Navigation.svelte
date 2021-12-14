@@ -2,6 +2,8 @@
   import { labelStore } from '../stores/stores'
   import NavigationLink from './NavigationLink.svelte'
 
+  import _ from '../stores/languageStore'
+
   let toggleMenu: Boolean = false
 </script>
 
@@ -16,11 +18,11 @@
   <div
     class="hidden font-regular sm:grid text-xs lg:text-sm gap-2 sm:gap-6 lg:gap-10 grid-flow-col transition-all "
   >
-    <NavigationLink href="/">Home</NavigationLink>
-    <NavigationLink href="/releases">Releases</NavigationLink>
-    <NavigationLink href="/artists">Artists</NavigationLink>
-    <NavigationLink href="/#info">Info</NavigationLink>
-    <NavigationLink href="/#contact">Contact</NavigationLink>
+    <NavigationLink href="/">{$_.header.home}</NavigationLink>
+    <NavigationLink href="/releases">{$_.header.releases}</NavigationLink>
+    <NavigationLink href="/artists">{$_.header.artists}</NavigationLink>
+    <NavigationLink href="/#info">{$_.header.info}</NavigationLink>
+    <NavigationLink href="/#contact">{$_.header.contact}</NavigationLink>
 
     <!-- <a href="/">Home</a>
     <a href="/releases">releases</a>

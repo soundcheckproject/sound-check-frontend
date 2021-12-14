@@ -8,7 +8,12 @@
   import authStore from '../stores/authStore'
   import Popup from '../components/Popup.svelte'
   import { goto } from '$app/navigation'
-  import Footer from '../components/Footer.svelte'
+
+  import _, {
+    languageStore,
+    translationsStore,
+    langStore,
+  } from '../stores/languageStore'
 
   const firebaseConfig = {
     apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
@@ -55,6 +60,7 @@
       />
     </div>
   {/if}
+  
 </div>
 
 <style lang="postcss">

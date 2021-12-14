@@ -24,6 +24,7 @@
 
   import Input from '../components/Input.svelte'
   import FadeBox from '../components/portal/FadeBox.svelte'
+  import _ from '../stores/languageStore'
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
@@ -83,42 +84,45 @@
           class=" flex lg:space-x-12 justify-between flex-col-reverse lg:flex-row items-center"
         >
           <div class="grid gap-4 py-12 ">
-            <SubTitle theme="dark">📝 Create account</SubTitle>
-            If you want to submit your music to {$labelStore.name}, then you'll
+            <SubTitle theme="dark">📝 {$_.register.title}</SubTitle>
+            {$_.register.description[0]}<br /><br />
+            {$_.register.description[1]}
+            <!-- If you want to submit your music to {$labelStore.name}, then you'll
             need to create an account. It's free!<br /><br />Our team will
             review your track as soon as possible and you'll be able to see if
-            your track has been accepted for a release on the label.
+            your track has been accepted for a release on the label. -->
             <Button
-                onClick={() => goto('/register')}
-                rounded="none"
-                color="bg-teal-700"
-                className="justify-self-start">Create account</Button>
+              onClick={() => goto('/register')}
+              rounded="none"
+              color="bg-teal-700"
+              className="justify-self-start">{$_.register.form.submit}</Button
+            >
           </div>
 
           <div
             class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full lg:w-96 box-content justify-self-end"
           >
-            <SubTitle theme="dark">⌛️ Login with account</SubTitle>
+            <SubTitle theme="dark">⌛️ {$_.login.title}</SubTitle>
             <InputError errorInput="general" />
             <InputError errorInput="connection" />
 
             <Input
               bind:value={user.email}
-              title="Email address"
+              title={$_.login.form.email}
               type="email"
               errorInput="email"
               portal=""
               on:input={() => {
                 checkValidation('email')
               }}
-              placeholder="Email address.."
+              placeholder={$_.login.form.email + '..'}
             />
             <!-- on:change={() => {
               checkValidation('email')
             }} -->
             <Input
               bind:value={user.password}
-              title="Password"
+              title={$_.login.form.password}
               type="password"
               errorInput="password"
               portal=""
@@ -128,25 +132,25 @@
               on:change={() => {
                 checkValidation('password')
               }}
-              placeholder="Enter password.."
+              placeholder={$_.login.form.password_placeholder}
               autocomplete="current-password"
             />
             <a
               href="/forgotpassword"
               class="text-sm underline text-teal-700 cursor-pointer"
-              >Forgot password ?</a
+              >{$_.login.forgot} ?</a
             >
             <div class="flex justify-between items-center">
               <label
                 class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"
-                ><input type="checkbox" />Remember me</label
+                ><input type="checkbox" />{$_.login.remember}</label
               >
 
               <Button
                 onClick={login}
                 rounded="none"
                 color="bg-teal-700"
-                className="justify-self-end">Login</Button
+                className="justify-self-end">{$_.login.form.submit}</Button
               >
             </div>
           </div>
