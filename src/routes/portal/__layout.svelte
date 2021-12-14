@@ -45,10 +45,10 @@
               >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
-            {/if}
+            {/if} 
 
             <a
-              class="hover:underline"
+              class="hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white rounded-full"
               in:fly|local={{ x: -50, duration: 200 }}
               out:fade|local={{ duration: 200 }}
               href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
