@@ -127,7 +127,7 @@
       if ($validationStore.length == 0) {
         registerUser(userRegister)
           .then(async e => {
-            // await goto('/portal')
+            await goto('/login')
             loadingStatus.register = false
           })
           .catch(() => {
