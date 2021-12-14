@@ -2,26 +2,30 @@
   import type { ArtistType, UserType } from '../types/User.type'
 
   import { fade, fly } from 'svelte/transition'
-  import { onMount } from 'svelte'
-  import { query } from '../utils/useGraphQL'
+
   import LinkIcon from './LinkIcon.svelte'
 
   export let className = ''
   export let artist: ArtistType = undefined
   export let size: 'xs' | 'sm' | 'md' = 'sm'
-  let hover: boolean = false
+  export let hover: boolean = false
 
   export let onClick = () => {}
   export let theme: 'light' | 'dark' = 'light'
   export let socials = false
+  export let pointer: boolean = true
 </script>
 
 {#if artist}
   <div
     on:click={onClick}
     class="inline"
-    on:mouseenter={() => (hover = true)}
-    on:mouseleave={() => (hover = false)}
+    on:mouseenter={() => {
+      hover = true
+    }}
+    on:mouseleave={() => {
+      hover = false
+    }}
   >
     <div
       class="relative mshadow-xs {theme == 'dark'
@@ -36,7 +40,7 @@
     >
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
-      <div class="cursor-pointer flex items-center group">
+      <div class={`${pointer && "cursor-pointer"} flex items-center group`}>
         {#if artist.logo}
           <img
             alt="Artist {artist.nickName ?? ''}"
@@ -87,8 +91,8 @@
 
       {#if hover && socials}
         <div
-          in:fly={{ y: 25, opacity: 0 }}
-          out:fade={{ duration: 200 }}
+          in:fly|local={{ y: 25, opacity: 0 }}
+          out:fade|local={{ duration: 200 }}
           class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
           'dark'
             ? 'bg-black bg-opacity-50 backdrop-blur-lg text-white'

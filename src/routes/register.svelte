@@ -29,19 +29,36 @@
   import userStore from '../stores/userStore'
   import { labelStore, roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
+  import { formatDateToDDMMJJJJ } from '../utils/useFormat'
+
+  let birthDateString = formatDateToDDMMJJJJ(new Date())
 
   let userRegister: UserType = {
-    email: 'testEmail' + Math.floor(Math.random() * 9999 + 1) + '@gmail.com',
-    password: 'veryStr0ng_',
-    nickName: 'testAccount' + Math.floor(Math.random() * 9999 + 1),
-    firstName: 'Maxime',
-    surName: 'Vermeeren',
-    country: 'België',
-    state: 'Oost-Vlaanderen',
-    city: 'Oudenaarde',
-    birthdate: '2000-01-01',
-    biography: 'Not a bio yet',
+    email: '',
+    password: '',
+    nickName: '',
+    firstName: '',
+    surName: '',
+    country: '',
+    state: '',
+    city: '',
+    birthdate: '',
+    biography: '',
   }
+
+  let inputFields: string[] = [
+    'email',
+    'password',
+    'nickname',
+    'birthdate',
+    'firstName',
+    'surName',
+    'country',
+    'state',
+    'city',
+    'biography',
+  ]
+
   let passwordCheck: string = ''
   let errors: string[] = []
 
@@ -76,17 +93,7 @@
         errors,
       )
     }
-    for (const errorType of [
-      'nickname',
-      'birthdate',
-      'firstName',
-      'surName',
-      'country',
-      'state',
-      'city',
-      'biography',
-      // 'prefferdReleaseDate',
-    ]) {
+    for (const errorType of inputFields) {
       if (errorType == type)
         errors = validateErrors(
           [validateEmpty(userRegister[type])],
@@ -98,21 +105,39 @@
   let loadingStatus: { [key: string]: boolean } = {
     register: false,
   }
-  const register = () => {
-    checkValidation()
-    loadingStatus.register = true
-    if ($validationStore.length == 0) {
-      registerUser(userRegister)
-        .then(async e => {
-          // await goto('/portal')
-          loadingStatus.register = false
-        })
-        .catch(() => {
-          loadingStatus.register = false
-          validateErrorTime('connection', 'graphql', errors)
-        })
+
+  const checkAllInputs = async () => {
+    return new Promise(resolve => {
+      inputFields.map((field: string) => {
+        checkValidation(field)
+      })
+      resolve(true)
+    })
+  }
+
+  const register = async () => {
+    if (await checkAllInputs()) {
+      checkValidation()
+      loadingStatus.register = true
+
+      // ! format it back to date type
+      userRegister.birthdate = new Date(birthDateString)
+
+      if ($validationStore.length == 0) {
+        registerUser(userRegister)
+          .then(async e => {
+            // await goto('/portal')
+            loadingStatus.register = false
+          })
+          .catch(() => {
+            loadingStatus.register = false
+            validateErrorTime('connection', 'graphql', errors)
+          })
+      } else {
+        loadingStatus.register = false
+        validateErrorTime('general', 'errors', errors)
+      }
     } else {
-      loadingStatus.register = false
       validateErrorTime('general', 'errors', errors)
     }
   }
@@ -129,7 +154,7 @@
 </script>
 
 <svelte:head>
-	<title>Register</title>
+  <title>Register</title>
 </svelte:head>
 
 <Header type="split" />
@@ -156,6 +181,7 @@
               checkValidation('email')
             }}
             placeholder="Email address.."
+            required
           />
           <!-- <label
             >Password<input
@@ -173,6 +199,7 @@
             on:input={() => checkValidation('password')}
             placeholder="Strong password.."
             type="password"
+            required
           />
           <Input
             title="Password validate"
@@ -181,6 +208,7 @@
             on:input={() => checkValidation('password')}
             placeholder="Password again.."
             type="password"
+            required
           />
 
           <!-- <label
@@ -195,11 +223,11 @@
           <Input
             errorInput={'birthdate'}
             title="Birthdate"
-            bind:value={userRegister.birthdate}
+            bind:value={birthDateString}
             portal=""
-            on:input={() => checkValidation('birthdate')}
             placeholder="Birthdate.."
             type="date"
+            required
           />
           <!-- <label
             >Birthdate<input
@@ -221,11 +249,12 @@
           > -->
           <Input
             errorInput={'nickname'}
-            title="What's your artistname?"
+            title="What's your artistname / nickname?"
             bind:value={userRegister.nickName}
             portal=""
             on:input={() => checkValidation('nickname')}
             placeholder="Choose a nickname.."
+            required
           />
           <div class="grid md:grid-cols-2 gap-4">
             <Input
@@ -235,6 +264,7 @@
               portal=""
               on:input={() => checkValidation('firstName')}
               placeholder="First name.."
+              required
             />
             <!-- <label
               >First name<input
@@ -250,6 +280,7 @@
               portal=""
               on:input={() => checkValidation('surName')}
               placeholder="Last name.."
+              required
             />
           </div>
           <div class="grid md:grid-cols-3 gap-4">
@@ -260,6 +291,7 @@
               portal=""
               on:input={() => checkValidation('country')}
               placeholder="Country.."
+              required
             />
             <!-- <label
               >Country<input
@@ -275,6 +307,7 @@
               portal=""
               on:input={() => checkValidation('state')}
               placeholder="State.."
+              required
             />
             <!-- <label
               >State<input
@@ -290,6 +323,7 @@
               portal=""
               on:input={() => checkValidation('city')}
               placeholder="City.."
+              required
             />
           </div>
           <Input
@@ -303,8 +337,8 @@
           />
 
           <p class="text-gray-400 text-sm">
-            * If you register an account, then you give the label the permission
-            to use your data on this platform.
+            ❗ If you register an account, then you give the label the
+            permission to use your data on this platform.
           </p>
           <Button
             onClick={register}

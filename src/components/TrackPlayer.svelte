@@ -14,7 +14,7 @@
   import { fade, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
-  import type { TrackInfoType, TrackType } from '../types/Track.type'
+  import type { TrackInfoType, TrackInputType, TrackType } from '../types/Track.type'
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
@@ -25,7 +25,7 @@
   let showFeedback: boolean =
     JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
-  export let audio: HTMLAudioElement = undefined
+  export let audio: HTMLAudioElement | string = undefined
 
   let trackInfo: TrackInfoType = {
       duration: '0:00',
@@ -61,6 +61,7 @@
         await addFeedbackToTrack(feedbackData)
         feedbackData.user = $userStore
         feedbacks = [...feedbacks, feedbackData]
+        feedbackInput = ''
       } catch (e) {
         console.log(e)
       }
@@ -97,10 +98,13 @@
       height: 80,
     })
 
-    // ! not tested yet
-    if (track.uuid) {
-      const data = await getTrackFileFromTrackId(track.uuid)
-      audio = data.encodedFile
+    if (!audio) {
+      if ('encodedFile' in track && track.encodedFile) {
+        audio = track.encodedFile
+      } else if (track.uuid) {
+        const data = await getTrackFileFromTrackId(track.uuid)
+        audio = data.encodedFile
+      }
     }
   })
 
@@ -139,8 +143,7 @@
 {#if track}
   <div class="relative">
     <div
-      in:fade|local={{ duration: 200, delay: 200 }}
-      out:fade={{ duration: 200 }}
+  
       class="overflow-hidden relative grid bg-gray-800 {rounded} backdrop-blur-sm text-gray-100"
     >
       <div
@@ -161,9 +164,7 @@
         }') center center no-repeat;background-size:cover`}
       />
 
-      <div
-        class="z-10 grid gap-8  p-8 sm:grid-cols-auto-1fr w-full"
-      >
+      <div class="z-10 grid gap-8  p-8 sm:grid-cols-auto-1fr w-full">
         <div
           class="overflow-hidden w-48 h-48 lg:h-64 lg:w-64 m-auto bg-gray-100 bg-opacity-10 rounded-md mshadow-md flex justify-center items-center"
         >
@@ -306,7 +307,10 @@
             </div>
             <div
               on:click={() => {
-                if (wavesurfer) {isMuted = !isMuted; wavesurfer.setMute(isMuted)}
+                if (wavesurfer) {
+                  isMuted = !isMuted
+                  wavesurfer.setMute(isMuted)
+                }
               }}
             >
               {#if wavesurfer}
@@ -349,7 +353,6 @@
             </div>
           </div>
 
-          <!-- <div>show more</div> -->
         </div>
       </div>
       {#if audio && feedback && (track.isSigned == null || track.isSigned == true)}
@@ -389,7 +392,7 @@
             </div></SubTitle
           >
           {#if showFeedback}
-            <!-- <SubTitle theme="light">Add feedback</SubTitle> -->
+
             <div
               transition:slide|local
               class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
@@ -405,7 +408,7 @@
                 <input
                   type="text"
                   bind:value={feedbackInput}
-                  class="bg-opacity-0 bg-white outline-none w-full mr-2 text-white text-opacity-75"
+                  class="bg-opacity-0 bg-white outline-none w-full mr-2  placeholder-white placeholder-opacity-50 text-white text-opacity-75"
                   placeholder="Write a comment.."
                 />
                 <Button onClick={() => addComment()} type="glass">Post</Button>

@@ -1,6 +1,10 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import type { ArtworkType, TrackType } from '../../../../types/Track.type'
+  import type {
+    ArtworkType,
+    TrackType,
+    TrackUpdateType,
+  } from '../../../../types/Track.type'
   import type { ArtistType, UserType } from '../../../../types/User.type'
 
   import {
@@ -41,6 +45,8 @@
   import { page } from '$app/stores'
   import { roleStore } from '../../../../stores/stores'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
+  import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import Skeleton from '../../../../components/Skeleton.svelte'
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -49,7 +55,8 @@
 
   let prefferedReleaseDateString: string
 
-  let artistsArray: { [key: string]: any }[] = []
+  let artistsArray: { uuid?: string; user: UserType; royaltySplit: number }[] =
+    []
 
   let artwork: ArtworkType
   let newArtwork: ArtworkType
@@ -109,31 +116,31 @@
   const postTrack = async () => {
     loadingStatus.track = true
     if ($validationStore.length == 0) {
-      const updatedTrack: TrackType = {
+      const updatedTrack: TrackUpdateType = {
         prefferdReleaseDate: new Date(prefferedReleaseDateString),
         title: newTrack.title,
         description: newTrack.description,
         genreId: newTrack.genreId,
+        artistTracks: [],
       }
 
-      await updateTrack(track.uuid, updatedTrack)
-        .then(err => {
-          loadingStatus.track = false
-          errors = validateError('connection', 'graphql', true, errors)
-          if (err) {
-            console.log(err)
-            //   if (err[0].extensions.response.statusCode == 403) {
-            //     errors = validateError('update', '403', false, errors)
-            //   }
-            // } else {
-            //   errors = validateError('update', '403', true, errors)
-
-            //   goto($page.path)
-          }
+      artistsArray.map(at => {
+        updatedTrack.artistTracks.push({
+          uuid: at.uuid,
+          userId: at.user.uuid,
+          royaltySplit: at.royaltySplit,
         })
+      })
+
+      console.log({ updatedTrack })
+
+      await updateTrack(track.uuid, updatedTrack)
         .catch(e => {
           // errors = validateError('connection', 'graphql', false, errors)
           validateErrorTime('connection', 'graphql', errors)
+        })
+        .finally(() => {
+          loadingStatus.track = false
         })
     }
   }
@@ -205,8 +212,9 @@
         .catch(error => {
           loadingStatus.track = false
           validateErrorTime('track', 'upload', errors)
-        }).finally(()=>{
-          loadingStatus.trackfile = false;
+        })
+        .finally(() => {
+          loadingStatus.trackfile = false
         })
     } else {
       loadingStatus.track = false
@@ -231,17 +239,26 @@
   onMount(async () => {
     genres = await getGenres()
     if ($page.params.trackId) {
-      track = await getTrackById($page.params.trackId)
+      try {
+        track = await getTrackById($page.params.trackId)
 
-      prefferedReleaseDateString = formatDateToDDMMJJJJ(
-        new Date(track.prefferdReleaseDate),
-      )
-      artistsArray = track.artistTracks
-      artwork = track.artwork
-      newArtwork = artwork
-      newTrack = track
+        prefferedReleaseDateString = formatDateToDDMMJJJJ(
+          new Date(track.prefferdReleaseDate),
+        )
+        artistsArray = track.artistTracks
+        artwork = track.artwork
+        newArtwork = artwork
+        newTrack = track
+        calcRoyaltySplitotal()
+      } catch (error) {
+        newTrack = null
+      }
     }
   })
+
+  $: {
+    console.log({ artistsArray })
+  }
 
   $: {
     validationStore.set(errors)
@@ -251,253 +268,277 @@
 </script>
 
 <svelte:head>
-	<title>{`${track ? track.title: '' + ' - ' }Track edit`}</title>
+  <title>{`${track ? track.title : ''} - Track edit`}</title>
 </svelte:head>
 
-<div class="grid gap-8">
-  {#if newTrack}
-    <TrackPlayer
-      track={newTrack}
-      audioFile={trackPreview ? trackPreview : null}
-      artworkFile={artworkPreview ? artworkPreview : null}
-      feedback={false}
-    />
-    {#if newTrack.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
-      <Box>
-        <Title>Edit track</Title>
+<FadeBox>
+  <div class="grid gap-8">
+    {#if newTrack}
+      <TrackPlayer
+        track={newTrack}
+        audio={trackPreview ? trackPreview : null}
+        artworkFile={artworkPreview ? artworkPreview : null}
+        feedback={false}
+      />
+      {#if newTrack.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
+        <Box>
+          <Title>Edit track</Title>
 
-        <InputError errorInput="connection" />
-        <InputError errorInput="general" />
-        <InputError errorInput="update" />
+          <InputError errorInput="connection" />
+          <InputError errorInput="general" />
+          <InputError errorInput="update" />
 
-        <SubTitle>📝 Information about your track</SubTitle>
+          <SubTitle>📝 Information about your track</SubTitle>
 
-        <div class="grid lg:grid-cols-2 gap-4">
-          <Input
-            bind:value={newTrack.title}
-            title="Create a title"
-            errorInput="title"
-            on:input={() => {
-              checkValidation('title')
-            }}
-            placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
-          />
+          <div class="grid lg:grid-cols-2 gap-4">
+            <Input
+              bind:value={newTrack.title}
+              title="Create a title"
+              errorInput="title"
+              on:input={() => {
+                checkValidation('title')
+              }}
+              placeholder="Full track title.. For example: Mave & Alex Silves - Memories"
+            />
 
-          <div class="grid grid-cols-2 gap-4">
-            <label class="portal"
-              >Pick a genre
+            <div class="grid grid-cols-2 gap-4">
+              <label class="portal"
+                >Pick a genre
 
-              <select
-                bind:value={newTrack.genreId}
-                class="input portal text-red-300"
-                placeholder="For example: Future House, Bass House"
-              >
-                <option selected disabled>Pick a genre</option>
-                {#each genres as genre}
-                  <option value={genre.uuid}>{genre.name}</option>
-                {/each}</select
-              >
-            </label>
+                <select
+                  bind:value={newTrack.genreId}
+                  class="input portal text-red-300"
+                  placeholder="For example: Future House, Bass House"
+                >
+                  <option selected disabled>Pick a genre</option>
+                  {#each genres as genre}
+                    <option value={genre.uuid}>{genre.name}</option>
+                  {/each}</select
+                >
+              </label>
+
+              <Input
+                errorInput="date"
+                bind:value={prefferedReleaseDateString}
+                type="date"
+                title="Preferred release date"
+                placeholder="For example: August 8th, 2021"
+              />
+            </div>
+            <Input
+              bind:value={newTrack.description}
+              errorInput="description"
+              on:input={() => {
+                checkValidation('description')
+              }}
+              textarea
+              rows="5"
+              title="Describe your track"
+              placeholder="This track is about.. It was created in .. The main theme of the track is.."
+            />
 
             <Input
-              errorInput="date"
-              bind:value={prefferedReleaseDateString}
-              type="date"
-              title="Preferred release date"
-              placeholder="For example: August 8th, 2021"
+              bind:value={newTrack.lyrics}
+              errorInput="lyrics"
+              on:input={() => {
+                checkValidation('lyrics')
+              }}
+              textarea
+              rows="5"
+              title="Lyrics of your track"
+              placeholder="For example: “I’m in love with the shape of you..“"
             />
           </div>
-          <Input
-            bind:value={newTrack.description}
-            errorInput="description"
-            on:input={() => {
-              checkValidation('description')
-            }}
-            textarea
-            rows="5"
-            title="Describe your track"
-            placeholder="This track is about.. It was created in .. The main theme of the track is.."
-          />
 
-          <Input
-            bind:value={newTrack.lyrics}
-            errorInput="lyrics"
-            on:input={() => {
-              checkValidation('lyrics')
-            }}
-            textarea
-            rows="5"
-            title="Lyrics of your track"
-            placeholder="For example: “I’m in love with the shape of you..“"
-          />
-        </div>
-
-        <SubTitle>👨🏼‍🎨 Artists</SubTitle>
-        <div class="grid gap-4">
-          {#if track.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
-            <div class="grid lg:grid-cols-2 gap-4">
-              <div
-                class="relative"
-                on:mouseenter={() => (artistSearch.hover = true)}
-                on:mouseleave={() => (artistSearch.hover = false)}
-              >
-                <label class="portal"
-                  >Search collaborator<input
-                    bind:value={artistSearch.nickName}
-                    on:input={() => searchArtistByNickName()}
-                    on:blur={() => searchArtistByNickName()}
-                    class="input portal"
-                    placeholder="Search by name.."
-                  /></label
-                >
-                {#if artistSearch.hover}
-                  <div
-                    in:fly={{ y: 25, opacity: 0 }}
-                    out:fade={{ duration: 200 }}
-                    class="absolute left-0 right-0 w-full z-10 "
-                  >
-                    <div
-                      class=" mt-2 mshadow-md p-4 bg-white rounded-sm grid gap-2"
-                    >
-                      <p class="text-xs font-semibold ">Select artist</p>
-                      {#if artistSearch.nickName.length > 0}
-                        <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
-                          {#if artists.length == 0}
-                            <p class="text-sm animate-pulse	">
-                              No artists found..
-                            </p>{:else}
-                            {#each artists as artist}
-                              <Artist
-                                {artist}
-                                onClick={() => {
-                                  artistsArray = [
-                                    ...artistsArray,
-                                    { user: artist, royaltySplit: 0 },
-                                  ]
-                                }}>{artist.nickName}</Artist
-                              >
-                            {/each}
-                          {/if}
-                        </div>
-                      {:else}
-                        <p class="text-sm animate-pulse	">Loading artists..</p>
-                      {/if}
-                    </div>
-                  </div>
-                {/if}
-              </div>
+          <SubTitle>👨🏼‍🎨 Artists</SubTitle>
+          <div class="grid gap-4">
+            {#if track.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
               <div class="grid gap-4">
-                {#if artistsArray.length > 0}
-                  <InputError errorInput="artist" />
-                  <div
-                    class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                    transition:fade
-                  >
-                    <p class="">Artist(s)</p>
-                    <p class="font-semibold text-right ">
-                      Royalties {royaltySplitotal}%
-                    </p>
-                  </div>
-
-                  {#if royaltySplitotal != 100 && false}
-                    <SubTitle theme="error"
-                      >Total royalties should be equal to 100</SubTitle
+                <div class="grid gap-4">
+                  {#if artistsArray.length > 0}
+                    <InputError errorInput="artist" />
+                    <div
+                      class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
+                      transition:fade|local
                     >
-                  {/if}
-                {:else}<div class="label portal grid  gap-2 " transition:fade>
-                    <p class="">Add a collaborator</p>
-                  </div>{/if}
-                {#each artistsArray as artist}
-                  <div
-                    class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                    transition:fade
-                  >
-                    <Artist
-                      artist={artist.user}
-                      size="md"
-                      remove={() => {
-                        removeArtist(artist.user.uuid)
-                      }}>{artist.user.nickName}</Artist
-                    >
-                    <div class="relative flex items-center justify-end group">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
-                        bind:value={artist.royaltySplit}
-                        on:input={() => {
-                          calcRoyaltySplitotal()
-                        }}
-                      />
-                      <svg
-                        class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <line x1="19" y1="5" x2="5" y2="19" />
-                        <circle cx="6.5" cy="6.5" r="2.5" />
-                        <circle cx="17.5" cy="17.5" r="2.5" />
-                      </svg>
+                      <p class="">Artist(s)</p>
+                      <p class="font-semibold text-right ">
+                        Royalties {royaltySplitotal}%
+                      </p>
                     </div>
-                  </div>
-                {/each}
+
+                    {#if royaltySplitotal != 100}
+                      <SubTitle theme="error"
+                        >Total royalties should be equal to 100</SubTitle
+                      >
+                    {/if}
+                  {:else}<div
+                      class="label portal grid  gap-2 "
+                      transition:fade|local
+                    >
+                      <p class="">Add a collaborator</p>
+                    </div>{/if}
+                  {#each artistsArray as artist}
+                    <div
+                      class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
+                      transition:fade|local
+                    >
+                      <Artist artist={artist.user} size="md" pointer={false}
+                        >{artist.user.nickName}</Artist
+                      >
+                      <div class="relative flex items-center justify-end group">
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
+                          bind:value={artist.royaltySplit}
+                          on:input={() => {
+                            calcRoyaltySplitotal()
+                          }}
+                        />
+                        <svg
+                          class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <line x1="19" y1="5" x2="5" y2="19" />
+                          <circle cx="6.5" cy="6.5" r="2.5" />
+                          <circle cx="17.5" cy="17.5" r="2.5" />
+                        </svg>
+                      </div>
+                    </div>
+                  {/each}
+                </div>
               </div>
-            </div>
-          {:else}
-            <p class="text-sm">
-              Artists and royalties percentages cannot be changed if the track
-              has already been signed.
-            </p>
-          {/if}
-        </div>
+            {:else}
+              <p class="text-sm">
+                Artists and royalties percentages cannot be changed if the track
+                has already been signed.
+              </p>
+            {/if}
+          </div>
 
-        <div class="flex justify-end space-x-2">
-          <Button
-            color="bg-gray-600"
-            onClick={() => {
-              goto($page.path)
-            }}>Cancel changes</Button
-          >
-          <Button
-            color="bg-teal-700"
-            onClick={postTrack}
-            size="sm"
-            loading={loadingStatus.track ? "Updating track.." : null}
-            >Update track</Button
-          >
-        </div>
-      </Box><Box>
-        <div class="grid gap-8 lg:grid-cols-2">
-          <!-- <figure /> -->
+          <div class="flex justify-end space-x-2">
+            <Button
+              color="bg-gray-600"
+              onClick={() => {
+                goto($page.path)
+              }}>Cancel changes</Button
+            >
+            <Button
+              color="bg-teal-700"
+              onClick={postTrack}
+              size="sm"
+              loading={loadingStatus.track ? 'Updating track..' : null}
+              >Update track</Button
+            >
+          </div>
+        </Box><Box>
+          <div class="grid gap-8 lg:grid-cols-2">
+            <!-- <figure /> -->
 
-          <form class="grid gap-4 ">
-            <SubTitle>🖼 Artwork</SubTitle>
+            <form class="grid gap-4 ">
+              <SubTitle>🖼 Artwork</SubTitle>
 
-            <Input
-              title="Artwork designer"
-              placeholder="For example: Picasso"
-              bind:value={newArtwork.designer}
-            />
-            <InputError errorInput="artwork" />
-            <div class="label portal">
-              Upload Artwork
-              <div
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
-                on:click={() => artworkClick.click()}
-              >
-                {#if artworkBlob}
-                  <p class="text-teal-700 font-medium">
-                    Artwork has been selected.
-                  </p>
-                {:else}
+              <Input
+                title="Artwork designer"
+                placeholder="For example: Picasso"
+                bind:value={newArtwork.designer}
+              />
+              <InputError errorInput="artwork" />
+              <div class="label portal">
+                Upload Artwork
+                <div
+                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+                  on:click={() => artworkClick.click()}
+                >
+                  {#if artworkBlob}
+                    <p class="text-teal-700 font-medium">
+                      Artwork has been selected.
+                    </p>
+                  {:else}
+                    <svg
+                      class="-mt-px"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <p>Click to upload or drag your artwork here..</p>
+                  {/if}
+                  <input
+                    required={true}
+                    type="file"
+                    accept=".jpg, .jpeg, .png"
+                    bind:this={artworkClick}
+                    bind:files={artworkBlob}
+                    on:change={e => previewArtwork(e)}
+                    class="hidden"
+                    placeholder=""
+                  />
+                </div>
+              </div>
+              <div class="flex justify-end">
+                <Button
+                  color="bg-teal-700"
+                  size="sm"
+                  loading={loadingStatus.artwork ? 'Updating artwork..' : null}
+                  onClick={() => {
+                    updateArtwork()
+                  }}>Update artwork</Button
+                >
+              </div>
+            </form>
+
+            <div class="grid gap-4 ">
+              <SubTitle>💽 Upload track</SubTitle>
+              <div class="label portal opacity-40">
+                Preview part
+                <div
+                  class="input portal grid gap-4 p-2 grid-flow-col grid-cols-3 w-full justify-center items-center"
+                  style="grid-template-columns: 1fr min-content 1fr"
+                >
+                  <input
+                    type="number"
+                    class="p-1 bg-gray-100 text-center w-16"
+                    bind:value={newTrack.previewStart}
+                    min="0"
+                    disabled={true}
+                  />
+                  <div class="w-px rounded-sm h-full bg-gray-200" />
+                  <input
+                    type="number"
+                    class="p-1 bg-gray-100 text-center w-16"
+                    bind:value={newTrack.previewStop}
+                    min="30"
+                    disabled={false}
+                  />
+                </div>
+              </div>
+              <InputError errorInput="track" />
+              <div class="label portal">
+                Upload track
+                <div
+                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+                  on:click={() => trackDataClick.click()}
+                >
                   <svg
                     class="-mt-px"
                     xmlns="http://www.w3.org/2000/svg"
@@ -514,111 +555,48 @@
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <p>Click to upload or drag your artwork here..</p>
-                {/if}
-                <input
-                  required={true}
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  bind:this={artworkClick}
-                  bind:files={artworkBlob}
-                  on:change={e => previewArtwork(e)}
-                  class="hidden"
-                  placeholder=""
-                />
+                  <p>Click to upload or drag your track here..</p>
+                  <input
+                    required={true}
+                    type="file"
+                    accept=".wav,.mp3,.flac"
+                    bind:this={trackDataClick}
+                    bind:files={trackData.blob}
+                    on:change={e => previewTrack(e)}
+                    class="hidden"
+                    placeholder=""
+                  />
+                </div>
               </div>
-            </div>
-            <div class="flex justify-end">
-              <Button
-                color="bg-teal-700"
-                size="sm"
-                loading={loadingStatus.artwork ? 'Updating artwork..' : null}
-                onClick={() => {
-                  updateArtwork()
-                }}>Update artwork</Button
-              >
-            </div>
-          </form>
-
-          <div class="grid gap-4 ">
-            <SubTitle>💽 Upload track</SubTitle>
-            <div class="label portal opacity-40">
-              Preview part
-              <div
-                class="input portal grid gap-4 p-2 grid-flow-col grid-cols-3 w-full justify-center items-center"
-                style="grid-template-columns: 1fr min-content 1fr"
-              >
-                <input
-                  type="number"
-                  class="p-1 bg-gray-100 text-center w-16"
-                  bind:value={newTrack.previewStart}
-                  min="0"
-                  disabled={true}
-                />
-                <div class="w-px rounded-sm h-full bg-gray-200" />
-                <input
-                  type="number"
-                  class="p-1 bg-gray-100 text-center w-16"
-                  bind:value={newTrack.previewStop}
-                  min="30"
-                  disabled={false}
-                />
-              </div>
-            </div>
-            <InputError errorInput="track" />
-            <div class="label portal">
-              Upload track
-              <div
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
-                on:click={() => trackDataClick.click()}
-              >
-                <svg
-                  class="-mt-px"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+              <div class="flex justify-end">
+                <Button
+                  color="bg-teal-700"
+                  size="sm"
+                  loading={loadingStatus.trackfile ? 'Updating audio..' : null}
+                  onClick={() => {
+                    updateTrackFile()
+                  }}>Update audio</Button
                 >
-                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                <p>Click to upload or drag your track here..</p>
-                <input
-                  required={true}
-                  type="file"
-                  accept=".wav,.mp3,.flac"
-                  bind:this={trackDataClick}
-                  bind:files={trackData.blob}
-                  on:change={e => previewTrack(e)}
-                  class="hidden"
-                  placeholder=""
-                />
               </div>
-            </div>
-            <div class="flex justify-end">
-              <Button
-                color="bg-teal-700"
-                size="sm"
-                loading={loadingStatus.trackfile ? 'Updating audio..' : null}
-                onClick={() => {
-                  updateTrackFile()
-                }}>Update audio</Button
-              >
             </div>
           </div>
-        </div>
-      </Box>
-    {:else}
-      <Box>
-        <Title>Hola!</Title>
-        You cannot edit your track if the track is already signed or denied.</Box
-      >
+        </Box>
+      {:else}
+        <Box>
+          <Title>Hola!</Title>
+          You cannot edit your track if the track is already signed or denied.</Box
+        >
+      {/if}
+    {:else if newTrack === undefined}
+      <Skeleton
+        theme="light"
+        loading={true}
+        height="h-[22rem]"
+        className="mb-8"
+      />
+      <Skeleton theme="light" loading={true} height="h-[18rem]" />
+    {:else if newTrack === null}
+      <ErrorBanner message="Error while fetching the track data." />
     {/if}
-  {/if}
-</div>
+  </div>
+</FadeBox>

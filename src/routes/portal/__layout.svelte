@@ -10,7 +10,7 @@
     pageBread = $page.path.split('/')
     pageBread.splice(0, 2)
   }
-  let nav: HTMLDivElement
+  let nav: any
   const scrollUp = () => {
     nav.scrollTop = 0
     // Todo: smooth scroll to top
@@ -21,11 +21,11 @@
 <AuthLayer>
   <div class="c-portal" transition:fade|local={{ duration: 200 }}>
     <PortalNavigation />
-    <div
+    <main
       class="p-8  bg-gray-100 h-screen w-full overflow-y-scroll"
       bind:this={nav}
     >
-      <div style="max-width:1000px " class="mx-auto">
+      <div class="mx-auto max-w-[62rem]">
         <p
           class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
         >
@@ -45,18 +45,10 @@
               >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
-            {/if}
-            <!-- <a
-            class="hover:underline"
-            in:fly={{ x: -50, duration: 200 }}
-            out:fade={{ duration: 200 }}
-            href=""
-            on:click={() =>
-              goto(`/portal/${pageBread.slice(0, index + 1).join('/')}`)}
-            >{bread}
-          </a> -->
+            {/if} 
+
             <a
-              class="hover:underline"
+              class="hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white rounded-full"
               in:fly|local={{ x: -50, duration: 200 }}
               out:fade|local={{ duration: 200 }}
               href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
@@ -64,11 +56,11 @@
             </a>
           {/each}
         </p>
-        <div class=""><slot /></div>
+        <section class="p-0 m-0"><slot /></section>
       </div>
-    </div>
+    </main>
 
-    <!-- <div
+    <div
       on:click={() => scrollUp()}
       class="backdrop-blur-2xl absolute right-12 bottom-12 rounded-full bg-opacity-25 bg-gray-500 p-4 text-white cursor-pointer hover:bg-opacity-75 transition-all"
     >
@@ -85,7 +77,7 @@
       >
         <polyline points="18 15 12 9 6 15" />
       </svg>
-    </div> -->
+    </div>
   </div>
 </AuthLayer>
 

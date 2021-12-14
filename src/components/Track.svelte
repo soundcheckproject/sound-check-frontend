@@ -6,7 +6,7 @@
   export let track: TrackType = undefined
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
-  let hover = false
+  export let hover = false
 </script>
 
 {#if add}
@@ -19,7 +19,7 @@
         : size == 'lg'
         ? ' h-64 w-64'
         : ''
-    } bg-gray-100 relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md`}
+    } bg-gray-100 relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md focus-ring`}
     href="/portal/artist/demo/submit"
   >
     <svg
@@ -41,7 +41,7 @@
   </a>
 {:else if track}
   <a
-    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
+    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start focus-ring"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
     href={`/portal/artist/demo/${track.uuid}`}
@@ -61,7 +61,7 @@
     />
     {#if hover}
       <div
-        transition:fade={{ duration: 100 }}
+        transition:fade|local={{ duration: 100 }}
         class={`${
           size == 'sm'
             ? ' h-32 w-32'

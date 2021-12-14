@@ -10,7 +10,8 @@
   import Title from '../../components/Title.svelte'
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Footer from '../../components/Footer.svelte'
-import { labelStore } from '../../stores/stores';
+  import Skeleton from '../../components/Skeleton.svelte'
+  import { labelStore } from '../../stores/stores'
 
   let tracks: TrackType[] = []
 
@@ -58,7 +59,7 @@ import { labelStore } from '../../stores/stores';
 </script>
 
 <svelte:head>
-	<title>Releases</title>
+  <title>Releases</title>
 </svelte:head>
 
 <Header type="split" />
@@ -83,7 +84,7 @@ import { labelStore } from '../../stores/stores';
                 <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->
               {/each}
             {:else}
-              No tracks yet //todo: update skeleton
+              <Skeleton>No tracks yet</Skeleton>
             {/if}
           </div>
         {/if}

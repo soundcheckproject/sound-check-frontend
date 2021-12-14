@@ -53,8 +53,8 @@
         <a href="/home">home</a>
         <a href="/releases">releases</a>
         <a href="/artists">artists</a>
-        <a href="/info">info</a>
-        <a href="/contact">contact</a>
+        <a href="/#info">info</a>
+        <a href="/#contact">contact</a>
         <a href="/login">portal</a>
       </ul>
     </div>

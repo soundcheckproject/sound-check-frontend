@@ -141,7 +141,7 @@ import { labelStore } from '../../stores/stores';
             {/if}
           </div>
           <!-- //todo make thing work\ -->
-          <div class="flex space-x-2">
+          <!-- <div class="flex space-x-2">
             <ButtonBox
               on:click={() => {
                 ;() => {}
@@ -163,8 +163,6 @@ import { labelStore } from '../../stores/stores';
               </svg>
             </ButtonBox>
             {#each Array(artistsDisplay.length) as i, index}
-              <!-- <ArtistCardSkeleton /> -->
-
               <ButtonBox on:click={() => artistsPage == index}
                 >{index + 1}</ButtonBox
               >
@@ -199,7 +197,7 @@ import { labelStore } from '../../stores/stores';
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </ButtonBox>
-          </div>
+          </div> -->
         </section>
       </Container>
     </div>

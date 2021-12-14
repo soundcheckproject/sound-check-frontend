@@ -22,7 +22,7 @@
 {#if track}
   <a
     href={$$props.href ? $$props.href : `/portal/${portal}/demo/${track.uuid}`}
-    class="relative grid grid-cols-auto-1fr gap-4 items-center sm:items-stretch"
+    class="relative grid grid-cols-auto-1fr {portal === 'staff' ? 'gap-x-4' : 'gap-4'} items-center sm:items-stretch focus-ring"
   >
   <!-- {size == 'sm'
       ? 'h-16'

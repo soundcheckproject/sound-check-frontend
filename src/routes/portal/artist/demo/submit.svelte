@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { GenreType } from '../../../../types/Genre.type'
-  import type { TrackType } from '../../../../types/Track.type'
+  import type { TrackInputType } from '../../../../types/Track.type'
   import type { ArtistType } from '../../../../types/User.type'
 
   import {
@@ -45,13 +45,13 @@
 
   let prefferedReleaseDateString: string = formatDateToDDMMJJJJ(new Date())
 
-  let newTrack: TrackType = {
+  let newTrack: TrackInputType = {
     title: '',
     description: '',
     previewStart: 0,
-    previewStop: 20,
+    previewStop: 10,
     lyrics: '',
-    artistIds: [$userStore.uuid],
+    artistTracks: [],
     genreId: 'Pick a genre',
     labelId: variables.labelId as string,
     prefferdReleaseDate: undefined,
@@ -63,9 +63,18 @@
   user.royaltyPercentage = 100
   let artistsArray = [user]
 
+  const validatePreviewPart = () => {
+    if (newTrack.previewStart > newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be lower than start')
+    if (newTrack.previewStart === newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be === start')
+  }
+
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
-    newTrack.artistIds = newTrack.artistIds.filter(id => id != uuid)
+    newTrack.artistTracks = newTrack.artistTracks.filter(x => x.userId != uuid)
   }
 
   let loadingStatus: { [key: string]: boolean } = {
@@ -78,7 +87,7 @@
     artworkClick: HTMLInputElement,
     trackDataClick: HTMLInputElement,
     trackBlob: any,
-    royaltyPercentageTotal: number = 0,
+    royaltyPercentageTotal: number = 100,
     track: File,
     artwork: File
 
@@ -119,6 +128,14 @@
     // ! Create track mutation uitvoeren in de backend
     loadingStatus.submit = true
     newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
+
+    artistsArray.map(a => {
+      newTrack.artistTracks.push({
+        userId: a.uuid,
+        royaltySplit: a.royaltyPercentage,
+      })
+    })
+
     console.log(newTrack)
     if ($validationStore.length === 0) {
       // Create track in database
@@ -152,8 +169,10 @@
       if ($validationStore.length === 0)
         try {
           const trackId: string = await postTrack()
-          await uploadTrack(trackBlob[0], track.name, trackId)
-          await uploadArtwork(artworkBlob[0], artwork.name, trackId)
+
+          if (trackBlob) await uploadTrack(trackBlob[0], track.name, trackId)
+          if (artworkBlob)
+            await uploadArtwork(artworkBlob[0], artwork.name, trackId)
           goto(`/portal/artist/demo/${trackId}`)
         } catch (error) {
           log(
@@ -280,7 +299,7 @@
           <SubTitle>📝 Information about your track</SubTitle>
           <div class="grid lg:grid-cols-2 gap-4">
             <Input
-              required={true}
+              required
               bind:value={newTrack.title}
               title="Create a title"
               errorInput="title"
@@ -292,7 +311,7 @@
 
             <div class="grid md:grid-cols-2 gap-4">
               <label class="portal"
-                >Pick a genre
+                >Pick a genre *
                 <select
                   bind:value={newTrack.genreId}
                   class="input portal text-red-300"
@@ -305,7 +324,6 @@
                 >
               </label>
               <Input
-                required={true}
                 errorInput="date"
                 bind:value={prefferedReleaseDateString}
                 type="date"
@@ -313,7 +331,6 @@
               />
             </div>
             <Input
-              required={true}
               errorInput="description"
               bind:value={newTrack.description}
               on:input={() => {
@@ -326,7 +343,6 @@
             />
 
             <Input
-              required={true}
               errorInput="lyrics"
               bind:value={newTrack.lyrics}
               on:input={() => {
@@ -368,8 +384,8 @@
                 >
                 {#if artistSearch.hover}
                   <div
-                    in:fly={{ y: 25, opacity: 0 }}
-                    out:fade={{ duration: 200 }}
+                    in:fly|local={{ y: 25, opacity: 0 }}
+                    out:fade|local={{ duration: 200 }}
                     class="absolute left-0 right-0 w-full z-10 "
                   >
                     <div
@@ -386,12 +402,7 @@
                                 {artist}
                                 onClick={() => {
                                   artist.royaltyPercentage = 0
-
                                   artistsArray = [...artistsArray, artist]
-                                  newTrack.artistIds = [
-                                    ...newTrack.artistIds,
-                                    artist.uuid,
-                                  ]
                                 }}>{artist.nickName}</Artist
                               >
                             {/each}
@@ -408,7 +419,7 @@
                 {#if artistsArray.length > 0}
                   <div
                     class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                    transition:fade
+                    transition:fade|local
                   >
                     <p class="">Artist(s)</p>
                     <p class="font-semibold text-right ">
@@ -416,7 +427,7 @@
                     </p>
                   </div>
 
-                  {#if royaltyPercentageTotal != 100 && false}
+                  {#if royaltyPercentageTotal != 100}
                     <SubTitle theme="error"
                       >Total royalties should be equal to 100</SubTitle
                     >
@@ -424,18 +435,23 @@
                 {:else}<div class="label portal grid  gap-2 " transition:fade>
                     <p class="">Add a collaborator</p>
                   </div>{/if}
-                {#each artistsArray as artist}
+                {#each artistsArray as artist, i}
                   <div
                     class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                    transition:fade
+                    transition:fade|local
                   >
-                    <Artist
-                      {artist}
-                      size="md"
-                      remove={() => {
-                        removeArtist(artist.uuid)
-                      }}>{artist.nickName}</Artist
-                    >
+                    {#if i === 0}
+                      <Artist {artist} size="md">{artist.nickName}</Artist>
+                    {:else}
+                      <Artist
+                        {artist}
+                        size="md"
+                        remove={() => {
+                          removeArtist(artist.uuid)
+                        }}>{artist.nickName}</Artist
+                      >
+                    {/if}
+
                     <div class="relative flex items-center justify-end group">
                       <input
                         type="number"
@@ -521,8 +537,8 @@
               />
               <div class="label portal">
                 Upload Artwork
-                <div
-                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+                <button
+                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 focus-ring"
                   on:click={() => artworkClick.click()}
                 >
                   {#if artworkBlob}
@@ -549,7 +565,6 @@
                     <p>Click to upload your artwork here...</p>
                   {/if}
                   <input
-                    required={true}
                     type="file"
                     accept=".jpg, .jpeg, .png"
                     bind:this={artworkClick}
@@ -558,7 +573,7 @@
                     class="hidden"
                     placeholder=""
                   />
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -585,8 +600,8 @@
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="label portal">
               Upload track
-              <div
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+              <button
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem] focus-ring"
                 on:click={() => trackDataClick.click()}
               >
                 {#if trackBlob}
@@ -622,7 +637,7 @@
                   class="hidden"
                   placeholder=""
                 />
-              </div>
+                </button>
             </div>
             <div
               class="label portal {trackBase64String
@@ -630,6 +645,7 @@
                 : 'opacity-40'}"
             >
               Preview part *
+              <p>error handling! => validatePreviewPart</p>
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
@@ -638,6 +654,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
+                  on:change={validatePreviewPart}
                   min="0"
                   disabled={trackBase64String ? false : true}
                 />
@@ -646,6 +663,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
+                  on:change={validatePreviewPart}
                   min="30"
                   disabled={trackBase64String ? false : true}
                 />

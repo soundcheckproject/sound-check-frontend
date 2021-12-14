@@ -14,7 +14,8 @@
   import TrackSkeleton from '../components/skeleton/TrackSkeleton.svelte'
   import { labelStore } from '../stores/stores'
   import { goto } from '$app/navigation'
-import FadeBox from '../components/portal/FadeBox.svelte';
+  import FadeBox from '../components/portal/FadeBox.svelte'
+  import { page } from '$app/stores'
 
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
@@ -61,17 +62,31 @@ import FadeBox from '../components/portal/FadeBox.svelte';
     }
   }
 
+  const options = {
+    show: 50,
+    threshold: 100,
+    style: 'opacity: 1;',
+  }
+
+  let refs = ['info', 'contact']
+ 
   onMount(async () => {
+    const location = window.location.href
+    const [url, subnav] = location.split('#')
+    if (subnav) {
+      refs[subnav].scrollIntoView()
+    }
+
     getReleasesData()
   })
 </script>
 
 <svelte:head>
-	<title>{$labelStore.name} - Home</title>
+  <title>{$labelStore.name} - Home</title>
 </svelte:head>
 
 <Header>
-  <article
+  <article 
     class=" {spotlightTrack
       ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
@@ -110,7 +125,9 @@ import FadeBox from '../components/portal/FadeBox.svelte';
                 >{at.user.nickName}</Artist
               >
             {:else}
-              <Artist theme="dark" artist={at.user} size="xs">{at.user.nickName}</Artist>
+              <Artist theme="dark" artist={at.user} size="xs"
+                >{at.user.nickName}</Artist
+              >
             {/if}
           {/each}
         {/if}
@@ -142,94 +159,103 @@ import FadeBox from '../components/portal/FadeBox.svelte';
   </article>
 </Header>
 <FadeBox>
-<div class="py-16">
-  <Container>
-    <section>
-      <article id="releases">
-        <Title className="">Latest releases</Title>
-        <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
-          {#if latestReleases && latestReleases.length > 0}
-            {#each latestReleases as track}
-              <Track on:click={()=>{goto('/releases/'+track.uuid)}} {track} />
-            {/each}
-          {:else}
-            {#each Array(3) as i}
-              <TrackSkeleton loading={false} />
-            {/each}
-          {/if}
-          {#if latestReleases && latestReleases.length < 4}
-            {#each Array(3) as i}
-              <TrackSkeleton loading={false} />
-            {/each}
-          {/if}
-        </div>
-      </article>
-    </section>
-  </Container>
-</div>
-<div class="gradientBlueGreen">
-  <Container>
-    <section>
-      <article
-        class="flex justify-between flex-col md:flex-row items-center gap-8"
-      >
-        <div class="w-full grid gap-4">
-          <Title theme="light"
-            >What is {$labelStore ? $labelStore.name : 'this label'}?</Title
-          >
-          {#if $labelStore}
-            <SubTitle theme="light">🚨 Letsgo!</SubTitle>
-            <p class="max-w-lg text-white text-sm font-base">
-              {$labelStore.description}
-            </p>
-          {:else}
-            <LineSkeleton width="w-4/6" lines={6} />
-          {/if}
-        </div>
-        {#if $labelStore}
-          <img
-            class="w-full h-full rounded-md mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
-            src={$labelStore.logo.toString()}
-            alt="Logo of label {$labelStore.name}"
-          />
-        {:else}
-          <div
-            class="w-full h-full rounded-md bg-gray-400 opacity-80 animate-pulse mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
-          />
-        {/if}
-      </article>
-    </section></Container
+  <div class="py-16">
+    <Container>
+      <section>
+        <article id="releases">
+          <Title className="">Latest releases</Title>
+          <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
+            {#if latestReleases && latestReleases.length > 0}
+              {#each latestReleases as track}
+                <Track
+                  on:click={() => {
+                    goto('/releases/' + track.uuid)
+                  }}
+                  {track}
+                />
+              {/each}
+            {:else}
+              {#each Array(3) as i}
+                <TrackSkeleton loading={false} />
+              {/each}
+            {/if}
+            {#if latestReleases && latestReleases.length < 4}
+              {#each Array(3) as i}
+                <TrackSkeleton loading={false} />
+              {/each}
+            {/if}
+          </div>
+        </article>
+      </section>
+    </Container>
+  </div>
+  <div
+    bind:this={refs['info']}
+    id="info"
+    class="gradientBlueGreen py-4"
   >
-</div>
-<div class="py-16 ">
-  <Container>
-    <section class="grid gap-6">
-      <Title>Contact</Title>
-      <div class="md:flex items-center">
+    <Container>
+      <section class="p-16">
         <article
-          class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+          class="flex justify-between flex-col md:flex-row items-center gap-8 p-0"
         >
-          <form class="grid gap-4 ">
-            <label
-              >Topic<input
-                class="input"
-                placeholder="Royalties, demo, promo, .."
-              /></label
+          <div class="w-full grid gap-4">
+            <Title theme="light"
+              >What is {$labelStore ? $labelStore.name : 'this label'}?</Title
             >
-            <label
-              >What's your question?<textarea
-                class="input "
-                placeholder="For example: I'm interested to know how.."
-              /></label
-            >
+            {#if $labelStore}
+              <SubTitle theme="light">🚨 Letsgo!</SubTitle>
+              <p class="max-w-lg text-white text-sm font-base">
+                {$labelStore.description}
+              </p>
+            {:else}
+              <LineSkeleton width="w-4/6" lines={6} />
+            {/if}
+          </div>
+          {#if $labelStore}
+            <img
+              class="w-full h-full rounded-md mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
+              src={$labelStore.logo.toString()}
+              alt="Logo of label {$labelStore.name}"
+            />
+          {:else}
+            <div
+              class="w-full h-full rounded-md bg-gray-400 opacity-80 animate-pulse mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
+            />
+          {/if}
+        </article>
+      </section></Container
+    >
+  </div>
+  <div bind:this={refs['contact']} id="contact" class="py-16">
+    <Container>
+      <section class="grid gap-6">
+        <Title>Contact</Title>
+        <div class="md:flex items-center">
+          <article
+            class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+          >
+            <form class="grid gap-4 ">
+              <label
+                >Topic<input
+                  class="input"
+                  placeholder="Royalties, demo, promo, .."
+                /></label
+              >
+              <label
+                >What's your question?<textarea
+                  class="input "
+                  placeholder="For example: I'm interested to know how.."
+                /></label
+              >
 
-            <label for="file">
-              Attachment
-              <div class="relative flex items-center justify-end group">
-                <div class="input peer text-gray-500">
-                  Drag & drop your file!
-                </div>
-                <!-- 
+              <label for="file">
+                Attachment
+                <div class="relative flex items-center justify-end group">
+                  <div class="input peer text-gray-500">
+                    Drag & drop your file!
+                  </div>
+                  <!-- 
 								
 								<input
 								id="file"
@@ -238,11 +264,68 @@ import FadeBox from '../components/portal/FadeBox.svelte';
 								class="hidden"
 								placeholder="Drag & drop!"
 							/> -->
+                  <svg
+                    class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
+                    />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <line x1="10" y1="9" x2="8" y2="9" />
+                  </svg>
+                </div>
+              </label>
+              <Button color="bg-teal-700" size="md">Learn more!</Button>
+            </form>
+          </article>
+          <article class="py-12 md:w-1/2 lg:w-3/5 lg:left ">
+            <SubTitle>📩 Get in touch with us!</SubTitle>
+            <p>
+              As a label we like to interact with our fans and future artists.
+              If you have any questions or suggestions, don't hesitate to
+              contact us!
+            </p>
+            <p>
+              <b class="grid grid-flow-col  items-center justify-start gap-1">
                 <svg
-                  class="absolute mr-4 mt-2 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
+                  class="-mt-px"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polygon
+                    points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
+                  />
+                </svg> Company</b
+              >
+              Ethereal<br />
+              Deinzestraat 175, 9700 Oudenaarde<br />
+              BTW: BE02.231.123
+            </p>
+            <p>
+              <b class="grid grid-flow-col items-center justify-start gap-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -251,74 +334,18 @@ import FadeBox from '../components/portal/FadeBox.svelte';
                   stroke-linejoin="round"
                 >
                   <path
-                    d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
                   />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <line x1="10" y1="9" x2="8" y2="9" />
-                </svg>
-              </div>
-            </label>
-            <Button color="bg-teal-700" size="md">Learn more!</Button>
-          </form>
-        </article>
-        <article class="py-12 md:w-1/2 lg:w-3/5 lg:left ">
-          <SubTitle>📩 Get in touch with us!</SubTitle>
-          <p>
-            As a label we like to interact with our fans and future artists. If
-            you have any questions or suggestions, don't hesitate to contact us!
-          </p>
-          <p>
-            <b class="grid grid-flow-col  items-center justify-start gap-1">
-              <svg
-                class="-mt-px"
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                </svg>Press</b
               >
-                <circle cx="12" cy="12" r="10" />
-                <polygon
-                  points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
-                />
-              </svg> Company</b
-            >
-            Ethereal<br />
-            Deinzestraat 175, 9700 Oudenaarde<br />
-            BTW: BE02.231.123
-          </p>
-          <p>
-            <b class="grid grid-flow-col items-center justify-start gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
-                />
-              </svg>Press</b
-            >
-            Styling kit
-          </p>
-          <div />
-        </article>
-      </div>
-    </section>
-  </Container>
-</div>
+              Styling kit
+            </p>
+            <div />
+          </article>
+        </div>
+      </section>
+    </Container>
+  </div>
 </FadeBox>
 <Footer />
 

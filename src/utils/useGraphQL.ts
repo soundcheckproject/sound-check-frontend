@@ -2,11 +2,11 @@
 import { getAuth } from 'firebase/auth'
 import type { RoleType } from '../types/Role.type'
 import type FeedbackType from '../types/Feedback.type'
-import type { TrackType } from '../types/Track.type'
+import type { TrackInputType, TrackType, TrackUpdateType } from '../types/Track.type'
 import type { Link, UserType, ArtistType, UserLink } from '../types/User.type'
 import log, { logGraphQLError, LogType } from './logger'
 import type { GenreType } from 'src/types/Genre.type'
-import type Uuid from 'src/types/Uuid'
+import type Uuid from '../types/Uuid'
 
 export const query = async (
   name: string,
@@ -133,7 +133,7 @@ export const getArtistByUserId = async (userId: string): Promise<UserType> => {
   )
 }
 
-export const createTrack = async (track: TrackType): Promise<Uuid> => {
+export const createTrack = async (track: TrackInputType): Promise<Uuid> => {
   return await query(
     'createTrack',
     `mutation createTrack($data: CreateTrackInput!) {
@@ -261,6 +261,7 @@ export const getTrackById = async (trackId: string): Promise<TrackType> => {
         prefferdReleaseDate
    
         artistTracks {
+          uuid
           royaltySplit
           isApproved
           user {
@@ -412,8 +413,8 @@ export const getArtists = async (): Promise<ArtistType[]> => {
 
 export const updateTrack = async (
   trackId: string,
-  data: TrackType,
-): Promise<TrackType> => {
+  data: TrackUpdateType,
+): Promise<Uuid> => {
   return await query(
     'updateTrack',
     `mutation UpdateTrack($data: UpdateTrackInput!, $trackId: String!) {

@@ -16,14 +16,12 @@
 
   export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
-  let audio: HTMLAudioElement
+  let audioPlayer: HTMLAudioElement
   let trackInfo: TrackInfoType = {
     duration: '0:00',
     currentTime: '0:00',
     playing: null,
   }
-
-  export let audioFile = null
   export let track: TrackType
 
   let artistTracks: { user: UserType }[] = track.artistTracks ?? []
@@ -38,8 +36,10 @@
   //   }
   // }
 
+  let isFetched = undefined
   let loadTrack = false
   let trackPlayable = false
+
   const loadTrackInfo = (media: HTMLAudioElement) => {
     if (media) {
       media.onloadedmetadata = () => {
@@ -47,7 +47,7 @@
         trackInfo.duration = formatTimeForPlayer(trackDuration)
 
         trackPlayable = true
-        audio.currentTime = track.previewStart
+        audioPlayer.currentTime = track.previewStart
         media.ontimeupdate = () => {
           let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
 
@@ -59,35 +59,36 @@
     }
   }
 
-  onMount(async () => {
-    if (track.uuid && loadTrack) {
-    }
-  })
-
   const loadTrackBlob = async () => {
     // blobToBase64(await getTrackFileFromTrackId(track.uuid))
-    const encodedFile = await query(
-      'getTrackById',
-      `query Query($trackId: String!) {
-          getTrackById(trackId: $trackId) {
-            encodedFile
-          }
-        }`,
-      { trackId: track.uuid },
-    )
-    track.encodedFile = encodedFile.encodedFile
+    try {
+      isFetched = false
+      const encodedFile = await query(
+        'getTrackById',
+        `query Query($trackId: String!) {
+            getTrackById(trackId: $trackId) {
+              encodedFile
+            }
+          }`,
+        { trackId: track.uuid },
+      )
+      track.encodedFile = encodedFile.encodedFile
+      isFetched = true
+    } catch (error) {
+      isFetched = null
+    }
   }
 
   $: {
     if (loadTrack)
       if (track.encodedFile) {
-        loadTrackInfo(audio)
+        loadTrackInfo(audioPlayer)
       }
   }
 </script>
 
 {#if track.encodedFile}
-  <audio hidden bind:this={audio} preload="auto" controls>
+  <audio hidden bind:this={audioPlayer} preload="auto" controls>
     <source src={track.encodedFile} type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
@@ -97,11 +98,22 @@
   in:slide|local={{ duration: 200, delay: 200 }}
   out:slide|local={{ duration: 200 }}
   on:mouseenter={() => {
-    loadTrackBlob()
-    loadTrack = true
+    if (!trackPlayable) {
+      loadTrackBlob()
+      loadTrack = true
+    }
   }}
 >
-  <a href={`demo/${track.uuid}`}>
+  <a
+    class="focus-ring"
+    href={`demo/${track.uuid}`}
+    on:focus={() => {
+      if (!trackPlayable) {
+        loadTrackBlob()
+        loadTrack = true
+      }
+    }}
+  >
     <img
       class="h-32 w-32 bg-gray-100 rounded-sm hover:opacity-75 transition-opacity"
       src={track.artwork.resource}
@@ -135,6 +147,7 @@
 
           <div class="justify-self-end flex flex-col justify-around items-end">
             {#if track.isSigned != false}
+            <button class="outline-none focus:scale-150">
               <svg
                 on:click={() => denyTrack(track)}
                 class="text-red-700 mx-2"
@@ -152,8 +165,10 @@
                 <line x1="15" y1="9" x2="9" y2="15" />
                 <line x1="9" y1="9" x2="15" y2="15" />
               </svg>
+            </button>
             {/if}
             {#if track.isSigned != true}
+            <button class="outline-none focus:scale-150">
               <svg
                 on:click={() => signTrack(track)}
                 class="text-green-700 mx-2"
@@ -170,6 +185,7 @@
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <polyline points="22 4 12 14.01 9 11.01" />
               </svg>
+            </button>
             {/if}
           </div>
         </div>
@@ -179,66 +195,77 @@
   <div
     class="h-10 px-4 py-2 self-end flex rounded-md bg-gray-700 text-gray-100 items-center col-span-2 shadow-md"
   >
-    {#if trackPlayable}
-      <svg
+    {#if trackPlayable && isFetched}
+      <button
+        class="focus:text-green-300 outline-none"
         on:click={() => {
           trackInfo.playing = false
-          audio.pause()
+          audioPlayer.pause()
         }}
-        class="mr-1"
-        class:active={!trackInfo.playing}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        ><svg
+          class="mr-1"
+          class:active={!trackInfo.playing}
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="10" y1="15" x2="10" y2="9" />
+          <line x1="14" y1="15" x2="14" y2="9" />
+        </svg></button
       >
-        <circle cx="12" cy="12" r="10" />
-        <line x1="10" y1="15" x2="10" y2="9" />
-        <line x1="14" y1="15" x2="14" y2="9" />
-      </svg>
-      <svg
+      <button
+        class="focus:text-green-300 outline-none"
         on:click={() => {
           trackInfo.playing = true
-          audio.play()
+          audioPlayer.play()
         }}
-        class="mr-1 "
-        xmlns="http://www.w3.org/2000/svg"
-        class:active={trackInfo.playing}
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
       >
-        <circle cx="12" cy="12" r="10" />
-        <polygon points="10 8 16 12 10 16 10 8" />
-      </svg>
-      <svg
+        <svg
+          class="mr-1 "
+          xmlns="http://www.w3.org/2000/svg"
+          class:active={trackInfo.playing}
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="10 8 16 12 10 16 10 8" />
+        </svg>
+      </button>
+      <button
+        class="focus:text-green-300 outline-none"
         on:click={() => {
-          audio.currentTime += 5
+          audioPlayer.currentTime += 5
         }}
-        class="mr-3"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
       >
-        <polygon points="13 19 22 12 13 5 13 19" />
-        <polygon points="2 19 11 12 2 5 2 19" />
-      </svg>
+        <svg
+          class="mr-3"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="13 19 22 12 13 5 13 19" />
+          <polygon points="2 19 11 12 2 5 2 19" />
+        </svg>
+      </button>
       <div class="text-xs mr-2">00:00</div>
       <div class="flex ml-2 mr-4 items-center w-full">
         <div
@@ -259,9 +286,13 @@
       <div class="text-xs ml-auto">{trackInfo.duration}</div>
       <a
         href="/portal/staff/demo/{track.uuid}"
-        class="w-28 text-xs text-right font-medium hover:underline"
-        >Learn more..</a
+        class="w-28 ml-1 text-xs text-right font-medium hover:underline outline-none focus:text-teal-300"
+        >details</a
       >
+    {:else if isFetched === false}<p class="text-xs">Fetching the track..</p>
+    {:else if isFetched === null}<p class="text-xs">
+        Error while fetching the track.
+      </p>
     {:else}<p class="text-xs">Audio is not loaded yet.</p>
     {/if}
   </div>

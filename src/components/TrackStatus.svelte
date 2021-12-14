@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition'
   import FadeBox from './portal/FadeBox.svelte'
 
-  let hoverStatus = false
+  export let hoverStatus = false
   export let status = 'pending'
   //todo: make status color global
 </script>

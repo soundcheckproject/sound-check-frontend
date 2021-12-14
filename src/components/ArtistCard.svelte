@@ -8,8 +8,8 @@
 
 <a
   href="/artists/{artist.uuid}"
-  in:fly={{ y: 25, opacity: 0, duration: 200, delay: 200 }}
-  out:fade={{ duration: 200 }}
+  in:fly|local={{ y: 25, opacity: 0, duration: 200, delay: 200 }}
+  out:fade|local={{ duration: 200 }}
   class="cursor-pointer relative p-0 w-full h-full mshadow-sm hover:shadow-2xl hover:scale-105 focus:scale-105 focus:shadow-2xl transition-all ease-out outline-none"
 >
 <div class="w-full pb-[100%]">
