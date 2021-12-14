@@ -147,6 +147,7 @@
 
           <div class="justify-self-end flex flex-col justify-around items-end">
             {#if track.isSigned != false}
+            <button class="outline-none focus:scale-150">
               <svg
                 on:click={() => denyTrack(track)}
                 class="text-red-700 mx-2"
@@ -164,8 +165,10 @@
                 <line x1="15" y1="9" x2="9" y2="15" />
                 <line x1="9" y1="9" x2="15" y2="15" />
               </svg>
+            </button>
             {/if}
             {#if track.isSigned != true}
+            <button class="outline-none focus:scale-150">
               <svg
                 on:click={() => signTrack(track)}
                 class="text-green-700 mx-2"
@@ -182,6 +185,7 @@
                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
                 <polyline points="22 4 12 14.01 9 11.01" />
               </svg>
+            </button>
             {/if}
           </div>
         </div>
