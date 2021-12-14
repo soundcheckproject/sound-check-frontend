@@ -7,6 +7,7 @@
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
+import { RoleName } from '../../types/Role.type';
 
   $:{
     console.log($menuState)
@@ -68,12 +69,12 @@
         </svg>
       </div>
       <h1 class="text-3xl font-bold -mt-2">
-        <a href="/portal" class="opacity-25  h-8 mb-1 flex ">
+        <a href="/portal" class="opacity-25 h-8 mb-1 flex focus:opacity-100">
           {#if !$menuState}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local
               class="absolute left-0 right-0 text-center"
-            >
+            > 
               {#if $labelStore}{$labelStore.name}{:else}SoundCheck{/if}
             </div>{:else}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
@@ -88,7 +89,7 @@
       <hr />
       <a
         href="/portal/profile"
-        class="text-lg flex space-x-4 items-center h-12 cursor-pointer"
+        class="text-lg flex space-x-4 items-center w-full cursor-pointer focus:outline-none rounded-sm focus:bg-gray-700 p-2"
       >
         {#if $userStore.logo}
           <img
@@ -110,11 +111,11 @@
       </a>
       <hr />
       <div
-        class={`text-sm grid gap-4 w-full transition-all delay-200 ${
+        class={`text-sm grid gap-1   w-full transition-all delay-200 ${
           $menuState ? ' ml-4' : ''
         }`}
       >
-        <RoleLayer allowedForRoles={['label-artist', 'user']}>
+        <RoleLayer allowedForRoles={[RoleName.LabelArtist, RoleName.User]}>
           <NavLink href="/portal/artist" name="Overview"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -305,9 +306,9 @@
       </div>
       <!-- <hr /> -->
     </div>
-    <div
+    <button
       on:click={logout}
-      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2  rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform"
+      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus:ring ring-teal-300"
     >
       {#if !$menuState}
         <p
@@ -333,7 +334,7 @@
         <polyline points="16 17 21 12 16 7" />
         <line x1="21" y1="12" x2="9" y2="12" />
       </svg>
-    </div>
+    </button>
   </div>
 </aside>
 

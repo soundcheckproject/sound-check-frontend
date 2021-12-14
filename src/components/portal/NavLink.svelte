@@ -22,15 +22,13 @@
 <!-- svelte-ignore a11y-missing-attribute -->
 <a
   href={$$props.routes ? '' : $$props.href}
+  class="focus:outline-none rounded-sm focus:bg-gray-700 p-2"
   class:active={$page.path === $$props.href}
   on:click={() => {
     isActive = !isActive
   }}
-  class="h-4"
 >
-  <div>
-    <slot />
-  </div>
+  <slot />
   {#if !$menuState}
     <p
       class="ml-4"
