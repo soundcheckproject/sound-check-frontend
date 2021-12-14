@@ -25,11 +25,13 @@ describe('example to-do app', () => {
     cy.contains('Ethereal')
   })
 
-    it('should change the language', () => {
-      cy.contains('Ethereal')
-    })
+  it('should change the language', () => {
+    cy.get('.lang-btn').focus()
+    cy.get('.nederlands-btn').should('be.visible')
+    cy.get('.nederlands-btn').click()
+    cy.contains('Artiesten')
 
-
+  })
 
   // it('can add new todo items', () => {
   //   // We'll store our item text in a variable so we can reuse it
