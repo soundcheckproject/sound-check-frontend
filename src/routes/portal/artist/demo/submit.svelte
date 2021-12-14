@@ -49,7 +49,7 @@
     title: '',
     description: '',
     previewStart: 0,
-    previewStop: 20,
+    previewStop: 10,
     lyrics: '',
     artistTracks: [],
     genreId: 'Pick a genre',
@@ -62,6 +62,15 @@
   let user = $userStore
   user.royaltyPercentage = 100
   let artistsArray = [user]
+
+  const validatePreviewPart = () => {
+    if (newTrack.previewStart > newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be lower than start')
+    if (newTrack.previewStart === newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be === start')
+  }
 
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
@@ -637,6 +646,7 @@
                 : 'opacity-40'}"
             >
               Preview part *
+              <p>error handling! => validatePreviewPart</p>
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
@@ -645,6 +655,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
+                       on:change={validatePreviewPart}
                   min="0"
                   disabled={trackBase64String ? false : true}
                 />
@@ -653,6 +664,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
+                  on:change={validatePreviewPart}
                   min="30"
                   disabled={trackBase64String ? false : true}
                 />
