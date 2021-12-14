@@ -34,9 +34,9 @@
       class="relative group outline-none focus:scale-150"
     >
       <NavigationLink href="/login">Portal</NavigationLink>
-      <div class="absolute hidden group-focus:block group-hover:block pt-3">
+      <div class="absolute hidden group-focus:block group-hover:block pt-3 ">
         <div
-          class="text-white bg-gray-900/40 backdrop-blur-2xl  grid gap-2 text-xs px-5 py-4 rounded-md -ml-4"
+          class="text-white mshadow-sm bg-gray-900/40 hover:bg-gray-900/50 transition-all backdrop-blur-2xl  grid gap-2 text-xs px-5 py-4 rounded-md -ml-4"
         >
           <NavigationLink href="/login">login</NavigationLink>
           <NavigationLink href="/register">register</NavigationLink>
@@ -71,17 +71,21 @@
       <div
         class="gap-2 hidden pt-2 absolute hover:grid group-hover:grid opacity-0 group-hover:opacity-100 transition-all"
       >
-        {#each Object.keys($translationsStore) as key}
-          <div
-            class="mshadow-md transition-all py-2 px-3 text-white bg-gray-500 rounded-md text-xs flex space-x-2 cursor-pointer hover:bg-gray-700"
-            on:click={() => {
-              langStore.set(key)
-            }}
-          >
-            <div>{$translationsStore[key].flag}</div>
-            <div>{$translationsStore[key].language}</div>
-          </div>
-        {/each}
+        <div
+          class="mshadow-md transition-all py-3 px-3 text-white backdrop-blur-2xl bg-gray-900/40 grid gap-2  rounded-md text-xs hover:bg-gray-900/50"
+        >
+          {#each Object.keys($translationsStore) as key}
+            <div
+              class="flex space-x-2 cursor-pointer hover:text-white/75"
+              on:click={() => {
+                langStore.set(key)
+              }}
+            >
+              <div>{$translationsStore[key].flag}</div>
+              <div>{$translationsStore[key].language}</div>
+            </div>
+          {/each}
+        </div>
       </div>
     </button>
     <!-- Test data -->
@@ -203,7 +207,7 @@
       >
         {#each Object.keys($translationsStore) as key}
           <div
-            class="mshadow-md transition-all py-2 px-3 text-white bg-gray-500 rounded-md text-xs flex space-x-2 cursor-pointer hover:bg-gray-700"
+            class="mshadow-md transition-all py-2 px-3 text-white bg-white/20 rounded-md text-xs flex space-x-2 cursor-pointer hover:bg-white-30"
             on:click={() => {
               langStore.set(key)
             }}

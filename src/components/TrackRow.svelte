@@ -22,15 +22,15 @@
 {#if track}
   <a
     href={$$props.href ? $$props.href : `/portal/${portal}/demo/${track.uuid}`}
-    class="relative grid grid-cols-auto-1fr {portal === 'staff' ? 'gap-x-4' : 'gap-4'} items-center sm:items-stretch focus-ring"
+    class="relative grid grid-cols-auto-1fr {portal === 'staff' ? 'gap-x-4' : 'gap-4'} {size == 'sm'
+    ? 'h-16'
+    : size == 'md'
+    ? 'h-20'
+    : size == 'lg'
+    ? 'h-28'
+    : ''}  items-center sm:items-stretch focus-ring"
   >
-  <!-- {size == 'sm'
-      ? 'h-16'
-      : size == 'md'
-      ? 'h-20'
-      : size == 'lg'
-      ? 'h-28'
-      : ''}  -->
+  
     {#if track.artwork && track.artwork.resource}
       <img
         class="mshadow-sm  rounded-sm object-cover {size == 'sm'
