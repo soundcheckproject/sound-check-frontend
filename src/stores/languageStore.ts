@@ -1,14 +1,29 @@
 import { browser } from '$app/env'
 
-import { readable, writable } from 'svelte/store'
+import { writable } from 'svelte/store'
 
 import translationsJSON from '../assets/translations.json'
 
 const translations: any = translationsJSON
 
+// interface FormType {
+//   [key: string]: { [key: string]: string }
+// }
+
+// interface PageType {
+//   [key: string]: {
+//     [key: string]:
+//       | string
+//       | string[]
+//       | { [key: string]: { [key: string]: string } }
+//   }
+// }
 interface PageType {
   [key: string]: {
-    [key: string]: string
+    [key: string]:
+      | string
+      | string[]
+      | any
   }
 }
 
@@ -23,7 +38,7 @@ interface TranslationsType {
 }
 
 const langFromLocalStorage =
-  (browser && localStorage.getItem('lang')) || 'en' || 'en'
+  (browser && (localStorage.getItem('lang') || 'en')) || 'en'
 export const langStore = writable(langFromLocalStorage)
 export const translationsStore = writable<TranslationsType>(translations)
 export const languageStore = writable<LanguageType>(
@@ -43,18 +58,3 @@ langStore.subscribe(value => {
     pageStore.set(translations[value].pages)
   }
 })
-
-// const languageProp = language.subscribe(value => {
-//   return value
-// })
-// const languageProp = 'nl'
-
-// console.log(language)
-
-// export const tranStore = writable<TranslationsType>(translations)
-// export const langStore = writable<LanguageType>(
-//   translations[langFromLocalStorage],
-// )
-// export const trans = writable<PageType>(
-//   translations[langFromLocalStorage].pages,
-// )

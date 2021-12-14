@@ -10,14 +10,67 @@
         "releases": "Releases",
         "contact": "Contact",
         "info": "Info",
-        "artists": "Artist"
+        "artists": "Artist",
+        "portal": "Portal"
       },
       "home": {
         "title": "Home",
         "description": "description",
         "learnmore": "Learn more",
-        "latest": "Latest releases"
-      }
+        "latest": "Latest releases",
+        "by": "by",
+        "what": "What is "
+      },
+      "contact": {
+        "title": "Contact",
+        "touch": "Get in touch with us!",
+        "description": [
+          "As a label we like to interact with our fans and future artists.",
+          "If you have any questions or suggestions, don't hesitate to contact us!"
+        ],
+        "company": "Company information",
+        "press": "Press",
+        "stylingkit": "Styling kit",
+        "form": {
+          "topic": "Topic",
+          "topic_placeholder": "Royalties, demo, promo, ..",
+          "question": "What's your question?",
+          "question_placeholder": "For example: I'm interested to know how..",
+          "submit": "Send question!"
+        }
+      },
+      "footer": { "madeby": "Made by" },
+      "artists": { "title": "Artiesten" },
+
+      "register": {
+        "title": "Register account",
+        "description": [
+          "If you want to submit your music to Ethereal, then you'll need to create an account. It's free!",
+          "Our team will review your track as soon as possible and you'll be able to see if your track has been accepted for a release on the label."
+        ],
+        "register": "Create account",
+        "additional": "Additional information",
+        "privacy": "If you register an account, then you give the label the permission to use your data on this platform.",
+        "form": {
+          "name": "Artistname",
+          "email": "Email",
+          "password": "Password",
+          "password_confirm": "Confirm password",
+          "submit": "Create account"
+        }
+      },
+      "login": {
+        "title": "Login with account",
+        "form": {
+          "email": "Email address",
+          "password": "Password",
+          "password_placeholder": "Enter password..",
+          "submit": "Login"
+        },
+        "forgot": "Forgot password",
+        "remember": "Remember me"
+      },
+      "error": {}
     }
   },
   "nl": {
@@ -37,7 +90,55 @@
         "title": "Home",
         "description": "Beschrijving",
         "learnmore": "Toon meer",
-        "latest": "Nieuwste releases"
+        "latest": "Nieuwste releases",
+        "by": "van",
+        "what": "Wat is "
+      },
+      "contact": {
+        "title": "Contact",
+        "touch": "Kom met ons in contact!",
+        "description": [
+          "Als label houden wij ervan om met ons fans interactief bezig te zijn.",
+          "Als je vragen of suggesties hebt, houd ons dan zeker op de hoogte!"
+        ],
+        "company": "Bedrijfsinformatie",
+        "press": "Pers",
+        "stylingkit": "Stijlgids",
+        "form": {
+          "topic": "Onderwerp",
+          "topic_placeholder": "Royalties, demo, promo, ..",
+          "question": "Wat is je vraag",
+          "question_placeholder": "Bijvoorbeeld: Ik heb interesse om te weten hoe..",
+          "submit": "Verstuur vraag!"
+        }
+      },
+      "footer": { "madeby": "Gemaakt door" },
+      "register": {
+        "title": "Maak een account",
+        "description": [
+          "Als je muziek wil submitten voor het label, dan heb je een account nodig. Het is gratis!",
+          "Ons team zal zo snel mogelijk aan de slag gaan om jouw track te reviewen en je zal kunnen zien of je track geaccepteerd is voor een release op het label."
+        ],
+        "additional": "Bijhorende informatie",
+        "privacy": "Als je een account aanmaakt, geef je het label de permissie om deze informatie te gebruiken om het platform.",
+        "form": {
+          "name": "Naam",
+          "email": "E-mail",
+          "password": "Wachtwoord",
+          "password_confirm": "Bevestig wachtwoord",
+          "submit": "Maak account"
+        }
+      },
+      "login": {
+        "title": "Login met je account",
+        "form": {
+          "email": "E-mail adres",
+          "password": "Wachtwoord",
+          "password_placeholder": "Geef wachtwoord in..",
+          "submit": "Inloggen"
+        },
+        "forgot": "Wachtwoord vergeten",
+        "remember": "Onthoud mij"
       }
     }
   }
