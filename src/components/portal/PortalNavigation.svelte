@@ -308,7 +308,7 @@ import { RoleName } from '../../types/Role.type';
     </div>
     <button
       on:click={logout}
-      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus:ring ring-teal-300"
+      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus-ring"
     >
       {#if !$menuState}
         <p
