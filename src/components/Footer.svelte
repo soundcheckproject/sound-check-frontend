@@ -52,12 +52,12 @@
         </ul>
       </div>
       <ul class="text-xs gap-2 text-gray-400 text-right grid uppercase">
-        <a href="/home">{$_.header.home}</a>
-        <a href="/releases">{$_.header.releases}</a>
-        <a href="/artists">{$_.header.artists}</a>
-        <a href="/#info">{$_.header.info}</a>
-        <a href="/#contact">{$_.header.contact}</a>
-        <a href="/login">{$_.header.portal}</a>
+        <a class="focus:scale-105 outline-none" href="/home">{$_.header.home}</a>
+        <a class="focus:scale-105 outline-none" href="/releases">{$_.header.releases}</a>
+        <a class="focus:scale-105 outline-none" href="/artists">{$_.header.artists}</a>
+        <a class="focus:scale-105 outline-none" href="/#info">{$_.header.info}</a>
+        <a class="focus:scale-105 outline-none" href="/#contact">{$_.header.contact}</a>
+        <a class="focus:scale-105 outline-none" href="/login">{$_.header.portal}</a>
       </ul>
     </div>
   </Container>

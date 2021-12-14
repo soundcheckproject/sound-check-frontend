@@ -151,17 +151,26 @@
       class="grid gap-8 text-center font-bold self-end"
       on:click={() => (toggleMenu = false)}
     >
-      <NavigationLink href="/">{$_.header.home}</NavigationLink>
-      <NavigationLink href="/releases">{$_.header.releases}</NavigationLink>
-      <NavigationLink href="/artists">{$_.header.artists}</NavigationLink>
-      <NavigationLink href="/#info">{$_.header.info}</NavigationLink>
-      <NavigationLink href="/#contact">{$_.header.contact}</NavigationLink>
-      <NavigationLink href="/login">Portal</NavigationLink>
+      <NavigationLink tabindex="-1" href="/">{$_.header.home}</NavigationLink>
+      <NavigationLink tabindex="-1" href="/releases"
+        >{$_.header.releases}</NavigationLink
+      >
+      <NavigationLink tabindex="-1" href="/artists"
+        >{$_.header.artists}</NavigationLink
+      >
+      <NavigationLink tabindex="-1" href="/#info"
+        >{$_.header.info}</NavigationLink
+      >
+      <NavigationLink tabindex="-1" href="/#contact"
+        >{$_.header.contact}</NavigationLink
+      >
+      <NavigationLink tabindex="-1" href="/login">Portal</NavigationLink>
     </ul>
     <button
       on:click={() => {
         showMobileLangMenu = !showMobileLangMenu
       }}
+      tabindex="-1"
       class="focus-ring relative self-start"
     >
       <div

@@ -167,7 +167,7 @@
       <section>
         <article id="releases">
           <Title className="">{$_.home.latest}</Title>
-          <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 ">
+          <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 p-2 ">
             {#if latestReleases && latestReleases.length > 0}
               {#each latestReleases as track}
                 <Track

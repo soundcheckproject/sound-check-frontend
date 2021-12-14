@@ -14,7 +14,11 @@
   import { fade, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
-  import type { TrackInfoType, TrackInputType, TrackType } from '../types/Track.type'
+  import type {
+    TrackInfoType,
+    TrackInputType,
+    TrackType,
+  } from '../types/Track.type'
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
@@ -143,7 +147,6 @@
 {#if track}
   <div class="relative">
     <div
-  
       class="overflow-hidden relative grid bg-gray-800 {rounded} backdrop-blur-sm text-gray-100"
     >
       <div
@@ -235,75 +238,89 @@
             class="mt-2 grid grid-flow-col  items-center justify-between gap-2 self-end py-4 px-5 bg-opacity-10 rounded-md bg-gray-50"
           >
             <div class="grid gap-2 grid-flow-col items-center">
-              <svg
+              <button
+                class="focus:text-green-300 outline-none"
                 on:click={() => wavesurfer.skip(-5)}
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon points="19 20 9 12 19 4 19 20" />
-                <line x1="5" y1="19" x2="5" y2="5" />
-              </svg>
-              <svg
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="19 20 9 12 19 4 19 20" />
+                  <line x1="5" y1="19" x2="5" y2="5" />
+                </svg>
+              </button>
+              <button
+                class="focus:text-green-300 outline-none"
                 on:click={() => {
                   wavesurfer.pause()
                   trackInfo.playing = false
                 }}
-                class:active={!trackInfo.playing}
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
               >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="10" y1="15" x2="10" y2="9" />
-                <line x1="14" y1="15" x2="14" y2="9" />
-              </svg>
-              <svg
+                <svg
+                  class:active={!trackInfo.playing}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="10" y1="15" x2="10" y2="9" />
+                  <line x1="14" y1="15" x2="14" y2="9" />
+                </svg></button
+              >
+              <button
+                class="focus:text-green-300 outline-none"
                 on:click={() => {
                   wavesurfer.playPause()
                   trackInfo.playing = true
                 }}
-                xmlns="http://www.w3.org/2000/svg"
-                class:active={trackInfo.playing}
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class:active={trackInfo.playing}
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polygon points="10 8 16 12 10 16 10 8" />
+                </svg></button
               >
-                <circle cx="12" cy="12" r="10" />
-                <polygon points="10 8 16 12 10 16 10 8" />
-              </svg>
-              <svg
+              <button
                 on:click={() => wavesurfer.skip(5)}
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                class="focus:text-green-300 outline-none"
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="5 4 15 12 5 20 5 4" />
+                  <line x1="19" y1="5" x2="19" y2="19" />
+                </svg></button
               >
-                <polygon points="5 4 15 12 5 20 5 4" />
-                <line x1="19" y1="5" x2="19" y2="19" />
-              </svg>
+              <button />
             </div>
             <div
               on:click={() => {
@@ -352,7 +369,6 @@
                 {/if}{/if}
             </div>
           </div>
-
         </div>
       </div>
       {#if audio && feedback && (track.isSigned == null || track.isSigned == true)}
@@ -392,7 +408,6 @@
             </div></SubTitle
           >
           {#if showFeedback}
-
             <div
               transition:slide|local
               class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
