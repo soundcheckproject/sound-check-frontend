@@ -107,6 +107,28 @@ export const validateDate = (input: string): Error => {
     return { error: errorName, status: false }
   }
 }
+
+export const validateStartLower = (start: number, stop: number): Error => {
+  const errorName = 'startlower'
+  const result = { error: errorName, status: false }
+    if (start && stop)
+      if (start > stop) {
+        result.status = true
+      }
+  return result
+}
+
+export const validateEqualityNumbers = (start: number, stop: number): Error => {
+  const errorName = 'equalitynumbers'
+  const result = { error: errorName, status: false }
+  if(start && stop)
+    if (start === stop) {
+      result.status = true
+    }
+  
+  return result
+}
+
 export const validateMatch = (input: string, input2: string): Error => {
   const errorName = 'match'
   if (input === input2) return { error: errorName, status: true }

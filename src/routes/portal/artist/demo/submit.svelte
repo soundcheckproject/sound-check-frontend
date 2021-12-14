@@ -28,10 +28,12 @@
   import {
     validateEmailValid,
     validateEmpty,
+    validateEqualityNumbers,
     validateError,
     validateErrors,
     validateErrorTime,
     validateLength,
+    validateStartLower,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
@@ -39,7 +41,7 @@
   import variables from '../../../../utils/variables'
   import log, { LogType } from '../../../../utils/logger'
 
-  const inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
+  const inputFields: string[] = ['title', 'genreId']
 
   let artistSearch = { nickName: '', hover: false }
 
@@ -62,15 +64,6 @@
   let user = $userStore
   user.royaltyPercentage = 100
   let artistsArray = [user]
-
-  const validatePreviewPart = () => {
-    if (newTrack.previewStart > newTrack.previewStop)
-      // ! show error
-      console.log('stop cant be lower than start')
-    if (newTrack.previewStart === newTrack.previewStop)
-      // ! show error
-      console.log('stop cant be === start')
-  }
 
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
@@ -150,6 +143,17 @@
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
+    if (type === 'previewpart') {
+      errors = validateErrors(
+        [
+          validateStartLower(newTrack.previewStart, newTrack.previewStop),
+          validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
+        ],
+        type,
+        errors,
+      )
+    }
+
     for (const errorType of inputFields) {
       errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
     }
@@ -628,7 +632,7 @@
                   <p>Click to upload your track here...</p>
                 {/if}
                 <input
-                  required={true}
+                  required
                   type="file"
                   accept=".wav,.mp3,.flac"
                   bind:this={trackDataClick}
@@ -637,7 +641,7 @@
                   class="hidden"
                   placeholder=""
                 />
-                </button>
+              </button>
             </div>
             <div
               class="label portal {trackBase64String
@@ -645,7 +649,6 @@
                 : 'opacity-40'}"
             >
               Preview part *
-              <p>error handling! => validatePreviewPart</p>
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
@@ -654,7 +657,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
-                  on:change={validatePreviewPart}
+                  on:input={() => checkValidation('previewpart')}
                   min="0"
                   disabled={trackBase64String ? false : true}
                 />
@@ -663,11 +666,12 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
-                  on:change={validatePreviewPart}
+                  on:input={() => checkValidation('previewpart')}
                   min="30"
                   disabled={trackBase64String ? false : true}
                 />
               </div>
+              <InputError errorInput="previewpart" />
             </div>
           </div>
           <p class="text-sm text-gray-400">

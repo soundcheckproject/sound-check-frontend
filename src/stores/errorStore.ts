@@ -241,6 +241,18 @@ const errorStore = readable<{
       message: 'Error while uploading artwork',
     },
   ],
+  previewpart: [
+    {
+      display: false,
+      errorName: 'previewpart_startlower',
+      message: 'Start must be lower then stop',
+    },
+    {
+      display: false,
+      errorName: 'previewpart_equalitynumbers',
+      message: "Start and stop can't be equal",
+    },
+  ],
 })
 
 export default {
