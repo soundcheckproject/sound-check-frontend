@@ -33,7 +33,7 @@
           <p class="text-sm">
             Nobody is perfect, everyone can make little mistakes when submitting
             their track. Check if the rendered track doesn't have any clicks or
-            pops. <br />Ask the artist for a new version of necessary!
+            pops.
           </p>
         </div>
       </div>

@@ -67,21 +67,10 @@ import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
       .catch(() => {
         tracksLoaded = null
       })
-    // if ($userTracksStore == null) {
-    //   userTracksStore.set(await getTracksByArtistId($userStore.uuid))
-    //   console.log($userTracksStore)
-    //   if ($userTracksStore)
-    //     tracks = {
-    //       all: $userTracksStore,
-    //       pending: $userTracksStore.filter(track => track.isSigned == null),
-    //       accepted: $userTracksStore.filter(track => track.isSigned === true),
-    //       denied: $userTracksStore.filter(track => track.isSigned === false),
-    //     }
-    // }
+
   })
 
   $: {
-    // console.log(tracks)
     if (tracksLoaded) tracks = sortTracksByType($userTracksStore)
   }
 </script>
