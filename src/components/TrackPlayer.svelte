@@ -322,7 +322,8 @@
               >
               <button />
             </div>
-            <div
+            <button
+             class="focus:text-green-300 outline-none"
               on:click={() => {
                 if (wavesurfer) {
                   isMuted = !isMuted
@@ -367,7 +368,7 @@
                     <line x1="17" y1="9" x2="23" y2="15" />
                   </svg>
                 {/if}{/if}
-            </div>
+            </button>
           </div>
         </div>
       </div>
