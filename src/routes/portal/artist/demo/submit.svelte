@@ -537,8 +537,8 @@
               />
               <div class="label portal">
                 Upload Artwork
-                <div
-                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+                <button
+                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 focus-ring"
                   on:click={() => artworkClick.click()}
                 >
                   {#if artworkBlob}
@@ -565,7 +565,6 @@
                     <p>Click to upload your artwork here...</p>
                   {/if}
                   <input
-                    required={true}
                     type="file"
                     accept=".jpg, .jpeg, .png"
                     bind:this={artworkClick}
@@ -574,7 +573,7 @@
                     class="hidden"
                     placeholder=""
                   />
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -601,8 +600,8 @@
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="label portal">
               Upload track
-              <div
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem]"
+              <button
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem] focus-ring"
                 on:click={() => trackDataClick.click()}
               >
                 {#if trackBlob}
@@ -638,7 +637,7 @@
                   class="hidden"
                   placeholder=""
                 />
-              </div>
+                </button>
             </div>
             <div
               class="label portal {trackBase64String
@@ -655,7 +654,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
-                       on:change={validatePreviewPart}
+                  on:change={validatePreviewPart}
                   min="0"
                   disabled={trackBase64String ? false : true}
                 />
