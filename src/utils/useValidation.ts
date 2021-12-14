@@ -125,7 +125,6 @@ export const validateEqualityNumbers = (start: number, stop: number): Error => {
     if (start === stop) {
       result.status = true
     }
-  
   return result
 }
 
