@@ -7,42 +7,42 @@
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
-import { RoleName } from '../../types/Role.type';
+  import { RoleName } from '../../types/Role.type'
 
-  $:{
+  $: {
     console.log($menuState)
   }
 </script>
 
-<div class={
-    $menuState ? 'block sm:hidden' : 'hidden'
-  }>
-   <div
-        class={`absolute right-6 top-6 transition-all delay-200 cursor-pointer bg-gray-700 backdrop-blur-sm z-10 p-2 rounded-full transform ${
-          $menuState && 'rotate-180'
-        }`}
-        on:click={() => menuState.set(!$menuState)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          class="-ml-px"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </div>
+<div class={$menuState ? 'block sm:hidden' : 'hidden'}>
+  <div
+    class={`absolute right-6 top-6 transition-all delay-200 cursor-pointer bg-gray-700 backdrop-blur-sm z-10 p-2 rounded-full transform ${
+      $menuState && 'rotate-180'
+    }`}
+    on:click={() => menuState.set(!$menuState)}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      class="-ml-px"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </div>
 </div>
 <aside
   in:fly|local={{ x: -300, duration: 200 }}
   class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200  ${
-    $menuState ? 'w-[calc(100vw-2.5rem)] sm:w-24 px-6 hidden sm:block' : 'w-[calc(100vw-2.5rem)] sm:w-72'
+    $menuState
+      ? 'w-[calc(100vw-2.5rem)] sm:w-24 px-6 hidden sm:block'
+      : 'w-[calc(100vw-2.5rem)] sm:w-72'
   }`}
 >
   <div class="flex flex-col justify-between h-full space-y-12 ">
@@ -74,7 +74,7 @@ import { RoleName } from '../../types/Role.type';
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local
               class="absolute left-0 right-0 text-center"
-            > 
+            >
               {#if $labelStore}{$labelStore.name}{:else}SoundCheck{/if}
             </div>{:else}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
@@ -133,13 +133,7 @@ import { RoleName } from '../../types/Role.type';
             </svg>
           </NavLink>
 
-          <NavLink
-            href="/portal/artist/demo"
-            name="Music"
-            routes={[
-              { path: '/portal/artist/demo/submit', pathName: 'Submit' },
-              { path: '/portal/artist/demo', pathName: 'All tracks' },
-            ]}
+          <NavLink href="/portal/artist/demo" name="Tracks"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -154,6 +148,23 @@ import { RoleName } from '../../types/Role.type';
               <path d="M9 18V5l12-2v13" />
               <circle cx="6" cy="18" r="3" />
               <circle cx="18" cy="16" r="3" />
+            </svg>
+          </NavLink>
+          <NavLink href="/portal/artist/demo/submit" name="Submit track"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
             </svg>
           </NavLink>
         </RoleLayer>
@@ -192,7 +203,7 @@ import { RoleName } from '../../types/Role.type';
             <path d="M13.73 21a2 2 0 01-3.46 0" />
           </svg>
         </NavLink> -->
-        <RoleLayer allowedForRoles={['label-ar', 'label-manager']}>
+        <RoleLayer allowedForRoles={[RoleName.LabelAR, RoleName.LabelManager]}>
           <NavLink href="/portal/staff" name="Overview" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -339,7 +350,6 @@ import { RoleName } from '../../types/Role.type';
 </aside>
 
 <style>
-
   hr {
     background: white;
     border: 1px solid white;
