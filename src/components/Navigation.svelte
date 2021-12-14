@@ -15,7 +15,7 @@
 
 <nav class="flex py-8 flex-row justify-between items-center">
   {#if $labelStore}
-    <a href="/" id="home" class="outline-none focus:scale-125">
+    <a href="/" id="home" class="outline-none focus:scale-105">
       <h1 class="text-xl font-bold">{$labelStore.name}</h1></a
     >
   {:else}
