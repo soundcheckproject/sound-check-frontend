@@ -105,7 +105,7 @@
         {#if usersLoaded === false}
           <Skeleton loading>Loading users..</Skeleton>
         {:else if filteredUsers.length === 0 && usersLoaded}
-          <Skeleton>There are no users found.</Skeleton>
+          <Skeleton>No users found..</Skeleton>
         {:else}
           {#each filteredUsers as user}
             <a
