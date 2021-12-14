@@ -12,6 +12,8 @@
     | 'upload' = 'text'
   let ref: HTMLInputElement
   export let autocomplete = 'off'
+  export let required = false
+  export let title: string = ''
 
   onMount(() => {
     if (ref) {
@@ -29,10 +31,9 @@
 
 <!-- //todo: add  red border to input validation -->
 <div class="grid gap-4">
-
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="portal"
-    >{$$props.title ?? 'Title'}
+    >{title ? (required ? `${title} *` : title) : 'Title'}
     {#if !$$props.textarea}<input
         bind:value
         on:input
@@ -41,6 +42,7 @@
         class="input {portal} {borderColor} {$$props.class}"
         placeholder={$$props.placeholder ?? 'Type here..'}
         {autocomplete}
+        {required}
       />{:else}
       <textarea
         rows={$$props.rows}
@@ -49,10 +51,11 @@
         on:change
         class="input {portal} {$$props.class}"
         placeholder={$$props.placeholder ?? 'Type here..'}
+        {required}
       />
     {/if}</label
-  >  {#if errorInput}
-
-  <InputError {errorInput} />
-{/if}
+  >
+  {#if errorInput}
+    <InputError {errorInput} />
+  {/if}
 </div>
