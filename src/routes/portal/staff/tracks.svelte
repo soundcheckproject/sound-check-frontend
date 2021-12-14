@@ -81,7 +81,7 @@
       {:else if filteredTracks.length == 0 && tracksLoaded}
         <Skeleton>No tracks found..</Skeleton>
       {:else}
-        <div class="grid gap-x-4 lg:grid-cols-2 ">
+        <div class="grid gap-4 lg:grid-cols-2 ">
           {#each filteredTracks as track}
             <TrackRow portal="staff" {track}>{track.title}</TrackRow>
           {/each}
