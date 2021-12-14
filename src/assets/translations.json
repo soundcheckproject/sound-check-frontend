@@ -1,0 +1,44 @@
+{
+  "en": {
+    "language": "English",
+    "code": "en",
+    "flag": "🇺🇸",
+    "pages": {
+      "header": {
+        "home": "Home",
+        "about": "About",
+        "releases": "Releases",
+        "contact": "Contact",
+        "info": "Info",
+        "artists": "Artist"
+      },
+      "home": {
+        "title": "Home",
+        "description": "description",
+        "learnmore": "Learn more",
+        "latest": "Latest releases"
+      }
+    }
+  },
+  "nl": {
+    "language": "Nederlands",
+    "code": "nl",
+    "flag": "🇧🇪",
+    "pages": {
+      "header": {
+        "home": "Home",
+        "about": "About",
+        "releases": "Releases",
+        "contact": "Contact",
+        "info": "Info",
+        "artists": "Artiesten"
+      },
+      "home": {
+        "title": "Home",
+        "description": "Beschrijving",
+        "learnmore": "Toon meer",
+        "latest": "Nieuwste releases"
+      }
+    }
+  }
+}

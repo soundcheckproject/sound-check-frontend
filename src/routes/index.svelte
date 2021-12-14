@@ -69,7 +69,7 @@
   }
 
   let refs = ['info', 'contact']
- 
+
   onMount(async () => {
     const location = window.location.href
     const [url, subnav] = location.split('#')
@@ -86,7 +86,8 @@
 </svelte:head>
 
 <Header>
-  <article 
+
+  <article
     class=" {spotlightTrack
       ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
@@ -189,11 +190,7 @@
       </section>
     </Container>
   </div>
-  <div
-    bind:this={refs['info']}
-    id="info"
-    class="gradientBlueGreen py-4"
-  >
+  <div bind:this={refs['info']} id="info" class="gradientBlueGreen py-4">
     <Container>
       <section class="p-16">
         <article
