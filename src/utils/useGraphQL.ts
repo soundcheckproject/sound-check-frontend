@@ -203,7 +203,7 @@ export const getAllTracks = async (): Promise<TrackType[]> => {
       getTracks {
         uuid
         title
-        description
+        dedscription
         lyrics
         contractFile
         resource
