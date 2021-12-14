@@ -30,6 +30,7 @@
     JSON.parse(localStorage.getItem('showFeedback')) ?? true
 
   export let audio: HTMLAudioElement | string = undefined
+  export let status = true
 
   let trackInfo: TrackInfoType = {
       duration: '0:00',
@@ -323,7 +324,7 @@
               <button />
             </div>
             <button
-             class="focus:text-green-300 outline-none"
+              class="focus:text-green-300 outline-none"
               on:click={() => {
                 if (wavesurfer) {
                   isMuted = !isMuted
@@ -493,9 +494,10 @@
       {/if}
       <!-- </div> -->
     </div>
-    <TrackStatus
-      status={validateStatusTrack(track.isSigned, track.prefferdReleaseDate)}
-    />
+    {#if status}
+      <TrackStatus
+        status={validateStatusTrack(track.isSigned, track.prefferdReleaseDate)}
+      />{/if}
   </div>
 {/if}
 
