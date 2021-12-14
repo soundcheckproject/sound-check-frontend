@@ -7,41 +7,42 @@
   import { labelStore, menuState } from '../../stores/stores'
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
+  import { RoleName } from '../../types/Role.type'
 
-  $:{
+  $: {
     console.log($menuState)
   }
 </script>
 
-<div class={
-    $menuState ? 'block sm:hidden' : 'hidden'
-  }>
-   <div
-        class={`absolute right-6 top-6 transition-all delay-200 cursor-pointer bg-gray-700 backdrop-blur-sm z-10 p-2 rounded-full transform ${
-          $menuState && 'rotate-180'
-        }`}
-        on:click={() => menuState.set(!$menuState)}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          class="-ml-px"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="3"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-      </div>
+<div class={$menuState ? 'block sm:hidden' : 'hidden'}>
+  <div
+    class={`absolute right-6 top-6 transition-all delay-200 cursor-pointer bg-gray-700 backdrop-blur-sm z-10 p-2 rounded-full transform ${
+      $menuState && 'rotate-180'
+    }`}
+    on:click={() => menuState.set(!$menuState)}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      class="-ml-px"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </div>
 </div>
 <aside
   in:fly|local={{ x: -300, duration: 200 }}
   class={`bg-gray-900 px-12 pt-12 pb-8 text-white mshadow-md group c-portal transition-all delay-200  ${
-    $menuState ? 'w-[calc(100vw-2.5rem)] sm:w-24 px-6 hidden sm:block' : 'w-[calc(100vw-2.5rem)] sm:w-72'
+    $menuState
+      ? 'w-[calc(100vw-2.5rem)] sm:w-28 px-6 hidden sm:block'
+      : 'w-[calc(100vw-2.5rem)] sm:w-72'
   }`}
 >
   <div class="flex flex-col justify-between h-full space-y-12 ">
@@ -68,7 +69,7 @@
         </svg>
       </div>
       <h1 class="text-3xl font-bold -mt-2">
-        <a href="/portal" class="opacity-25  h-8 mb-1 flex ">
+        <a href="/portal" class="opacity-25 h-8 mb-1 flex focus:opacity-100">
           {#if !$menuState}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local
@@ -88,7 +89,7 @@
       <hr />
       <a
         href="/portal/profile"
-        class="text-lg flex space-x-4 items-center h-12 cursor-pointer"
+        class="text-lg flex space-x-4 items-center w-full cursor-pointer focus:outline-none rounded-sm focus:bg-gray-700 p-2"
       >
         {#if $userStore.logo}
           <img
@@ -110,11 +111,9 @@
       </a>
       <hr />
       <div
-        class={`text-sm grid gap-4 w-full transition-all delay-200 ${
-          $menuState ? ' ml-4' : ''
-        }`}
+        class="text-sm grid gap-1 w-full transition-all delay-200"
       >
-        <RoleLayer allowedForRoles={['label-artist', 'user']}>
+        <RoleLayer allowedForRoles={[RoleName.LabelArtist, RoleName.User]}>
           <NavLink href="/portal/artist" name="Overview"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -132,13 +131,7 @@
             </svg>
           </NavLink>
 
-          <NavLink
-            href="/portal/artist/demo"
-            name="Music"
-            routes={[
-              { path: '/portal/artist/demo/submit', pathName: 'Submit' },
-              { path: '/portal/artist/demo', pathName: 'All tracks' },
-            ]}
+          <NavLink href="/portal/artist/demo" name="Tracks"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -153,6 +146,23 @@
               <path d="M9 18V5l12-2v13" />
               <circle cx="6" cy="18" r="3" />
               <circle cx="18" cy="16" r="3" />
+            </svg>
+          </NavLink>
+          <NavLink href="/portal/artist/demo/submit" name="Submit track"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
             </svg>
           </NavLink>
         </RoleLayer>
@@ -191,7 +201,7 @@
             <path d="M13.73 21a2 2 0 01-3.46 0" />
           </svg>
         </NavLink> -->
-        <RoleLayer allowedForRoles={['label-ar', 'label-manager']}>
+        <RoleLayer allowedForRoles={[RoleName.LabelAR, RoleName.LabelManager]}>
           <NavLink href="/portal/staff" name="Overview" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -280,9 +290,7 @@
       </div>
       <hr />
       <div
-        class={`text-sm grid gap-4 w-full transition-all delay-200 ${
-          $menuState ? ' ml-4' : ''
-        }`}
+        class="text-sm grid gap-4 w-full transition-all delay-200"
       >
         <NavLink href="/" name="Home">
           <svg
@@ -305,9 +313,9 @@
       </div>
       <!-- <hr /> -->
     </div>
-    <div
+    <button
       on:click={logout}
-      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2  rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform"
+      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus-ring"
     >
       {#if !$menuState}
         <p
@@ -333,12 +341,11 @@
         <polyline points="16 17 21 12 16 7" />
         <line x1="21" y1="12" x2="9" y2="12" />
       </svg>
-    </div>
+    </button>
   </div>
 </aside>
 
 <style>
-
   hr {
     background: white;
     border: 1px solid white;

@@ -11,6 +11,7 @@
   import { onMount } from 'svelte'
   import userStore from '../../../../stores/userStore'
   import userTracksStore from '../../../../stores/userTracksStore'
+import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
 
   interface DemoListType {
     all: TrackType[]
@@ -39,7 +40,7 @@
   const sortTracksByType = (trackStore: TrackType[]): DemoListType => {
     return {
       all: trackStore,
-      pending: trackStore.filter(track => track.isSigned == null) ?? [],
+      pending: trackStore.filter(track => track.isSigned === null) ?? [],
       accepted: trackStore.filter(track => track.isSigned === true) ?? [],
       denied: trackStore.filter(track => track.isSigned === false) ?? [],
     }
@@ -61,27 +62,15 @@
     getTracksByArtistId($userStore.uuid)
       .then(res => {
         userTracksStore.set(res)
-        tracks = sortTracksByType(res)
         tracksLoaded = true
       })
-      .catch(err => {
-        console.log(err)
+      .catch(() => {
+        tracksLoaded = null
       })
-    // if ($userTracksStore == null) {
-    //   userTracksStore.set(await getTracksByArtistId($userStore.uuid))
-    //   console.log($userTracksStore)
-    //   if ($userTracksStore)
-    //     tracks = {
-    //       all: $userTracksStore,
-    //       pending: $userTracksStore.filter(track => track.isSigned == null),
-    //       accepted: $userTracksStore.filter(track => track.isSigned === true),
-    //       denied: $userTracksStore.filter(track => track.isSigned === false),
-    //     }
-    // }
+
   })
 
   $: {
-    // console.log(tracks)
     if (tracksLoaded) tracks = sortTracksByType($userTracksStore)
   }
 </script>
@@ -91,6 +80,9 @@
 </svelte:head>
 
 <div class="grid gap-8">
+  {#if tracksLoaded === null}
+  <ErrorBanner message='Something went wrong while fetching your tracks.'></ErrorBanner>
+  {:else}
   <Box>
     <Title>
       <div class="grid sm:grid-cols-2 items-center">
@@ -133,18 +125,15 @@
         <div class="flex justify-between items-center">
           <SubTitle>Pending tracks</SubTitle>
         </div>
-        <div class="grid gap-4 ">
-          {#if tracks.pending.length <= 0}
-            <Skeleton>Loading pending tracks..</Skeleton>
+        <div class="grid gap-4">
+          {#if tracks.pending.length <= 0 && tracksLoaded}
+             <div class="col-span-2">
+              <Skeleton>There are no pending tracks.</Skeleton>
+            </div>
+          {:else if tracks.pending.length <= 0}
+            <Skeleton loading>Loading pending tracks..</Skeleton>
           {:else}
-            <!-- {#each tracks.pending as track}
-              <TrackRow {track} size="lg" slot={true}
-                ><div>
-                  Your track "<b>{track.title}</b>" hasn't been reviewed yet.
-                </div>
-              </TrackRow>
-            {/each} -->
-             {#each tracks.pending as track}
+            {#each tracks.pending as track}
               <TrackRow {track} size="md" />
             {/each}
           {/if}
@@ -153,9 +142,13 @@
       {#if filterType == 'accepted' || filterType == 'all'}
         <SubTitle>Accepted tracks</SubTitle>
         <div class="grid gap-4 ">
-          {#if tracks.accepted.length <= 0}
+          {#if tracks.accepted.length <= 0 && tracksLoaded}
+             <div class="col-span-2">
+              <Skeleton>There are no accepted tracks.</Skeleton>
+            </div>
+          {:else if tracks.accepted.length <= 0}
             <div class="">
-              <Skeleton>Loading accepted tracks..</Skeleton>
+              <Skeleton loading>Loading accepted tracks..</Skeleton>
             </div>
           {:else}
             {#each tracks.accepted as track}
@@ -167,9 +160,13 @@
       {#if filterType == 'denied' || filterType == 'all'}
         <SubTitle>Denied tracks</SubTitle>
         <div class="grid gap-4 lg:grid-cols-2">
-          {#if tracks.denied.length <= 0}
+          {#if tracks.denied.length <= 0 && tracksLoaded}
             <div class="col-span-2">
-              <Skeleton>Loading denied tracks..</Skeleton>
+              <Skeleton>There are no denied tracks.</Skeleton>
+            </div>
+          {:else if tracks.denied.length <= 0}
+            <div class="col-span-2">
+              <Skeleton loading>Loading denied tracks..</Skeleton>
             </div>
           {:else}
             {#each tracks.denied as track}
@@ -181,4 +178,5 @@
       <div />
     {/if}
   </Box>
+  {/if}
 </div>

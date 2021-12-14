@@ -14,7 +14,7 @@
   import { fade, slide } from 'svelte/transition'
   import TrackStatus from './TrackStatus.svelte'
   import { validateStatusTrack } from '../utils/useValidation'
-  import type { TrackInfoType, TrackType } from '../types/Track.type'
+  import type { TrackInfoType, TrackInputType, TrackType } from '../types/Track.type'
   import { getTrackFileFromTrackId } from '../utils/useRest'
   import { formatDateTime, formatTimeForPlayer } from '../utils/useFormat'
 
@@ -99,7 +99,7 @@
     })
 
     if (!audio) {
-      if (track.encodedFile) {
+      if ('encodedFile' in track && track.encodedFile) {
         audio = track.encodedFile
       } else if (track.uuid) {
         const data = await getTrackFileFromTrackId(track.uuid)

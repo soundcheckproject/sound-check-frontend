@@ -49,7 +49,7 @@
     title: '',
     description: '',
     previewStart: 0,
-    previewStop: 20,
+    previewStop: 10,
     lyrics: '',
     artistTracks: [],
     genreId: 'Pick a genre',
@@ -62,6 +62,15 @@
   let user = $userStore
   user.royaltyPercentage = 100
   let artistsArray = [user]
+
+  const validatePreviewPart = () => {
+    if (newTrack.previewStart > newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be lower than start')
+    if (newTrack.previewStart === newTrack.previewStop)
+      // ! show error
+      console.log('stop cant be === start')
+  }
 
   const removeArtist = (uuid: string) => {
     artistsArray = artistsArray.filter(artist => artist.uuid != uuid)
@@ -290,7 +299,7 @@
           <SubTitle>📝 Information about your track</SubTitle>
           <div class="grid lg:grid-cols-2 gap-4">
             <Input
-              required={true}
+              required
               bind:value={newTrack.title}
               title="Create a title"
               errorInput="title"
@@ -302,7 +311,7 @@
 
             <div class="grid md:grid-cols-2 gap-4">
               <label class="portal"
-                >Pick a genre
+                >Pick a genre *
                 <select
                   bind:value={newTrack.genreId}
                   class="input portal text-red-300"
@@ -315,7 +324,6 @@
                 >
               </label>
               <Input
-                required={true}
                 errorInput="date"
                 bind:value={prefferedReleaseDateString}
                 type="date"
@@ -323,7 +331,6 @@
               />
             </div>
             <Input
-              required={true}
               errorInput="description"
               bind:value={newTrack.description}
               on:input={() => {
@@ -336,7 +343,6 @@
             />
 
             <Input
-              required={true}
               errorInput="lyrics"
               bind:value={newTrack.lyrics}
               on:input={() => {
@@ -429,18 +435,23 @@
                 {:else}<div class="label portal grid  gap-2 " transition:fade>
                     <p class="">Add a collaborator</p>
                   </div>{/if}
-                {#each artistsArray as artist}
+                {#each artistsArray as artist, i}
                   <div
                     class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
                     transition:fade|local
                   >
-                    <Artist
-                      {artist}
-                      size="md"
-                      remove={() => {
-                        removeArtist(artist.uuid)
-                      }}>{artist.nickName}</Artist
-                    >
+                    {#if i === 0}
+                      <Artist {artist} size="md">{artist.nickName}</Artist>
+                    {:else}
+                      <Artist
+                        {artist}
+                        size="md"
+                        remove={() => {
+                          removeArtist(artist.uuid)
+                        }}>{artist.nickName}</Artist
+                      >
+                    {/if}
+
                     <div class="relative flex items-center justify-end group">
                       <input
                         type="number"
@@ -526,8 +537,8 @@
               />
               <div class="label portal">
                 Upload Artwork
-                <div
-                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+                <button
+                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 focus-ring"
                   on:click={() => artworkClick.click()}
                 >
                   {#if artworkBlob}
@@ -554,7 +565,6 @@
                     <p>Click to upload your artwork here...</p>
                   {/if}
                   <input
-                    required={true}
                     type="file"
                     accept=".jpg, .jpeg, .png"
                     bind:this={artworkClick}
@@ -563,7 +573,7 @@
                     class="hidden"
                     placeholder=""
                   />
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -590,8 +600,8 @@
           <div class="grid gap-4 sm:grid-cols-2">
             <div class="label portal">
               Upload track
-              <div
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
+              <button
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem] focus-ring"
                 on:click={() => trackDataClick.click()}
               >
                 {#if trackBlob}
@@ -627,7 +637,7 @@
                   class="hidden"
                   placeholder=""
                 />
-              </div>
+                </button>
             </div>
             <div
               class="label portal {trackBase64String
@@ -635,6 +645,7 @@
                 : 'opacity-40'}"
             >
               Preview part *
+              <p>error handling! => validatePreviewPart</p>
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
@@ -643,6 +654,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
+                  on:change={validatePreviewPart}
                   min="0"
                   disabled={trackBase64String ? false : true}
                 />
@@ -651,6 +663,7 @@
                   type="number"
                   class="p-1 bg-gray-100 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
+                  on:change={validatePreviewPart}
                   min="30"
                   disabled={trackBase64String ? false : true}
                 />

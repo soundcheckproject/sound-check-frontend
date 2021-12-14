@@ -16,12 +16,6 @@
     ? 'bg-gray-200'
     : theme == 'dark'
     ? 'bg-gray-700'
-    : ''} {theme == 'white'
-    ? 'bg-white'
-    : theme == 'light'
-    ? 'bg-gray-400'
-    : theme == 'dark'
-    ? 'bg-gray-700'
     : ''} opacity-{opacity} {height} {className}"
 >
   <div class="text-sm"><slot /></div>

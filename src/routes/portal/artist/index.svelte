@@ -71,7 +71,7 @@
         <div />
       </div>
     </SubTitle>
-    <div class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-auto snap rounded-md">
+    <div class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-auto snap rounded-md p-1">
       <Track add size="sm" />
       {#each tracks as t}
         <Track track={t} size="sm" />
@@ -80,8 +80,8 @@
   </Box>
   <div class="flex gap-4 items-center">
     {#if totalTracks.accepted}
-      <a href="/portal/artist/demo">
-        <Box size="sm" class="bg-accepted">
+      <a href="/portal/artist/demo" class="focus-ring">
+        <Box size="sm" class="bg-accepted" >
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
             Accepted ({totalTracks.pending})
           </p>
@@ -89,8 +89,8 @@
       </a>
     {/if}
     {#if totalTracks.pending}
-      <a href="/portal/artist/demo">
-        <Box size="sm" class="bg-pending">
+      <a href="/portal/artist/demo" class="focus-ring">
+        <Box size="sm" class="bg-pending" >
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
             Pending ({totalTracks.pending})
           </p>
@@ -98,7 +98,7 @@
       </a>
     {/if}
     {#if totalTracks.denied}
-      <a href="/portal/artist/demo">
+      <a href="/portal/artist/demo" class="focus-ring">
         <Box size="sm" class="bg-denied">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
             Denied ({totalTracks.pending})

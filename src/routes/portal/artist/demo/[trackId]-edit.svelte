@@ -271,8 +271,8 @@
   <title>{`${track ? track.title : ''} - Track edit`}</title>
 </svelte:head>
 
-<div class="grid gap-8">
-  <FadeBox>
+<FadeBox>
+  <div class="grid gap-8">
     {#if newTrack}
       <TrackPlayer
         track={newTrack}
@@ -372,7 +372,10 @@
                         >Total royalties should be equal to 100</SubTitle
                       >
                     {/if}
-                  {:else}<div class="label portal grid  gap-2 " transition:fade|local>
+                  {:else}<div
+                      class="label portal grid  gap-2 "
+                      transition:fade|local
+                    >
                       <p class="">Add a collaborator</p>
                     </div>{/if}
                   {#each artistsArray as artist}
@@ -595,5 +598,5 @@
     {:else if newTrack === null}
       <ErrorBanner message="Error while fetching the track data." />
     {/if}
-  </FadeBox>
-</div>
+  </div>
+</FadeBox>

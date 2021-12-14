@@ -16,7 +16,7 @@
 <button
   on:click|preventDefault={onClick}
   type="submit"
-  class="space-x-2 transition-colors hover:bg-opacity-80 mshadow-md bg-gray-50 flex justify-center items-center
+  class="space-x-2 transition-colors hover:bg-opacity-80 outline-none focus:ring ring-teal-500 mshadow-md bg-gray-50 flex justify-center items-center
 	{rounded == 'default'
     ? ' rounded-md'
     : rounded == 'full'

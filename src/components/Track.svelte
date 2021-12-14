@@ -19,7 +19,7 @@
         : size == 'lg'
         ? ' h-64 w-64'
         : ''
-    } bg-gray-100 relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md`}
+    } bg-gray-100 relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md focus-ring`}
     href="/portal/artist/demo/submit"
   >
     <svg
@@ -41,7 +41,7 @@
   </a>
 {:else if track}
   <a
-    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start"
+    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start focus-ring"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
     href={`/portal/artist/demo/${track.uuid}`}
