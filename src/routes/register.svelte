@@ -50,13 +50,11 @@
     'email',
     'password',
     'nickname',
-    'birthdate',
     'firstName',
     'surName',
     'country',
     'state',
     'city',
-    'biography',
   ]
 
   let passwordCheck: string = ''
@@ -67,8 +65,12 @@
       isNickNameAvailable(userRegister.nickName).then(result => {
         errors = validateError('nickname', 'available', result, errors)
       })
-    }
-    if (type == 'email') {
+      errors = validateErrors(
+        [validateEmpty(userRegister.nickName)],
+        type,
+        errors,
+      )
+    } else if (type == 'email') {
       errors = validateErrors(
         [
           validateLength(userRegister.email, 12),
@@ -77,8 +79,7 @@
         type,
         errors,
       )
-    }
-    if (type == 'password') {
+    } else if (type == 'password') {
       errors = validateErrors(
         [
           validateLength(userRegister.password, 8),
@@ -92,14 +93,15 @@
         type,
         errors,
       )
-    }
-    for (const errorType of inputFields) {
-      if (errorType == type)
-        errors = validateErrors(
-          [validateEmpty(userRegister[type])],
-          type,
-          errors,
-        )
+    } else {
+      for (const errorType of inputFields) {
+        if (errorType == type)
+          errors = validateErrors(
+            [validateEmpty(userRegister[type])],
+            type,
+            errors,
+          )
+      }
     }
   }
   let loadingStatus: { [key: string]: boolean } = {
@@ -117,7 +119,6 @@
 
   const register = async () => {
     if (await checkAllInputs()) {
-      checkValidation()
       loadingStatus.register = true
 
       // ! format it back to date type
@@ -150,6 +151,10 @@
 
   $: {
     validationStore.set(errors)
+  }
+
+  $: {
+    console.log(userRegister.nickName)
   }
 </script>
 
