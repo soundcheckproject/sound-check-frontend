@@ -110,7 +110,7 @@
           {#each filteredUsers as user}
             <a
               href={`/portal/staff/users/${user.uuid}`}
-              class="grid grid-cols-auto-1fr justify-start gap-4"
+              class="grid grid-cols-auto-1fr justify-start gap-4 focus-ring"
             >
               <div
                 class="h-24 w-24 bg-gray-100 rounded-md flex justify-center items-center"
@@ -162,7 +162,7 @@
                     {user.role.name}
                   </div>
                   <a
-                    class="hidden sm:block"
+                    class="hidden sm:block focus-ring"
                     href={`/portal/staff/users/${user.uuid}-edit`}
                   >
                     <svg

@@ -20,7 +20,7 @@ body {
 }
 
 .focus-ring{
-  @apply focus:ring ring-teal-500 ring-opacity-50 focus:outline-none;
+  @apply focus:ring ring-teal-500 ring-opacity-50 focus:outline-none rounded-sm;
 }
 
 article {
