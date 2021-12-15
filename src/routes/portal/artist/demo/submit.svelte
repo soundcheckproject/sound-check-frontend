@@ -144,7 +144,6 @@
   let errors: string[] = []
   const checkValidation = (type: string) => {
     if (type === 'previewpart') {
-      console.log(newTrack.previewStart, newTrack.previewStop)
       errors = validateErrors(
         [
           validateStartLower(newTrack.previewStart, newTrack.previewStop),
@@ -658,7 +657,7 @@
               >
                 <input
                   type="number"
-                  class="p-1  text-center w-16 mx-auto"
+                  class="p-1 bg-white/0 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
                   on:input={() => checkValidation('previewpart')}
                   min="0"
@@ -667,7 +666,7 @@
                 <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
                 <input
                   type="number"
-                  class="p-1  text-center w-16 mx-auto"
+                  class="p-1 bg-white/0 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
                   on:input={() => checkValidation('previewpart')}
                   min="30"
