@@ -27,11 +27,16 @@ const langFromLocalStorage =
 
 export const langStore = writable(langFromLocalStorage)
 export const translationsStore = writable<TranslationsType>(languages)
+
 export const languageStore = writable<LanguageType>(
   languages[langFromLocalStorage],
 )
-translations = await import(`../assets/lang/${langFromLocalStorage}.json`)
-const pageStore = writable<PageType>(translations.pages)
+import en from '../assets/lang/en.json'
+const pageStore = writable<PageType>(en.pages)
+
+import(`../assets/lang/${langFromLocalStorage}.json`).then(resp =>
+  pageStore.set(resp.pages),
+)
 
 export default {
   subscribe: pageStore.subscribe,
