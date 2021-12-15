@@ -12,7 +12,7 @@
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
 
-describe('landing page', () => {
+describe('portal', () => {
   const testUser_User = {
     email: 'niels2011@live.be',
     password: 'strongpassword1',
