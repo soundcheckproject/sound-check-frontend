@@ -4,7 +4,9 @@ import _, { langStore } from '../stores/languageStore'
 
 let errors: { [key: string]: string }
 _.subscribe(v => {
-  errors = v.errors
+  langStore.subscribe(() => {
+    errors = v.errors
+  })
 })
 
 const errorStore = readable<{
