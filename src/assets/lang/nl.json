@@ -1,0 +1,83 @@
+{
+  "language": "Nederlands",
+  "code": "nl",
+  "flag": "🇧🇪",
+  "pages": {
+    "header": {
+      "home": "Home",
+      "about": "About",
+      "releases": "Releases",
+      "contact": "Contact",
+      "info": "Info",
+      "artists": "Artiesten"
+    },
+    "home": {
+      "title": "Home",
+      "description": "Beschrijving",
+      "learnmore": "Toon meer",
+      "latest": "Nieuwste releases",
+      "by": "van",
+      "what": "Wat is "
+    },
+    "contact": {
+      "title": "Contact",
+      "touch": "Kom met ons in contact!",
+      "description": [
+        "Als label houden wij ervan om met ons fans interactief bezig te zijn.",
+        "Als je vragen of suggesties hebt, houd ons dan zeker op de hoogte!"
+      ],
+      "company": "Bedrijfsinformatie",
+      "press": "Pers",
+      "stylingkit": "Stijlgids",
+      "form": {
+        "topic": "Onderwerp",
+        "topic_placeholder": "Royalties, demo, promo, ..",
+        "question": "Wat is je vraag",
+        "question_placeholder": "Bijvoorbeeld: Ik heb interesse om te weten hoe..",
+        "submit": "Verstuur vraag!"
+      }
+    },
+    "footer": { "madeby": "Gemaakt door" },
+    "register": {
+      "title": "Maak een account",
+      "description": [
+        "Als je muziek wil submitten voor het label, dan heb je een account nodig. Het is gratis!",
+        "Ons team zal zo snel mogelijk aan de slag gaan om jouw track te reviewen en je zal kunnen zien of je track geaccepteerd is voor een release op het label."
+      ],
+      "additional": "Bijhorende informatie",
+      "privacy": "Als je een account aanmaakt, geef je het label de permissie om deze informatie te gebruiken om het platform.",
+      "form": {
+        "name": "Naam",
+        "email": "E-mail",
+        "password": "Wachtwoord",
+        "password_confirm": "Bevestig wachtwoord",
+        "submit": "Maak account",
+        "nickname": "Wat is je artiesten naam, hoe wil je jezelf noemen?",
+        "nickname_placeholder": "Kies een artiestennaam",
+        "password_confirm_placeholder": "Wachtwoord opnieuw",
+        "password_strong": "Sterk wachtwoord",
+        "birthdate": "Geboortedag",
+        "firstname": "Voornaam",
+        "surname": "Achternaam",
+        "country": "Country",
+        "state": "Provincie",
+        "street": "Straat",
+        "city": "Stad",
+        "biography": "Biografie",
+        "biography_placeholder": "Over jou",
+        "loading": "Account aanmaken"
+      }
+    },
+    "login": {
+      "title": "Login met je account",
+      "form": {
+        "email": "E-mail adres",
+        "password": "Wachtwoord",
+        "password_placeholder": "Geef wachtwoord in..",
+        "submit": "Inloggen"
+      },
+      "forgot": "Wachtwoord vergeten",
+      "remember": "Onthoud mij"
+    }
+  }
+}
