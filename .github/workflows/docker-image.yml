@@ -1,8 +1,8 @@
 name: Docker build and push dockerhub
 
-on:
-  push:
-    branches: [ main ]
+# on:
+#   # push:
+#   #   branches: [ main ]
 
 jobs:
 
