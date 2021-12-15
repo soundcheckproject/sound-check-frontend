@@ -26,7 +26,9 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import _ from '../stores/languageStore'
 
+
     let user = { email: '', password: '' }
+
   // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
@@ -34,11 +36,7 @@
   let errors: string[] = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
-      // errors = validateErrors(
-      //   [validateEmailValid(user.email), validateLength(user.email, 12)],
-      //   type,
-      //   errors,
-      //   )
+
       errors = validateErrors([validateEmpty(user.email)], type, errors)
     }
     if (type == 'password') {
@@ -156,12 +154,7 @@
             </div>
           </div>
 
-          <!-- <a
-					href="/register"
-					class="text-sm text-white text-opacity-50 hover:text-opacity-95 transition-colors"
-				>
-					Click <u>here</u> to signup
-				</a> -->
+   
         </div>
       </article>
     </section>

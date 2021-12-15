@@ -56,6 +56,8 @@
     {/if}</label
   >
   {#if errorInput}
+  <div class="grid gap-2">
     <InputError {errorInput} />
+  </div>
   {/if}
 </div>
