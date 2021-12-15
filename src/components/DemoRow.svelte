@@ -147,45 +147,45 @@
 
           <div class="justify-self-end flex flex-col justify-around items-end">
             {#if track.isSigned != false}
-            <button class="outline-none focus:scale-150">
-              <svg
-                on:click={() => denyTrack(track)}
-                class="text-red-700 mx-2"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="15" y1="9" x2="9" y2="15" />
-                <line x1="9" y1="9" x2="15" y2="15" />
-              </svg>
-            </button>
+              <button class="outline-none focus:scale-150">
+                <svg
+                  on:click={() => denyTrack(track)}
+                  class="text-red-700 mx-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="15" y1="9" x2="9" y2="15" />
+                  <line x1="9" y1="9" x2="15" y2="15" />
+                </svg>
+              </button>
             {/if}
             {#if track.isSigned != true}
-            <button class="outline-none focus:scale-150">
-              <svg
-                on:click={() => signTrack(track)}
-                class="text-green-700 mx-2"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                <polyline points="22 4 12 14.01 9 11.01" />
-              </svg>
-            </button>
+              <button class="outline-none focus:scale-150">
+                <svg
+                  on:click={() => signTrack(track)}
+                  class="text-green-700 mx-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+              </button>
             {/if}
           </div>
         </div>
@@ -286,8 +286,21 @@
       <div class="text-xs ml-auto">{trackInfo.duration}</div>
       <a
         href="/portal/staff/demo/{track.uuid}"
-        class="w-28 ml-1 text-xs text-right font-medium hover:underline outline-none focus:text-teal-300"
-        >details</a
+        class="flex items-center transition-all hover:opacity-75 space-x-1 ml-4 text-xs uppercase text-white text-right font-medium outline-none focus:text-teal-300"
+        ><div>details</div> <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="13 17 18 12 13 7" />
+          <polyline points="6 17 11 12 6 7" />
+        </svg></a
       >
     {:else if isFetched === false}<p class="text-xs">Fetching the track..</p>
     {:else if isFetched === null}<p class="text-xs">

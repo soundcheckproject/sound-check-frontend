@@ -8,6 +8,11 @@
     sendSignInLinkToEmail,
   } from 'firebase/auth'
   import { onMount } from 'svelte'
+  import Title from '../../components/Title.svelte'
+  import Input from '../../components/Input.svelte'
+
+  import _ from '../../stores/languageStore'
+  import Button from '../../components/Button.svelte'
 
   let email = ''
   let error = undefined
@@ -107,17 +112,22 @@
     class="w-full max-w-md bg-gray-50 rounded-md p-4 sm:p-10 shadow-xl text-gray-900"
   >
     {#if !send}
-      <h1 class="text-2xl font-bold text-center mb-4">Forgot password</h1>
-      <p class="text-sm text-center">
-        Enter your email to receive a link to reset your password.
+      <Title class="text-center">🧠 {$_.forgot.title}</Title>
+
+      <p class="text-sm ">
+        {$_.forgot.description[0]}<br /><br />
+        {$_.forgot.description[1]}
       </p>
       {#if sendError}
-        <p class="text-red-600 font-bold text-center">Could not send reset link to this email.</p>
+        <p class="text-red-600 font-bold text-center">
+          {$_.errors.forgot_error}
+        </p>
       {/if}
-      <input
+      <Input
         bind:value={email}
-        class="input"
-        placeholder="e.g. jhon.doe@domain.com"
+        title={$_.forgot.form.email}
+        portal=""
+        placeholder="{$_.forgot.form.example} jhon.doe@domain.com"
         type="email"
         name="email"
         id="email"
@@ -125,7 +135,16 @@
       {#if error}
         <p class="text-red-600">{error}</p>
       {/if}
-      <button
+      <Button
+        loading={sending ? 'Updating track..' : null}
+        size="md"
+        color="bg-teal-700"
+        class="mb-6"
+        on:click={submitHandler}
+      >
+        {$_.forgot.form.submit}
+      </Button>
+      <!-- <button
         class="bg-teal-700 p-2 rounded-sm text-white font-bold mb-6 transition-colors hover:bg-opacity-80 mshadow-md"
         type="submit"
         on:click={submitHandler}
@@ -147,8 +166,8 @@
             </svg>
             <p>Sending...</p>
           </div>
-        {:else}Submit{/if}</button
-      >
+        {:else}{/if}</button
+      > -->
     {:else}
       <div class="flex flex-col items-center">
         {#if LottiePlayer}
@@ -164,23 +183,24 @@
             {controlsLayout}
           />
         {/if}
-        <h1 class="text-2xl font-bold text-center mb-6">Email send.</h1>
+        <h1 class="text-2xl font-bold text-center mb-6">{$_.forgot.send}</h1>
       </div>
     {/if}
 
     <a
-      class="w-[calc(100% + 2rem)] sm:w-[calc(100% + 3rem)] bg-teal-700 text-white text-center p-4 -m-4 sm:-m-10 sm:mt-0 flex justify-center transition-colors hover:bg-opacity-80 mshadow-md  rounded-b-md"
+      class="w-[calc(100% + 2rem)] sm:w-[calc(100% + 3rem)] bg-teal-700 text-white text-center p-4 -m-4 sm:-m-10 sm:mt-0 flex justify-center transition-colors hover:bg-opacity-80 mshadow-md items-center  rounded-b-md"
       href="/login"
     >
       <svg
-        class="w-6 h-6 stroke-current"
+        class="w-5 h-5 stroke-current mr-1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="none"
-        stroke-width="2"
+        stroke-width="2.5"
         stroke-linecap="round"
         stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg
-      > Return to login</a
+      >
+      {$_.forgot.back}</a
     >
   </article>
 </main>

@@ -27,7 +27,7 @@
     >
       <div class="mx-auto max-w-[62rem]">
         <p
-          class="text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
+          class="-ml-3 text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
         >
           {#each pageBread as bread, index}
             {#if index != 0}
@@ -48,7 +48,7 @@
             {/if} 
 
             <a
-              class="hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white rounded-full"
+              class="transition-all hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white focus:no-underline	 rounded-full"
               in:fly|local={{ x: -50, duration: 200 }}
               out:fade|local={{ duration: 200 }}
               href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { validateStatusTrack } from '../utils/useValidation'
 
-
   import TrackStatus from './TrackStatus.svelte'
   import { formatDate } from '../utils/useFormat'
   import { roleStore } from '../stores/stores'
@@ -16,21 +15,22 @@
   export let artists = false
   export let actions = false
   export let status = true
-
 </script>
 
 {#if track}
   <a
     href={$$props.href ? $$props.href : `/portal/${portal}/demo/${track.uuid}`}
-    class="relative grid grid-cols-auto-1fr {portal === 'staff' ? 'gap-x-4' : 'gap-4'} items-center sm:items-stretch focus-ring"
-  >
-  <!-- {size == 'sm'
-      ? 'h-16'
+    class="{status ? 'relative' : ''} grid grid-cols-auto-1fr {portal ===
+    'staff'
+      ? 'gap-x-4'
+      : 'gap-4'} {size == 'sm'
+      ? 'h-12'
       : size == 'md'
       ? 'h-20'
       : size == 'lg'
       ? 'h-28'
-      : ''}  -->
+      : ''}  items-center sm:items-stretch focus-ring"
+  >
     {#if track.artwork && track.artwork.resource}
       <img
         class="mshadow-sm  rounded-sm object-cover {size == 'sm'
@@ -57,8 +57,9 @@
     >
       {#if $$props.background && track.artwork}
         <div
-          class="absolute w-full z-1 inset-0 blur-2xl h-full filter opacity-25"
-          style="background:url('{track.artwork.resource}') center center no-repeat;"
+          class="absolute w-full z-1 inset-0 blur-3xl h-full filter "
+          style="background:url('{track.artwork
+            .resource}') center center;backround-size:cover"
         />
       {/if}
       {#if $$props.slot}
@@ -72,7 +73,7 @@
             {#if track.artistTracks && track.artistTracks.length > 0}
               <div class="mt-2 flex space-x-2">
                 {#each track.artistTracks as artist}
-                  <Artist artist={artist.user} socials size="sm" theme="light"
+                  <Artist artist={artist.user} socials size="sm" theme="glass"
                     >{artist.user.nickName}</Artist
                   >
                 {/each}

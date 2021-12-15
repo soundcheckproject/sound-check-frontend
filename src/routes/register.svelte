@@ -155,9 +155,6 @@
     validationStore.set(errors)
   }
 
-  $: {
-    console.log(userRegister.nickName)
-  }
 </script>
 
 <svelte:head>

@@ -1,0 +1,130 @@
+{
+  "language": "Nederlands",
+  "code": "nl",
+  "flag": "🇧🇪",
+  "pages": {
+    "header": {
+      "home": "Home",
+      "about": "About",
+      "releases": "Releases",
+      "contact": "Contact",
+      "info": "Info",
+      "artists": "Artiesten"
+    },
+    "home": {
+      "title": "Home",
+      "description": "Beschrijving",
+      "learnmore": "Toon meer",
+      "latest": "Nieuwste releases",
+      "by": "van",
+      "what": "Wat is "
+    },
+    "contact": {
+      "title": "Contact",
+      "touch": "Kom met ons in contact!",
+      "description": [
+        "Als label houden wij ervan om met ons fans interactief bezig te zijn.",
+        "Als je vragen of suggesties hebt, houd ons dan zeker op de hoogte!"
+      ],
+      "company": "Bedrijfsinformatie",
+      "press": "Pers",
+      "stylingkit": "Stijlgids",
+      "form": {
+        "topic": "Onderwerp",
+        "topic_placeholder": "Royalties, demo, promo, ..",
+        "question": "Wat is je vraag",
+        "question_placeholder": "Bijvoorbeeld: Ik heb interesse om te weten hoe..",
+        "submit": "Verstuur vraag!"
+      }
+    },
+    "footer": { "madeby": "Gemaakt door" },
+    "register": {
+      "title": "Maak een account",
+      "description": [
+        "Als je muziek wil submitten voor het label, dan heb je een account nodig. Het is gratis!",
+        "Ons team zal zo snel mogelijk aan de slag gaan om jouw track te reviewen en je zal kunnen zien of je track geaccepteerd is voor een release op het label."
+      ],
+      "register": "Maak account",
+      "additional": "Bijhorende informatie",
+      "privacy": "Als je een account aanmaakt, geef je het label de permissie om deze informatie te gebruiken om het platform.",
+      "form": {
+        "name": "Naam",
+        "email": "E-mail",
+        "password": "Wachtwoord",
+        "password_confirm": "Bevestig wachtwoord",
+        "submit": "Maak account",
+        "nickname": "Wat is je artiesten naam, hoe wil je jezelf noemen?",
+        "nickname_placeholder": "Kies een artiestennaam",
+        "password_confirm_placeholder": "Wachtwoord opnieuw",
+        "password_strong": "Sterk wachtwoord",
+        "birthdate": "Geboortedag",
+        "firstname": "Voornaam",
+        "surname": "Achternaam",
+        "country": "Land",
+        "state": "Provincie",
+        "street": "Straat",
+        "city": "Stad",
+        "biography": "Biografie",
+        "biography_placeholder": "Over jou",
+        "loading": "Account aanmaken"
+      }
+    },
+    "login": {
+      "title": "Login met je account",
+      "form": {
+        "email": "E-mail adres",
+        "password": "Wachtwoord",
+        "password_placeholder": "Geef wachtwoord in..",
+        "submit": "Inloggen"
+      },
+      "forgot": "Wachtwoord vergeten",
+      "remember": "Onthoud mij"
+    },
+    "forgot": {
+      "title": "Wachtwoord vergeten",
+      "description": [
+        "Vul jouw email address in en verkrijg een link om je wachtwoord te kunnen resetten.",
+        "Deel deze link met niemand. Iedereen met deze link kan je wachtwoord resetten."
+      ],
+      "form": {
+        "email": "Email address",
+        "example": "Bv.",
+        "submit": "Vraag nieuw wachtwoord"
+      },
+      "send":"Email verzonden.",
+      "back": "Terug naar login"
+    },
+    "errors": {
+      "connection_graphql": "Er is een fout opgetreden bij het verbinden met de database. ",
+      "email": "Email is niet lang genoeg",
+      "password": "Wachtwoord is niet lang genoeg",
+      "password_confirm": "Wachtwoord komt niet overeen",
+      "password_strong": "Wachtwoord is niet sterk genoeg",
+      "nickname": "Artiestennaam is niet lang genoeg",
+      "firstname": "Voornaam is niet lang genoeg",
+      "surname": "Achternaam is niet lang genoeg",
+      "street": "Straat is niet lang genoeg",
+      "city": "Stad is niet lang genoeg",
+      "biography": "Biografie is niet lang genoeg",
+      "country": "Land is niet lang genoeg",
+      "state": "Provincie is niet lang genoeg",
+      "birthdate": "Geboortedatum is niet lang genoeg",
+      "email_invalid": "Email is niet geldig",
+      "email_taken": "Email is al in gebruik",
+      "email_required": "Email is verplicht",
+      "password_required": "Wachtwoord is verplicht",
+      "nickname_required": "Artiestennaam is verplicht",
+      "firstname_required": "Voornaam is verplicht",
+      "surname_required": "Achternaam is verplicht",
+      "street_required": "Straat is verplicht",
+      "city_required": "Stad is verplicht",
+      "biography_required": "Biografie is verplicht",
+      "country_required": "Land is verplicht",
+      "state_required": "Provincie is verplicht",
+      "birthdate_required": "Geboortedatum is verplicht",
+      "birthdate_invalid": "Geboortedatum is niet geldig",
+      "general_login":"Kon niet inloggen met opgegeven gegevens. Probeer opnieuw."
+      
+    }
+  }
+}

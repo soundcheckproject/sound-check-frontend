@@ -35,10 +35,12 @@
   import {
     validateEmailValid,
     validateEmpty,
+    validateEqualityNumbers,
     validateError,
     validateErrors,
     validateErrorTime,
     validateLength,
+    validateStartLower,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
@@ -52,6 +54,11 @@
 
   let track: TrackType
   let newTrack: TrackType
+
+  let newAudio = {
+    previewStart: 0,
+    previewStop: 0,
+  }
 
   let prefferedReleaseDateString: string
 
@@ -121,6 +128,8 @@
         title: newTrack.title,
         description: newTrack.description,
         genreId: newTrack.genreId,
+        previewStart: newTrack.previewStart,
+        previewStop: newTrack.previewStop,
         artistTracks: [],
       }
 
@@ -148,13 +157,6 @@
   let genres: GenreType[] = []
 
   let artists: ArtistType[] = []
-
-  const searchArtistByNickName = async () => {
-    if (artistSearch.nickName.length > 0) {
-      artists = await getArtistsByNickName(artistSearch.nickName)
-      artists = artists.filter(artist => artist.uuid !== artistsArray[0].uuid)
-    }
-  }
 
   const updateArtwork = async () => {
     loadingStatus.artwork = true
@@ -207,6 +209,20 @@
       //     .pop()
       await uploadTrack(trackData.blob[0], trackData.blob[0].name, track.uuid)
         .then(async res => {
+          // todo: update previewpart
+          const updatedPreview = {
+            previewStart: newTrack.previewStart,
+            previewStop: newTrack.previewStop,
+          }
+          await updateTrack(track.uuid, updatedPreview)
+            .catch(e => {
+              // errors = validateError('connection', 'graphql', false, errors)
+              validateErrorTime('connection', 'graphql', errors)
+            })
+            .finally(() => {
+              loadingStatus.track = false
+            })
+
           console.log(res)
         })
         .catch(error => {
@@ -224,15 +240,27 @@
 
   let errors: string[] = []
   const checkValidation = (type: string) => {
-    for (const errorType of [
-      'title',
-      'description',
-      'lyrics',
-      'genreId',
-      // 'prefferdReleaseDate',
-    ]) {
-      console.log(newTrack[type])
-      // errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+    if (type === 'previewpart') {
+      console.log(newTrack.previewStart, newTrack.previewStop)
+      errors = validateErrors(
+        [
+          validateStartLower(newTrack.previewStart, newTrack.previewStop),
+          validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
+        ],
+        type,
+        errors,
+      )
+    } else {
+      for (const errorType of [
+        'title',
+        'description',
+        'lyrics',
+        'genreId',
+        // 'prefferdReleaseDate',
+      ]) {
+        console.log(newTrack[type])
+        // errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+      }
     }
   }
 
@@ -348,82 +376,114 @@
               title="Lyrics of your track"
               placeholder="For example: “I’m in love with the shape of you..“"
             />
-          </div>
-
-          <SubTitle>👨🏼‍🎨 Artists</SubTitle>
-          <div class="grid gap-4">
-            {#if track.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
-              <div class="grid gap-4">
-                <div class="grid gap-4">
-                  {#if artistsArray.length > 0}
-                    <InputError errorInput="artist" />
-                    <div
-                      class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                      transition:fade|local
-                    >
-                      <p class="">Artist(s)</p>
-                      <p class="font-semibold text-right ">
-                        Royalties {royaltySplitotal}%
-                      </p>
-                    </div>
-
-                    {#if royaltySplitotal != 100}
-                      <SubTitle theme="error"
-                        >Total royalties should be equal to 100</SubTitle
-                      >
-                    {/if}
-                  {:else}<div
-                      class="label portal grid  gap-2 "
-                      transition:fade|local
-                    >
-                      <p class="">Add a collaborator</p>
-                    </div>{/if}
-                  {#each artistsArray as artist}
-                    <div
-                      class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                      transition:fade|local
-                    >
-                      <Artist artist={artist.user} size="md" pointer={false}
-                        >{artist.user.nickName}</Artist
-                      >
-                      <div class="relative flex items-center justify-end group">
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
-                          bind:value={artist.royaltySplit}
-                          on:input={() => {
-                            calcRoyaltySplitotal()
-                          }}
-                        />
-                        <svg
-                          class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <line x1="19" y1="5" x2="5" y2="19" />
-                          <circle cx="6.5" cy="6.5" r="2.5" />
-                          <circle cx="17.5" cy="17.5" r="2.5" />
-                        </svg>
-                      </div>
-                    </div>
-                  {/each}
+            <div class="grid gap-4">
+              <div class="label portal">
+                Preview part *
+                <div class="grid gap-4 ">
+                  <div
+                    class="input portal grid grid-cols-3 justify-around items-center"
+                    style="grid-template-colums:1fr min-content 1fr"
+                  >
+                    <input
+                      type="number"
+                      class="p-1 bg-white/0 text-center w-16 mx-auto"
+                      bind:value={newTrack.previewStart}
+                      on:input={() => checkValidation('previewpart')}
+                      min="0"
+                    />
+                    <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
+                    <input
+                      type="number"
+                      class="p-1 bg-white/0 text-center w-16 mx-auto"
+                      bind:value={newTrack.previewStop}
+                      on:input={() => checkValidation('previewpart')}
+                      min="30"
+                    />
+                  </div>
                 </div>
               </div>
-            {:else}
-              <p class="text-sm">
-                Artists and royalties percentages cannot be changed if the track
-                has already been signed.
-              </p>
-            {/if}
+              <InputError errorInput="previewpart" />
+            </div>
+            <div />
+            <div class="grid gap-4 lg:col-span-2">
+              <SubTitle>👨🏼‍🎨 Artists</SubTitle>
+              <div class="grid gap-4 ">
+                {#if track.isSigned == null || ['label-ar', 'label-manager'].includes($roleStore)}
+                  <div class="grid gap-4">
+                    <div class="grid gap-4">
+                      {#if artistsArray.length > 0}
+                        <InputError errorInput="artist" />
+                        <div
+                          class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
+                          transition:fade|local
+                        >
+                          <p class="">Artist(s)</p>
+                          <p class="font-semibold text-right ">
+                            Royalties {royaltySplitotal}%
+                          </p>
+                        </div>
+
+                        {#if royaltySplitotal != 100}
+                          <SubTitle theme="error"
+                            >Total royalties should be equal to 100</SubTitle
+                          >
+                        {/if}
+                      {:else}<div
+                          class="label portal grid  gap-2 "
+                          transition:fade|local
+                        >
+                          <p class="">Add a collaborator</p>
+                        </div>{/if}
+                      {#each artistsArray as artist}
+                        <div
+                          class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
+                          transition:fade|local
+                        >
+                          <Artist artist={artist.user} size="md" pointer={false}
+                            >{artist.user.nickName}</Artist
+                          >
+                          <div
+                            class="relative flex items-center justify-end group"
+                          >
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
+                              bind:value={artist.royaltySplit}
+                              on:input={() => {
+                                calcRoyaltySplitotal()
+                              }}
+                            />
+                            <svg
+                              class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <line x1="19" y1="5" x2="5" y2="19" />
+                              <circle cx="6.5" cy="6.5" r="2.5" />
+                              <circle cx="17.5" cy="17.5" r="2.5" />
+                            </svg>
+                          </div>
+                        </div>
+                      {/each}
+                    </div>
+                  </div>
+                {:else}
+                  <p class="text-sm">
+                    Artists and royalties percentages cannot be changed if the
+                    track has already been signed.
+                  </p>
+                {/if}
+              </div>
+            </div>
           </div>
 
           <div class="flex justify-end space-x-2">
@@ -509,27 +569,38 @@
 
             <div class="grid gap-4 ">
               <SubTitle>💽 Upload track</SubTitle>
-              <div class="label portal opacity-40">
-                Preview part
-                <div
-                  class="input portal grid gap-4 p-2 grid-flow-col grid-cols-3 w-full justify-center items-center"
-                  style="grid-template-columns: 1fr min-content 1fr"
-                >
-                  <input
-                    type="number"
-                    class="p-1 bg-gray-100 text-center w-16"
-                    bind:value={newTrack.previewStart}
-                    min="0"
-                    disabled={true}
-                  />
-                  <div class="w-px rounded-sm h-full bg-gray-200" />
-                  <input
-                    type="number"
-                    class="p-1 bg-gray-100 text-center w-16"
-                    bind:value={newTrack.previewStop}
-                    min="30"
-                    disabled={false}
-                  />
+              <div
+                class="label portal {trackData.blob
+                  ? 'opacity-100'
+                  : 'opacity-40'}"
+              >
+                Preview part *
+                <div class="grid gap-4 ">
+                  <div
+                    class="input portal grid grid-cols-3 justify-around items-center"
+                    style="grid-template-colums:1fr min-content 1fr"
+                  >
+                    <input
+                      type="number"
+                      class="p-1 bg-white/0 text-center w-16 mx-auto"
+                      bind:value={newTrack.previewStart}
+                      on:input={() => checkValidation('previewpart')}
+                      min="0"
+                      disabled={trackData.blob ? false : true}
+                    />
+                    <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
+                    <input
+                      type="number"
+                      class="p-1 bg-white/0 text-center w-16 mx-auto"
+                      bind:value={newTrack.previewStop}
+                      on:input={() => checkValidation('previewpart')}
+                      min="30"
+                      disabled={trackData.blob ? false : true}
+                    />
+                  </div>
+                  {#if trackData.blob}
+                    <InputError errorInput="previewpart" />
+                  {/if}
                 </div>
               </div>
               <InputError errorInput="track" />

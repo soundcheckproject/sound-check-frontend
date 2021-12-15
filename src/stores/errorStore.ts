@@ -1,5 +1,14 @@
 import { readable } from 'svelte/store'
 
+import _, { langStore } from '../stores/languageStore'
+
+let errors: { [key: string]: string }
+_.subscribe(v => {
+  langStore.subscribe(() => {
+    errors = v.errors
+  })
+})
+
 const errorStore = readable<{
   [key: string]: { [key: string]: string | boolean }[]
 }>({
@@ -7,7 +16,9 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'connection_graphql',
-      message: 'Connection with database is not working.',
+      // message: 'Connection with database is not working.',
+
+      message: errors.connection_graphql,
     },
   ],
   email: [
@@ -186,6 +197,17 @@ const errorStore = readable<{
       display: false,
       errorName: 'general_submit',
       message: 'Something went wrong while submitting your track',
+    },
+    {
+      display: false,
+      errorName: 'general_login',
+
+      message: errors.general_login,
+    },
+    {
+      display: false,
+      errorName: 'general_register',
+      message: 'Could not register your account, please try again',
     },
   ],
   update: [

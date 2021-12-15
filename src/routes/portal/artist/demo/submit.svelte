@@ -152,10 +152,11 @@
         type,
         errors,
       )
-    }
-
-    for (const errorType of inputFields) {
-      errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+    } else {
+      for (const errorType of inputFields) {
+        if (errorType == type)
+          errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
+      }
     }
   }
 
@@ -649,13 +650,14 @@
                 : 'opacity-40'}"
             >
               Preview part *
+              <div class="grid gap-4 ">
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
               >
                 <input
                   type="number"
-                  class="p-1 bg-gray-100 text-center w-16 mx-auto"
+                  class="p-1 bg-white/0 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStart}
                   on:input={() => checkValidation('previewpart')}
                   min="0"
@@ -664,7 +666,7 @@
                 <div class="w-1 rounded-sm h-full bg-gray-200 mx-auto" />
                 <input
                   type="number"
-                  class="p-1 bg-gray-100 text-center w-16 mx-auto"
+                  class="p-1 bg-white/0 text-center w-16 mx-auto"
                   bind:value={newTrack.previewStop}
                   on:input={() => checkValidation('previewpart')}
                   min="30"
@@ -672,6 +674,7 @@
                 />
               </div>
               <InputError errorInput="previewpart" />
+              </div>
             </div>
           </div>
           <p class="text-sm text-gray-400">

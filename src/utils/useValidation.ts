@@ -110,20 +110,20 @@ export const validateDate = (input: string): Error => {
 
 export const validateStartLower = (start: number, stop: number): Error => {
   const errorName = 'startlower'
-  const result = { error: errorName, status: false }
+  const result = { error: errorName, status: true }
     if (start && stop)
       if (start > stop) {
-        result.status = true
+        result.status = false
       }
   return result
 }
 
 export const validateEqualityNumbers = (start: number, stop: number): Error => {
   const errorName = 'equalitynumbers'
-  const result = { error: errorName, status: false }
+  const result = { error: errorName, status: true }
   if(start && stop)
     if (start === stop) {
-      result.status = true
+      result.status = false
     }
   return result
 }
