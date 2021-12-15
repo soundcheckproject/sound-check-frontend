@@ -2,9 +2,7 @@ name: Docker build and push dockerhub
 
 on:
   push:
-    branches: [ develop ]
-  # pull_request:
-  #   branches: [ main ]
+    branches: [ main ]
 
 jobs:
 
@@ -25,9 +23,6 @@ jobs:
 
     - name: Test e2e tests
       run: npx cypress run --spec "cypress/integration/home.spec.js"
-
-    - name: Stop dev server
-      run: ^C
 
     - name: Docker login
       env:
