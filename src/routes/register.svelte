@@ -169,7 +169,7 @@
 
       <InputError errorInput="general" />
       <InputError errorInput="connection" />
-      <div class="flex space-x-12 flex-col sm:flex-row " style="">
+      <form class="flex space-x-12 flex-col sm:flex-row " style="">
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
@@ -305,7 +305,7 @@
             className="justify-self-end">{$_.register.form.submit}</Button
           >
         </div>
-      </div>
+      </form>
     </article>
   </section>
 </Container>
