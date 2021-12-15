@@ -53,9 +53,23 @@
         "privacy": "If you register an account, then you give the label the permission to use your data on this platform.",
         "form": {
           "name": "Artistname",
-          "email": "Email",
+          "nickname": "What's your artist name / nickname you wan to use?",
+          "nickname_placeholder": "Choose a nickname",
+          "email": "Email address",
           "password": "Password",
           "password_confirm": "Confirm password",
+          "password_confirm_placeholder": "Password again",
+          "password_strong": "Strong password",
+          "birthdate": "Birthdate",
+          "firstname": "Firstname",
+          "surname": "Surname",
+          "country": "Country",
+          "state": "State",
+          "street": "Street",
+          "city": "City",
+          "biography": "Biography",
+          "biography_placeholder": "About you",
+          "loading": "Creating account",
           "submit": "Create account"
         }
       },
@@ -126,7 +140,21 @@
           "email": "E-mail",
           "password": "Wachtwoord",
           "password_confirm": "Bevestig wachtwoord",
-          "submit": "Maak account"
+          "submit": "Maak account",
+          "nickname": "Wat is je artiesten naam, hoe wil je jezelf noemen?",
+          "nickname_placeholder": "Kies een artiestennaam",
+          "password_confirm_placeholder": "Wachtwoord opnieuw",
+          "password_strong": "Sterk wachtwoord",
+          "birthdate": "Geboortedag",
+          "firstname": "Voornaam",
+          "surname": "Achternaam",
+          "country": "Country",
+          "state": "Provincie",
+          "street": "Straat",
+          "city": "Stad",
+          "biography": "Biografie",
+          "biography_placeholder": "Over jou",
+          "loading": "Account aanmaken"
         }
       },
       "login": {
