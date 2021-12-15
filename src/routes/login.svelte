@@ -26,7 +26,8 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import _ from '../stores/languageStore'
 
-  let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+    let user = { email: '', password: '' }
+  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
@@ -150,7 +151,7 @@
                 onClick={login}
                 rounded="none"
                 color="bg-teal-700"
-                className="justify-self-end">{$_.login.form.submit}</Button
+                className="login-btn justify-self-end">{$_.login.form.submit}</Button
               >
             </div>
           </div>
