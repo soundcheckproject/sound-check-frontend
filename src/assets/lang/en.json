@@ -1,88 +1,91 @@
 {
-    "language": "English",
-    "code": "en",
-    "flag": "🇺🇸",
-    "pages": {
-      "header": {
-        "home": "Home",
-        "about": "About",
-        "releases": "Releases",
-        "contact": "Contact",
-        "info": "Info",
-        "artists": "Artists",
-        "portal": "Portal"
-      },
-      "home": {
-        "title": "Home",
-        "description": "description",
-        "learnmore": "Learn more",
-        "latest": "Latest releases",
-        "by": "by",
-        "what": "What is "
-      },
-      "contact": {
-        "title": "Contact",
-        "touch": "Get in touch with us!",
-        "description": [
-          "As a label we like to interact with our fans and future artists.",
-          "If you have any questions or suggestions, don't hesitate to contact us!"
-        ],
-        "company": "Company information",
-        "press": "Press",
-        "stylingkit": "Styling kit",
-        "form": {
-          "topic": "Topic",
-          "topic_placeholder": "Royalties, demo, promo, ..",
-          "question": "What's your question?",
-          "question_placeholder": "For example: I'm interested to know how..",
-          "submit": "Send question!"
-        }
-      },
-      "footer": { "madeby": "Made by" },
-      "artists": { "title": "Artiesten" },
+  "language": "English",
+  "code": "en",
+  "flag": "🇺🇸",
+  "pages": {
+    "header": {
+      "home": "Home",
+      "about": "About",
+      "releases": "Releases",
+      "contact": "Contact",
+      "info": "Info",
+      "artists": "Artists",
+      "portal": "Portal"
+    },
+    "home": {
+      "title": "Home",
+      "description": "description",
+      "learnmore": "Learn more",
+      "latest": "Latest releases",
+      "by": "by",
+      "what": "What is "
+    },
+    "contact": {
+      "title": "Contact",
+      "touch": "Get in touch with us!",
+      "description": [
+        "As a label we like to interact with our fans and future artists.",
+        "If you have any questions or suggestions, don't hesitate to contact us!"
+      ],
+      "company": "Company information",
+      "press": "Press",
+      "stylingkit": "Styling kit",
+      "form": {
+        "topic": "Topic",
+        "topic_placeholder": "Royalties, demo, promo, ..",
+        "question": "What's your question?",
+        "question_placeholder": "For example: I'm interested to know how..",
+        "submit": "Send question!"
+      }
+    },
+    "footer": { "madeby": "Made by" },
+    "artists": { "title": "Artiesten" },
 
-      "register": {
-        "title": "Register account",
-        "description": [
-          "If you want to submit your music to Ethereal, then you'll need to create an account. It's free!",
-          "Our team will review your track as soon as possible and you'll be able to see if your track has been accepted for a release on the label."
-        ],
-        "register": "Create account",
-        "additional": "Additional information",
-        "privacy": "If you register an account, then you give the label the permission to use your data on this platform.",
-        "form": {
-          "name": "Artistname",
-          "nickname": "What's your artist name / nickname you wan to use?",
-          "nickname_placeholder": "Choose a nickname",
-          "email": "Email address",
-          "password": "Password",
-          "password_confirm": "Confirm password",
-          "password_confirm_placeholder": "Password again",
-          "password_strong": "Strong password",
-          "birthdate": "Birthdate",
-          "firstname": "Firstname",
-          "surname": "Surname",
-          "country": "Country",
-          "state": "State",
-          "street": "Street",
-          "city": "City",
-          "biography": "Biography",
-          "biography_placeholder": "About you",
-          "loading": "Creating account",
-          "submit": "Create account"
-        }
+    "register": {
+      "title": "Register account",
+      "description": [
+        "If you want to submit your music to Ethereal, then you'll need to create an account. It's free!",
+        "Our team will review your track as soon as possible and you'll be able to see if your track has been accepted for a release on the label."
+      ],
+      "register": "Create account",
+      "additional": "Additional information",
+      "privacy": "If you register an account, then you give the label the permission to use your data on this platform.",
+      "form": {
+        "name": "Artistname",
+        "nickname": "What's your artist name / nickname you wan to use?",
+        "nickname_placeholder": "Choose a nickname",
+        "email": "Email address",
+        "password": "Password",
+        "password_confirm": "Confirm password",
+        "password_confirm_placeholder": "Password again",
+        "password_strong": "Strong password",
+        "birthdate": "Birthdate",
+        "firstname": "Firstname",
+        "surname": "Surname",
+        "country": "Country",
+        "state": "State",
+        "street": "Street",
+        "city": "City",
+        "biography": "Biography",
+        "biography_placeholder": "About you",
+        "loading": "Creating account",
+        "submit": "Create account"
+      }
+    },
+    "login": {
+      "title": "Login with account",
+      "form": {
+        "email": "Email address",
+        "password": "Password",
+        "password_placeholder": "Enter password..",
+        "submit": "Login"
       },
-      "login": {
-        "title": "Login with account",
-        "form": {
-          "email": "Email address",
-          "password": "Password",
-          "password_placeholder": "Enter password..",
-          "submit": "Login"
-        },
-        "forgot": "Forgot password",
-        "remember": "Remember me"
-      },
-      "error": {}
+      "forgot": "Forgot password",
+      "remember": "Remember me"
+    },
+    "errors": {
+      "connection_graphql": "Connection with database is not working.",
+      "general_login": "Could not login with credentials. Please try again"
     }
   }
+}

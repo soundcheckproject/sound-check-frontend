@@ -79,6 +79,38 @@
       },
       "forgot": "Wachtwoord vergeten",
       "remember": "Onthoud mij"
+    },
+    "errors": {
+      "connection_graphql": "Er is een fout opgetreden bij het verbinden met de database. ",
+      "email": "Email is niet lang genoeg",
+      "password": "Wachtwoord is niet lang genoeg",
+      "password_confirm": "Wachtwoord komt niet overeen",
+      "password_strong": "Wachtwoord is niet sterk genoeg",
+      "nickname": "Artiestennaam is niet lang genoeg",
+      "firstname": "Voornaam is niet lang genoeg",
+      "surname": "Achternaam is niet lang genoeg",
+      "street": "Straat is niet lang genoeg",
+      "city": "Stad is niet lang genoeg",
+      "biography": "Biografie is niet lang genoeg",
+      "country": "Land is niet lang genoeg",
+      "state": "Provincie is niet lang genoeg",
+      "birthdate": "Geboortedatum is niet lang genoeg",
+      "email_invalid": "Email is niet geldig",
+      "email_taken": "Email is al in gebruik",
+      "email_required": "Email is verplicht",
+      "password_required": "Wachtwoord is verplicht",
+      "nickname_required": "Artiestennaam is verplicht",
+      "firstname_required": "Voornaam is verplicht",
+      "surname_required": "Achternaam is verplicht",
+      "street_required": "Straat is verplicht",
+      "city_required": "Stad is verplicht",
+      "biography_required": "Biografie is verplicht",
+      "country_required": "Land is verplicht",
+      "state_required": "Provincie is verplicht",
+      "birthdate_required": "Geboortedatum is verplicht",
+      "birthdate_invalid": "Geboortedatum is niet geldig",
+      "general_login":"Kon niet inloggen met opgegeven gegevens. Probeer opnieuw."
+      
     }
   }
 }

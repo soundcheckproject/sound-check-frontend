@@ -1,5 +1,12 @@
 import { readable } from 'svelte/store'
 
+import _, { langStore } from '../stores/languageStore'
+
+let errors: { [key: string]: string }
+_.subscribe(v => {
+  errors = v.errors
+})
+
 const errorStore = readable<{
   [key: string]: { [key: string]: string | boolean }[]
 }>({
@@ -7,7 +14,9 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'connection_graphql',
-      message: 'Connection with database is not working.',
+      // message: 'Connection with database is not working.',
+
+      message: errors.connection_graphql,
     },
   ],
   email: [
@@ -190,7 +199,8 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'general_login',
-      message: 'Could not login with credentials, please try again',
+
+      message: errors.general_login,
     },
     {
       display: false,
