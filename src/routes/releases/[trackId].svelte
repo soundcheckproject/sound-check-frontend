@@ -72,7 +72,7 @@
     <section>
       <article class="grid gap-6">
         {#if track}
-          <TrackPlayer feedback={false} {track} />
+          <TrackPlayer feedback={false} {track} status={false} />
           <Box>
             <div class="grid gap-6 lg:grid-cols-2 items-start">
               <div class="grid gap-4">

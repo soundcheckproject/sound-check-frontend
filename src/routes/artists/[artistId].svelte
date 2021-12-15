@@ -186,6 +186,7 @@
                       artists
                       href="/releases/{track.uuid}"
                       size="lg"
+                      status={false}
                       {track}
                     />
                     <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->

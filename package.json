@@ -10,7 +10,8 @@
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
     "test": "jest src --config ./jest.config.cjs",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "cypress:open": "cypress open"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
@@ -42,6 +43,8 @@
     "@typescript-eslint/parser": "^4.31.1",
     "autoprefixer": "^10.3.7",
     "babel-jest": "^27.4.2",
+    "chance": "^1.1.8",
+    "cypress": "^9.1.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",

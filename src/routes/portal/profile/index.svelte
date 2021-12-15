@@ -400,7 +400,7 @@
 </script>
 
 <svelte:head>
-	<title>{`${artist ? artist.nickName : ''} - Profile`}</title>
+  <title>{`${artist ? artist.nickName : ''} - Profile`}</title>
 </svelte:head>
 
 <div class="grid gap-8">
@@ -532,65 +532,6 @@
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
                   <p>Click to upload or drag your logo here..</p>
-                {/if}
-
-                <input
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  bind:this={logoClick}
-                  bind:files={logoBlob}
-                  on:change={e => previewLogo(e)}
-                  class="hidden"
-                  placeholder=""
-                />
-              </div>
-            </div>
-            <div class="flex justify-end">
-              <Button
-                color="bg-teal-700"
-                onClick={() => {
-                  updateLogo()
-                }}
-                loading={loadingStatus.logo ? 'Updating logo..' : null}
-                >Update logo</Button
-              >
-            </div>
-          </div>
-          <!-- // todo: add  header -->
-          <div class="grid gap-6 opacity-30">
-            <div class="label portal w-full">
-              Upload banner
-              <div
-                class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
-                on:click={() => logoClick.click()}
-              >
-                {#if logoBlob}
-                  <img
-                    class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3"
-                    src={logoPreview}
-                    alt="Preview of logo"
-                  />
-                  <p class="text-teal-700 font-medium">
-                    Logo has been selected. Press update logo to submit!
-                  </p>
-                {:else}
-                  <svg
-                    class="-mt-px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                    <polyline points="17 8 12 3 7 8" />
-                    <line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
-                  <p>Click to upload or drag your artwork here..</p>
                 {/if}
 
                 <input

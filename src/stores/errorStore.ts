@@ -10,7 +10,6 @@ const errorStore = readable<{
       message: 'Connection with database is not working.',
     },
   ],
-
   email: [
     {
       display: false,
@@ -21,6 +20,11 @@ const errorStore = readable<{
       display: false,
       errorName: 'email_valid',
       message: 'Email is not valid',
+    },
+    {
+      display: false,
+      errorName: 'email_empty',
+      message: 'Please fill in a email',
     },
   ],
   password: [
@@ -63,6 +67,11 @@ const errorStore = readable<{
       display: false,
       errorName: 'password_lower',
       message: 'Password should contain at least 1 uppercase letter',
+    },
+    {
+      display: false,
+      errorName: 'password_empty',
+      message: 'Please fill in a password',
     },
   ],
   nickname: [
@@ -230,6 +239,18 @@ const errorStore = readable<{
       display: false,
       errorName: 'track_upload',
       message: 'Error while uploading artwork',
+    },
+  ],
+  previewpart: [
+    {
+      display: false,
+      errorName: 'previewpart_startlower',
+      message: 'Start must be lower then stop',
+    },
+    {
+      display: false,
+      errorName: 'previewpart_equalitynumbers',
+      message: "Start and stop can't be equal",
     },
   ],
 })

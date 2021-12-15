@@ -11,8 +11,8 @@
   import Footer from '../../components/Footer.svelte'
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Title from '../../components/Title.svelte'
-  import ButtonBox from '../../components/ButtonBox.svelte'
-import { labelStore } from '../../stores/stores';
+
+  import _ from '../../stores/languageStore'
 
   let searchNickname: string = ''
   let artists: UserType[] = []
@@ -33,7 +33,7 @@ import { labelStore } from '../../stores/stores';
           }
       }`,
     )
-      console.log(data)
+    console.log(data)
     if (data) {
       artists = data
       artistsDisplay = artists
@@ -56,7 +56,7 @@ import { labelStore } from '../../stores/stores';
 </script>
 
 <svelte:head>
-	<title>Artists</title>
+  <title>{$_.header.artists}</title>
 </svelte:head>
 
 <Header type="split" />
@@ -96,7 +96,7 @@ import { labelStore } from '../../stores/stores';
       <Container>
         <Title>
           <div class="flex items-center justify-between">
-            <div>Artists</div>
+            <div>{$_.header.artists}</div>
             <form on:submit={prevent_default} class="relative">
               <label class="relative w-48 flex items-center">
                 <input
@@ -128,7 +128,6 @@ import { labelStore } from '../../stores/stores';
         <section class="grid gap-6">
           <div class="grid grid-cols-repeat-min-12rem gap-6">
             {#if artistsDisplay}
-            
               {#each artistsDisplay as artist, i}
                 {#if i < artistsPerPage}
                   <ArtistCard {artist} />

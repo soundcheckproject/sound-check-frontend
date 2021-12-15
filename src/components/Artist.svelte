@@ -17,9 +17,10 @@
 </script>
 
 {#if artist}
-  <div
+  <button
+    
     on:click={onClick}
-    class="inline"
+    class="inline focus-ring rounded-full"
     on:mouseenter={() => {
       hover = true
     }}
@@ -140,5 +141,5 @@
         </div>
       {/if}
     </div>
-  </div>
+  </button>
 {/if}

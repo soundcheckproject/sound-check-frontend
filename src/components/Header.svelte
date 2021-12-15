@@ -1,4 +1,10 @@
 <script lang="ts">
+  import _, {
+    languageStore,
+    langStore,
+    translationsStore,
+  } from '../stores/languageStore'
+
   import Container from './Container.svelte'
   import Navigation from './Navigation.svelte'
 
