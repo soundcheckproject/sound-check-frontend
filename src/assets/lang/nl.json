@@ -80,6 +80,20 @@
       "forgot": "Wachtwoord vergeten",
       "remember": "Onthoud mij"
     },
+    "forgot": {
+      "title": "Wachtwoord vergeten",
+      "description": [
+        "Vul jouw email address in en verkrijg een link om je wachtwoord te kunnen resetten.",
+        "Deel deze link met niemand. Iedereen met deze link kan je wachtwoord resetten."
+      ],
+      "form": {
+        "email": "Email address",
+        "example": "Bv.",
+        "submit": "Vraag nieuw wachtwoord"
+      },
+      "send":"Email verzonden.",
+      "back": "Terug naar login"
+    },
     "errors": {
       "connection_graphql": "Er is een fout opgetreden bij het verbinden met de database. ",
       "email": "Email is niet lang genoeg",

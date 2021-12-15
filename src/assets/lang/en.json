@@ -83,7 +83,23 @@
       "forgot": "Forgot password",
       "remember": "Remember me"
     },
+    "forgot": {
+      "title": "Forgot password",
+      "description": [
+        "Enter your email address and we'll send you a link to reset your password.",
+        "Don't show this link to anyone. With this link they can reset your password."
+      ],
+      "form": {
+        "email": "Email address",
+        "example": "e.g.",
+        "submit": "Ask for new password"
+      },
+      "send":"Email sended.",
+      "back": "Return to login"
+    },
+
     "errors": {
+      "forgot_error":"Could not send reset link to this email.",
       "connection_graphql": "Connection with database is not working.",
       "general_login": "Could not login with credentials. Please try again"
     }
