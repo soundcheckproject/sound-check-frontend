@@ -24,7 +24,7 @@ jobs:
       run: npm run test
 
     - name: Test e2e tests
-      run: npx cypress run
+      run: npx cypress run --spec "cypress/integration/home.spec.js"
 
     - name: Stop dev server
       run: ^C
