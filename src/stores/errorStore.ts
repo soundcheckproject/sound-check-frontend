@@ -187,6 +187,16 @@ const errorStore = readable<{
       errorName: 'general_submit',
       message: 'Something went wrong while submitting your track',
     },
+    {
+      display: false,
+      errorName: 'general_login',
+      message: 'Could not login with credentials, please try again',
+    },
+    {
+      display: false,
+      errorName: 'general_register',
+      message: 'Could not register your account, please try again',
+    },
   ],
   update: [
     {

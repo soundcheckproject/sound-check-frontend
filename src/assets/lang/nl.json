@@ -44,6 +44,7 @@
         "Als je muziek wil submitten voor het label, dan heb je een account nodig. Het is gratis!",
         "Ons team zal zo snel mogelijk aan de slag gaan om jouw track te reviewen en je zal kunnen zien of je track geaccepteerd is voor een release op het label."
       ],
+      "register": "Maak account",
       "additional": "Bijhorende informatie",
       "privacy": "Als je een account aanmaakt, geef je het label de permissie om deze informatie te gebruiken om het platform.",
       "form": {
@@ -59,7 +60,7 @@
         "birthdate": "Geboortedag",
         "firstname": "Voornaam",
         "surname": "Achternaam",
-        "country": "Country",
+        "country": "Land",
         "state": "Provincie",
         "street": "Straat",
         "city": "Stad",

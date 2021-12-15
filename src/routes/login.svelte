@@ -51,7 +51,7 @@
           await goto('/portal')
         })
         .catch(e => {
-          validateErrorTime('connection', 'graphql', errors)
+          validateErrorTime('general', 'login', errors)
         })
     } else {
       validateErrorTime('general', 'errors', errors)

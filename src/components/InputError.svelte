@@ -17,6 +17,7 @@
         <div
           in:fade={{ duration: 200, delay: 200 }}
           out:fade={{ duration: 200 }}
+          class="-mt-2"
         >
           <Error
             onClose={error == errorInput + '_available'
