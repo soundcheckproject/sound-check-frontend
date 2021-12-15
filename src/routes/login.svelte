@@ -100,7 +100,7 @@
             >
           </div>
 
-          <div
+          <form
             class="grid gap-4 bg-gray-100 -mx-12 p-12 rounded-md sm:w-full lg:w-96 box-content justify-self-end"
           >
             <SubTitle theme="dark">⌛️ {$_.login.title}</SubTitle>
@@ -117,6 +117,7 @@
                 checkValidation('email')
               }}
               placeholder={$_.login.form.email + '..'}
+              required
             />
             <!-- on:change={() => {
               checkValidation('email')
@@ -135,6 +136,7 @@
               }}
               placeholder={$_.login.form.password_placeholder}
               autocomplete="current-password"
+              required
             />
             <a
               href="/forgotpassword"
@@ -173,10 +175,11 @@
                 rounded="none"
                 color="bg-teal-700"
                 className="login-btn justify-self-end"
+         
                 >{$_.login.form.submit}</Button
               >
             </div>
-          </div>
+          </form>
         </div>
       </article>
     </section>

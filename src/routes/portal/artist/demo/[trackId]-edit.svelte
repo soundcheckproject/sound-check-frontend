@@ -318,7 +318,7 @@
 
           <SubTitle>📝 Information about your track</SubTitle>
 
-          <div class="grid lg:grid-cols-2 gap-4">
+          <form class="grid lg:grid-cols-2 gap-4">
             <Input
               bind:value={newTrack.title}
               title="Create a title"
@@ -484,23 +484,23 @@
                 {/if}
               </div>
             </div>
-          </div>
-
-          <div class="flex justify-end space-x-2">
-            <Button
+            
+            <div class="flex justify-end space-x-2">
+              <Button
               color="bg-gray-600"
               onClick={() => {
                 goto($page.path)
               }}>Cancel changes</Button
             >
             <Button
-              color="bg-teal-700"
-              onClick={postTrack}
-              size="sm"
-              loading={loadingStatus.track ? 'Updating track..' : null}
-              >Update track</Button
+            color="bg-teal-700"
+            onClick={postTrack}
+            size="sm"
+            loading={loadingStatus.track ? 'Updating track..' : null}
+            >Update track</Button
             >
           </div>
+        </form>
         </Box><Box>
           <div class="grid gap-8 lg:grid-cols-2">
             <!-- <figure /> -->

@@ -564,7 +564,7 @@
       <SubTitle>Social media channels</SubTitle>
       <div class="grid gap-6">
         <div class="grid lg:grid-cols-2 gap-6">
-          <div class="grid gap-4 auto-rows-min items-start">
+          <form class="grid gap-4 auto-rows-min items-start">
             <InputError errorInput="update" />
             <label class="portal"
               >Pick a channel
@@ -595,7 +595,7 @@
                 }}>Add link</Button
               >
             </div>
-          </div>
+          </form>
           <div class="grid auto-rows-min gap-4">
             {#if newArtist.userLinks.length == 0}
               <div class="input portal mt-7">
