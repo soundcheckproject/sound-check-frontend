@@ -36,7 +36,7 @@
       <NavigationLink href="/login">Portal</NavigationLink>
       <div class="absolute hidden group-focus:block group-hover:block pt-3">
         <div
-          class="text-white bg-gray-500 hover:bg-gray-700 grid gap-2 text-xs px-5 py-4 rounded-md -ml-4"
+          class="text-white bg-gray-900/40 backdrop-blur-2xl  grid gap-2 text-xs px-5 py-4 rounded-md -ml-4"
         >
           <NavigationLink href="/login">login</NavigationLink>
           <NavigationLink href="/register">register</NavigationLink>

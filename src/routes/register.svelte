@@ -31,6 +31,8 @@
   import InputError from '../components/InputError.svelte'
   import { formatDateToDDMMJJJJ } from '../utils/useFormat'
 
+  import _ from '../stores/languageStore'
+
   let birthDateString = formatDateToDDMMJJJJ(new Date())
 
   let userRegister: UserType = {
@@ -166,7 +168,7 @@
 <Container>
   <section>
     <article>
-      <Title theme="dark">Register account</Title>
+      <Title theme="dark">{$_.register.title}</Title>
 
       <InputError errorInput="general" />
       <InputError errorInput="connection" />
@@ -174,183 +176,136 @@
         <div
           class="grid gap-4 auto-rows-min bg-gray-100 p-12 rounded-md box-content justify-self-end "
         >
-          <SubTitle theme="dark">📝 Create account</SubTitle>
+          <SubTitle theme="dark">📝 {$_.register.register}</SubTitle>
 
           <Input
             bind:value={userRegister.email}
-            title="Email address"
+            title={$_.register.form.email}
             type="email"
             errorInput="email"
             portal=""
             on:input={() => {
               checkValidation('email')
             }}
-            placeholder="Email address.."
+            placeholder={$_.register.form.email + '..'}
             required
           />
-          <!-- <label
-            >Password<input
-              bind:value={userRegister.password}
-              class="input"
-              type="password"
-              placeholder="Password.."
-            /></label
-          > -->
+
           <Input
             errorInput={'password'}
-            title="Password"
+            title={$_.register.form.password}
             bind:value={userRegister.password}
             portal=""
             on:input={() => checkValidation('password')}
-            placeholder="Strong password.."
+            placeholder={$_.register.form.password_strong + '..'}
             type="password"
             required
           />
           <Input
-            title="Password validate"
+            title={$_.register.form.password_confirm}
             bind:value={passwordCheck}
             portal=""
             on:input={() => checkValidation('password')}
-            placeholder="Password again.."
+            placeholder={$_.register.form.password_confirm_placeholder + '..'}
             type="password"
             required
           />
 
-          <!-- <label
-            >Password again<input
-              bind:value={passwordCheck}
-              on:input={() => checkValidation('password')}
-              class="input"
-              type="password"
-              placeholder="Password again.."
-            /></label
-          > -->
           <Input
             errorInput={'birthdate'}
-            title="Birthdate"
+            title={$_.register.form.birthdate}
             bind:value={birthDateString}
             portal=""
-            placeholder="Birthdate.."
+            placeholder={$_.register.form.birthdate + '..'}
             type="date"
             required
           />
-          <!-- <label
-            >Birthdate<input
-              bind:value={userRegister.birthdate}
-              class="input"
-              placeholder="Birthdate.."
-              type="date"
-            /></label
-          > -->
         </div>
         <div class="grid gap-4 py-12  w-full">
-          <SubTitle theme="dark">🏡 Additional info</SubTitle>
-          <!-- <label
-            >What's your artistname?<input
-              bind:value={userRegister.nickName}
-              class="input"
-              placeholder="Artist name.."
-            /></label
-          > -->
+          <SubTitle theme="dark">🏡 {$_.register.additional}</SubTitle>
+
           <Input
             errorInput={'nickname'}
-            title="What's your artistname / nickname?"
+            title={$_.register.form.nickname}
             bind:value={userRegister.nickName}
             portal=""
             on:input={() => checkValidation('nickname')}
-            placeholder="Choose a nickname.."
+            placeholder={$_.register.form.nickname_placeholder + '..'}
             required
           />
           <div class="grid md:grid-cols-2 gap-4">
             <Input
               errorInput={'firstName'}
-              title="First name"
+              title={$_.register.form.firstname}
               bind:value={userRegister.firstName}
               portal=""
               on:input={() => checkValidation('firstName')}
-              placeholder="First name.."
+              placeholder={$_.register.form.firstname + '..'}
               required
             />
-            <!-- <label
-              >First name<input
-                bind:value={userRegister.firstName}
-                class="input"
-                placeholder="First name.."
-              /></label
-            > -->
+
             <Input
               errorInput={'surName'}
-              title="Last name"
+              title={$_.register.form.surname}
               bind:value={userRegister.surName}
               portal=""
               on:input={() => checkValidation('surName')}
-              placeholder="Last name.."
+              placeholder={$_.register.form.surname + '..'}
               required
             />
           </div>
           <div class="grid md:grid-cols-3 gap-4">
             <Input
               errorInput={'country'}
-              title="Country"
+              title={$_.register.form.country}
               bind:value={userRegister.country}
               portal=""
               on:input={() => checkValidation('country')}
-              placeholder="Country.."
+              placeholder={$_.register.form.country + '..'}
               required
             />
-            <!-- <label
-              >Country<input
-                bind:value={userRegister.country}
-                class="input"
-                placeholder="Country.."
-              /></label
-            > -->
+
             <Input
               errorInput={'state'}
-              title="State"
+              title={$_.register.form.state}
               bind:value={userRegister.state}
               portal=""
               on:input={() => checkValidation('state')}
-              placeholder="State.."
+              placeholder={$_.register.form.state + '..'}
               required
             />
-            <!-- <label
-              >State<input
-                bind:value={userRegister.state}
-                class="input"
-                placeholder="State.."
-              /></label
-            > -->
+
             <Input
               errorInput={'city'}
-              title="City"
+              title={$_.register.form.city}
               bind:value={userRegister.city}
               portal=""
               on:input={() => checkValidation('city')}
-              placeholder="City.."
+              placeholder={$_.register.form.city + '..'}
               required
             />
           </div>
           <Input
             errorInput={'biography'}
-            title="Biography"
+            title={$_.register.form.biography}
             bind:value={userRegister.biography}
             portal=""
             on:input={() => checkValidation('biography')}
             textarea
-            placeholder="About you.."
+            placeholder={$_.register.form.biography_placeholder}
           />
 
           <p class="text-gray-400 text-sm">
-            ❗ If you register an account, then you give the label the
-            permission to use your data on this platform.
+            ❗ {$_.register.privacy}
           </p>
           <Button
             onClick={register}
             rounded="none"
             color="bg-teal-700"
-            loading={loadingStatus.register ? 'Creading account..' : null}
-            className="justify-self-end">Create account!</Button
+            loading={loadingStatus.register
+              ? $_.register.form.submit + '..'
+              : null}
+            className="justify-self-end">{$_.register.form.submit}</Button
           >
         </div>
       </div>
