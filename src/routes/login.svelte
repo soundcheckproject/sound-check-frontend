@@ -26,8 +26,7 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import _ from '../stores/languageStore'
 
-
-    // let user = { email: '', password: '' }
+  // let user = { email: '', password: '' }
 
   let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
   //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
@@ -36,7 +35,6 @@
   let errors: string[] = []
   const checkValidation = (type: string) => {
     if (type == 'email') {
-
       errors = validateErrors([validateEmpty(user.email)], type, errors)
     }
     if (type == 'password') {
@@ -136,9 +134,29 @@
             />
             <a
               href="/forgotpassword"
-              class="text-sm underline text-teal-700 cursor-pointer"
-              >{$_.login.forgot} ?</a
+              class="text-xs text-teal-700 cursor-pointer flex items-center  group"
             >
+              <div
+                class="mr-1 transition-all -ml-1 text-teal-700 group-hover:bg-teal-600 group-hover:text-white group-hover:rounded-full p-1"
+              >
+                <svg
+                  class=""
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  ><circle cx="12" cy="12" r="10" /><path
+                    d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"
+                  /><line x1="12" y1="17" x2="12.01" y2="17" /></svg
+                >
+              </div>
+              {$_.login.forgot}
+            </a>
             <div class="flex justify-between items-center">
               <label
                 class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"
@@ -149,12 +167,11 @@
                 onClick={login}
                 rounded="none"
                 color="bg-teal-700"
-                className="login-btn justify-self-end">{$_.login.form.submit}</Button
+                className="login-btn justify-self-end"
+                >{$_.login.form.submit}</Button
               >
             </div>
           </div>
-
-   
         </div>
       </article>
     </section>
