@@ -16,6 +16,7 @@
 
   onMount(() => {
     authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
+      console.log(user)
       if (!isLoggedIn && firebaseControlled) {
         // Reset user in localstorage
 

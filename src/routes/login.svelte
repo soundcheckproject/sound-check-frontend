@@ -26,9 +26,13 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import _ from '../stores/languageStore'
 
-  let user = { email: '', password: '' }
+  let user = { email: '', password: '', remember: false }
 
-  // let user = { email: 'docent@howest.be', password: 'P@ssw0rd' }
+  // let user = {
+  //   email: 'docent@howest.be',
+  //   password: 'P@ssw0rd',
+  //   remember: false,
+  // }
   //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
@@ -44,7 +48,7 @@
 
   const login = () => {
     if ($validationStore.length == 0) {
-      loginUser(user.email, user.password)
+      loginUser(user.email, user.password, user.remember)
         .then(async e => {
           await goto('/portal')
         })
@@ -160,7 +164,8 @@
             <div class="flex justify-between items-center">
               <label
                 class="text-sm grid gap-2 grid-flow-col items-center text-opacity-80"
-                ><input type="checkbox" />{$_.login.remember}</label
+                ><input type="checkbox" bind:checked={user.remember} />{$_.login
+                  .remember}</label
               >
 
               <Button
