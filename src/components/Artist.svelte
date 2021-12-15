@@ -11,14 +11,13 @@
   export let hover: boolean = false
 
   export let onClick = () => {}
-  export let theme: 'light' | 'dark' = 'light'
+  export let theme: 'light' | 'dark' | 'glass' = 'light'
   export let socials = false
   export let pointer: boolean = true
 </script>
 
 {#if artist}
   <button
-    
     on:click={onClick}
     class="inline focus-ring rounded-full"
     on:mouseenter={() => {
@@ -29,19 +28,21 @@
     }}
   >
     <div
-      class="relative mshadow-xs {theme == 'dark'
+      class="relative mshadow-xs {theme == 'glass'
+        ? 'bg-black/20 backdrop-blur-xl text-white'
+        : theme == 'dark'
         ? 'bg-gray-300 bg-opacity-40'
         : 'bg-white'}  rounded-full group {size == 'md'
         ? 'text-md'
         : 'text-sm'} {className} {size == 'md'
         ? 'pr-5'
         : size == 'sm'
-        ? 'pr-3'
+        ? 'pr-4'
         : ''} transition-all hover:bg-opacity-75"
     >
       <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
       <!-- // Todo: custom not found logo -->
-      <div class={`${pointer && "cursor-pointer"} flex items-center group`}>
+      <div class={`${pointer && 'cursor-pointer'} flex items-center group`}>
         {#if artist.logo}
           <img
             alt="Artist {artist.nickName ?? ''}"
@@ -94,8 +95,8 @@
         <div
           in:fly|local={{ y: 25, opacity: 0 }}
           out:fade|local={{ duration: 200 }}
-          class="min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700 text-sm p-3 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
-          'dark'
+          class="text-xs min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700  py-3 px-5 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
+          'dark'||'glass'
             ? 'bg-black bg-opacity-50 backdrop-blur-lg text-white'
             : 'bg-white'} "
         >
@@ -104,8 +105,8 @@
             <hr class="w-full border-gray-800 mb-2 mt-1" />{/if}
           {#if artist.userLinks && artist.userLinks.length > 0}
             {#each artist.userLinks as userLink}
-              <div class="flex items-center">
-                <LinkIcon className="mr-2" type={userLink.link.type} />
+              <div class="flex items-start">
+                <LinkIcon className="mr-2 -ml-2" type={userLink.link.type} />
                 <a
                   href={'https://' + userLink.linkAddress}
                   target="_blank"

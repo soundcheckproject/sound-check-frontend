@@ -20,10 +20,11 @@
 {#if track}
   <a
     href={$$props.href ? $$props.href : `/portal/${portal}/demo/${track.uuid}`}
-    class="relative grid grid-cols-auto-1fr {portal === 'staff'
+    class="{status ? 'relative' : ''} grid grid-cols-auto-1fr {portal ===
+    'staff'
       ? 'gap-x-4'
       : 'gap-4'} {size == 'sm'
-      ? 'h-16'
+      ? 'h-12'
       : size == 'md'
       ? 'h-20'
       : size == 'lg'
@@ -72,7 +73,7 @@
             {#if track.artistTracks && track.artistTracks.length > 0}
               <div class="mt-2 flex space-x-2">
                 {#each track.artistTracks as artist}
-                  <Artist artist={artist.user} socials size="sm" theme="light"
+                  <Artist artist={artist.user} socials size="sm" theme="glass"
                     >{artist.user.nickName}</Artist
                   >
                 {/each}
