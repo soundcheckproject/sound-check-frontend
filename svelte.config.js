@@ -1,6 +1,8 @@
 import preprocess from 'svelte-preprocess'
 // import adapter from '@sveltejs/adapter-node'
-import adapter from '@sveltejs/adapter-static'
+// import adapter from '@sveltejs/adapter-static'
+import netlify from '@sveltejs/adapter-netlify'
+import pkg from './package.json'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -19,16 +21,23 @@ const config = {
     //     port: 'NODE_PORT',
     //   },
     // }),
-        adapter: adapter({
-          // default options are shown
-          pages: 'build',
-          assets: 'build',
-          fallback: null,
-          ssr: false,
-        }),
-        prerender: {
-          enabled: false,
-        },
+    // adapter: adapter({
+    //   // default options are shown
+    //   pages: 'build',
+    //   assets: 'build',
+    //   fallback: null,
+    //   ssr: false,
+    // }),
+    // prerender: {
+    //   enabled: false,
+    // },
+    adapter: netlify(),
+
+    vite: {
+      ssr: {
+        noExternal: Object.keys(pkg.dependencies || {}),
+      },
+    },
   },
 }
 
