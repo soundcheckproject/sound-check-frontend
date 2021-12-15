@@ -13,7 +13,9 @@
   let showMobileLangMenu: Boolean = false
 </script>
 
-<nav class="flex py-8 flex-row justify-between items-center {$$props.class}">
+
+<nav class="top-navigation flex py-8 flex-row justify-between items-center {$$props.class}">
+
   {#if $labelStore}
     <a href="/" id="home" class="outline-none focus:scale-105">
       <h1 class="text-xl font-bold">{$labelStore.name}</h1></a
@@ -45,7 +47,7 @@
         </div>
       </div>
     </button>
-    <button class="focus-ring group relative">
+    <button class="lang-btn focus-ring group relative">
       <div
         class="py-2 px-3 text-white bg-white/10 rounded-md text-xs flex space-x-2 uppercase justify-between"
       >
@@ -69,14 +71,17 @@
         </div>
       </div>
       <div
-        class="gap-2 hidden pt-2 absolute hover:grid group-hover:grid opacity-0 group-hover:opacity-100 transition-all"
+        class="gap-2 hidden pt-2 absolute hover:grid group-hover:grid group-focus:grid opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-all"
       >
+
         <div
           class="mshadow-md transition-all py-3 px-3 text-white backdrop-blur-2xl bg-gray-900/40 grid gap-2  rounded-md text-xs hover:bg-gray-900/50"
         >
           {#each Object.keys($translationsStore) as key}
             <div
-              class="flex space-x-2 cursor-pointer hover:text-white/75"
+              class="{`${$translationsStore[
+              key
+            ].language.toLowerCase()}-btn`} flex space-x-2 cursor-pointer hover:text-white/75"
               on:click={() => {
                 langStore.set(key)
               }}
@@ -86,6 +91,7 @@
             </div>
           {/each}
         </div>
+
       </div>
     </button>
     <!-- Test data -->
