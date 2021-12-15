@@ -88,9 +88,14 @@
 </svelte:head>
 
 <Header>
-
+  {#if spotlightTrack}
+    <div
+      class="absolute inset-0 blur-3xl z-1 opacity-25"
+      style={`background: url(${spotlightTrack.artwork.resource}) 200%;background-size: cover; `}
+    />
+  {/if}
   <article
-    class=" {spotlightTrack
+    class="relative {spotlightTrack
       ? 'w-72 sm:w-full max-w-xs sm:max-w-full mx-auto sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'
       : 'w-72 sm:w-full max-w-xs mx-auto sm:max-w-full sm:mx-0 mb-24 flex gap-6 sm:gap-2 flex-col-reverse sm:flex-row-reverse lg:flex-row lg:space-x-12 lg:items-center space-between'}"
   >
@@ -105,7 +110,8 @@
         </h1>
         <h3 class="text-white text-opacity-50 text-sm sm:text-md">
           {#if spotlightTrack}
-            {$_.home.by} {#each spotlightTrack.artistTracks as at, i}
+            {$_.home.by}
+            {#each spotlightTrack.artistTracks as at, i}
               {i > 0 ? `, ${at.user.nickName}` : at.user.nickName}
             {/each}
           {:else}
@@ -194,13 +200,14 @@
   </div>
   <div bind:this={refs['info']} id="info" class="gradientBlueGreen py-4">
     <Container>
-      <section class="p-16">
+      <section class="py-8 lg:p-16">
         <article
-          class="flex justify-between flex-col md:flex-row items-center gap-8 p-0"
+          class="flex justify-between flex-col md:flex-row items-center gap-12 lg:gap-16 p-0"
         >
           <div class="w-full grid gap-4">
             <Title theme="light"
-              >{$_.home.what} {$labelStore ? $labelStore.name : 'this label'}?</Title
+              >{$_.home.what}
+              {$labelStore ? $labelStore.name : 'this label'}?</Title
             >
             {#if $labelStore}
               <SubTitle theme="light">🚨 Letsgo!</SubTitle>
@@ -232,7 +239,7 @@
         <Title>{$_.header.contact}</Title>
         <div class="md:flex items-center">
           <article
-            class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md md:w-1/2 lg:w-2/5 "
+            class="bg-gray-100 text-gray-900 px-6 md:mr-12 md:p-12 box-content rounded-md  md:w-1/2 lg:w-2/5 "
           >
             <form class="grid gap-4 ">
               <label
@@ -248,16 +255,16 @@
                 /></label
               >
 
-      
-              <Button color="bg-teal-700" size="md">{$_.contact.form.submit}</Button>
+              <Button color="bg-teal-700" size="md"
+                >{$_.contact.form.submit}</Button
+              >
             </form>
           </article>
           <article class="py-12 md:w-1/2 lg:w-3/5 lg:left ">
             <SubTitle>📩 {$_.contact.touch}</SubTitle>
             <p>
-              {$_.contact.description[0]}<br>
+              {$_.contact.description[0]}<br />
               {$_.contact.description[1]}
-            
             </p>
             <p>
               <b class="grid grid-flow-col  items-center justify-start gap-1">
@@ -277,7 +284,8 @@
                   <polygon
                     points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"
                   />
-                </svg> {$_.contact.company}</b
+                </svg>
+                {$_.contact.company}</b
               >
               Ethereal<br />
               Deinzestraat 175, 9700 Oudenaarde<br />

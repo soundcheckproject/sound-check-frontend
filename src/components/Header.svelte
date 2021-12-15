@@ -22,7 +22,7 @@
         ? ' h-screen'
         : ''} items-center appHeaderGrid "
     >
-      <Navigation />
+      <Navigation class="z-10"/>
       <slot />
     </div>
   </Container>
