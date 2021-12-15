@@ -65,6 +65,7 @@
             lyrics
             isSigned
             genreId
+            prefferdReleaseDate
             artistTracks
             {
               user{
