@@ -16,15 +16,15 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-
-    - name: Run the app
       run: npm run dev
-
-    - name: Test unit tests
       run: npm run test
-
-    - name: Test e2e tests
       run: npx cypress run
+
+    # - name: Run the app
+
+    # - name: Test unit tests
+
+    # - name: Test e2e tests
 
     - name: Stop dev server
       run: ^C
