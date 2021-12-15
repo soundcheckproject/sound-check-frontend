@@ -13,7 +13,9 @@ const config = {
   kit: {
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte',
+    // ! vercel setup
     adapter: vercel(),
+    // ! node setup for docker
     // adapter: adapter({
     //   out: 'build',
     //   precompress: false,
@@ -22,6 +24,7 @@ const config = {
     //     port: 'NODE_PORT',
     //   },
     // }),
+    // ! static files setup
     // adapter: adapter({
 
     //   pages: 'build',
@@ -31,12 +34,6 @@ const config = {
     // }),
     // prerender: {
     //   enabled: false,
-    // },
-
-    // vite: {
-    //   ssr: {
-    //     noExternal: Object.keys(pkg.dependencies || {}),
-    //   },
     // },
   },
 }
