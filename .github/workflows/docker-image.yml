@@ -17,7 +17,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - run: npm run build
-    - run: npm run preview -p 8888
+    - run: npm run preview -p 8888 & npx wait-on http://localhost:8888
     - run: npm run test
     - run: npx cypress run
 
