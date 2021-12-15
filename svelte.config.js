@@ -1,5 +1,8 @@
 import preprocess from 'svelte-preprocess'
-import adapter from '@sveltejs/adapter-node'
+// import adapter from '@sveltejs/adapter-node'
+// import adapter from '@sveltejs/adapter-static'
+import vercel from '@sveltejs/adapter-vercel'
+// import pkg from './package.json'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -10,24 +13,31 @@ const config = {
   kit: {
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte',
-    adapter: adapter({
-      out: 'build',
-      precompress: false,
-      env: {
-        host: 'NODE_HOST',
-        port: 'NODE_PORT',
-      },
-    }),
-    //     adapter: adapter({
-    //       // default options are shown
-    //       pages: 'build',
-    //       assets: 'build',
-    //       fallback: null,
-    //       ssr: false,
-    //     }),
-    //     prerender: {
-    //       enabled: false,
-    //     },
+    adapter: vercel(),
+    // adapter: adapter({
+    //   out: 'build',
+    //   precompress: false,
+    //   env: {
+    //     host: 'NODE_HOST',
+    //     port: 'NODE_PORT',
+    //   },
+    // }),
+    // adapter: adapter({
+
+    //   pages: 'build',
+    //   assets: 'build',
+    //   fallback: null,
+    //   ssr: false,
+    // }),
+    // prerender: {
+    //   enabled: false,
+    // },
+
+    // vite: {
+    //   ssr: {
+    //     noExternal: Object.keys(pkg.dependencies || {}),
+    //   },
+    // },
   },
 }
 
