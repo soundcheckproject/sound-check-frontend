@@ -1,6 +1,7 @@
 import { goto } from '$app/navigation'
 import {
   browserLocalPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
   setPersistence,
@@ -24,18 +25,17 @@ export const logout = async () => {
 export const loginUser = (
   email: string,
   password: string,
+  remember: boolean,
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(getAuth(), email, password)
       .then(async userCredential => {
         // Signed in
 
-        setPersistenceFirebase(email, password)
+        setPersistenceFirebase(email, password, remember)
           .then(() => {
             storeUserInfoInLocalStorage()
               .then(() => {
-                // storeRole(userCredential.user)
-
                 resolve(true)
               })
               .catch(() => reject(false))
@@ -74,7 +74,9 @@ export const storeUserInfoInLocalStorage = async (
   })
 }
 
-export const storeRole = (userCredentials: { [x: string]: { customAttributes: string } }): Promise<boolean> => {
+export const storeRole = (userCredentials: {
+  [x: string]: { customAttributes: string }
+}): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
       const role: string = JSON.parse(
@@ -99,8 +101,12 @@ export const getUserInfoFromLocalStorage = async (): Promise<void> => {
 export const setPersistenceFirebase = async (
   email: string,
   password: string,
+  local = true,
 ): Promise<void> => {
-  setPersistence(getAuth(), browserLocalPersistence)
+  await setPersistence(
+    getAuth(),
+    local ? browserLocalPersistence : browserSessionPersistence,
+  )
     .then(() => {
       // Existing and future Auth states are now persisted in the current
       // session only. Closing the window would clear any existing state even
