@@ -1,1 +1,1 @@
-{ "pluginsFile": false, "baseUrl": "https://localhost:8888" }
+{ "pluginsFile": false, "baseUrl": "https://localhost:8888", "video": false }
