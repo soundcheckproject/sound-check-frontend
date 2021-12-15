@@ -20,17 +20,24 @@ describe('landing page', () => {
 
   beforeEach(() => {
     cy.visit('/login')
-  })
+}
+)
 
-  it('should show error message', () => {
+it('should login a user with role User', () => {
+  cy.get('input[type=email').type(testUser_User.email)
+  cy.get('input[type=password]').type(testUser_User.password)
+  cy.get('.login-btn').click()
+  cy.url().should('include', '/portal')
+  cy.contains('Welcome to the portal.')
+})
+
+it('should show error message', () => {
     const fakeTrackId = 'qhfsqsfqs46546'
-
     cy.get('input[type=email').type(testUser_User.email)
     cy.get('input[type=password]').type(testUser_User.password)
     cy.get('.login-btn').click()
-    cy.visit(`/portal`)
-    cy.get('aside').contains('NielsO')
+    cy.url().should('include', '/portal')
     cy.visit(`/portal/artist/demo/${fakeTrackId}`)
-    cy.get('html').contains('Error while fetching')
+    cy.contains('Error while fetching')
   })
 })
