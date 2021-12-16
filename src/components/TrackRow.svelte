@@ -12,6 +12,8 @@
   export let portal: 'staff' | 'artist' = 'artist'
   export let track: TrackType
 
+  track.artwork.resource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.template.net%2Fwp-content%2Fuploads%2F2016%2F12%2F21140757%2FNature-Artwork-by-Marian-Voicu1.jpg&f=1&nofb=1"
+
   export let artists = false
   export let actions = false
   export let status = true
@@ -43,8 +45,8 @@
         src={track.artwork.resource ? track.artwork.resource : ''}
         alt="artwork"
       />
-    {/if}
-    <div
+      {/if}
+      <div
       class="{size == 'sm'
         ? 'p-4'
         : size == 'md'
@@ -55,13 +57,13 @@
         ? 'overflow-hidden bg-opacity-0'
         : ''}"
     >
-      {#if $$props.background && track.artwork}
-        <div
-          class="absolute w-full z-1 inset-0 blur-3xl h-full filter "
-          style="background:url('{track.artwork
-            .resource}') center center;backround-size:cover"
-        />
-      {/if}
+    {#if $$props.background && track.artwork}
+      <div
+        class="absolute w-full z-1 inset-0 blur-3xl h-full filter "
+        style="background:url('{track.artwork
+          .resource}') center center;backround-size:cover"
+      />
+    {/if}
       {#if $$props.slot}
         <slot />
       {:else}
@@ -73,7 +75,7 @@
             {#if track.artistTracks && track.artistTracks.length > 0}
               <div class="mt-2 flex space-x-2">
                 {#each track.artistTracks as artist}
-                  <Artist artist={artist.user} socials size="sm" theme="glass"
+                  <Artist artist={artist.user}  size="sm" theme="glass"
                     >{artist.user.nickName}</Artist
                   >
                 {/each}
