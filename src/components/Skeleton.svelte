@@ -6,8 +6,6 @@ import { compute_slots } from "svelte/internal"
   export let loading = false
   export let height = 'h-24'
   export let className = ''
-
-  console.log('slots', $$slots.default)
 </script>
 
 <div
