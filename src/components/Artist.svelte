@@ -108,7 +108,7 @@
               <div class="flex items-start">
                 <LinkIcon className="mr-2 -ml-2" type={userLink.link.type} />
                 <a
-                  href={'https://' + userLink.linkAddress}
+                  href={userLink.linkAddress}
                   target="_blank"
                   class="hover:underline grid grid-flow-col gap-2 items-center "
                 >
