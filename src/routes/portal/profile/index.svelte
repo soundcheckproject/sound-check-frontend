@@ -377,7 +377,7 @@
 
   onMount(async () => {
     links = await getLinks()
-    // getArtist()
+    getArtist()
     if ($roleStore == 'label-manager') {
       roles = await getRoles()
     }

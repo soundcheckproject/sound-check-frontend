@@ -9,9 +9,9 @@
   import type { TrackType } from '../../../types/Track.type'
 
   let totalTracks: { accepted: number; denied: number; pending: number } = {
-    accepted: null,
-    denied: null,
-    pending: null,
+    accepted: 0,
+    denied: 0,
+    pending: 0,
   }
 
   let tracks: TrackType[] = []
@@ -38,17 +38,20 @@
         { artistId: $userStore.uuid },
       )
 
-      userTracks.forEach((track: { isSigned: boolean | null }) => {
-        if (track.isSigned == true) {
+      console.log({ userTracks })
+
+      userTracks.map((track: { isSigned: boolean | null }) => {
+        if (track.isSigned === true) {
           totalTracks.accepted++
         }
-        if (track.isSigned == false) {
+        if (track.isSigned === false) {
           totalTracks.denied++
         }
-        if (track.isSigned == null) {
+        if (track.isSigned === null) {
           totalTracks.pending++
         }
       })
+
       tracks = userTracks
     } catch (error) {
       console.error('Could not get tracks', error)
@@ -57,7 +60,7 @@
 </script>
 
 <svelte:head>
-	<title>Portal overview</title>
+  <title>Portal overview</title>
 </svelte:head>
 
 <div class="grid gap-8">
@@ -71,7 +74,9 @@
         <div />
       </div>
     </SubTitle>
-    <div class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-auto snap rounded-md p-1">
+    <div
+      class="sm:grid-cols-3 gap-4 mt-2 flex overflow-x-auto snap rounded-md p-1"
+    >
       <Track add size="sm" />
       {#each tracks as t}
         <Track track={t} size="sm" />
@@ -81,16 +86,16 @@
   <div class="flex gap-4 items-center">
     {#if totalTracks.accepted}
       <a href="/portal/artist/demo" class="focus-ring">
-        <Box size="sm" class="bg-accepted" >
+        <Box size="sm" class="bg-accepted">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
-            Accepted ({totalTracks.pending})
+            Accepted ({totalTracks.accepted})
           </p>
         </Box>
       </a>
     {/if}
     {#if totalTracks.pending}
       <a href="/portal/artist/demo" class="focus-ring">
-        <Box size="sm" class="bg-pending" >
+        <Box size="sm" class="bg-pending">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
             Pending ({totalTracks.pending})
           </p>
@@ -101,13 +106,13 @@
       <a href="/portal/artist/demo" class="focus-ring">
         <Box size="sm" class="bg-denied">
           <p class="uppercase text-sm lg:text-md font-semibold text-white">
-            Denied ({totalTracks.pending})
+            Denied ({totalTracks.denied})
           </p>
         </Box>
       </a>
     {/if}
   </div>
-</div>    
+</div>
 
 <style>
   .snap {
