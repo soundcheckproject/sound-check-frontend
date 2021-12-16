@@ -566,9 +566,9 @@
                 class="input portal text-red-300 capitalize"
                 placeholder="For example: Instagram, facebook, .."
               >
-                <option selected disabled>Pick a channel</option>
-                {#each links as link}
-                  <option value={link}>{link.type}</option>
+                <option selected disabled value="Pick a channel">Pick a channel</option>
+                {#each links as l}
+                  <option value={l}>{l.type}</option>
                 {/each}</select
               >
             </label>
