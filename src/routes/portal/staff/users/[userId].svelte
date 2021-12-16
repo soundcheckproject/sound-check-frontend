@@ -17,6 +17,7 @@
   import { RoleName } from '../../../../types/Role.type'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import userStore from '../../../../stores/userStore'
 
   let artist: UserType = undefined
   let artistTracks: TrackType[] = []
@@ -52,8 +53,9 @@
         ><Title>
           <div class="flex justify-between items-center">
             <div>Information</div>
-
-            <EditButton href={$page.path + '-edit'} />
+            {#if $userStore.role.slug === RoleName.LabelManager}
+              <EditButton href={$page.path + '-edit'} />
+            {/if}
           </div>
         </Title>
         <div class="grid gap-4 lg:grid-cols-3">

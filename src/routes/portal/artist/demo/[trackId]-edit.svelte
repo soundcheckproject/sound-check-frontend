@@ -120,37 +120,75 @@
     }
   }
 
-  const postTrack = async () => {
-    loadingStatus.track = true
-    if ($validationStore.length == 0) {
-      const updatedTrack: TrackUpdateType = {
-        prefferdReleaseDate: new Date(prefferedReleaseDateString),
-        title: newTrack.title,
-        description: newTrack.description,
-        genreId: newTrack.genreId,
-        previewStart: newTrack.previewStart,
-        previewStop: newTrack.previewStop,
-        artistTracks: [],
+  let inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
+
+  let errors: string[] = []
+  const checkValidation = (type: string = null) => {
+    if (type === 'previewpart') {
+      console.log(newTrack.previewStart, newTrack.previewStop)
+      errors = validateErrors(
+        [
+          validateStartLower(newTrack.previewStart, newTrack.previewStop),
+          validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
+        ],
+        type,
+        errors,
+      )
+    } else {
+      for (const errorType of inputFields) {
+        if (errorType === type)
+          errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
       }
+    }
+  }
 
-      artistsArray.map(at => {
-        updatedTrack.artistTracks.push({
-          uuid: at.uuid,
-          userId: at.user.uuid,
-          royaltySplit: at.royaltySplit,
-        })
+  const checkAllInputs = async () => {
+    return new Promise(resolve => {
+      inputFields.map((field: string) => {
+        checkValidation(field)
       })
+      resolve(true)
+    })
+  }
 
-      console.log({ updatedTrack })
+  const postTrack = async () => {
+    if (await checkAllInputs()) {
+      loadingStatus.track = true
+      if ($validationStore.length == 0) {
+        const updatedTrack: TrackUpdateType = {
+          prefferdReleaseDate: new Date(prefferedReleaseDateString),
+          title: newTrack.title,
+          description: newTrack.description,
+          genreId: newTrack.genreId,
+          previewStart: newTrack.previewStart,
+          previewStop: newTrack.previewStop,
+          artistTracks: [],
+        }
 
-      await updateTrack(track.uuid, updatedTrack)
-        .catch(e => {
-          // errors = validateError('connection', 'graphql', false, errors)
-          validateErrorTime('connection', 'graphql', errors)
+        artistsArray.map(at => {
+          updatedTrack.artistTracks.push({
+            uuid: at.uuid,
+            userId: at.user.uuid,
+            royaltySplit: at.royaltySplit,
+          })
         })
-        .finally(() => {
-          loadingStatus.track = false
-        })
+
+        console.log({ updatedTrack })
+
+        await updateTrack(track.uuid, updatedTrack)
+          .catch(e => {
+           
+            validateErrorTime('connection', 'graphql', errors)
+          })
+          .finally(() => {
+            loadingStatus.track = false
+          })
+      } else {
+        loadingStatus.track = false
+        validateErrorTime('general', 'errors', errors)
+      }
+    } else {
+      validateErrorTime('general', 'errors', errors)
     }
   }
 
@@ -161,27 +199,14 @@
   const updateArtwork = async () => {
     loadingStatus.artwork = true
     if (artworkBlob) {
-      // const uploadName = artworkBlob[0].name
-      // const fileName =
-      //   track.title
-      //     .replace(/ /g, '')
-      //     .replace(/[^a-zA-Z ]/g, '')
-      //     .toLowerCase() +
-      //   '.' +
-      //   uploadName
-      //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-      //     .split('.')
-      //     .pop()
       await uploadArtwork(
         artworkBlob[0],
         artworkBlob[0].name,
-        track.artwork.uuid,
+        track.uuid,
       )
         .then(res => {
           console.log(res)
           loadingStatus.artwork = false
-          // goto('/')
-          // goto('/portal/artist/demo/' + resCreateTrack.uuid)
         })
         .catch(error => {
           loadingStatus.artwork = false
@@ -196,27 +221,14 @@
   const updateTrackFile = async () => {
     loadingStatus.trackfile = true
     if (trackData.blob) {
-      // const uploadName = trackData.blob[0].name
-      // const fileName =
-      //   track.title
-      //     .replace(/ /g, '')
-      //     .replace(/[^a-zA-Z ]/g, '')
-      //     .toLowerCase() +
-      //   '.' +
-      //   uploadName
-      //     .substring(uploadName.lastIndexOf('.') + 1, uploadName.length)
-      //     .split('.')
-      //     .pop()
       await uploadTrack(trackData.blob[0], trackData.blob[0].name, track.uuid)
         .then(async res => {
-          // todo: update previewpart
           const updatedPreview = {
             previewStart: newTrack.previewStart,
             previewStop: newTrack.previewStop,
           }
           await updateTrack(track.uuid, updatedPreview)
             .catch(e => {
-              // errors = validateError('connection', 'graphql', false, errors)
               validateErrorTime('connection', 'graphql', errors)
             })
             .finally(() => {
@@ -235,32 +247,6 @@
     } else {
       loadingStatus.track = false
       validateErrorTime('track', 'empty', errors)
-    }
-  }
-
-  let errors: string[] = []
-  const checkValidation = (type: string) => {
-    if (type === 'previewpart') {
-      console.log(newTrack.previewStart, newTrack.previewStop)
-      errors = validateErrors(
-        [
-          validateStartLower(newTrack.previewStart, newTrack.previewStop),
-          validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
-        ],
-        type,
-        errors,
-      )
-    } else {
-      for (const errorType of [
-        'title',
-        'description',
-        'lyrics',
-        'genreId',
-        // 'prefferdReleaseDate',
-      ]) {
-        console.log(newTrack[type])
-        // errors = validateErrors([validateEmpty(newTrack[type])], type, errors)
-      }
     }
   }
 
@@ -318,7 +304,7 @@
 
           <SubTitle>📝 Information about your track</SubTitle>
 
-          <div class="grid lg:grid-cols-2 gap-4">
+          <form class="grid lg:grid-cols-2 gap-4">
             <Input
               bind:value={newTrack.title}
               title="Create a title"
@@ -484,23 +470,23 @@
                 {/if}
               </div>
             </div>
-          </div>
 
-          <div class="flex justify-end space-x-2">
-            <Button
-              color="bg-gray-600"
-              onClick={() => {
-                goto($page.path)
-              }}>Cancel changes</Button
-            >
-            <Button
-              color="bg-teal-700"
-              onClick={postTrack}
-              size="sm"
-              loading={loadingStatus.track ? 'Updating track..' : null}
-              >Update track</Button
-            >
-          </div>
+            <div class="flex justify-end space-x-2">
+              <Button
+                color="bg-gray-600"
+                onClick={() => {
+                  goto($page.path)
+                }}>Cancel changes</Button
+              >
+              <Button
+                color="bg-teal-700"
+                onClick={postTrack}
+                size="sm"
+                loading={loadingStatus.track ? 'Updating track..' : null}
+                >Update track</Button
+              >
+            </div>
+          </form>
         </Box><Box>
           <div class="grid gap-8 lg:grid-cols-2">
             <!-- <figure /> -->

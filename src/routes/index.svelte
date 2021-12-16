@@ -17,10 +17,13 @@
   import FadeBox from '../components/portal/FadeBox.svelte'
   import { page } from '$app/stores'
 
-  import _ from '../stores/languageStore'
+  import _, { langStore } from '../stores/languageStore'
+  import { sortByDate } from '../utils/useSorting'
 
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined
+
+  let fetchedPageData = false
 
   const getReleasesData = async () => {
     try {
@@ -31,6 +34,7 @@
             uuid
             title
             description
+            prefferdReleaseDate
             artistTracks {
               user {
               nickName
@@ -56,11 +60,18 @@
       )
 
       if (releases && releases.length > 0) {
-        spotlightTrack = releases[0]
+        latestReleases = releases.sort(
+          (a, b) =>
+            new Date(b.prefferdReleaseDate).getTime() -
+            new Date(a.prefferdReleaseDate).getTime(),
+        )
+        console.log({ latestReleases })
+        spotlightTrack = latestReleases[0]
       }
-      latestReleases = releases
+      fetchedPageData = true
     } catch (error) {
       console.error('Could not get latest tracks.', error)
+      fetchedPageData = null
     }
   }
 
@@ -105,7 +116,11 @@
           {#if spotlightTrack}
             {spotlightTrack.title}
           {:else}
-            <LineSkeleton loading={true} height={6} width="w-5/6" />
+            <LineSkeleton
+              loading={fetchedPageData === false}
+              height={6}
+              width="w-5/6"
+            />
           {/if}
         </h1>
         <h3 class="text-white text-opacity-50 text-sm sm:text-md">
@@ -115,7 +130,11 @@
               {i > 0 ? `, ${at.user.nickName}` : at.user.nickName}
             {/each}
           {:else}
-            <LineSkeleton loading={true} height={3} width="w-2/6" />
+            <LineSkeleton
+              loading={fetchedPageData === false}
+              height={3}
+              width="w-2/6"
+            />
           {/if}
         </h3>
       </div>
@@ -123,7 +142,11 @@
         {#if spotlightTrack}
           {spotlightTrack.description}
         {:else}
-          <LineSkeleton loading={true} lines={4} width="w-4/6" />
+          <LineSkeleton
+            loading={fetchedPageData === false}
+            lines={4}
+            width="w-4/6"
+          />
         {/if}
       </p>
       <div class="mb-2 flex justify-start items-end">
@@ -161,7 +184,8 @@
         />
       {:else}
         <div
-          class="rounded-md mshadow-lg h-56 lg:h-72 w-full max-w-xs bg-gray-400 opacity-80 animate-pulse grid place-items-center"
+          class="rounded-md mshadow-lg h-56 lg:h-72 w-full max-w-xs bg-gray-400 opacity-80 {fetchedPageData ===
+            false && 'animate-pulse'} grid place-items-center"
         />
       {/if}
     </div>
@@ -176,12 +200,7 @@
           <div class="sm:grid-cols-3 gap-4 flex overflow-x-auto mt-2 p-2 ">
             {#if latestReleases && latestReleases.length > 0}
               {#each latestReleases as track}
-                <Track
-                  on:click={() => {
-                    goto('/releases/' + track.uuid)
-                  }}
-                  {track}
-                />
+                <Track hrefTrack={'/releases/' + track.uuid} {track} />
               {/each}
             {:else}
               {#each Array(3) as i}

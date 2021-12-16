@@ -65,6 +65,7 @@
             lyrics
             isSigned
             genreId
+            prefferdReleaseDate
             artistTracks
             {
               user{
@@ -161,7 +162,7 @@
                   >
                     <LinkIcon className="mr-2" type={userLink.link.type} />
                     <a
-                      href={'https://' + userLink.linkAddress}
+                      href={userLink.linkAddress}
                       target="_blank"
                       class="hover:underline grid grid-flow-col gap-2 items-center text-gray-700"
                     >

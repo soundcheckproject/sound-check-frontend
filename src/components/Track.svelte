@@ -7,6 +7,7 @@
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
   export let hover = false
+  export let hrefTrack = `/portal/artist/demo/${track && track.uuid}`
 </script>
 
 {#if add}
@@ -44,7 +45,7 @@
     class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start focus-ring"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
-    href={`/portal/artist/demo/${track.uuid}`}
+    href={hrefTrack}
   >
     <img
       alt="Trackname"

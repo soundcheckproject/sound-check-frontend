@@ -7,7 +7,6 @@
   import Button from '../../../components/Button.svelte'
   import InputError from '../../../components/InputError.svelte'
   import {
-    isEmailAvailable,
     isNickNameAvailable,
     validateCapital,
     validateEmailValid,
@@ -17,7 +16,6 @@
     validateErrorTime,
     validateLength,
     validateLower,
-    validateMatch,
     validateNumbers,
     validateOld,
   } from '../../../utils/useValidation'
@@ -41,17 +39,17 @@
     updateFirebaseEmail,
     updateFirebasePassword,
   } from '../../../utils/useFirebase'
-  import { formatDate } from '../../../utils/useFormat'
+  import { formatDateToDDMMJJJJ } from '../../../utils/useFormat'
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
   import { capitalize } from '../../../utils/capitalize'
-  import RoleLayer from '../../../components/RoleLayer.svelte'
   import { roleStore } from '../../../stores/stores'
   import type { RoleType } from '../../../types/Role.type'
+  import ErrorBanner from '../../../components/error/ErrorBanner.svelte'
+  import Skeleton from '../../../components/Skeleton.svelte'
 
-  // let artist: UserType = $userStore
-  let artist: UserType
+  let artist: UserType = undefined
 
   let newArtist: UserType
 
@@ -60,6 +58,7 @@
     linkAddress: '',
   }
 
+  let birthdatestring: string
   let logoClick: HTMLInputElement
 
   let links: Link[] = []
@@ -96,24 +95,13 @@
           updatedUser[objectKey] = newArtist[objectKey]
         }
       }
+      updatedUser.birthdate = new Date(birthdatestring)
 
       if (Object.keys(updatedUser).length > 0) {
         await updateUserInfoByUserId(artist.uuid, updatedUser)
           .then(err => {
-            console.log(err)
-            // console.log({data})
-            // if (err) {
-            //   console.log(err)
-            //   if (err[0].extensions.response.statusCode == 403) {
-            //     errors = validateError('update', '403', false, errors)
-            //   }
-            // } else {
-            //   errors = validateError('update', '403', true, errors)
-
-            // }
             loadingStatus.userinfo = false
             console.log('User has been updated!', updatedUser)
-            // goto($page.path)
           })
           .catch(e => {
             loadingStatus.userinfo = false
@@ -373,10 +361,15 @@
   }
 
   const getArtist = async () => {
-    if ($page.params.userId) {
-      artist = await getArtistByUserId($page.params.userId)
-    } else {
-      artist = await getUserViaFirebase()
+    try {
+      if ($page.params.userId) {
+        artist = await getArtistByUserId($page.params.userId)
+      } else {
+        artist = await getUserViaFirebase()
+      }
+      birthdatestring = formatDateToDDMMJJJJ(new Date(artist.birthdate))
+    } catch (error) {
+      artist = null
     }
   }
 
@@ -387,10 +380,7 @@
     getArtist()
     if ($roleStore == 'label-manager') {
       roles = await getRoles()
-      // console.log(roles)
     }
-
-    // Admin update
   })
 
   $: {
@@ -426,12 +416,13 @@
           <!-- // Todo make birthdate work -->
           <Input
             title="Birthdate"
+            bind:value={birthdatestring}
             type="date"
             errorInput="birthdate"
             placeholder="What's your birthdate?"
-            bind:value={newArtist.birthdate}
             on:input={() => checkValidation('birthdate')}
           />
+          {birthdatestring}
         </div>
         <div class="grid sm:grid-cols-2 gap-4">
           <Input
@@ -564,7 +555,7 @@
       <SubTitle>Social media channels</SubTitle>
       <div class="grid gap-6">
         <div class="grid lg:grid-cols-2 gap-6">
-          <div class="grid gap-4 auto-rows-min items-start">
+          <form class="grid gap-4 auto-rows-min items-start">
             <InputError errorInput="update" />
             <label class="portal"
               >Pick a channel
@@ -575,9 +566,9 @@
                 class="input portal text-red-300 capitalize"
                 placeholder="For example: Instagram, facebook, .."
               >
-                <option selected disabled>Pick a channel</option>
-                {#each links as link}
-                  <option value={link}>{link.type}</option>
+                <option selected disabled value="Pick a channel">Pick a channel</option>
+                {#each links as l}
+                  <option value={l}>{l.type}</option>
                 {/each}</select
               >
             </label>
@@ -595,7 +586,7 @@
                 }}>Add link</Button
               >
             </div>
-          </div>
+          </form>
           <div class="grid auto-rows-min gap-4">
             {#if newArtist.userLinks.length == 0}
               <div class="input portal mt-7">
@@ -770,5 +761,15 @@
       </Box>
       <!-- </RoleLayer> -->
     {/if}
+  {:else if artist === undefined}
+    <Skeleton
+      theme="light"
+      loading={true}
+      height="h-[22rem]"
+      className="mb-8"
+    />
+    <Skeleton theme="light" loading={true} height="h-[18rem]" />
+  {:else if artist === null}
+    <ErrorBanner message="Error while fetching the user data." />
   {/if}
 </div>
