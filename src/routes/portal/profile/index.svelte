@@ -46,8 +46,10 @@
   import { capitalize } from '../../../utils/capitalize'
   import { roleStore } from '../../../stores/stores'
   import type { RoleType } from '../../../types/Role.type'
+  import ErrorBanner from '../../../components/error/ErrorBanner.svelte'
+  import Skeleton from '../../../components/Skeleton.svelte'
 
-  let artist: UserType
+  let artist: UserType = undefined
 
   let newArtist: UserType
 
@@ -359,19 +361,23 @@
   }
 
   const getArtist = async () => {
-    if ($page.params.userId) {
-      artist = await getArtistByUserId($page.params.userId)
-    } else {
-      artist = await getUserViaFirebase()
+    try {
+      if ($page.params.userId) {
+        artist = await getArtistByUserId($page.params.userId)
+      } else {
+        artist = await getUserViaFirebase()
+      }
+      birthdatestring = formatDateToDDMMJJJJ(new Date(artist.birthdate))
+    } catch (error) {
+      artist = null
     }
-    birthdatestring = formatDateToDDMMJJJJ(new Date(artist.birthdate))
   }
 
   let roles: RoleType[] = []
 
   onMount(async () => {
     links = await getLinks()
-    getArtist()
+    // getArtist()
     if ($roleStore == 'label-manager') {
       roles = await getRoles()
     }
@@ -755,5 +761,15 @@
       </Box>
       <!-- </RoleLayer> -->
     {/if}
+  {:else if artist === undefined}
+    <Skeleton
+      theme="light"
+      loading={true}
+      height="h-[22rem]"
+      className="mb-8"
+    />
+    <Skeleton theme="light" loading={true} height="h-[18rem]" />
+  {:else if artist === null}
+    <ErrorBanner message="Error while fetching the user data." />
   {/if}
 </div>

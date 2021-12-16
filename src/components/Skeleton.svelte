@@ -1,9 +1,13 @@
 <script lang="ts">
+import { compute_slots } from "svelte/internal"
+
   export let theme: 'white' | 'light' | 'dark' = 'light'
   export let opacity = 100
   export let loading = false
   export let height = 'h-24'
   export let className = ''
+
+  console.log('slots', $$slots.default)
 </script>
 
 <div
@@ -35,6 +39,9 @@
       <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg><div class="opacity-20">|</div>
     <div>
+      {#if $$slots.default === undefined && loading}
+        Loading
+      {/if}
       <slot />
     </div>
   </div>
