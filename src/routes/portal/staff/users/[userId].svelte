@@ -18,14 +18,21 @@
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import userStore from '../../../../stores/userStore'
+  import {
+    pageSelectedStore,
+    userSelectedStore,
+  } from '../../../../stores/stores'
 
   let artist: UserType = undefined
   let artistTracks: TrackType[] = []
 
+  pageSelectedStore.set(undefined)
+
   onMount(async () => {
     try {
       artist = await getArtistByUserId($page.params.userId)
-      console.log({ artist })
+      if (artist)
+        pageSelectedStore.set({ name: 'users', title: artist.nickName })
       if (
         artist &&
         (artist.role.slug === RoleName.User ||
@@ -36,9 +43,6 @@
       artist = null
     }
   })
-  $: {
-    console.log(artistTracks)
-  }
 </script>
 
 <svelte:head>

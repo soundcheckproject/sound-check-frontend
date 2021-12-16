@@ -45,7 +45,7 @@
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
   import { page } from '$app/stores'
-  import { roleStore } from '../../../../stores/stores'
+  import { pageSelectedStore, roleStore, trackSelectedStore } from '../../../../stores/stores'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
@@ -251,12 +251,13 @@
     }
   }
 
+  pageSelectedStore.set(undefined)
   onMount(async () => {
     genres = await getGenres()
     if ($page.params.trackId) {
       try {
         track = await getTrackById($page.params.trackId)
-
+        if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
         prefferedReleaseDateString = formatDateToDDMMJJJJ(
           new Date(track.prefferdReleaseDate),
         )

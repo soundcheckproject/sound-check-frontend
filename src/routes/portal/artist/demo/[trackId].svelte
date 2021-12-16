@@ -14,11 +14,14 @@
   import { goto } from '$app/navigation'
   import { onMount } from 'svelte'
   import { getTrackById } from '../../../../utils/useGraphQL'
-  import userStore from '../../../../stores/userStore'
-  import FinanceButton from '../../../../components/portal/FinanceButton.svelte'
+
   import { formatDate } from '../../../../utils/useFormat'
   import { uploadContract } from '../../../../utils/useRest'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import {
+    pageSelectedStore,
+
+  } from '../../../../stores/stores'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -69,6 +72,7 @@
   onMount(async () => {
     try {
       track = await getTrackById($page.params.trackId)
+      if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
     } catch (error) {
       track = null
     }

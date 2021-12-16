@@ -44,7 +44,7 @@
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
   import { capitalize } from '../../../utils/capitalize'
-  import { roleStore } from '../../../stores/stores'
+  import { pageSelectedStore, roleStore } from '../../../stores/stores'
   import type { RoleType } from '../../../types/Role.type'
   import ErrorBanner from '../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../components/Skeleton.svelte'
@@ -365,6 +365,8 @@
     try {
       if ($page.params.userId) {
         artist = await getArtistByUserId($page.params.userId)
+        if (artist)
+          pageSelectedStore.set({ name: 'users', title: artist.nickName })
       } else {
         artist = await getUserViaFirebase()
       }
@@ -376,6 +378,7 @@
 
   let roles: RoleType[] = []
 
+  pageSelectedStore.set(undefined)
   onMount(async () => {
     links = await getLinks()
     getArtist()
