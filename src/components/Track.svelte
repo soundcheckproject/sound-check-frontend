@@ -7,7 +7,7 @@
   export let size: 'sm' | 'md' | 'lg' = 'lg'
   export let add = false
   export let hover = false
-  export let hrefTrack = `/portal/artist/demo/${track.uuid}`
+  export let hrefTrack = `/portal/artist/demo/${track && track.uuid}`
 </script>
 
 {#if add}

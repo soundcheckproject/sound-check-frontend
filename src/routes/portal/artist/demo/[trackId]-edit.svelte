@@ -203,7 +203,7 @@
       await uploadArtwork(
         artworkBlob[0],
         artworkBlob[0].name,
-        track.artwork.uuid,
+        track.uuid,
       )
         .then(res => {
           console.log(res)

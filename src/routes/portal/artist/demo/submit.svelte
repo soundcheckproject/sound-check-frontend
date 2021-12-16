@@ -297,7 +297,7 @@
     <div class="z-10 absolute -top-4 left-12 flex space-x-2" />
     <Title>Submit a new track</Title>
     <InputError errorInput="general" />
-    <form class="" enctype="multipart/form-data">
+    <!-- <form class="" enctype="multipart/form-data"> -->
       {#if uploadPageStatus === 1}
         <FlyBox>
           <InputError errorInput="connection" />
@@ -691,6 +691,6 @@
           </div>
         </FlyBox>
       {/if}
-    </form>
+    <!-- </form> -->
   </Box>
 </div>

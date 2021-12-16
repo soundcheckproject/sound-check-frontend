@@ -60,8 +60,12 @@
       )
 
       if (releases && releases.length > 0) {
-        latestReleases = releases.sort((a, b) => new Date(b.prefferdReleaseDate).getTime() - new Date(a.prefferdReleaseDate).getTime()).reverse()
-        console.log({latestReleases})
+        latestReleases = releases.sort(
+          (a, b) =>
+            new Date(b.prefferdReleaseDate).getTime() -
+            new Date(a.prefferdReleaseDate).getTime(),
+        )
+        console.log({ latestReleases })
         spotlightTrack = latestReleases[0]
       }
       fetchedPageData = true
