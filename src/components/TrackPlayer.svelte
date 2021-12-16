@@ -143,7 +143,19 @@
   $: {
     localStorage.setItem('showFeedback', JSON.stringify(showFeedback))
   }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    // 32 = spacebar
+    if (e.keyCode === 32) {
+      if (wavesurfer) {
+        wavesurfer.playPause()
+        trackInfo.playing = !trackInfo.playing
+      }
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 {#if track}
   <div class="relative">

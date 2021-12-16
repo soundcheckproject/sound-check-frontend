@@ -60,7 +60,7 @@
   }
 
   const loadTrackBlob = async () => {
-    // blobToBase64(await getTrackFileFromTrackId(track.uuid))
+
     try {
       isFetched = false
       const encodedFile = await query(
@@ -85,8 +85,19 @@
         loadTrackInfo(audioPlayer)
       }
   }
+
+  // const handleKeyDown = (e: KeyboardEvent) => {
+  //   // 32 = spacebar
+  //   if (e.keyCode === 32) {
+  //     if (track.encodedFile) {
+  //       trackInfo.playing = !trackInfo.playing
+  //       audioPlayer.play()
+  //     }
+  //   }
+  // }
 </script>
 
+<!-- <svelte:window on:keydown={handleKeyDown} /> -->
 {#if track.encodedFile}
   <audio hidden bind:this={audioPlayer} preload="auto" controls>
     <source src={track.encodedFile} type="audio/mpeg" />
@@ -204,7 +215,7 @@
         }}
         ><svg
           class="mr-1"
-          class:active={!trackInfo.playing}
+          class:active={trackInfo.playing}
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -230,7 +241,7 @@
         <svg
           class="mr-1 "
           xmlns="http://www.w3.org/2000/svg"
-          class:active={trackInfo.playing}
+          class:active={!trackInfo.playing}
           width="20"
           height="20"
           viewBox="0 0 24 24"
@@ -287,7 +298,8 @@
       <a
         href="/portal/staff/demo/{track.uuid}"
         class="flex items-center transition-all hover:opacity-75 space-x-1 ml-4 text-xs uppercase text-white text-right font-medium outline-none focus:text-teal-300"
-        ><div>details</div> <svg
+        ><div>details</div>
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"

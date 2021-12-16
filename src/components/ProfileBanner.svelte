@@ -6,12 +6,11 @@
   export let container = false
   export let artist: UserType
   export let logo: string = artist.logo ?? ''
+
+  let showBiography = false
 </script>
 
 <FadeBox>
-
-
-
   <div
     class="relative overflow-hidden backdrop-blur-sm text-gray-50 grid bg-gray-800 {rounded}"
   >
@@ -66,7 +65,10 @@
           </p>
           <div class="mt-4 text-xs opacity-75 ">
             {#if artist.biography && artist.biography.length > 2}
-              <p class="flex lg:hidden">
+              <p
+                class="flex lg:hidden"
+                on:click={() => showBiography = true}
+              >
                 Click to read bio <svg
                   class="ml-2"
                   xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +85,7 @@
                   <polyline points="6 17 11 12 6 7" />
                 </svg>
               </p>
-              <p class="hidden lg:flex">
+              <p class="{showBiography ? '' : 'hidden'} lg:flex">
                 {artist.biography}
               </p>
             {:else}
