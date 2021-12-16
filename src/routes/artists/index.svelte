@@ -13,30 +13,35 @@
   import Title from '../../components/Title.svelte'
 
   import _ from '../../stores/languageStore'
+  import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
   let searchNickname: string = ''
   let artists: UserType[] = []
   let artistsDisplay: UserType[] = []
   let artistsPage: number
   let artistsPerPage: number = 10
+  let fetchedPageData: boolean = false
 
   const getLabelArtists = async () => {
-    const data = await query(
-      `getLabelArtists`,
-      `query getLabelArtists {
-          getLabelArtists {
-            uuid
-            nickName
-            firstName
-            surName
-            logo
-          }
-      }`,
-    )
-    console.log(data)
-    if (data) {
+    try {
+      const data = await query(
+        `getLabelArtists`,
+        `query getLabelArtists {
+            getLabelArtists {
+              uuid
+              nickName
+              firstName
+              surName
+              logo
+            }
+        }`,
+      )
+
       artists = data
       artistsDisplay = artists
+      fetchedPageData = true
+    } catch (error) {
+      fetchedPageData = null
     }
   }
 
@@ -126,14 +131,17 @@
           </div>
         </Title>
         <section class="grid gap-6">
+          {#if fetchedPageData === null}
+            <ErrorBanner message="Error while fetching the artists." />
+          {/if}
           <div class="grid grid-cols-repeat-min-12rem gap-6">
-            {#if artistsDisplay}
+            {#if artistsDisplay.length > 0}
               {#each artistsDisplay as artist, i}
                 {#if i < artistsPerPage}
                   <ArtistCard {artist} />
                 {/if}
               {/each}
-            {:else}
+            {:else if fetchedPageData === false}
               {#each Array(4) as i}
                 <ArtistCardSkeleton />
               {/each}

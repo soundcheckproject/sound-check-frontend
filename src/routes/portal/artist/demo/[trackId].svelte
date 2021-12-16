@@ -122,7 +122,7 @@
           {#if track.artistTracks && track.artistTracks.length > 0}
             <div class="flex space-x-2">
               {#each track.artistTracks as artist}
-                <a href={`/artists/${artist.user.uuid}`} target="_blank">
+                <a href={`/artists/${artist.user.uuid}`}>
                   <Artist artist={artist.user} socials theme="dark"
                     >{artist.user.nickName}</Artist
                   ></a
