@@ -412,7 +412,7 @@
           {#if showFeedback}
             <div
               transition:slide|local
-              class="grid gap-4 max-h-96 overflow-y-scroll -mx-8"
+              class="grid gap-4 max-h-96 overflow-y-auto -mx-8"
             >
               <div
                 class="bg-opacity-10 rounded-md bg-gray-50 text-sm py-2 px-2 flex mx-8"
