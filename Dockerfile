@@ -15,7 +15,6 @@ COPY . .
 
 ENV NODE_HOST=0.0.0.0
 ENV NODE_PORT=8888
-
 EXPOSE 8888
 
 CMD ["node", "build"]
