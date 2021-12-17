@@ -18,4 +18,4 @@ ENV NODE_PORT=8888
 
 EXPOSE 8888
 
-CMD ["node", "build"]
+CMD ["node", "index.js"]
