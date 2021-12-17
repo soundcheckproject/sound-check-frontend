@@ -45,7 +45,7 @@
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
   import { page } from '$app/stores'
-  import { roleStore } from '../../../../stores/stores'
+  import { pageSelectedStore, roleStore, trackSelectedStore } from '../../../../stores/stores'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
@@ -67,6 +67,8 @@
 
   let artwork: ArtworkType
   let newArtwork: ArtworkType
+
+  let artworkFile: File, trackFile: File
 
   let loadingStatus: { [key: string]: boolean } = {
     artwork: false,
@@ -104,15 +106,15 @@
   }
 
   const previewArtwork = (e: any) => {
-    let imageFile = e.target.files[0]
+    artworkFile = e.target.files[0]
     let reader = new FileReader()
-    reader.readAsDataURL(imageFile)
+    reader.readAsDataURL(artworkFile)
     reader.onload = e => {
       artworkPreview = e.target.result
     }
   }
   const previewTrack = (e: any) => {
-    let trackFile = e.target.files[0]
+    trackFile = e.target.files[0]
     let reader = new FileReader()
     reader.readAsDataURL(trackFile)
     reader.onload = e => {
@@ -177,7 +179,6 @@
 
         await updateTrack(track.uuid, updatedTrack)
           .catch(e => {
-           
             validateErrorTime('connection', 'graphql', errors)
           })
           .finally(() => {
@@ -250,12 +251,13 @@
     }
   }
 
+  pageSelectedStore.set(undefined)
   onMount(async () => {
     genres = await getGenres()
     if ($page.params.trackId) {
       try {
         track = await getTrackById($page.params.trackId)
-
+        if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
         prefferedReleaseDateString = formatDateToDDMMJJJJ(
           new Date(track.prefferdReleaseDate),
         )
@@ -271,13 +273,7 @@
   })
 
   $: {
-    console.log({ artistsArray })
-  }
-
-  $: {
     validationStore.set(errors)
-    // validationStore.set(errors)
-    // console.log(track)
   }
 </script>
 
@@ -471,7 +467,7 @@
               </div>
             </div>
 
-            <div class="flex justify-end space-x-2">
+            <div class="flex justify-end space-x-2 lg:col-span-2">
               <Button
                 color="bg-gray-600"
                 onClick={() => {
@@ -506,9 +502,9 @@
                   class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
                   on:click={() => artworkClick.click()}
                 >
-                  {#if artworkBlob}
+                  {#if artworkBlob && artworkFile}
                     <p class="text-teal-700 font-medium">
-                      Artwork has been selected.
+                      {artworkFile ? artworkFile.name : ''} has been selected.
                     </p>
                   {:else}
                     <svg
@@ -596,23 +592,30 @@
                   class="input portal w-full justify-center items-center cursor-pointer flex space-x-2"
                   on:click={() => trackDataClick.click()}
                 >
-                  <svg
-                    class="-mt-px"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                    <polyline points="17 8 12 3 7 8" />
-                    <line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
-                  <p>Click to upload or drag your track here..</p>
+                  {#if trackData.blob && trackFile}
+                    <p class="text-teal-700 font-medium">
+                      {trackFile ? trackFile.name : ''} has been selected.
+                      <!-- Logo has been selected. Press update logo to submit! -->
+                    </p>
+                  {:else}
+                    <svg
+                      class="-mt-px"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                    <p>Click to upload or drag your track here..</p>
+                  {/if}
                   <input
                     required={true}
                     type="file"

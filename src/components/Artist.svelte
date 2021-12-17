@@ -4,6 +4,7 @@
   import { fade, fly } from 'svelte/transition'
 
   import LinkIcon from './LinkIcon.svelte'
+  import { capitalize } from '../utils/capitalize'
 
   export let className = ''
   export let artist: ArtistType = undefined
@@ -91,8 +92,38 @@
         {/if}
       </div>
 
-      {#if hover && socials}
-        <div
+      <div
+        in:fly|local={{ y: 25, opacity: 0 }}
+        out:fade|local={{ duration: 200 }}
+        class="text-xs min-w-max grid  z-10 absolute text-gray-700"
+      >
+        {#if hover && socials}
+          {#if artist.userLinks && artist.userLinks.length > 0}
+            {#each artist.userLinks as userLink}
+              <div
+                class="mt-2 flex items-center bg-white rounded-full mshadow-md px-3 py-2 text-xs "
+              >
+                <LinkIcon className="mr-2" type={userLink.link.type} />
+                <a
+                  href={userLink.linkAddress}
+                  target="_blank"
+                  class="hover:underline grid grid-flow-col gap-2 items-center text-gray-700"
+                >
+                  {capitalize(userLink.link.type)}
+                </a>
+              </div>
+            {/each}
+          {:else}
+            <div
+              class="mt-2 flex items-center bg-white rounded-full mshadow-md px-3 py-2 text-xs "
+            >
+              <LinkIcon className="mr-2" />
+              No links found 😥
+            </div>
+          {/if}
+        {/if}
+      </div>
+      <!-- <div
           in:fly|local={{ y: 25, opacity: 0 }}
           out:fade|local={{ duration: 200 }}
           class="text-xs min-w-max grid animate__fadeInUp group-hover:animate__fadeInUp z-10 absolute bg-white mshadow-sm text-gray-700  py-3 px-5 rounded-sm -mt-2  gap-1 justify-items-start {theme ==
@@ -119,28 +150,9 @@
           {:else}
             <p>No links found 😥</p>
           {/if}
-          <!-- <a
-          href="twitter.com"
-          class="hover:underline grid grid-flow-col gap-2 items-center "
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path
-              d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0023 3z"
-            />
-          </svg>Twitter
-        </a> -->
+
         </div>
-      {/if}
+      {/if} -->
     </div>
   </button>
 {/if}

@@ -44,7 +44,7 @@
   import { page } from '$app/stores'
   import { uploadLogo } from '../../../utils/useRest'
   import { capitalize } from '../../../utils/capitalize'
-  import { roleStore } from '../../../stores/stores'
+  import { pageSelectedStore, roleStore } from '../../../stores/stores'
   import type { RoleType } from '../../../types/Role.type'
   import ErrorBanner from '../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../components/Skeleton.svelte'
@@ -348,13 +348,14 @@
         errors = validateErrors([validateEmpty(newArtist[type])], type, errors)
     }
   }
+  let logo: File
 
   let logoPreview: any = ''
   let logoBlob: any = ''
   const previewLogo = (e: any) => {
-    let image = e.target.files[0]
+    logo = e.target.files[0]
     let reader = new FileReader()
-    reader.readAsDataURL(image)
+    reader.readAsDataURL(logo)
     reader.onload = e => {
       logoPreview = e.target.result
     }
@@ -364,6 +365,8 @@
     try {
       if ($page.params.userId) {
         artist = await getArtistByUserId($page.params.userId)
+        if (artist)
+          pageSelectedStore.set({ name: 'users', title: artist.nickName })
       } else {
         artist = await getUserViaFirebase()
       }
@@ -375,6 +378,7 @@
 
   let roles: RoleType[] = []
 
+  pageSelectedStore.set(undefined)
   onMount(async () => {
     links = await getLinks()
     getArtist()
@@ -403,9 +407,8 @@
       <Title>Account</Title>
       <SubTitle>Personal information</SubTitle>
       <InputError errorInput="general" />
-      <form class="grid gap-6">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <!-- <InputError errorInput={'nickname'} /> -->
+      <form class="grid gap-6 ">
+        <div class="grid sm:grid-cols-2 gap-4 ">
           <Input
             errorInput="nickname"
             title="Nickname"
@@ -413,7 +416,7 @@
             bind:value={newArtist.nickName}
             on:input={() => checkValidation('nickname')}
           />
-          <!-- // Todo make birthdate work -->
+
           <Input
             title="Birthdate"
             bind:value={birthdatestring}
@@ -422,9 +425,8 @@
             placeholder="What's your birthdate?"
             on:input={() => checkValidation('birthdate')}
           />
-          {birthdatestring}
         </div>
-        <div class="grid sm:grid-cols-2 gap-4">
+        <div class="grid sm:grid-cols-2 gap-4 ">
           <Input
             title="First name"
             errorInput={'firstName'}
@@ -471,7 +473,7 @@
           rows="5"
         />
 
-        <div class="flex justify-end space-x-2">
+        <div class="flex justify-end space-x-2 ">
           <Button
             color="bg-gray-600"
             onClick={() => {
@@ -496,14 +498,15 @@
                 class="input portal  w-full justify-center items-center cursor-pointer flex space-x-2"
                 on:click={() => logoClick.click()}
               >
-                {#if logoBlob}
+                {#if logoBlob && logo}
                   <img
                     class="w-8 h-8 rounded-sm object-cover -my-2 -ml-3"
                     src={logoPreview}
                     alt="Preview of logo"
                   />
                   <p class="text-teal-700 font-medium">
-                    Logo has been selected. Press update logo to submit!
+                    {logo ? logo.name : ''} has been selected.
+                    <!-- Logo has been selected. Press update logo to submit! -->
                   </p>
                 {:else}
                   <svg
@@ -566,7 +569,9 @@
                 class="input portal text-red-300 capitalize"
                 placeholder="For example: Instagram, facebook, .."
               >
-                <option selected disabled value="Pick a channel">Pick a channel</option>
+                <option selected disabled value="Pick a channel"
+                  >Pick a channel</option
+                >
                 {#each links as l}
                   <option value={l}>{l.type}</option>
                 {/each}</select

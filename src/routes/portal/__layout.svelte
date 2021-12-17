@@ -3,6 +3,11 @@
   import { page } from '$app/stores'
   import { fade, fly } from 'svelte/transition'
   import AuthLayer from '../../components/AuthLayer.svelte'
+  import {
+    pageSelectedStore,
+    trackSelectedStore,
+    userSelectedStore,
+  } from '../../stores/stores'
 
   let pageBread = []
 
@@ -27,7 +32,7 @@
     >
       <div class="mx-auto max-w-[62rem]">
         <p
-          class="-ml-3 text-gray-800 mb-8 flex space-x-2 uppercase text-sm items-center"
+          class="-ml-3 text-gray-800 mb-8 grid grid-flow-col-dense justify-start gap-2 uppercase text-sm items-center"
         >
           {#each pageBread as bread, index}
             {#if index != 0}
@@ -45,15 +50,49 @@
               >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
-            {/if} 
+            {/if}
 
-            <a
-              class="transition-all hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white focus:no-underline	 rounded-full"
-              in:fly|local={{ x: -50, duration: 200 }}
-              out:fade|local={{ duration: 200 }}
-              href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
-              >{bread}
-            </a>
+            {#if pageBread[index - 1] == 'demo' || pageBread[index - 1] == 'users'}
+              {#if $pageSelectedStore}
+                <a
+                  class="transition-all hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white focus:no-underline	 rounded-full"
+                  href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
+                  >{$pageSelectedStore.title}</a
+                >
+                {#if $page.path.indexOf('edit') != -1}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    class="opacity-25 mr-3"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                  <div
+                    class="px-2 rounded-md py-px text-[.7rem] bg-black/10"
+                    in:fly|local={{ x: -50, duration: 200 }}
+                    out:fade|local={{ duration: 200 }}
+                  >
+                    Edit
+                  </div>
+                {/if}
+              {/if}
+            {:else}
+              <a
+                class="transition-all hover:underline py-2 px-3 focus:bg-gray-700 focus:outline-none focus:text-white focus:no-underline	 rounded-full"
+                in:fly|local={{ x: -50, duration: 200 }}
+                out:fade|local={{ duration: 200 }}
+                href={`/portal/${pageBread.slice(0, index + 1).join('/')}`}
+              >
+                {bread}</a
+              >
+            {/if}
           {/each}
         </p>
         <section class="p-0 m-0"><slot /></section>

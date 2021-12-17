@@ -21,37 +21,7 @@
   let artist: UserType
 
   let tracks: TrackType[] = []
-  // let tracks: TrackType[] = [
-  //   {
-  //     title: 'Miss you so feat. Jebroer',
-  //     description: 'Niels his new hit song',
-  //     previewStart: 20,
-  //     previewStop: 35,
-  //     lyrics: 'I hate to admit it',
 
-  //     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-  //     prefferdReleaseDate: '2022-01-01',
-  //     artwork: {
-  //       designer: 'nielsonderbeke2',
-  //       resource: 'https://pixy.org/src/20/201310.jpg',
-  //     },
-  //   },
-  //   {
-  //     title: 'Miss you so feat. Jebroer',
-  //     description: 'Niels his new hit song',
-  //     previewStart: 20,
-  //     previewStop: 35,
-  //     lyrics: 'I hate to admit it',
-
-  //     genreId: '6ef2aded-c280-40bf-8e4c-e4b6f38b72d2',
-  //     prefferdReleaseDate: '2022-01-01',
-  //     artwork: {
-  //       designer: 'nielsonderbeke2',
-  //       resource:
-  //         'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallup.net%2Fwp-content%2Fuploads%2F2018%2F09%2F28%2F951526-art-artwork-fantasy-artistic-original-abstract-abstraction-psychedelic.jpg&f=1&nofb=1',
-  //     },
-  //   },
-  // ]
 
   const getArtistTracks = async (userId: string) => {
     try {

@@ -9,9 +9,6 @@
   import userStore from '../../stores/userStore'
   import { RoleName } from '../../types/Role.type'
 
-  $: {
-    console.log($menuState)
-  }
 </script>
 
 <div class={$menuState ? 'block sm:hidden' : 'hidden'}>
@@ -345,7 +342,7 @@
   </div>
 </aside>
 
-<style>
+<style lang="postcss">
   hr {
     background: white;
     border: 1px solid white;

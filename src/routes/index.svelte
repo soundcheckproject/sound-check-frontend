@@ -92,11 +92,15 @@
 
     getReleasesData()
   })
+
+
 </script>
 
 <svelte:head>
   <title>{$labelStore.name} - Home</title>
 </svelte:head>
+
+
 
 <Header>
   {#if spotlightTrack}
