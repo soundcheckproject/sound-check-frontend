@@ -209,7 +209,7 @@ export const getAllTracks = async (): Promise<TrackType[]> => {
         title
         description
         lyrics
-        contractFile
+        
         resource
         previewStart
         previewStop

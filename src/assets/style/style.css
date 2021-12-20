@@ -19,8 +19,11 @@ body {
   box-shadow: 0 0 8rem rgba(0, 0, 0, 0.25);
 }
 
-.focus-ring {
+/* .focus-ring {
   @apply focus:ring ring-teal-500 ring-opacity-50 focus:outline-none rounded-sm;
+} */
+.focus-ring {
+  @apply transition-all focus:ring ring-teal-600/40 ring-opacity-50 outline-none;
 }
 
 article {
@@ -59,8 +62,7 @@ section {
 
 label.portal,
 .label.portal {
-  @apply text-sm;
-  @apply text-gray-700;
+  @apply text-sm text-gray-700 relative;
 }
 
 .input.portal {
@@ -93,6 +95,20 @@ label.portal,
     hsla(185, 40%, 20%, 1) 0%,
     hsla(215, 32%, 17%, 1) 100%
   );
+}
+
+.bg-teal-custom-dark {
+  background: hsla(185, 40%, 20%, 1);
+}
+
+.to-teal-custom-dark {
+  --tw-gradient-to: #1e4447;
+  --tw-gradient-stops: var(--tw-gradient-from),
+    var(--tw-gradient-to, rgba(30, 68, 71, 1));
+}
+
+.text-teal-custom-dark {
+  color: hsla(185, 40%, 20%, 1);
 }
 
 .download {

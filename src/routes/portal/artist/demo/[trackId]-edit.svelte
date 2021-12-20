@@ -99,7 +99,7 @@
     }
   }
 
-  let inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
+  let inputFields: string[] = ['title',  'genreId']
 
   let errors: string[] = []
   const checkValidation = (type: string = null) => {
@@ -390,7 +390,7 @@
                       {#each artistsArray as artist}
                         <div
                           class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                          transition:fade|local
+                          transition:fade
                         >
                           <Artist artist={artist.user} size="md" pointer={false}
                             >{artist.user.nickName}</Artist

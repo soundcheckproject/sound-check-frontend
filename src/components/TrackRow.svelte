@@ -30,7 +30,7 @@
       ? 'h-28'
       : size == 'xl'
       ? 'h-36'
-      : ''}  items-center sm:items-stretch focus-ring"
+      : ''}  items-center sm:items-stretch rounded-sm  focus-ring"
   >
     {#if track.artwork && track.artwork.resource}
       <img

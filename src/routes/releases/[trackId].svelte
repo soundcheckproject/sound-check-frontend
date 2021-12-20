@@ -15,7 +15,11 @@
   import Skeleton from '../../components/Skeleton.svelte'
   import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
+  import { goto } from '$app/navigation'
+
   let track: TrackType
+
+  let lyricsFormatted: string[]
 
   onMount(async () => {
     try {
@@ -32,6 +36,7 @@
                 prefferdReleaseDate
                 artistTracks{
                   user{
+                    uuid
                     nickName
                     logo
                     userLinks{
@@ -56,6 +61,8 @@
         }`,
           { trackId: $page.params.trackId },
         )
+
+      lyricsFormatted = track.lyrics.split('.')
     } catch (error) {
       track = null
     }
@@ -94,7 +101,11 @@
                   <p class="mt-4 font-semibold  ">Lyrics</p>
 
                   <p class="text-sm">
-                    {track.lyrics ?? "Track doesn't have any lyrics"}
+                    {#if track.lyrics}
+                      {#each lyricsFormatted as line}
+                        {line}<br />
+                      {/each}
+                    {:else}Track doesn't have any lyrics{/if}
                   </p>
                 </div>
               </div>
@@ -103,8 +114,13 @@
                 {#if track.artistTracks && track.artistTracks.length > 0}
                   <div class="flex space-x-2">
                     {#each track.artistTracks as artist}
-                      <Artist artist={artist.user} socials theme="dark"
-                        >{artist.user.nickName}</Artist
+                      <Artist
+                        onClick={() => {
+                          goto('/artists/' + artist.user.uuid)
+                        }}
+                        artist={artist.user}
+                        socials
+                        theme="dark">{artist.user.nickName}</Artist
                       >
                     {/each}
                   </div>

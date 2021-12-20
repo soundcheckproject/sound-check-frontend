@@ -15,6 +15,8 @@
   export let required = false
   export let title: string = ''
 
+  let passwordShow = false
+
   onMount(() => {
     if (ref) {
       ref.type = type
@@ -23,7 +25,10 @@
   export let errorInput = ''
   export let portal = 'portal'
   $: if (!value) value = ''
-
+  $: {
+    if (type == 'password' && ref)
+      passwordShow ? (ref.type = 'text') : (ref.type = 'password')
+  }
   let borderColor = ''
 </script>
 
@@ -41,7 +46,27 @@
         placeholder={$$props.placeholder ?? 'Type here..'}
         {autocomplete}
         {required}
-      />{:else}
+      />
+      {#if type == 'password'}
+        <svg
+          on:click={() => (passwordShow = !passwordShow)}
+          class="absolute transition-all bottom-4 right-4  {passwordShow
+            ? 'text-teal-700'
+            : 'text-gray-700/30'} hover:text-teal-600 cursor-pointer"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>{/if}
+    {:else}
       <textarea
         rows={$$props.rows}
         bind:value

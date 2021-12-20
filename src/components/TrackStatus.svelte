@@ -11,7 +11,7 @@
   <div
     on:mouseenter={() => (hoverStatus = true)}
     on:mouseleave={() => (hoverStatus = false)}
-    class="absolute top-0 right-0"
+    class="absolute top-0 right-0 z-10"
   >
     {#if hoverStatus}
       <div

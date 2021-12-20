@@ -79,7 +79,7 @@
                   on:input={() => getLabelArtistsOnName(searchNickname)}
                   type="text"
                   class="input"
-                  placeholder="Artist name"
+                  placeholder={$_.artists.name}
                 />
                 <svg
                   class="w-4 h-4 absolute mt-2 right-4  text-teal-700  stroke-current"

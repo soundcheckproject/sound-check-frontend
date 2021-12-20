@@ -68,7 +68,7 @@
         feedbacks = [...feedbacks, feedbackData]
         feedbackInput = ''
       } catch (e) {
-        console.log(e)
+        // console.log(e)
       }
     }
   }
@@ -79,7 +79,6 @@
   export let track: TrackType
 
   let trackPlayable = false
-
 
   onMount(async () => {
     if (feedback) {
@@ -115,7 +114,7 @@
   })
 
   onDestroy(() => {
-    wavesurfer.destroy()
+    if (wavesurfer) wavesurfer.destroy()
   })
 
   $: {
@@ -147,7 +146,7 @@
 
   const handleKeyDown = (e: KeyboardEvent) => {
     // 32 = spacebar
-    if (e.keyCode === 32) {
+    if (!feedbackInput && feedbackInput.length === 0 && e.keyCode === 32) {
       if (wavesurfer) {
         wavesurfer.playPause()
         trackInfo.playing = !trackInfo.playing
