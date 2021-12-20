@@ -24,16 +24,6 @@ const config = {
     //     port: 'NODE_PORT',
     //   },
     // }),
-    // ! static files setup
-    // adapter: adapter({
-
-    //   pages: 'build',
-    //   assets: 'build',
-    //   fallback: null,
-    //   ssr: false,
-    // }),
-    // prerender: {
-    //   enabled: false,
     // },
   },
 }
