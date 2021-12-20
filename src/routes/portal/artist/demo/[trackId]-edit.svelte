@@ -79,6 +79,8 @@
     }
     if (royaltySplitotal > 100) {
       errors = validateError('artist', 'royalty_high', false, errors)
+    } else {
+      errors = validateError('artist', 'royalty_high', true, errors)
     }
   }
 
@@ -99,12 +101,11 @@
     }
   }
 
-  let inputFields: string[] = ['title',  'genreId']
+  let inputFields: string[] = ['title', 'genreId']
 
   let errors: string[] = []
   const checkValidation = (type: string = null) => {
     if (type === 'previewpart') {
-      console.log(newTrack.previewStart, newTrack.previewStop)
       errors = validateErrors(
         [
           validateStartLower(newTrack.previewStart, newTrack.previewStop),
@@ -152,8 +153,6 @@
           })
         })
 
-        console.log({ updatedTrack })
-
         await updateTrack(track.uuid, updatedTrack)
           .catch(e => {
             validateErrorTime('connection', 'graphql', errors)
@@ -177,7 +176,6 @@
     if (artworkBlob) {
       await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.uuid)
         .then(res => {
-          console.log(res)
           loadingStatus.artwork = false
         })
         .catch(error => {
@@ -206,8 +204,6 @@
             .finally(() => {
               loadingStatus.track = false
             })
-
-          console.log(res)
         })
         .catch(error => {
           loadingStatus.track = false
@@ -375,12 +371,6 @@
                             Royalties {royaltySplitotal}%
                           </p>
                         </div>
-
-                        {#if royaltySplitotal != 100}
-                          <SubTitle theme="error"
-                            >Total royalties should be equal to 100</SubTitle
-                          >
-                        {/if}
                       {:else}<div
                           class="label portal grid  gap-2 "
                           transition:fade|local
@@ -390,7 +380,7 @@
                       {#each artistsArray as artist}
                         <div
                           class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                          transition:fade
+                          transition:fade|local
                         >
                           <Artist artist={artist.user} size="md" pointer={false}
                             >{artist.user.nickName}</Artist

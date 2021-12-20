@@ -67,8 +67,7 @@
       )
         .then(async () => {
           loadingStatus.contractUpload = false
-          // goto('/track/' + track.uuid)
-          console.log('uploaded contract file')
+
           track = await getTrackById($page.params.trackId)
           contract = undefined
           contractFileBlob = undefined
@@ -79,7 +78,6 @@
         })
     } else {
       loadingStatus.contractUpload = false
-      console.log('no contract file')
     }
   }
 
@@ -152,7 +150,9 @@
               <p class="mt-4 font-semibold  ">Description</p>
 
               <p class="text-sm max-h-48 overflow-y-auto">
-                {track.description ? track.lyrics : 'No description for this track.'}
+                {track.description
+                  ? track.lyrics
+                  : 'No description for this track.'}
               </p>
               <p class="mt-4 font-semibold ">Lyrics</p>
 

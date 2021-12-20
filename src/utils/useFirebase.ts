@@ -47,7 +47,7 @@ export const loginUser = (
       .catch(error => {
         // const errorCode = error.code
         // const errorMessage = error.message
-        console.error({ error })
+        // console.error({ error })
         reject(false)
       })
   })
@@ -117,8 +117,6 @@ export const setPersistenceFirebase = async (
     })
     .catch(error => {
       // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
     })
 }
 
@@ -126,7 +124,6 @@ export const registerUser = (user: UserType): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     createUserWithEmailAndPassword(getAuth(), user.email, user.password)
       .then(async userCred => {
-        console.log(userCred)
         // Signed in -> success -> let's add a record to our own database!
         // #2 Eigen account op server bijhouden
 
@@ -146,14 +143,15 @@ export const registerUser = (user: UserType): Promise<boolean> => {
             {
               data: addUser,
             },
-          ).then(res => console.log(res))
+          ).then(res => {
+            // console.log(res)
+          })
 
           await getAuth().signOut()
           userStore.set(undefined)
           resolve(true)
-      
         } catch (error) {
-          console.error({ error })
+          // console.error({ error })
           reject(false)
         }
       })
@@ -161,7 +159,7 @@ export const registerUser = (user: UserType): Promise<boolean> => {
         // const errorCode = error.code
         // const errorMessage = error.message
 
-        console.log({ error })
+        // console.log({ error })
         reject(false)
       })
   })

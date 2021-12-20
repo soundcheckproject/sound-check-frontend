@@ -50,19 +50,16 @@
       )
         .then(async () => {
           loadingStatus.contractUpload = false
-          // goto('/track/' + track.uuid)
-          console.log('uploaded contract file')
+
           track = await getTrackById($page.params.trackId)
           contract = undefined
           contractFileBlob = undefined
         })
         .catch(err => {
           loadingStatus.contractUpload = false
-          // ! todo popup at error
         })
     } else {
       loadingStatus.contractUpload = false
-      console.log('no contract file')
     }
   }
 
