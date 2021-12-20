@@ -147,11 +147,11 @@
           />
         {/if}
       </p>
-      <div class="mb-2 flex justify-start items-end">
+      <div class="mb-2 grid grid-flow-col gap-3 mt-4 justify-start items-end">
         {#if spotlightTrack}
           {#each spotlightTrack.artistTracks as at, i}
             {#if i > 0}
-              <Artist className="ml-4" artist={at.user} size="xs"
+              <Artist className="" artist={at.user} size="xs"
                 >{at.user.nickName}</Artist
               >
             {:else}

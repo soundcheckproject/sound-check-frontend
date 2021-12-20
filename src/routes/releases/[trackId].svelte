@@ -17,6 +17,8 @@
 
   let track: TrackType
 
+  let lyricsFormatted: string[]
+
   onMount(async () => {
     try {
       if ($page.params.trackId)
@@ -56,6 +58,8 @@
         }`,
           { trackId: $page.params.trackId },
         )
+
+      lyricsFormatted = track.lyrics.split('.')
     } catch (error) {
       track = null
     }
@@ -94,7 +98,11 @@
                   <p class="mt-4 font-semibold  ">Lyrics</p>
 
                   <p class="text-sm">
-                    {track.lyrics ?? "Track doesn't have any lyrics"}
+                    {#if track.lyrics}
+                      {#each lyricsFormatted as line}
+                        {line}<br />
+                      {/each}
+                    {:else}Track doesn't have any lyrics{/if}
                   </p>
                 </div>
               </div>
