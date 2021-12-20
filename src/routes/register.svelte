@@ -32,6 +32,7 @@
   import { formatDateToDDMMJJJJ } from '../utils/useFormat'
 
   import _ from '../stores/languageStore'
+  import { getAuth } from 'firebase/auth'
 
   let birthDateString = formatDateToDDMMJJJJ(new Date())
 

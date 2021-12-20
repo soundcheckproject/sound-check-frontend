@@ -148,17 +148,10 @@ export const registerUser = (user: UserType): Promise<boolean> => {
             },
           ).then(res => console.log(res))
 
-          setPersistenceFirebase(addUser.email, addUser.password)
-            .then(() => {
-              storeUserInfoInLocalStorage()
-                .then(() => {
-                  resolve(true)
-                })
-                .catch(() => reject(false))
-            })
-            .catch(() => {
-              reject(false)
-            })
+          await getAuth().signOut()
+          userStore.set(undefined)
+          resolve(true)
+      
         } catch (error) {
           console.error({ error })
           reject(false)
