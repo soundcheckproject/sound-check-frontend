@@ -3,20 +3,12 @@
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { roleStore } from '../stores/stores'
-  import { getUserViaFirebase } from '../utils/useGraphQL'
   import userStore from '../stores/userStore'
-  import type { UserType } from '../types/User.type'
-  import {
-    getUserInfoFromLocalStorage,
-    storeRole,
-    storeUserInfoInLocalStorage,
-  } from '../utils/useFirebase'
+  import { storeRole, storeUserInfoInLocalStorage } from '../utils/useFirebase'
   import Popup from './Popup.svelte'
-  import { getAuth } from '@firebase/auth'
 
   onMount(() => {
     authStore.subscribe(async ({ user, isLoggedIn, firebaseControlled }) => {
-
       if (!isLoggedIn && firebaseControlled) {
         // Reset user in localstorage
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import InputError from './InputError.svelte'
   import { onMount } from 'svelte'
-  import validationStore from '../stores/validationStore'
+
   export let value = ''
   export let type:
     | 'email'
@@ -23,10 +23,8 @@
   export let errorInput = ''
   export let portal = 'portal'
   $: if (!value) value = ''
-  //todo: red border around error input
+
   let borderColor = ''
-  // $: {
-  // }
 </script>
 
 <!-- //todo: add  red border to input validation -->
@@ -56,8 +54,6 @@
     {/if}</label
   >
   {#if errorInput}
-  <!-- <div class="grid gap-2"> -->
     <InputError {errorInput} />
-  <!-- </div> -->
   {/if}
 </div>

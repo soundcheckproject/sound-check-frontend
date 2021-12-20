@@ -20,7 +20,7 @@
   import validationStore from '../stores/validationStore'
 
   import userStore from '../stores/userStore'
-  import { labelStore, roleStore } from '../stores/stores'
+  import { roleStore } from '../stores/stores'
 
   import Input from '../components/Input.svelte'
   import FadeBox from '../components/portal/FadeBox.svelte'
@@ -31,9 +31,9 @@
   // let user = {
   //   email: 'docent@howest.be',
   //   password: 'P@ssw0rd',
-  //   remember: false,
+  //   remember: true,
   // }
-  //  let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
+  // let user = { email: 'artist.label@soundcheck.be', password: '@rtistLBL1' }
   // let user = { email: 'artist@soundcheck.be', password: '@rtistSC1' }
 
   let errors: string[] = []
@@ -175,7 +175,6 @@
                 rounded="none"
                 color="bg-teal-700"
                 className="login-btn justify-self-end"
-         
                 >{$_.login.form.submit}</Button
               >
             </div>

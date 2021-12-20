@@ -1,20 +1,12 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
   import type { TrackInfoType, TrackType } from '../types/Track.type'
-
   import { fade, slide } from 'svelte/transition'
 
   import type { UserType } from '../types/User.type'
   import { query } from '../utils/useGraphQL'
-
   import { formatDate, formatTimeForPlayer } from '../utils/useFormat'
-  import { onMount } from 'svelte'
 
   import { denyTrack, signTrack } from '../utils/useTrack'
-
-  export let artworkSource = ''
-
-  export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
   let audioPlayer: HTMLAudioElement
   let trackInfo: TrackInfoType = {
@@ -60,7 +52,6 @@
   }
 
   const loadTrackBlob = async () => {
-    // blobToBase64(await getTrackFileFromTrackId(track.uuid))
     try {
       isFetched = false
       const encodedFile = await query(
@@ -204,7 +195,7 @@
         }}
         ><svg
           class="mr-1"
-          class:active={!trackInfo.playing}
+          class:active={trackInfo.playing}
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -230,7 +221,7 @@
         <svg
           class="mr-1 "
           xmlns="http://www.w3.org/2000/svg"
-          class:active={trackInfo.playing}
+          class:active={!trackInfo.playing}
           width="20"
           height="20"
           viewBox="0 0 24 24"
@@ -287,7 +278,8 @@
       <a
         href="/portal/staff/demo/{track.uuid}"
         class="flex items-center transition-all hover:opacity-75 space-x-1 ml-4 text-xs uppercase text-white text-right font-medium outline-none focus:text-teal-300"
-        ><div>details</div> <svg
+        ><div>details</div>
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"

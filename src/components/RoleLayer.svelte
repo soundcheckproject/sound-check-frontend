@@ -3,7 +3,6 @@
   export let allowedForRoles: string[] = ['user']
   export let popup: boolean = false
   import Popup from '../components/Popup.svelte'
-
 </script>
 
 {#if allowedForRoles.includes($roleStore)}

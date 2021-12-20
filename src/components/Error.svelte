@@ -32,9 +32,11 @@
       >
     </div>
     {#if onClose}
-      <button class="opacity-0 group-hover:opacity-100 transition-all absolute right-3 cursor-pointer ">
+      <button
+        class="opacity-0 group-hover:opacity-100 transition-all absolute right-3 cursor-pointer "
+      >
         <svg
-        class="text-red-600"
+          class="text-red-600"
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="16"
@@ -52,7 +54,7 @@
     {/if}
 
     <div
-      in:fly={{ x: -25, opacity: 0,delay:200 }}
+      in:fly={{ x: -25, opacity: 0, delay: 200 }}
       out:fly={{ x: -25, opacity: 0 }}
       class="group-hover:-translate-x-6 transition-all group-hover:text-red-600"
     >
@@ -60,7 +62,8 @@
     </div>
   </h2>
 {/if}
-<!-- {#if display}
+<!--  Old error component
+  {#if display}
   <h2
     transition:slide|local
     class="relative text-md font-base justify-items-stretch flex items-center normal-case 

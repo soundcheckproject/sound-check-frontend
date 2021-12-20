@@ -7,11 +7,10 @@
   import type { TrackType } from '../types/Track.type'
   import Artist from './Artist.svelte'
 
-  export let size: 'sm' | 'md' | 'lg' = 'sm'
+  export let size: 'sm' | 'md' | 'lg' | 'xl' = 'sm'
 
   export let portal: 'staff' | 'artist' = 'artist'
   export let track: TrackType
-
   export let artists = false
   export let actions = false
   export let status = true
@@ -29,6 +28,8 @@
       ? 'h-20'
       : size == 'lg'
       ? 'h-28'
+      : size == 'xl'
+      ? 'h-36'
       : ''}  items-center sm:items-stretch focus-ring"
   >
     {#if track.artwork && track.artwork.resource}
@@ -39,6 +40,8 @@
           ? 'h-20 w-20'
           : size == 'lg'
           ? 'h-28 w-28'
+          : size == 'xl'
+          ? 'h-36'
           : ''} "
         src={track.artwork.resource ? track.artwork.resource : ''}
         alt="artwork"
@@ -51,6 +54,8 @@
         ? 'p-6'
         : size == 'lg'
         ? 'p-10'
+        : size == 'xl'
+        ? 'p-12'
         : ''}  items-center justify-between flex w-full rounded-sm text-sm bg-gray-100 relative {$$props.background
         ? 'overflow-hidden bg-opacity-0'
         : ''}"
@@ -65,15 +70,21 @@
       {#if $$props.slot}
         <slot />
       {:else}
-        <div>
-          <p class={size == 'sm' ? 'text-xs' : 'text-sm'}>
+        <div class="z-10 text-black/75">
+          <p
+            class={size == 'sm'
+              ? 'text-xs'
+              : size == 'xl'
+              ? 'text-md font-medium'
+              : 'text-sm'}
+          >
             {track.title ?? 'No title'}
           </p>
           {#if artists}
             {#if track.artistTracks && track.artistTracks.length > 0}
               <div class="mt-2 flex space-x-2">
                 {#each track.artistTracks as artist}
-                  <Artist artist={artist.user} socials size="sm" theme="glass"
+                  <Artist artist={artist.user} size="sm" theme="glass"
                     >{artist.user.nickName}</Artist
                   >
                 {/each}
@@ -85,10 +96,28 @@
         </div>
       {/if}
 
-      <div class="grid grid-flow-col gap-3 items-center ">
-        <div class="hidden lg:flex text-xs text-gray-500 text-right">
-          {#if size == 'lg'}Released on {/if}
+      <div class="grid grid-flow-col gap-3 items-center z-10">
+        <div
+          class="hidden lg:grid lg:grid-flow-col items-center gap-2 text-xs text-black/75 text-right"
+        >
+          {#if size == 'lg' || size == 'xl'}Released on {/if}
           {formatDate(new Date(track.prefferdReleaseDate)) ?? ''}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
         </div>
         {#if actions}
           <div class="flex space-x-2 text-gray-700">

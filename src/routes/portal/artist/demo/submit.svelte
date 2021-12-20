@@ -298,320 +298,257 @@
     <Title>Submit a new track</Title>
     <InputError errorInput="general" />
     <!-- <form class="" enctype="multipart/form-data"> -->
-      {#if uploadPageStatus === 1}
-        <FlyBox>
-          <InputError errorInput="connection" />
-          <SubTitle>📝 Information about your track</SubTitle>
-          <div class="grid lg:grid-cols-2 gap-4">
-            <Input
-              required
-              bind:value={newTrack.title}
-              title="Create a title"
-              errorInput="title"
-              on:input={() => {
-                checkValidation('title')
-              }}
-              placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
-            />
+    {#if uploadPageStatus === 1}
+      <FlyBox>
+        <InputError errorInput="connection" />
+        <SubTitle>📝 Information about your track</SubTitle>
+        <div class="grid lg:grid-cols-2 gap-4">
+          <Input
+            required
+            bind:value={newTrack.title}
+            title="Create a title"
+            errorInput="title"
+            on:input={() => {
+              checkValidation('title')
+            }}
+            placeholder="Full track title.. e.g. Mave & Alex Silves - Memories"
+          />
 
-            <div class="grid md:grid-cols-2 gap-4">
-              <label class="portal"
-                >Pick a genre *
-                <select
-                  bind:value={newTrack.genreId}
-                  class="input portal text-red-300"
-                  placeholder="e.g. Future House, Bass House"
-                >
-                  <option disabled selected>Pick a genre</option>
-                  {#each genres as genre}
-                    <option value={genre.uuid}>{genre.name}</option>
-                  {/each}</select
-                >
-              </label>
-              <Input
-                errorInput="date"
-                bind:value={prefferedReleaseDateString}
-                type="date"
-                title="Preferred release date"
-              />
-            </div>
-            <Input
-              errorInput="description"
-              bind:value={newTrack.description}
-              on:input={() => {
-                checkValidation('description')
-              }}
-              textarea
-              rows="5"
-              title="Describe your track"
-              placeholder="e.g. “This track is about...“"
-            />
-
-            <Input
-              errorInput="lyrics"
-              bind:value={newTrack.lyrics}
-              on:input={() => {
-                checkValidation('lyrics')
-              }}
-              textarea
-              rows="5"
-              title="Lyrics of your track"
-              placeholder="e.g. “I’m in love with the shape of you...“"
-            />
-          </div>
-          <div class="flex justify-end">
-            <Button
-              color="bg-teal-700"
-              size="sm"
-              onClick={() => setUploadPageStatus(2)}>Next</Button
-            >
-          </div>
-        </FlyBox>
-      {/if}
-      {#if uploadPageStatus == 2}
-        <FlyBox>
-          <SubTitle>👨🏼‍🎨 Artists</SubTitle>
-          <div class="grid gap-4">
-            <div class="grid lg:grid-cols-2 gap-4">
-              <div
-                class="relative"
-                on:mouseenter={() => (artistSearch.hover = true)}
-                on:mouseleave={() => (artistSearch.hover = false)}
+          <div class="grid md:grid-cols-2 gap-4">
+            <label class="portal"
+              >Pick a genre *
+              <select
+                bind:value={newTrack.genreId}
+                class="input portal text-red-300"
+                placeholder="e.g. Future House, Bass House"
               >
-                <label class="portal"
-                  >Search collaborator<input
-                    bind:value={artistSearch.nickName}
-                    on:input={() => searchArtistByNickName()}
-                    on:blur={() => searchArtistByNickName()}
-                    class="input portal"
-                    placeholder="Search by nickname..."
-                  /></label
-                >
-                {#if artistSearch.hover}
-                  <div
-                    in:fly|local={{ y: 25, opacity: 0 }}
-                    out:fade|local={{ duration: 200 }}
-                    class="absolute left-0 right-0 w-full z-10 "
-                  >
-                    <div
-                      class=" mt-2 mshadow-md p-4 bg-white rounded-sm grid gap-2"
-                    >
-                      <p class="text-xs font-semibold ">Select artist</p>
-                      {#if artistSearch.nickName.length > 0}
-                        <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
-                          {#if artists.length == 0}
-                            <p class="text-sm animate-pulse	">
-                              No artists found..
-                            </p>{:else}
-                            {#each artists as artist}<Artist
-                                {artist}
-                                onClick={() => {
-                                  artist.royaltyPercentage = 0
-                                  artistsArray = [...artistsArray, artist]
-                                }}>{artist.nickName}</Artist
-                              >
-                            {/each}
-                          {/if}
-                        </div>
-                      {:else}
-                        <p class="text-sm animate-pulse	">Loading artists..</p>
-                      {/if}
-                    </div>
-                  </div>
-                {/if}
-              </div>
-              <div class="grid gap-4">
-                {#if artistsArray.length > 0}
-                  <div
-                    class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
-                    transition:fade|local
-                  >
-                    <p class="">Artist(s)</p>
-                    <p class="font-semibold text-right ">
-                      Royalties {royaltyPercentageTotal}%
-                    </p>
-                  </div>
-
-                  {#if royaltyPercentageTotal != 100}
-                    <SubTitle theme="error"
-                      >Total royalties should be equal to 100</SubTitle
-                    >
-                  {/if}
-                {:else}<div class="label portal grid  gap-2 " transition:fade>
-                    <p class="">Add a collaborator</p>
-                  </div>{/if}
-                {#each artistsArray as artist, i}
-                  <div
-                    class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
-                    transition:fade|local
-                  >
-                    {#if i === 0}
-                      <Artist {artist} size="md">{artist.nickName}</Artist>
-                    {:else}
-                      <Artist
-                        {artist}
-                        size="md"
-                        remove={() => {
-                          removeArtist(artist.uuid)
-                        }}>{artist.nickName}</Artist
-                      >
-                    {/if}
-
-                    <div class="relative flex items-center justify-end group">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
-                        bind:value={artist.royaltyPercentage}
-                        on:input={() => {
-                          calcRoyaltyPercentageTotal()
-                        }}
-                      />
-                      <svg
-                        class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <line x1="19" y1="5" x2="5" y2="19" />
-                        <circle cx="6.5" cy="6.5" r="2.5" />
-                        <circle cx="17.5" cy="17.5" r="2.5" />
-                      </svg>
-                    </div>
-                  </div>
-                {/each}
-              </div>
-            </div>
+                <option disabled selected>Pick a genre</option>
+                {#each genres as genre}
+                  <option value={genre.uuid}>{genre.name}</option>
+                {/each}</select
+              >
+            </label>
+            <Input
+              errorInput="date"
+              bind:value={prefferedReleaseDateString}
+              type="date"
+              title="Preferred release date"
+            />
           </div>
-          <div class="flex justify-end">
-            <Button
-              color="bg-teal-700"
-              size="sm"
-              onClick={() => setUploadPageStatus(3)}>Next</Button
-            >
-          </div>
-        </FlyBox>
-      {/if}
-      {#if uploadPageStatus == 3}
-        <FlyBox>
-          <div class="grid gap-8 sm:grid-cols-min-auto ">
-            <!-- <figure /> -->
+          <Input
+            errorInput="description"
+            bind:value={newTrack.description}
+            on:input={() => {
+              checkValidation('description')
+            }}
+            textarea
+            rows="5"
+            title="Describe your track"
+            placeholder="e.g. “This track is about...“"
+          />
+
+          <Input
+            errorInput="lyrics"
+            bind:value={newTrack.lyrics}
+            on:input={() => {
+              checkValidation('lyrics')
+            }}
+            textarea
+            rows="5"
+            title="Lyrics of your track"
+            placeholder="e.g. “I’m in love with the shape of you...“"
+          />
+        </div>
+        <div class="flex justify-end">
+          <Button
+            color="bg-teal-700"
+            size="sm"
+            onClick={() => setUploadPageStatus(2)}>Next</Button
+          >
+        </div>
+      </FlyBox>
+    {/if}
+    {#if uploadPageStatus == 2}
+      <FlyBox>
+        <SubTitle>👨🏼‍🎨 Artists</SubTitle>
+        <div class="grid gap-4">
+          <div class="grid lg:grid-cols-2 gap-4">
             <div
-              class="bg-gray-100 rounded-md m-auto w-64 h-64 sm:w-52 sm:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
-              0
-                ? 'mshadow-sm '
-                : ''}"
-              style={artworkBase64String.length > 0
-                ? `background:url('${artworkBase64String}') center center;background-size:cover`
-                : ''}
-              on:click={() => artworkClick.click()}
+              class="relative"
+              on:mouseenter={() => (artistSearch.hover = true)}
+              on:mouseleave={() => (artistSearch.hover = false)}
             >
-              {#if artworkBase64String.length <= 0}
-                <svg
-                  class="text-teal-700 opacity-90"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+              <label class="portal"
+                >Search collaborator<input
+                  bind:value={artistSearch.nickName}
+                  on:input={() => searchArtistByNickName()}
+                  on:blur={() => searchArtistByNickName()}
+                  class="input portal"
+                  placeholder="Search by nickname..."
+                /></label
+              >
+              {#if artistSearch.hover}
+                <div
+                  in:fly|local={{ y: 25, opacity: 0 }}
+                  out:fade|local={{ duration: 200 }}
+                  class="absolute left-0 right-0 w-full z-10 "
                 >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
+                  <div
+                    class=" mt-2 mshadow-md p-4 bg-white rounded-sm grid gap-2"
+                  >
+                    <p class="text-xs font-semibold ">Select artist</p>
+                    {#if artistSearch.nickName.length > 0}
+                      <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
+                        {#if artists.length == 0}
+                          <p class="text-sm animate-pulse	">
+                            No artists found..
+                          </p>{:else}
+                          {#each artists as artist}<Artist
+                              {artist}
+                              onClick={() => {
+                                artist.royaltyPercentage = 0
+                                artistsArray = [...artistsArray, artist]
+                              }}>{artist.nickName}</Artist
+                            >
+                          {/each}
+                        {/if}
+                      </div>
+                    {:else}
+                      <p class="text-sm animate-pulse	">Loading artists..</p>
+                    {/if}
+                  </div>
+                </div>
               {/if}
             </div>
-            <div class="grid gap-4 ">
-              <SubTitle>🖼 Artwork</SubTitle>
-
-              <Input
-                title="Artwork designer"
-                placeholder="e.g. Picasso"
-                bind:value={newTrack.artwork.designer}
-              />
-              <div class="label portal">
-                Upload Artwork
-                <button
-                  class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 focus-ring"
-                  on:click={() => artworkClick.click()}
+            <div class="grid gap-4">
+              {#if artistsArray.length > 0}
+                <div
+                  class="label portal grid  gap-2 -mb-1 items-center grid-cols-1fr-auto"
+                  transition:fade|local
                 >
-                  {#if artworkBlob}
-                    <p class="text-teal-700 font-medium">
-                      {artwork ? artwork.name : ''} has been selected.
-                    </p>
+                  <p class="">Artist(s)</p>
+                  <p class="font-semibold text-right ">
+                    Royalties {royaltyPercentageTotal}%
+                  </p>
+                </div>
+
+                {#if royaltyPercentageTotal != 100}
+                  <SubTitle theme="error"
+                    >Total royalties should be equal to 100</SubTitle
+                  >
+                {/if}
+              {:else}<div class="label portal grid  gap-2 " transition:fade>
+                  <p class="">Add a collaborator</p>
+                </div>{/if}
+              {#each artistsArray as artist, i}
+                <div
+                  class="grid gap-2 text-sm items-center grid-cols-1fr-auto"
+                  transition:fade|local
+                >
+                  {#if i === 0}
+                    <Artist {artist} size="md">{artist.nickName}</Artist>
                   {:else}
+                    <Artist
+                      {artist}
+                      size="md"
+                      remove={() => {
+                        removeArtist(artist.uuid)
+                      }}>{artist.nickName}</Artist
+                    >
+                  {/if}
+
+                  <div class="relative flex items-center justify-end group">
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      class="input portal pr-5 m-0 bg-gray-100 rounded-sm "
+                      bind:value={artist.royaltyPercentage}
+                      on:input={() => {
+                        calcRoyaltyPercentageTotal()
+                      }}
+                    />
                     <svg
-                      class="-mt-px"
+                      class="absolute mr-3 group-hover:text-blue-800 peer-focus:text-blue-800 transition-colors"
                       xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
+                      width="14"
+                      height="14"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      stroke-width="2.5"
+                      stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                     >
-                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                      <polyline points="17 8 12 3 7 8" />
-                      <line x1="12" y1="3" x2="12" y2="15" />
+                      <line x1="19" y1="5" x2="5" y2="19" />
+                      <circle cx="6.5" cy="6.5" r="2.5" />
+                      <circle cx="17.5" cy="17.5" r="2.5" />
                     </svg>
-                    <p>Click to upload your artwork here...</p>
-                  {/if}
-                  <input
-                    type="file"
-                    accept=".jpg, .jpeg, .png"
-                    bind:this={artworkClick}
-                    bind:files={artworkBlob}
-                    on:change={e => previewArtwork(e)}
-                    class="hidden"
-                    placeholder=""
-                  />
-                </button>
-              </div>
+                  </div>
+                </div>
+              {/each}
             </div>
           </div>
-          <div class="flex justify-end">
-            <Button
-              color="bg-teal-700"
-              size="sm"
-              onClick={() => setUploadPageStatus(4)}>Next</Button
-            >
-          </div>
-        </FlyBox>
-      {/if}
-      {#if uploadPageStatus == 4}
-        <FlyBox>
-          {#if trackBase64String}
-            <TrackPlayer
-              track={newTrack}
-              artworkFile={artworkBase64String}
-              audio={trackBase64String}
-            />
-          {/if}
-          <SubTitle>💽 Upload track</SubTitle>
-
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div class="label portal">
-              Upload track
-              <button
-                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem] focus-ring"
-                on:click={() => trackDataClick.click()}
+        </div>
+        <div class="flex justify-end">
+          <Button
+            color="bg-teal-700"
+            size="sm"
+            onClick={() => setUploadPageStatus(3)}>Next</Button
+          >
+        </div>
+      </FlyBox>
+    {/if}
+    {#if uploadPageStatus == 3}
+      <FlyBox>
+        <div class="grid gap-8 sm:grid-cols-min-auto ">
+          <!-- <figure /> -->
+          <div
+            class="bg-gray-100 rounded-md m-auto w-64 h-64 sm:w-52 sm:h-52 flex items-center justify-center cursor-pointer {artworkBase64String.length >
+            0
+              ? 'mshadow-sm '
+              : ''}"
+            style={artworkBase64String.length > 0
+              ? `background:url('${artworkBase64String}') center center;background-size:cover`
+              : ''}
+            on:click={() => artworkClick.click()}
+          >
+            {#if artworkBase64String.length <= 0}
+              <svg
+                class="text-teal-700 opacity-90"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
-                {#if trackBlob}
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+            {/if}
+          </div>
+          <div class="grid gap-4 ">
+            <SubTitle>🖼 Artwork</SubTitle>
+
+            <Input
+              title="Artwork designer"
+              placeholder="e.g. Picasso"
+              bind:value={newTrack.artwork.designer}
+            />
+            <div class="label portal">
+              Upload Artwork
+              <button
+                class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 focus-ring"
+                on:click={() => artworkClick.click()}
+              >
+                {#if artworkBlob}
                   <p class="text-teal-700 font-medium">
-                    {track ? track.name : ''} has been selected.
+                    {artwork ? artwork.name : ''} has been selected.
                   </p>
                 {:else}
                   <svg
@@ -630,27 +567,90 @@
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  <p>Click to upload your track here...</p>
+                  <p>Click to upload your artwork here...</p>
                 {/if}
                 <input
-                  required
                   type="file"
-                  accept=".wav,.mp3,.flac"
-                  bind:this={trackDataClick}
-                  bind:files={trackBlob}
-                  on:change={e => previewTrack(e)}
+                  accept=".jpg, .jpeg, .png"
+                  bind:this={artworkClick}
+                  bind:files={artworkBlob}
+                  on:change={e => previewArtwork(e)}
                   class="hidden"
                   placeholder=""
                 />
               </button>
             </div>
-            <div
-              class="label portal {trackBase64String
-                ? 'opacity-100'
-                : 'opacity-40'}"
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <Button
+            color="bg-teal-700"
+            size="sm"
+            onClick={() => setUploadPageStatus(4)}>Next</Button
+          >
+        </div>
+      </FlyBox>
+    {/if}
+    {#if uploadPageStatus == 4}
+      <FlyBox>
+        {#if trackBase64String}
+          <TrackPlayer
+            track={newTrack}
+            artworkFile={artworkBase64String}
+            audio={trackBase64String}
+          />
+        {/if}
+        <SubTitle>💽 Upload track</SubTitle>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="label portal">
+            Upload track
+            <button
+              class="input portal w-full justify-center items-center cursor-pointer flex space-x-2 h-[3.25rem] focus-ring"
+              on:click={() => trackDataClick.click()}
             >
-              Preview part *
-              <div class="grid gap-4 ">
+              {#if trackBlob}
+                <p class="text-teal-700 font-medium">
+                  {track ? track.name : ''} has been selected.
+                </p>
+              {:else}
+                <svg
+                  class="-mt-px"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <p>Click to upload your track here...</p>
+              {/if}
+              <input
+                required
+                type="file"
+                accept=".wav,.mp3,.flac"
+                bind:this={trackDataClick}
+                bind:files={trackBlob}
+                on:change={e => previewTrack(e)}
+                class="hidden"
+                placeholder=""
+              />
+            </button>
+          </div>
+          <div
+            class="label portal {trackBase64String
+              ? 'opacity-100'
+              : 'opacity-40'}"
+          >
+            Preview part *
+            <div class="grid gap-4 ">
               <div
                 class="input portal grid grid-cols-3 justify-around items-center"
                 style="grid-template-colums:1fr min-content 1fr"
@@ -674,23 +674,22 @@
                 />
               </div>
               <InputError errorInput="previewpart" />
-              </div>
             </div>
           </div>
-          <p class="text-sm text-gray-400">
-            * Preview part is the part that will be heard first by the label
-            team.
-          </p>
-          <div class="flex justify-end">
-            <Button
-              loading={loadingStatus.submit ? 'Submitting track...' : null}
-              color="bg-teal-700"
-              onClick={handleSubmit}
-              size="md">Submit track</Button
-            >
-          </div>
-        </FlyBox>
-      {/if}
+        </div>
+        <p class="text-sm text-gray-400">
+          * Preview part is the part that will be heard first by the label team.
+        </p>
+        <div class="flex justify-end">
+          <Button
+            loading={loadingStatus.submit ? 'Submitting track...' : null}
+            color="bg-teal-700"
+            onClick={handleSubmit}
+            size="md">Submit track</Button
+          >
+        </div>
+      </FlyBox>
+    {/if}
     <!-- </form> -->
   </Box>
 </div>

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { query } from '../../utils/useGraphQL'
   import { onMount } from 'svelte'
-  import Artist from '../../components/Artist.svelte'
+
   import Container from '../../components/Container.svelte'
   import Header from '../../components/Header.svelte'
   import type { UserType } from '../../types/User.type'
-  import { each, prevent_default } from 'svelte/internal'
+  import { prevent_default } from 'svelte/internal'
   import ArtistCard from '../../components/ArtistCard.svelte'
   import ArtistCardSkeleton from '../../components/skeleton/ArtistCardSkeleton.svelte'
   import Footer from '../../components/Footer.svelte'
@@ -18,7 +18,7 @@
   let searchNickname: string = ''
   let artists: UserType[] = []
   let artistsDisplay: UserType[] = []
-  let artistsPage: number
+
   let artistsPerPage: number = 10
   let fetchedPageData: boolean = false
 
@@ -67,36 +67,6 @@
 <Header type="split" />
 <main class="py-8 ">
   <FadeBox>
-    <!-- <div class="bg-gray-100 shadow-sm">
-      <Container className="py-4">
-        <form on:submit={prevent_default} class="relative">
-          <label class="relative w-48 flex items-center">
-            <input
-              bind:value={searchNickname}
-              on:input={() => getLabelArtistsOnName(searchNickname)}
-              type="text"
-              class="input"
-              placeholder="Artist name"
-            />
-            <svg
-              class="w-5 h-5 absolute top-3 right-2  text-gray-900  stroke-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><circle cx="11" cy="11" r="8" /><line
-                x1="21"
-                y1="21"
-                x2="16.65"
-                y2="16.65"
-              /></svg
-            >
-          </label>
-        </form>
-      </Container>
-    </div> -->
     <div>
       <Container>
         <Title>
@@ -147,7 +117,7 @@
               {/each}
             {/if}
           </div>
-          <!-- //todo make thing work\ -->
+          <!-- //WIP: future release make thing work\ -->
           <!-- <div class="flex space-x-2">
             <ButtonBox
               on:click={() => {

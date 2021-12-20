@@ -15,7 +15,6 @@ export enum ContentType {
   PDF = 'application/pdf',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-inferrable-types
 const post = async (uri: string, data: any | string) => {
   try {
     const response = await fetch(
@@ -114,8 +113,8 @@ export const uploadContract = async (
 ): Promise<TrackType> => {
   const formData = new FormData()
   formData.append('pdfFile', file, fileName)
-  console.log({formData})
-  return await post(`tracks/upload/contract/${trackId}`,formData)
+  console.log({ formData })
+  return await post(`tracks/upload/contract/${trackId}`, formData)
 }
 
 //#endregion

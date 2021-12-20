@@ -1,5 +1,5 @@
 <script>
-	import HomePage from './index.svelte';
+  import HomePage from './index.svelte'
 </script>
 
 <HomePage />

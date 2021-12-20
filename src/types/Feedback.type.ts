@@ -1,4 +1,4 @@
-import type { UserType } from "./User.type";
+import type { UserType } from './User.type'
 
 export default interface Deedback {
   userId?: string
@@ -6,5 +6,5 @@ export default interface Deedback {
   description?: string
   timeStampSong?: number
   date?: string
-  user?:UserType
+  user?: UserType
 }

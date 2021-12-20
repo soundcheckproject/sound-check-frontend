@@ -66,5 +66,5 @@ export interface TrackUpdateType {
   genreId?: string
   artwork?: ArtworkType
   labelId?: string
-  artistTracks?: {uuid?: string, userId: string; royaltySplit: number }[]
+  artistTracks?: { uuid?: string; userId: string; royaltySplit: number }[]
 }

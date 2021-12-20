@@ -7,6 +7,8 @@
   import type { UserType, ArtistType } from 'src/types/User.type'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import userStore from '../../../../stores/userStore'
+  import { RoleName } from '../../../../types/Role.type'
 
   let users: ArtistType[] = []
   let usersLoaded = false
@@ -61,7 +63,6 @@
     }
   })
   $: {
-    // console.log(searchValue)
     filteredUsers = users
   }
 </script>
@@ -161,30 +162,32 @@
                   >
                     {user.role.name}
                   </div>
-                  <a
-                    class="hidden sm:block focus-ring"
-                    href={`/portal/staff/users/${user.uuid}-edit`}
-                  >
-                    <svg
-                      class="text-gray-700"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                  {#if $userStore.role.slug === RoleName.LabelManager}
+                    <a
+                      class="hidden sm:block focus-ring"
+                      href={`/portal/staff/users/${user.uuid}-edit`}
                     >
-                      <path
-                        d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
-                      />
-                      <path
-                        d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
-                      />
-                    </svg>
-                  </a>
+                      <svg
+                        class="text-gray-700"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path
+                          d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+                        />
+                        <path
+                          d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+                        />
+                      </svg>
+                    </a>
+                  {/if}
                 </div>
               </div>
             </a>

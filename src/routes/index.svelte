@@ -15,10 +15,8 @@
   import { labelStore } from '../stores/stores'
   import { goto } from '$app/navigation'
   import FadeBox from '../components/portal/FadeBox.svelte'
-  import { page } from '$app/stores'
 
-  import _, { langStore } from '../stores/languageStore'
-  import { sortByDate } from '../utils/useSorting'
+  import _ from '../stores/languageStore'
 
   let latestReleases: TrackType[] = []
   let spotlightTrack: TrackType = undefined

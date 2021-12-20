@@ -66,7 +66,7 @@
 <main>
   <FadeBox>
     <Container>
-      <div class="grid gap-6">
+      <div class="grid gap-6 mb-16">
         <Title class="mt-12">Tracks</Title>
         {#if tracks}
           <div class="grid gap-4 ">
@@ -78,7 +78,7 @@
                   background
                   artists
                   href="/releases/{track.uuid}"
-                  size="lg"
+                  size="xl"
                   {track}
                 />
                 <!-- <TrackRow actions={false} background artists href="/releases/{track.uuid}" size="lg" {track} /> -->

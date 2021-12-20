@@ -22,11 +22,8 @@
     signTrack,
   } from '../../../../utils/useTrack'
   import { goto } from '$app/navigation'
-  import {
-    getContractFromTrackId,
-    uploadContract,
-  } from '../../../../utils/useRest'
-  import { validateError } from '../../../../utils/useValidation'
+  import { uploadContract } from '../../../../utils/useRest'
+
   import EditButton from '../../../../components/portal/EditButton.svelte'
   import { formatDate } from '../../../../utils/useFormat'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
@@ -34,6 +31,7 @@
   import InputError from '../../../../components/InputError.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
+  import { pageSelectedStore } from '../../../../stores/stores'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -105,9 +103,11 @@
     if (contractFile) track.contractFile = contractFile.contractFile
   }
 
+  pageSelectedStore.set(undefined)
   onMount(async () => {
     try {
       track = await getTrackById($page.params.trackId)
+      if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
     } catch (error) {
       track = null
     }

@@ -11,14 +11,14 @@
   import Button from '../../../../components/Button.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
   import EditButton from '../../../../components/portal/EditButton.svelte'
-  import { goto } from '$app/navigation'
+
   import { onMount } from 'svelte'
   import { getTrackById } from '../../../../utils/useGraphQL'
-  import userStore from '../../../../stores/userStore'
-  import FinanceButton from '../../../../components/portal/FinanceButton.svelte'
+
   import { formatDate } from '../../../../utils/useFormat'
   import { uploadContract } from '../../../../utils/useRest'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
+  import { pageSelectedStore } from '../../../../stores/stores'
 
   let loadingStatus: { [key: string]: boolean } = {
     contractUpload: false,
@@ -69,6 +69,7 @@
   onMount(async () => {
     try {
       track = await getTrackById($page.params.trackId)
+      if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
     } catch (error) {
       track = null
     }
@@ -132,7 +133,6 @@
           {:else}
             <p class="text-sm">No artists found..</p>
           {/if}
-          <!-- <p class="text-xs">Track submitted on .. by ..</p> -->
         </div>
       </div>
     </Box>
@@ -247,68 +247,6 @@
       </Box>
     {/if}
   </div>
-
-  <!-- <div class="flex space-x-4">
-        <Button size="sm" color="bg-teal-700">
-          <div class="download">
-            <svg
-              class="-mt-px"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            <div>Upload signed contract</div>
-          </div>
-        </Button>
-        <Button size="sm" color="bg-gray-500">
-          <div class="download">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <div>Download unsigned contract</div>
-          </div>
-        </Button>
-        <div class="download opacity-25">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          <div>Download signed contract</div>
-        </div>
-      </div> -->
 {:else if track === undefined}
   <Skeleton theme="light" loading={true} height="h-[22rem]" className="mb-8" />
   <Skeleton theme="light" loading={true} height="h-[18rem]" />
