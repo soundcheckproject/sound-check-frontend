@@ -50,7 +50,7 @@
   const sortTracksByType = (trackStore: TrackType[]): DemoListType => {
     return {
       all: trackStore,
-      pending: trackStore.filter(track => track.isSigned == null) ?? [],
+      pending: trackStore.filter(track => track.isSigned === null) ?? [],
       accepted: trackStore.filter(track => track.isSigned === true) ?? [],
       denied: trackStore.filter(track => track.isSigned === false) ?? [],
     }
@@ -104,7 +104,7 @@
           </div>
         </div>
       </Title>
-      {#if demos.all.length == 0}
+      {#if demos.all.length === 0}
         <SubTitle>Demos</SubTitle>
         <Skeleton loading={true}>Loading demos..</Skeleton>
       {:else if filterType == 'all' && searchInput.length > 0}
@@ -116,7 +116,7 @@
         {#each filteredDemos.all as track}
           <DemoRow {track} />
         {/each}
-        {#if filteredDemos.all.length == 0}
+        {#if filteredDemos.all.length === 0}
           <Skeleton>No demos found..</Skeleton>
         {/if}
       {:else}
@@ -146,7 +146,7 @@
             {:else if filteredDemos.denied.length <= 0}
               <Skeleton loading>Loading denied tracks..</Skeleton>
             {:else}
-              {#each filteredDemos.pending as track}
+              {#each filteredDemos.denied as track}
                 <DemoRow {track} />
               {/each}
             {/if}

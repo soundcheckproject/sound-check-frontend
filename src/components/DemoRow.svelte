@@ -44,8 +44,9 @@
           let trackCurrentTime = parseInt(media.currentTime.toFixed(0))
 
           trackInfo.currentTime = formatTimeForPlayer(trackCurrentTime)
-          trackInfo.playerBar.style.width =
-            (100 * trackCurrentTime) / trackDuration + '%'
+          if (trackInfo.playerBar)
+            trackInfo.playerBar.style.width =
+              (100 * trackCurrentTime) / trackDuration + '%'
         }
       }
     }

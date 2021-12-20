@@ -24,18 +24,12 @@
       return tracks.filter(
         track =>
           track.title.toLowerCase().substring(0, input.length) == filteredInput,
-        // TODO: filter on artist nickname from tracks
+
         (track: { artistTracks: { user: { nickName: string } }[] }) =>
           track.artistTracks[0] ??
           track.artistTracks[0].user.nickName
             .toLowerCase()
             .substring(0, input.length) == filteredInput,
-
-        // console.log(
-        //   track.artistTracks[0].user.nickName
-        //     .toLowerCase()
-        //     .substring(0, input.length) == filteredInput,
-        // )
       )
     } else return tracks
   }

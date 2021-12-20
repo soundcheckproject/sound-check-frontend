@@ -99,7 +99,7 @@
     }
   }
 
-  let inputFields: string[] = ['title', 'description', 'lyrics', 'genreId']
+  let inputFields: string[] = ['title',  'genreId']
 
   let errors: string[] = []
   const checkValidation = (type: string = null) => {

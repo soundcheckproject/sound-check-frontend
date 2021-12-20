@@ -47,15 +47,14 @@
         {#if artist.logo}
           <img
             alt="Artist {artist.nickName ?? ''}"
-            src={artist.logo ??
-              'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.istockphoto.com%2Fvectors%2Ferror-icon-vector-illustration-vector-id922024216%3Fk%3D6%26m%3D922024216%26s%3D612x612%26w%3D0%26h%3DocSXgfV-7FlzSDe9LwBFoGTWAcfR6ES09hAl8OTe5Tw%3D&f=1&nofb=1'}
+            src={artist.logo}
             class="object-cover w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
               ? 'mr-3'
               : ''} {size == 'md' ? ' w-12 h-12' : ''}"
           />
         {:else}
           <div
-            class=" w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
+            class="shrink-0 w-8 h-8 bg-gray-300  rounded-full {size != 'xs'
               ? 'mr-3'
               : ''} {size == 'md' ? ' w-12 h-12' : ''}"
           />

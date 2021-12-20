@@ -114,7 +114,7 @@
   })
 
   onDestroy(() => {
-    wavesurfer.destroy()
+    if (wavesurfer) wavesurfer.destroy()
   })
 
   $: {
