@@ -95,6 +95,20 @@ label.portal,
   );
 }
 
+.bg-teal-custom-dark {
+  background: hsla(185, 40%, 20%, 1);
+}
+
+.to-teal-custom-dark {
+  --tw-gradient-to: #1e4447;
+  --tw-gradient-stops: var(--tw-gradient-from),
+    var(--tw-gradient-to, rgba(30, 68, 71, 1));
+}
+
+.text-teal-custom-dark {
+  color: hsla(185, 40%, 20%, 1);
+}
+
 .download {
   @apply flex space-x-2 items-center;
 }

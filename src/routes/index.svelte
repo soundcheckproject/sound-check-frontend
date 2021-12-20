@@ -190,7 +190,7 @@
   </article>
 </Header>
 <FadeBox>
-  <div class="py-16">
+  <div class="py-16 md:py-40">
     <Container>
       <section>
         <article id="releases">
@@ -215,29 +215,131 @@
       </section>
     </Container>
   </div>
-  <div bind:this={refs['info']} id="info" class="gradientBlueGreen py-4">
+
+  <div
+    bind:this={refs['info']}
+    id="info"
+    class="bg-gradient-to-b from-gray-900 to-teal-custom-dark py-4 md:py-12 relative"
+  >
+    <div
+      class="absolute -top-16 sm:-top-24 left-0 w-screen overflow-hidden leading-[0] text-gray-900"
+    >
+      <svg
+        class="relative block w-full h-16 sm:h-24 transform rotate-180"
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+          class="fill-current"
+        />
+      </svg>
+    </div>
     <Container>
       <section class="py-8 lg:p-16">
         <article
           class="flex justify-between flex-col md:flex-row items-center gap-12 lg:gap-16 p-0"
         >
-          <div class="w-full grid gap-4">
+          <div class="w-full grid gap-6">
             <Title theme="light"
               >{$_.home.what}
               {$labelStore ? $labelStore.name : 'this label'}?</Title
             >
             {#if $labelStore}
-              <SubTitle theme="light">🚨 Letsgo!</SubTitle>
+              <SubTitle theme="light">✨ How it started...</SubTitle>
               <p class="max-w-lg text-white text-sm font-base">
                 {$labelStore.description}
               </p>
+              <div class="grid grid-flow-col gap-6 max-w-min">
+                <a
+                  class="cursor-pointer text-white/70 hover:text-white focus:text-white outline-none"
+                  href="/"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                </a>
+                <a
+                  class="cursor-pointer text-white/70 hover:text-white focus:text-white outline-none"
+                  href="/"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"
+                    />
+                  </svg></a
+                >
+                <a
+                  class="cursor-pointer text-white/70 hover:text-white focus:text-white outline-none"
+                  href="/"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0023 3z"
+                    />
+                  </svg></a
+                >
+                <a
+                  class="cursor-pointer text-white/70 hover:text-white focus:text-white outline-none"
+                  href="/"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"
+                    />
+                    <rect x="2" y="9" width="4" height="12" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg></a
+                >
+              </div>
             {:else}
               <LineSkeleton width="w-4/6" lines={6} />
             {/if}
           </div>
           {#if $labelStore}
             <img
-              class="w-full h-full rounded-md mshadow-lg min-w-xs min-h-xs max-h-md md:max-w-md"
+              class="w-full h-full min-w-xs min-h-sm max-h-md md:max-w-md hover:animate-pulse"
               src={$labelStore.logo.toString()}
               alt="Logo of label {$labelStore.name}"
             />
@@ -249,8 +351,14 @@
         </article>
       </section></Container
     >
+    <div
+      class="absolute -bottom-16  sm:-bottom-24 left-0 w-screen overflow-hidden leading-[0] text-teal-custom-dark"
+    >
+      <svg class="rotate-180 h-16 sm:h-24 w-full" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-current"></path></svg>
+    </div>
+
   </div>
-  <div bind:this={refs['contact']} id="contact" class="py-16">
+  <div bind:this={refs['contact']} id="contact" class="py-16 md:py-40">
     <Container>
       <section class="grid gap-6">
         <Title>{$_.header.contact}</Title>
