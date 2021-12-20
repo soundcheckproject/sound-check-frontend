@@ -151,7 +151,7 @@
 
               <p class="text-sm max-h-48 overflow-y-auto">
                 {track.description
-                  ? track.lyrics
+                  ? track.description
                   : 'No description for this track.'}
               </p>
               <p class="mt-4 font-semibold ">Lyrics</p>
