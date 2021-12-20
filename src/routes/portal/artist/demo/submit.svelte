@@ -116,7 +116,6 @@
   }
 
   const postTrack = async (): Promise<string> => {
-    // ! Create track mutation uitvoeren in de backend
     loadingStatus.submit = true
     newTrack.prefferdReleaseDate = new Date(prefferedReleaseDateString)
 
@@ -127,14 +126,13 @@
       })
     })
 
-    console.log(newTrack)
     if ($validationStore.length === 0) {
       // Create track in database
       try {
         const { uuid } = await createTrack(newTrack)
         return uuid
       } catch (error) {
-        console.error('Could not post track data to gql api', error)
+        // console.error('Could not post track data to gql api', error)
       }
     }
   }
@@ -429,8 +427,6 @@
                     Royalties {royaltyPercentageTotal}%
                   </p>
                 </div>
-
-              
               {:else}<div class="label portal grid  gap-2 " transition:fade>
                   <p class="">Add a collaborator</p>
                 </div>{/if}
@@ -482,9 +478,8 @@
                 </div>
               {/each}
               {#if royaltyPercentageTotal != 100}
-                 
-              <Error>Total royalties should be equal to 100</Error>
-            {/if}
+                <Error>Total royalties should be equal to 100</Error>
+              {/if}
             </div>
           </div>
         </div>

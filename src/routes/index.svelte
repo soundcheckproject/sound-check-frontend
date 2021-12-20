@@ -76,15 +76,8 @@
       }
       fetchedPageData = true
     } catch (error) {
-      console.error('Could not get latest tracks.', error)
       fetchedPageData = null
     }
-  }
-
-  const options = {
-    show: 50,
-    threshold: 100,
-    style: 'opacity: 1;',
   }
 
   let refs = ['info', 'contact']
@@ -226,7 +219,7 @@
   <div
     bind:this={refs['info']}
     id="info"
-    class="bg-gradient-to-b from-gray-900 to-teal-custom-dark pt-16 -pb-12 md:py-12 relative lg:min-h-[90vh] flex items-center" 
+    class="bg-gradient-to-b from-gray-900 to-teal-custom-dark pt-16 -pb-12 md:py-12 relative lg:min-h-[90vh] flex items-center"
   >
     <div
       class="absolute -top-12 sm:-top-16 left-0 w-screen overflow-hidden leading-[0] text-gray-900"

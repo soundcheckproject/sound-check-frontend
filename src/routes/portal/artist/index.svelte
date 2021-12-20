@@ -38,8 +38,6 @@
         { artistId: $userStore.uuid },
       )
 
-      console.log({ userTracks })
-
       userTracks.map((track: { isSigned: boolean | null }) => {
         if (track.isSigned === true) {
           totalTracks.accepted++

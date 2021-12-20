@@ -102,7 +102,6 @@
         await updateUserInfoByUserId(artist.uuid, updatedUser)
           .then(err => {
             loadingStatus.userinfo = false
-            console.log('User has been updated!', updatedUser)
           })
           .catch(e => {
             loadingStatus.userinfo = false
@@ -128,11 +127,10 @@
         artist.uuid,
       )
         .then(res => {
-          console.log(res)
           loadingStatus.logo = false
           logoBlob = null
         })
-        .catch(error => console.log(error))
+        .catch(error => {})
     } else {
       loadingStatus.logo = false
       validateErrorTime('logo', 'empty', errors)
@@ -141,16 +139,12 @@
   const updateUserEmail = () => {
     loadingStatus.email = true
 
-    // Todo: testen update email in database
     if ($validationStore.length == 0) {
-      console.log(newArtist.email)
       updateFirebaseEmail(newArtist)
         .then(result => {
-          console.log(result)
           loadingStatus.email = false
         })
         .catch(error => {
-          console.log(error)
           loadingStatus.email = false
         })
     } else {
@@ -162,16 +156,13 @@
   let userPassword = { old: '', new: '' }
   const updateUserPassword = () => {
     loadingStatus.password = true
-    // Todo: functie nog niet getest
+
     if ($validationStore.length == 0 && userPassword.new && userPassword.old) {
       updateFirebasePassword(userPassword.new)
         .then(result => {
-          console.log('old' + userPassword.old, 'new' + userPassword.new)
-          console.log(result)
           loadingStatus.password = false
         })
         .catch(error => {
-          console.log(error)
           loadingStatus.password = false
           validateErrorTime('connection', 'graphql', errors)
         })
@@ -182,14 +173,9 @@
   }
 
   let newRole: RoleType
-  // Todo make backend queries work with frontend
+
   const updateUserRole = async () => {
     loadingStatus.role = true
-
-    console.log({
-      userId: artist.uuid,
-      roleId: newRole.uuid,
-    })
 
     await query(
       `updateUserRole`,
@@ -206,12 +192,10 @@
       },
     )
       .then(result => {
-        console.log(result)
         getArtist()
         loadingStatus.role = false
       })
       .catch(error => {
-        console.log(error)
         loadingStatus.role = false
       })
   }
@@ -277,7 +261,7 @@
       .then(() => {
         getArtist()
       })
-      .catch(error => console.log(error))
+      .catch(error => {})
   }
 
   const updateUserLink = async (linkId: string, linkAddress: string) => {
@@ -300,7 +284,7 @@
       .then(() => {
         getArtists()
       })
-      .catch(error => console.log(error))
+      .catch(error => {})
   }
 
   const checkNickNameAvailability = () => {}
@@ -567,7 +551,7 @@
 
                 <select
                   bind:value={newUserLink.link}
-                  on:change={e => console.log(newUserLink.link)}
+                  on:change={e => {}}
                   class="input portal text-red-300 capitalize"
                   placeholder="For example: Instagram, facebook, .."
                 >
@@ -742,7 +726,7 @@
                 {#if roles.length}
                   <select
                     bind:value={newRole}
-                    on:change={e => console.log(newRole)}
+                    on:change={e => {}}
                     class="input portal text-red-300"
                     placeholder="For example: Instagram, facebook, .."
                   >
