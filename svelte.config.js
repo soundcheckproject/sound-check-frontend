@@ -1,7 +1,7 @@
 import preprocess from 'svelte-preprocess'
-import adapter from '@sveltejs/adapter-node'
+// import adapter from '@sveltejs/adapter-node'
 // import adapter from '@sveltejs/adapter-static'
-// import vercel from '@sveltejs/adapter-vercel'
+import vercel from '@sveltejs/adapter-vercel'
 // import pkg from './package.json'
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -14,16 +14,16 @@ const config = {
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte',
     // ! vercel setup
-    // adapter: vercel(),
+    adapter: vercel(),
     // ! node setup for docker
-    adapter: adapter({
-      out: 'build',
-      precompress: false,
-      env: {
-        host: 'NODE_HOST',
-        port: 'NODE_PORT',
-      },
-    }),
+    // adapter: adapter({
+    //   out: 'build',
+    //   precompress: false,
+    //   env: {
+    //     host: 'NODE_HOST',
+    //     port: 'NODE_PORT',
+    //   },
+    // }),
     // ! static files setup
     // adapter: adapter({
 
