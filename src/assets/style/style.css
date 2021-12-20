@@ -59,8 +59,7 @@ section {
 
 label.portal,
 .label.portal {
-  @apply text-sm;
-  @apply text-gray-700;
+  @apply text-sm text-gray-700 relative;
 }
 
 .input.portal {
