@@ -42,7 +42,7 @@
   </a>
 {:else if track}
   <a
-    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start focus-ring"
+    class=" relative flex justify-center items-center cursor-pointer flex-none group snap-start rounded-md focus-ring"
     on:mouseenter={() => (hover = true)}
     on:mouseleave={() => (hover = false)}
     href={hrefTrack}

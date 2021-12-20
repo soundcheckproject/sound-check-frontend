@@ -18,6 +18,7 @@
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
+  import Error from '../../../../components/Error.svelte'
 
   import { onDestroy, onMount } from 'svelte'
   import { goto } from '$app/navigation'
@@ -26,13 +27,10 @@
   import userStore from '../../../../stores/userStore'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import {
-    validateEmailValid,
     validateEmpty,
     validateEqualityNumbers,
-    validateError,
     validateErrors,
     validateErrorTime,
-    validateLength,
     validateStartLower,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
@@ -148,8 +146,6 @@
         [
           validateStartLower(newTrack.previewStart, newTrack.previewStop),
           validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
-      
-          
         ],
         type,
         errors,
@@ -402,7 +398,7 @@
                     {#if artistSearch.nickName.length > 0}
                       <div class="grid gap-2 grid-cols-2 lg:grid-cols-3 mt-1">
                         {#if artists.length == 0}
-                          <p class="text-sm animate-pulse	">
+                          <p class="text-sm animate-pulse	lg:col-span-3">
                             No artists found..
                           </p>{:else}
                           {#each artists as artist}<Artist
@@ -434,11 +430,7 @@
                   </p>
                 </div>
 
-                {#if royaltyPercentageTotal != 100}
-                  <SubTitle theme="error"
-                    >Total royalties should be equal to 100</SubTitle
-                  >
-                {/if}
+              
               {:else}<div class="label portal grid  gap-2 " transition:fade>
                   <p class="">Add a collaborator</p>
                 </div>{/if}
@@ -489,6 +481,10 @@
                   </div>
                 </div>
               {/each}
+              {#if royaltyPercentageTotal != 100}
+                 
+              <Error>Total royalties should be equal to 100</Error>
+            {/if}
             </div>
           </div>
         </div>

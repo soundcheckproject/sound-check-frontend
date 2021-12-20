@@ -65,7 +65,10 @@
         </svg>
       </div>
       <h1 class="text-3xl font-bold -mt-2">
-        <a href="/portal" class="opacity-25 h-8 mb-1 flex focus:opacity-100">
+        <a
+          href="/portal"
+          class="transition-opacity opacity-25 h-8 mb-1 flex focus:opacity-50"
+        >
           {#if !$menuState}<div
               in:fly|local={{ opacity: 0, duration: 200, delay: 200 }}
               out:fade|local
@@ -85,28 +88,27 @@
       <hr />
       <a
         href="/portal/profile"
-        class="text-lg flex space-x-4 items-center w-full cursor-pointer focus:outline-none rounded-sm focus:bg-gray-700 p-2"
+        class="transition-colors text-lg flex items-center w-full cursor-pointer outline-none rounded-full focus:bg-gray-700 p-2"
       >
         {#if $userStore.logo}
           <img
             alt="Artist {$userStore.nickName}"
             src={$userStore.logo}
-            class="object-cover w-12 h-12 bg-gray-300  rounded-full mshadow-sm "
+            class="object-cover w-12 h-12 bg-gray-300 rounded-full mshadow-sm "
           />
         {/if}
         {#if !$menuState}
           <p
             in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
             out:fade|local={{ duration: 200, delay: 0 }}
-            class="font-semibold w-96"
+            class="font-semibold w-96 ml-4"
           >
             {$userStore.nickName ?? 'Nickname'}
           </p>
         {/if}
-        <!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
       </a>
       <hr />
-      <div class="text-sm grid gap-1 w-full transition-all delay-200">
+      <div class="text-sm grid -py-2 w-full transition-all delay-200">
         <RoleLayer allowedForRoles={[RoleName.LabelArtist, RoleName.User]}>
           <NavLink href="/portal/artist" name="Overview"
             ><svg
@@ -272,7 +274,7 @@
     </div>
     <button
       on:click={logout}
-      class="outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus-ring"
+      class="h-18 outline-none	overflow-hidden flex space-x-4 items-center justify-between text-sm p-4 px-6 bg-gray-100 -mx-2 rounded-sm bg-opacity-10 mshadow-md cursor-pointer transition-transform hover:opacity-80 focus-ring"
     >
       {#if !$menuState}
         <p

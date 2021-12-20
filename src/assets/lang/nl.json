@@ -12,6 +12,7 @@
       "artists": "Artiesten",
       "portal": "Portal"
     },
+    "artists": { "title": "Artiesten", "name": "Naam artiest" },
     "home": {
       "title": "Home",
       "description": "Beschrijving",
@@ -133,7 +134,8 @@
       "country_empty": "Land is verplicht",
       "state_empty": "Provincie is verplicht",
       "birthdate_empty": "Geboortedatum is verplicht",
-      "birthdate_invalid": "Geboortedatum is niet geldig"
+      "birthdate_invalid": "Geboortedatum is niet geldig",
+      "socials_notfound":"Geen socials gevonden"
     }
   }
 }

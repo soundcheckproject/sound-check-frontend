@@ -15,6 +15,8 @@
   import Skeleton from '../../components/Skeleton.svelte'
   import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
+  import { goto } from '$app/navigation'
+
   let track: TrackType
 
   let lyricsFormatted: string[]
@@ -34,6 +36,7 @@
                 prefferdReleaseDate
                 artistTracks{
                   user{
+                    uuid
                     nickName
                     logo
                     userLinks{
@@ -111,8 +114,13 @@
                 {#if track.artistTracks && track.artistTracks.length > 0}
                   <div class="flex space-x-2">
                     {#each track.artistTracks as artist}
-                      <Artist artist={artist.user} socials theme="dark"
-                        >{artist.user.nickName}</Artist
+                      <Artist
+                        onClick={() => {
+                          goto('/artists/' + artist.user.uuid)
+                        }}
+                        artist={artist.user}
+                        socials
+                        theme="dark">{artist.user.nickName}</Artist
                       >
                     {/each}
                   </div>

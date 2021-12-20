@@ -158,8 +158,13 @@
       <div class="mb-2 grid grid-flow-col gap-3 mt-4 justify-start items-end">
         {#if spotlightTrack}
           {#each spotlightTrack.artistTracks as at, i}
-            <Artist theme="dark" artist={at.user} size="xs"
-              >{at.user.nickName}</Artist
+            <Artist
+              onClick={() => {
+                goto('/artists/' + at.user.uuid)
+              }}
+              theme="dark"
+              artist={at.user}
+              size="xs">{at.user.nickName}</Artist
             >
           {/each}
         {/if}
@@ -221,13 +226,13 @@
   <div
     bind:this={refs['info']}
     id="info"
-    class="bg-gradient-to-b from-gray-900 to-teal-custom-dark py-4 md:py-12 relative"
+    class="bg-gradient-to-b from-gray-900 to-teal-custom-dark pt-16 -pb-12 md:py-12 relative lg:min-h-[90vh] flex items-center" 
   >
     <div
-      class="absolute -top-16 sm:-top-24 left-0 w-screen overflow-hidden leading-[0] text-gray-900"
+      class="absolute -top-12 sm:-top-16 left-0 w-screen overflow-hidden leading-[0] text-gray-900"
     >
       <svg
-        class="relative block w-full h-16 sm:h-24 transform rotate-180"
+        class="relative block w-full h-12 sm:h-16 transform rotate-180"
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 120"
@@ -244,7 +249,7 @@
         <article
           class="flex justify-between flex-col md:flex-row items-center gap-12 lg:gap-16 p-0"
         >
-          <div class="w-full grid gap-6">
+          <div class="w-full grid gap-8">
             <Title theme="light"
               >{$_.home.what}
               {$labelStore ? $labelStore.name : 'this label'}?</Title
@@ -354,10 +359,10 @@
       </section></Container
     >
     <div
-      class="absolute -bottom-16  sm:-bottom-24 left-0 w-screen overflow-hidden leading-[0] text-teal-custom-dark"
+      class="absolute -bottom-12  sm:-bottom-16 left-0 w-screen overflow-hidden leading-[0] text-teal-custom-dark"
     >
       <svg
-        class="rotate-180 h-16 sm:h-24 w-full"
+        class="rotate-180 h-12 sm:h-16 w-full"
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 120"
@@ -434,7 +439,7 @@
               Deinzestraat 175, 9700 Oudenaarde<br />
               BTW: BE02.231.123
             </p>
-            <p>
+            <!-- <a href="../stylingguide.pdf">
               <b class="grid grid-flow-col items-center justify-start gap-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -453,7 +458,7 @@
                 </svg>{$_.contact.press}</b
               >
               {$_.contact.stylingkit}
-            </p>
+            </a> -->
             <div />
           </article>
         </div>

@@ -7,24 +7,14 @@
   import SubLink from './SubLink.svelte'
 
   let isActive = false
-
-  // let hrefSplit = $$props.href.split('/')
-  // let hrefSlice = hrefSplit.slice(1, hrefSplit.length)
-  // let lastSlice = hrefSlice[hrefSlice.length - 1]
-
-  // let pageActive =
-  // 	$$props.href.split('/').includes(hrefSlice[hrefSlice.length - 1]) &&
-  // 	$$props.href.split('/').includes(hrefSlice[hrefSlice.length - 2])
-
-  // $: isActive = $page.path === $$props.href
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
 <a
   href={$$props.routes ? '' : $$props.href}
-  class={`focus:outline-none rounded-sm focus:bg-gray-700 p-2 ${
-    $menuState && 'flex justify-center'
-  }`}
+  class="group transition-all outline-none rounded-full focus:bg-gray-700 py-2 px-3 {!$menuState
+    ? '-mx-3'
+    : 'flex justify-center'}"
   class:active={$page.path === $$props.href}
   on:click={() => {
     isActive = !isActive
@@ -33,7 +23,7 @@
   <slot />
   {#if !$menuState}
     <p
-      class="ml-4"
+      class="group-focus:opacity-100 ml-4"
       in:fly|local={{ x: -50, opacity: 0, duration: 200, delay: 200 }}
       out:fade|local
     >
@@ -67,7 +57,7 @@
   </div>
 {/if}
 
-<style>
+<style lang="postcss">
   svg {
     @apply text-teal-300;
   }
@@ -101,13 +91,13 @@
   }
 
   a p:hover {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   a p::before {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -3px;
 
     height: 2px;
 

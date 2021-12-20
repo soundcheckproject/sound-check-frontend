@@ -19,8 +19,11 @@ body {
   box-shadow: 0 0 8rem rgba(0, 0, 0, 0.25);
 }
 
-.focus-ring {
+/* .focus-ring {
   @apply focus:ring ring-teal-500 ring-opacity-50 focus:outline-none rounded-sm;
+} */
+.focus-ring {
+  @apply transition-all focus:ring ring-teal-600/40 ring-opacity-50 outline-none;
 }
 
 article {

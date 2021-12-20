@@ -41,8 +41,6 @@
         ? 'pr-4'
         : ''} transition-all hover:bg-opacity-75"
     >
-      <!-- <img alt="Artist {artist}" class="w-8 h-8 bg-gray-300 mr-2 rounded-full" /> -->
-      <!-- // Todo: custom not found logo -->
       <div class={`${pointer && 'cursor-pointer'} flex items-center group`}>
         {#if artist.logo}
           <img

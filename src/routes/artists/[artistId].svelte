@@ -18,6 +18,8 @@
   import { capitalize } from '../../utils/capitalize'
   import ErrorBanner from '../../components/error/ErrorBanner.svelte'
 
+  import _ from '../../stores/languageStore'
+
   let artist: UserType
 
   let tracks: TrackType[] = []
@@ -140,7 +142,12 @@
                   </div>
                 {/each}
               {:else}
-                <p class="text-sm ">No links found 😥</p>
+                <div
+                  class="flex items-center bg-white rounded-full mshadow-xs px-3 py-2 text-xs "
+                >
+                  <p class="text-sm ">{$_.errors.socials_notfound}</p>
+                </div>
+                
               {/if}
             </div>
           </div>

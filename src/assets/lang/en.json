@@ -12,6 +12,7 @@
       "artists": "Artists",
       "portal": "Portal"
     },
+
     "home": {
       "title": "Home",
       "description": "description",
@@ -39,7 +40,8 @@
       }
     },
     "footer": { "madeby": "Made by" },
-    "artists": { "title": "Artiesten" },
+    "artists": { "title": "Artists", "name": "Name artist" },
+    
 
     "register": {
       "title": "Register account",
@@ -128,7 +130,8 @@
       "biography_empty": "Please fill in a biography",
       "country_empty": "Please fill in your country",
       "state_empty": "Please fill in your state",
-      "birthdate_required": "Please fill in your birthdate"
+      "birthdate_required": "Please fill in your birthdate",
+      "socials_notfound":"No socials found"
     }
   }
 }
