@@ -5,23 +5,20 @@
     TrackType,
     TrackUpdateType,
   } from '../../../../types/Track.type'
-  import type { ArtistType, UserType } from '../../../../types/User.type'
+  import type { UserType } from '../../../../types/User.type'
 
   import {
     getGenres,
-    getArtistsByNickName,
-    createTrack,
     getTrackById,
     updateTrack,
   } from '../../../../utils/useGraphQL'
-  //Todo: Royaltie percentage calc
 
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Box from '../../../../components/Box.svelte'
   import Artist from '../../../../components/Artist.svelte'
-  import { fade, fly } from 'svelte/transition'
-  import FlyBox from '../../../../components/FlyBox.svelte'
+  import { fade } from 'svelte/transition'
+
   import Button from '../../../../components/Button.svelte'
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
   import Input from '../../../../components/Input.svelte'
@@ -29,36 +26,26 @@
   import { onMount } from 'svelte'
   import { goto } from '$app/navigation'
   import { uploadArtwork, uploadTrack } from '../../../../utils/useRest'
-  import ButtonBox from '../../../../components/ButtonBox.svelte'
-  import userStore from '../../../../stores/userStore'
+
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import {
-    validateEmailValid,
     validateEmpty,
     validateEqualityNumbers,
     validateError,
     validateErrors,
     validateErrorTime,
-    validateLength,
     validateStartLower,
   } from '../../../../utils/useValidation'
   import validationStore from '../../../../stores/validationStore'
   import InputError from '../../../../components/InputError.svelte'
   import { page } from '$app/stores'
-  import { pageSelectedStore, roleStore, trackSelectedStore } from '../../../../stores/stores'
+  import { pageSelectedStore, roleStore } from '../../../../stores/stores'
   import { formatDateToDDMMJJJJ } from '../../../../utils/useFormat'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import Skeleton from '../../../../components/Skeleton.svelte'
 
-  let artistSearch = { nickName: '', hover: false }
-
   let track: TrackType
   let newTrack: TrackType
-
-  let newAudio = {
-    previewStart: 0,
-    previewStop: 0,
-  }
 
   let prefferedReleaseDateString: string
 
@@ -74,16 +61,6 @@
     artwork: false,
     trackfile: false,
     track: false,
-  }
-
-  const removeArtist = (uuid: string) => {
-    let newArtistsArray = []
-    for (const artist of artistsArray) {
-      if (artist.user.uuid == uuid) {
-        newArtistsArray = [...newArtistsArray, artist]
-      }
-    }
-    artistsArray = newArtistsArray
   }
 
   let artworkBlob: any = '',
@@ -195,16 +172,10 @@
 
   let genres: GenreType[] = []
 
-  let artists: ArtistType[] = []
-
   const updateArtwork = async () => {
     loadingStatus.artwork = true
     if (artworkBlob) {
-      await uploadArtwork(
-        artworkBlob[0],
-        artworkBlob[0].name,
-        track.uuid,
-      )
+      await uploadArtwork(artworkBlob[0], artworkBlob[0].name, track.uuid)
         .then(res => {
           console.log(res)
           loadingStatus.artwork = false

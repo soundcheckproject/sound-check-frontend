@@ -52,5 +52,4 @@ describe('ProfileBanner component', () => {
     ).toBeInTheDocument()
     expect(getByText(artistObj.role.name)).toBeInTheDocument()
   })
-
 })

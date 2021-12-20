@@ -11,12 +11,10 @@ const label = {
 }
 
 export const labelStore = writable(label)
-// export const userRole = writable(2)
-// export const userAuth = writable(true)
 
-export const pageSelectedStore = writable<{ name: string; title: string }>(undefined)
+export const pageSelectedStore =
+  writable<{ name: string; title: string }>(undefined)
 
 export const roleStore = writable<string>()
-// generalStore.set({ Name: 'yo' });
 
 export const menuState = writable(false)

@@ -13,5 +13,4 @@
   if (type in iconList) displayIcon = iconList[type]
 </script>
 
-
 <img class="w-3 h-3 {className} {$$props.class}" src={displayIcon} alt={type} />

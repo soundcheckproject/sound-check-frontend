@@ -7,8 +7,8 @@
   import type { UserType, ArtistType } from 'src/types/User.type'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
-import userStore from '../../../../stores/userStore';
-import { RoleName } from '../../../../types/Role.type';
+  import userStore from '../../../../stores/userStore'
+  import { RoleName } from '../../../../types/Role.type'
 
   let users: ArtistType[] = []
   let usersLoaded = false
@@ -63,7 +63,6 @@ import { RoleName } from '../../../../types/Role.type';
     }
   })
   $: {
-    // console.log(searchValue)
     filteredUsers = users
   }
 </script>

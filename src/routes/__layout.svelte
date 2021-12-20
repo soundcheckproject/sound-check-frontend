@@ -23,7 +23,6 @@
   const app = initializeApp(firebaseConfig)
 
   let graphQLconnection = true
-  //todo: check if graphql can make connection
 
   onMount(async () => {
     getAuth().onAuthStateChanged(async (user: User | any) => {
@@ -56,7 +55,6 @@
       />
     </div>
   {/if}
-  
 </div>
 
 <style lang="postcss">

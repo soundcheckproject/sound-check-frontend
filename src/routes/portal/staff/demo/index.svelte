@@ -34,10 +34,8 @@
     denied: [],
   }
   let searchInput: string = ''
-  // TODO: filter doesn't show items when length 0
+
   const searchTracks = (type: string) => {
-    console.log(searchInput, filterType, type)
-    console.log(searchInput.length)
     if (searchInput.length > 0) {
       filteredDemos[type] = demos[type].filter(
         (track: TrackType) =>
@@ -47,33 +45,6 @@
     } else {
       filteredDemos[type] = demos[type]
     }
-
-    // if (searchInput.length > 0) {
-    //   filteredDemos[type] = $demoTracksStore
-    // .filter(track => track.isSigned === null)
-    // .filter(
-    //   track =>
-    //     track.title.toLowerCase().substring(0, searchInput.length) ==
-    //     searchInput.toLowerCase().substring(0, searchInput.length),
-    // )
-    //   // If no tracks are found, search by artistsname
-    //   // if (filteredDemos[type].length == 0) {
-    //   //   filteredDemos[type] = $demoTracksStore
-    //   //     .filter(track => track.isSigned === null)
-    //   //     .filter(
-    //   //       track =>
-    //   //         track.artistTracks[0].user.nickName
-    //   //           .toLowerCase()
-    //   //           .substring(0, searchInput.length) ==
-    //   //         searchInput.toLowerCase().substring(0, searchInput.length),
-    //   //     )
-    //   // }
-    //   // console.log(filteredDemos[type].length > 0 ?? 'hola!')
-    // } else {
-    //   filteredDemos[type] = $demoTracksStore.filter(
-    //     track => track.isSigned === null,
-    //   )
-    // }
   }
 
   const sortTracksByType = (trackStore: TrackType[]): DemoListType => {

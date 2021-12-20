@@ -1,20 +1,12 @@
 <script lang="ts">
-  import { goto } from '$app/navigation'
   import type { TrackInfoType, TrackType } from '../types/Track.type'
-
   import { fade, slide } from 'svelte/transition'
 
   import type { UserType } from '../types/User.type'
   import { query } from '../utils/useGraphQL'
-
   import { formatDate, formatTimeForPlayer } from '../utils/useFormat'
-  import { onMount } from 'svelte'
 
   import { denyTrack, signTrack } from '../utils/useTrack'
-
-  export let artworkSource = ''
-
-  export let status: 'accepted' | 'pending' | 'denied' | 'released' = 'denied'
 
   let audioPlayer: HTMLAudioElement
   let trackInfo: TrackInfoType = {
@@ -60,7 +52,6 @@
   }
 
   const loadTrackBlob = async () => {
-
     try {
       isFetched = false
       const encodedFile = await query(
@@ -85,19 +76,8 @@
         loadTrackInfo(audioPlayer)
       }
   }
-
-  // const handleKeyDown = (e: KeyboardEvent) => {
-  //   // 32 = spacebar
-  //   if (e.keyCode === 32) {
-  //     if (track.encodedFile) {
-  //       trackInfo.playing = !trackInfo.playing
-  //       audioPlayer.play()
-  //     }
-  //   }
-  // }
 </script>
 
-<!-- <svelte:window on:keydown={handleKeyDown} /> -->
 {#if track.encodedFile}
   <audio hidden bind:this={audioPlayer} preload="auto" controls>
     <source src={track.encodedFile} type="audio/mpeg" />

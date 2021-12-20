@@ -92,7 +92,7 @@
         "example": "Bv.",
         "submit": "Vraag nieuw wachtwoord"
       },
-      "send":"Email verzonden.",
+      "send": "Email verzonden.",
       "back": "Terug naar login"
     },
     "errors": {
@@ -124,8 +124,7 @@
       "state_required": "Provincie is verplicht",
       "birthdate_required": "Geboortedatum is verplicht",
       "birthdate_invalid": "Geboortedatum is niet geldig",
-      "general_login":"Kon niet inloggen met opgegeven gegevens. Probeer opnieuw."
-      
+      "general_login": "Kon niet inloggen met opgegeven gegevens. Probeer opnieuw."
     }
   }
 }

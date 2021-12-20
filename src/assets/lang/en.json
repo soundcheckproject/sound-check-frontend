@@ -94,12 +94,12 @@
         "example": "e.g.",
         "submit": "Ask for new password"
       },
-      "send":"Email sended.",
+      "send": "Email sended.",
       "back": "Return to login"
     },
 
     "errors": {
-      "forgot_error":"Could not send reset link to this email.",
+      "forgot_error": "Could not send reset link to this email.",
       "connection_graphql": "Connection with database is not working.",
       "general_login": "Could not login with credentials. Please try again"
     }

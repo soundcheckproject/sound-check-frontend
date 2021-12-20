@@ -11,9 +11,6 @@
 
   export let portal: 'staff' | 'artist' = 'artist'
   export let track: TrackType
-
-  // track.artwork.resource="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.template.net%2Fwp-content%2Fuploads%2F2016%2F12%2F21140757%2FNature-Artwork-by-Marian-Voicu1.jpg&f=1&nofb=1"
-
   export let artists = false
   export let actions = false
   export let status = true
@@ -100,7 +97,9 @@
       {/if}
 
       <div class="grid grid-flow-col gap-3 items-center z-10">
-        <div class="hidden lg:grid lg:grid-flow-col items-center gap-2 text-xs text-black/75 text-right">
+        <div
+          class="hidden lg:grid lg:grid-flow-col items-center gap-2 text-xs text-black/75 text-right"
+        >
           {#if size == 'lg' || size == 'xl'}Released on {/if}
           {formatDate(new Date(track.prefferdReleaseDate)) ?? ''}
           <svg

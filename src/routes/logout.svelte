@@ -4,10 +4,9 @@
   import { onMount } from 'svelte'
 
   import { goto } from '$app/navigation'
-import userStore from '../stores/userStore';
+  import userStore from '../stores/userStore'
 
   onMount(async () => {
-    // logout()
     localStorage.removeItem('user')
 
     await getAuth().signOut()
@@ -16,8 +15,6 @@ import userStore from '../stores/userStore';
   })
 </script>
 
- <svelte:head>
+<svelte:head>
   <title>Logout</title>
 </svelte:head>
-
-Logging out.

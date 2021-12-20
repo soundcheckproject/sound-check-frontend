@@ -8,7 +8,6 @@
   import { logout } from '../../utils/useFirebase'
   import userStore from '../../stores/userStore'
   import { RoleName } from '../../types/Role.type'
-
 </script>
 
 <div class={$menuState ? 'block sm:hidden' : 'hidden'}>
@@ -107,9 +106,7 @@
         <!-- <p class="font-semibold break-all">{$authStore.user.providerData[0]?.email}</p> -->
       </a>
       <hr />
-      <div
-        class="text-sm grid gap-1 w-full transition-all delay-200"
-      >
+      <div class="text-sm grid gap-1 w-full transition-all delay-200">
         <RoleLayer allowedForRoles={[RoleName.LabelArtist, RoleName.User]}>
           <NavLink href="/portal/artist" name="Overview"
             ><svg
@@ -163,41 +160,7 @@
             </svg>
           </NavLink>
         </RoleLayer>
-        <!-- <RoleLayer allowedForRoles={['artist', 'label-ar', 'label-manager']}>
-          <NavLink href="" name="Royalties" class="">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4" />
-              <path d="M4 6v12c0 1.1.9 2 2 2h14v-4" />
-              <path d="M16 12a2 2 0 00-2 2c0 1.1.9 2 2 2h4v-4h-4z" />
-            </svg>
-          </NavLink>
-        </RoleLayer> -->
-        <!-- <NavLink href="" name="Notifications" class="">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 01-3.46 0" />
-          </svg>
-        </NavLink> -->
+
         <RoleLayer allowedForRoles={[RoleName.LabelAR, RoleName.LabelManager]}>
           <NavLink href="/portal/staff" name="Overview" class="">
             <svg
@@ -265,7 +228,7 @@
               <path d="M17 18.5c-1.4-1-3.1-1.5-5-1.5s-3.6.6-5 1.5" />
             </svg>
           </NavLink>
-          <!-- <SubLink /> -->
+
           <NavLink href="/portal/staff/tracks" name="Tracks" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -286,9 +249,7 @@
         </RoleLayer>
       </div>
       <hr />
-      <div
-        class="text-sm grid gap-4 w-full transition-all delay-200"
-      >
+      <div class="text-sm grid gap-4 w-full transition-all delay-200">
         <NavLink href="/" name="Home">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -308,7 +269,6 @@
           </svg>
         </NavLink>
       </div>
-      <!-- <hr /> -->
     </div>
     <button
       on:click={logout}

@@ -3,13 +3,13 @@
   import ProfileBanner from '../../components/ProfileBanner.svelte'
   import Container from '../../components/Container.svelte'
   import Header from '../../components/Header.svelte'
-  import { getTracksByArtistId, query } from '../../utils/useGraphQL'
-  import type { UserLink, UserType } from '../../types/User.type'
+  import { query } from '../../utils/useGraphQL'
+  import type { UserType } from '../../types/User.type'
   import { onMount } from 'svelte'
   import type { TrackType } from '../../types/Track.type'
-  import TrackPlayer from '../../components/TrackPlayer.svelte'
+
   import TrackRow from '../../components/TrackRow.svelte'
-  import Title from '../../components/Title.svelte'
+
   import FadeBox from '../../components/portal/FadeBox.svelte'
   import Footer from '../../components/Footer.svelte'
   import Skeleton from '../../components/Skeleton.svelte'
@@ -21,7 +21,6 @@
   let artist: UserType
 
   let tracks: TrackType[] = []
-
 
   const getArtistTracks = async (userId: string) => {
     try {
@@ -172,11 +171,7 @@
           </div>
         </div>
       {:else if artist === undefined}
-        <Skeleton
-          theme="light"
-          loading={true}
-          height="h-[22rem]"
-        />
+        <Skeleton theme="light" loading={true} height="h-[22rem]" />
         <Skeleton theme="light" loading={true} height="h-[18rem]" />
       {:else if artist === null}
         <ErrorBanner message="Error while fetching the user data." />

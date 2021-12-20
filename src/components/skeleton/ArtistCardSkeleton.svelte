@@ -12,6 +12,4 @@
     : theme == 'dark'
     ? 'bg-gray-700 text-gray-700'
     : ''} {loading && 'animate-pulse'}"
->
-  
-</article>
+/>

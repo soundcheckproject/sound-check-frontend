@@ -27,7 +27,7 @@
   } from '../utils/useValidation'
   import validationStore from '../stores/validationStore'
   import userStore from '../stores/userStore'
-  import { labelStore, roleStore } from '../stores/stores'
+  import { roleStore } from '../stores/stores'
   import InputError from '../components/InputError.svelte'
   import { formatDateToDDMMJJJJ } from '../utils/useFormat'
 
@@ -154,7 +154,6 @@
   $: {
     validationStore.set(errors)
   }
-
 </script>
 
 <svelte:head>

@@ -2,7 +2,11 @@
 import { getAuth } from 'firebase/auth'
 import type { RoleType } from '../types/Role.type'
 import type FeedbackType from '../types/Feedback.type'
-import type { TrackInputType, TrackType, TrackUpdateType } from '../types/Track.type'
+import type {
+  TrackInputType,
+  TrackType,
+  TrackUpdateType,
+} from '../types/Track.type'
 import type { Link, UserType, ArtistType, UserLink } from '../types/User.type'
 import log, { logGraphQLError, LogType } from './logger'
 import type { GenreType } from 'src/types/Genre.type'
