@@ -80,7 +80,6 @@
 
   let trackPlayable = false
 
-
   onMount(async () => {
     if (feedback) {
       feedbacks = await getTrackFeedbacksByTrackId(track.uuid)
@@ -147,7 +146,7 @@
 
   const handleKeyDown = (e: KeyboardEvent) => {
     // 32 = spacebar
-    if (e.keyCode === 32) {
+    if (!feedbackInput && feedbackInput.length === 0 && e.keyCode === 32) {
       if (wavesurfer) {
         wavesurfer.playPause()
         trackInfo.playing = !trackInfo.playing

@@ -150,15 +150,9 @@
       <div class="mb-2 grid grid-flow-col gap-3 mt-4 justify-start items-end">
         {#if spotlightTrack}
           {#each spotlightTrack.artistTracks as at, i}
-            {#if i > 0}
-              <Artist className="" artist={at.user} size="xs"
-                >{at.user.nickName}</Artist
-              >
-            {:else}
-              <Artist theme="dark" artist={at.user} size="xs"
-                >{at.user.nickName}</Artist
-              >
-            {/if}
+            <Artist theme="dark" artist={at.user} size="xs"
+              >{at.user.nickName}</Artist
+            >
           {/each}
         {/if}
       </div>

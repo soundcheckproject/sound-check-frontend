@@ -148,6 +148,8 @@
         [
           validateStartLower(newTrack.previewStart, newTrack.previewStop),
           validateEqualityNumbers(newTrack.previewStart, newTrack.previewStop),
+      
+          
         ],
         type,
         errors,

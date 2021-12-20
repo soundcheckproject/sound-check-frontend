@@ -26,7 +26,8 @@
   export let portal = 'portal'
   $: if (!value) value = ''
   $: {
-    if (ref) passwordShow ? (ref.type = 'text') : (ref.type = 'password')
+    if (type == 'password' && ref)
+      passwordShow ? (ref.type = 'text') : (ref.type = 'password')
   }
   let borderColor = ''
 </script>

@@ -57,7 +57,7 @@
           : size == 'lg'
           ? ' h-64 w-64'
           : ''
-      }  rounded-md mshadow-sm outline-none object-cover`}
+      }  rounded-md  outline-none object-cover`}
       src={track.artwork.resource}
     />
     {#if hover}
@@ -73,22 +73,6 @@
             : ''
         } flex absolute justify-end p-4 bg-gray-800 bg-opacity-25 backdrop-filter backdrop-blur-lg rounded-md text-white flex-col`}
       >
-        <!-- <div class="mb-4 grid grid-flow-col items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32"
-            height="32"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="10 8 16 12 10 16 10 8" />
-          </svg>
-        </div> -->
         <div class="text-xs">
           {#each track.artistTracks as at, i}
             {i > 0 ? ` & ${at.user.nickName}` : at.user.nickName}

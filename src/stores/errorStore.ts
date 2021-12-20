@@ -25,83 +25,83 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'email_length',
-      message: 'Email is not long enough',
+      message: errors.email,
     },
     {
       display: false,
       errorName: 'email_valid',
-      message: 'Email is not valid',
+      message: errors.email_valid,
     },
     {
       display: false,
       errorName: 'email_empty',
-      message: 'Please fill in a email',
+      message: errors.email_required,
     },
   ],
   password: [
     {
       display: false,
       errorName: 'password_length',
-      message: 'Password is not long enough',
+      message: errors.password,
     },
     {
       display: false,
       errorName: 'password_valid',
-      message: 'Password is not valid',
+      message: errors.password_valid,
     },
     {
       display: false,
       errorName: 'password_strength',
-      message: 'Password is not strong enough',
+      message: errors.password_strong,
     },
     {
       display: false,
       errorName: 'password_match',
-      message: 'Password does not match',
+      message: errors.password_match,
     },
     {
       display: false,
       errorName: 'password_old',
-      message: 'Password cannot be the same',
+      message: errors.password_old,
     },
     {
       display: false,
       errorName: 'password_number',
-      message: 'Password should contain at least 1 number',
+      message: errors.password_number,
     },
     {
       display: false,
       errorName: 'password_capital',
-      message: 'Password should contain at least 1 lowercase letter',
+      message: errors.password_capital,
     },
     {
       display: false,
       errorName: 'password_lower',
-      message: 'Password should contain at least 1 uppercase letter',
+      message: errors.password_lower,
     },
     {
       display: false,
       errorName: 'password_empty',
-      message: 'Please fill in a password',
+      message: errors.password_empty,
     },
   ],
   nickname: [
     {
       display: false,
       errorName: 'nickname_available',
-      message: 'Nickname is not available',
+      message: errors.nickname_available,
     },
     {
       display: false,
       errorName: 'nickname_empty',
-      message: 'Please fill in a nickname',
+      message: errors.nickname_empty,
     },
   ],
   firstName: [
     {
       display: false,
       errorName: 'firstName_empty',
-      message: 'Please fill in a first name',
+      message: errors.firstname_empty,
     },
   ],
   logo: [
@@ -115,7 +115,7 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'surName_empty',
-      message: 'Please fill in a last name',
+      message: errors.surname_empty,
     },
   ],
 
@@ -123,35 +123,35 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'state_empty',
-      message: 'Please fill in a state',
+      message: errors.state_empty,
     },
   ],
   biography: [
     {
       display: false,
       errorName: 'biography_empty',
-      message: 'Please fill in a biography',
+      message: errors.biography_empty,
     },
   ],
   birthdate: [
     {
       display: false,
       errorName: 'birthdate_empty',
-      message: 'Please fill in a birthdate',
+      message: errors.birthdate_empty,
     },
   ],
   country: [
     {
       display: false,
       errorName: 'country_empty',
-      message: 'Please fill in a country',
+      message: errors.country_empty,
     },
   ],
   city: [
     {
       display: false,
       errorName: 'city_empty',
-      message: 'Please fill in a city',
+      message: errors.city_empty,
     },
   ],
   title: [
@@ -207,7 +207,7 @@ const errorStore = readable<{
     {
       display: false,
       errorName: 'general_register',
-      message: 'Could not register your account, please try again',
+      message: errors.general_register,
     },
   ],
   update: [

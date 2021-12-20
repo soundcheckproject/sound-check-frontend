@@ -101,7 +101,34 @@
     "errors": {
       "forgot_error": "Could not send reset link to this email.",
       "connection_graphql": "Connection with database is not working.",
-      "general_login": "Could not login with credentials. Please try again"
+      "general_login": "Could not login with credentials. Please try again",
+      "general_register": "Could not register with credentials. Please try again",
+      "email": "Email is not long enough",
+      "email_valid": "Email is not valid",
+      "email_taken": "Email is already in use",
+      "email_required": "Email is required",
+      "password": "Password is not long enough",
+      "password_valid": "Password is not valid",
+      "password_confirm": "Passwords doesn't match",
+      "password_strong": "Password is not strong enough",
+      "password_match": "Passwords doesn't match",
+      "password_old": "Password cannot be the same",
+      "password_required": "Password is required",
+      "password_empty": "Please fill in a password",
+      "password_number": "Password must contain at least 1 number",
+      "password_capital": "Password must contain at least 1 lowercase letter",
+      "password_lower": "Password must contain at least 1 uppercase letter",
+      "nickname": "Artistname is not long enough",
+      "nickname_empty": "Artistname is required",
+      "nickname_available": "Artistname is not available",
+      "firstname_empty": "Please fill in a first name",
+      "surname_empty": "Please fill in a last name",
+      "street_empty": "Please fill in your street",
+      "city_empty": "Please fill in your city",
+      "biography_empty": "Please fill in a biography",
+      "country_empty": "Please fill in your country",
+      "state_empty": "Please fill in your state",
+      "birthdate_required": "Please fill in your birthdate"
     }
   }
 }
