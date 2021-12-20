@@ -254,7 +254,6 @@ export const getTrackById = async (trackId: string): Promise<TrackType> => {
         lyrics
         uuid
         contractFile
-        encodedFile
         previewStart
         previewStop
         isSigned
