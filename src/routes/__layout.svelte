@@ -10,16 +10,19 @@
   import { goto } from '$app/navigation'
 
   import _ from '../stores/languageStore'
+  import variables from '../utils/variables'
 
   const firebaseConfig = {
-    apiKey: 'AIzaSyCYK72nVcZjG9lYgoFP1LLSvT2A1GEIaVE',
-    authDomain: 'sound-check-cccba.firebaseapp.com',
-    projectId: 'sound-check-cccba',
-    storageBucket: 'sound-check-cccba.appspot.com',
-    messagingSenderId: '357132427436',
-    appId: '1:357132427436:web:eca118cfb03620924dbf09',
-    measurementId: 'G-QLH9WHRQJE',
+    apiKey: variables.apiKey,
+    authDomain: variables.authDomain,
+    projectId: variables.projectId,
+    storageBucket: variables.storageBucket,
+    messagingSenderId: variables.messagingSenderId,
+    appId: variables.appId,
+    measurementId: variables.measurementId,
   }
+
+  //@ts-ignore
   const app = initializeApp(firebaseConfig)
 
   let graphQLconnection = true
