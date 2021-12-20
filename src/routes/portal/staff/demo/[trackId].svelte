@@ -22,11 +22,8 @@
     signTrack,
   } from '../../../../utils/useTrack'
   import { goto } from '$app/navigation'
-  import {
-    getContractFromTrackId,
-    uploadContract,
-  } from '../../../../utils/useRest'
-  import { validateError } from '../../../../utils/useValidation'
+  import { uploadContract } from '../../../../utils/useRest'
+
   import EditButton from '../../../../components/portal/EditButton.svelte'
   import { formatDate } from '../../../../utils/useFormat'
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
@@ -111,7 +108,6 @@
     try {
       track = await getTrackById($page.params.trackId)
       if (track) pageSelectedStore.set({ name: 'demo', title: track.title })
-      
     } catch (error) {
       track = null
     }

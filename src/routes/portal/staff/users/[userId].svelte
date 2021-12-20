@@ -18,10 +18,7 @@
   import FadeBox from '../../../../components/portal/FadeBox.svelte'
   import ErrorBanner from '../../../../components/error/ErrorBanner.svelte'
   import userStore from '../../../../stores/userStore'
-  import {
-    pageSelectedStore,
-    userSelectedStore,
-  } from '../../../../stores/stores'
+  import { pageSelectedStore } from '../../../../stores/stores'
 
   let artist: UserType = undefined
   let artistTracks: TrackType[] = []

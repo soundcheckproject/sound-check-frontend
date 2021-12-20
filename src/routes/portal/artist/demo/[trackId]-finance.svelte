@@ -3,39 +3,16 @@
   import type { ArtworkType, TrackType } from '../../../../types/Track.type'
   import type { ArtistType, UserType } from '../../../../types/User.type'
 
-  import {
-    getGenres,
-    getArtistsByNickName,
-    createTrack,
-    getTrackById,
-    updateTrack,
-  } from '../../../../utils/useGraphQL'
- 
+  import { getTrackById } from '../../../../utils/useGraphQL'
+
   import Title from '../../../../components/Title.svelte'
   import SubTitle from '../../../../components/SubTitle.svelte'
   import Box from '../../../../components/Box.svelte'
-  import Artist from '../../../../components/Artist.svelte'
-  import { fade, fly } from 'svelte/transition'
-  import FlyBox from '../../../../components/FlyBox.svelte'
-  import Button from '../../../../components/Button.svelte'
+
   import TrackPlayer from '../../../../components/TrackPlayer.svelte'
-  import Input from '../../../../components/Input.svelte'
 
   import { onMount } from 'svelte'
-  import { goto } from '$app/navigation'
-  import { uploadTrack } from '../../../../utils/useRest'
-  import ButtonBox from '../../../../components/ButtonBox.svelte'
-  import userStore from '../../../../stores/userStore'
-  import FadeBox from '../../../../components/portal/FadeBox.svelte'
-  import {
-    validateEmailValid,
-    validateEmpty,
-    validateError,
-    validateErrors,
-    validateLength,
-  } from '../../../../utils/useValidation'
-  import validationStore from '../../../../stores/validationStore'
-  import InputError from '../../../../components/InputError.svelte'
+
   import { page } from '$app/stores'
   import { roleStore } from '../../../../stores/stores'
 
@@ -52,9 +29,9 @@
 </script>
 
 <svelte:head>
-	<title>{`${track ? track.title : '' + ' - ' }Track finance`}</title>
+  <title>{`${track ? track.title : '' + ' - '}Track finance`}</title>
 </svelte:head>
-
+<!-- WIP: future release with finance details
 <div class="grid gap-8">
   {#if newTrack}
     <TrackPlayer track={newTrack} feedback={false} />
@@ -98,4 +75,4 @@
       >
     {/if}
   {/if}
-</div>
+</div> -->

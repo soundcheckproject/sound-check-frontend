@@ -2,38 +2,6 @@ import validationStore from '../stores/validationStore'
 import type { UserType } from '../types/User.type'
 import type { Error } from '../types/Error.type'
 import { getArtistsByNickName } from './useGraphQL'
-import { getAuth } from '@firebase/auth'
-import userStore from '../stores/userStore'
-import authStore from '../stores/authStore'
-
-// export const isNotEmptyValidation = (value: any, typeName: string) => {
-//   let errorName = 'isNotEmptyValidation' + typeName
-//   if (value[typeName].length <= 0) {
-//     formErrors[typeName] = [
-//       ...formErrors[typeName],
-//       {
-//         display: true,
-//         errorName: errorName,
-//         message: `${capitalize(typeName)} cannot be empty.`,
-//       },
-//     ]
-//   }
-// }
-// export const isNotStrongEnoughValidation = (value: any, typeName: string) => {
-//   let errorName = 'isNotStrongEnoughValidation' + typeName
-//   if (value[typeName].length < 8) {
-//     formErrors[typeName] = [
-//       ...formErrors[typeName],
-//       {
-//         display: true,
-//         errorName: errorName,
-//         message: `${capitalize(
-//           typeName,
-//         )} should maintain more than 8 characters.`,
-//       },
-//     ]
-//   }
-// }
 
 export const isNickNameAvailable = async (
   nickName: string,
@@ -53,19 +21,10 @@ export const isNickNameAvailable = async (
     return true
   }
 }
-export const isEmailAvailable = (
-  artist: UserType,
-  email: string,
-): Promise<boolean> => {
-  return new Promise<boolean>((resolve, reject) => resolve(true))
-}
-
-// const validationStoreObj = $validationStore
-
-// const errorArray = [...$validationStore,'email_valid']
 
 export const validateEmailValid = (email: string): Error => {
   const errorName = 'valid'
+  // eslint-disable-next-line no-useless-escape
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
     return { error: errorName, status: true }
   return { error: errorName, status: false }
@@ -96,7 +55,7 @@ export const validateLower = (input: string): Error => {
   if (!/^[a-z]*$/.test(input)) return { error: errorName, status: true }
   return { error: errorName, status: false }
 }
-// Todo: Check if works
+
 export const validateDate = (input: string): Error => {
   const errorName = 'date'
   try {
@@ -111,17 +70,17 @@ export const validateDate = (input: string): Error => {
 export const validateStartLower = (start: number, stop: number): Error => {
   const errorName = 'startlower'
   const result = { error: errorName, status: true }
-    if (start && stop)
-      if (start > stop) {
-        result.status = false
-      }
+  if (start && stop)
+    if (start > stop) {
+      result.status = false
+    }
   return result
 }
 
 export const validateEqualityNumbers = (start: number, stop: number): Error => {
   const errorName = 'equalitynumbers'
   const result = { error: errorName, status: true }
-  if(start && stop)
+  if (start && stop)
     if (start === stop) {
       result.status = false
     }

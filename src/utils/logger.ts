@@ -49,7 +49,7 @@ export const logRestError = (
   url: string,
   method: string,
   error: string,
-  status: number
+  status: number,
 ): void => {
   log(LogType.ERROR, `${method} to ${url} results in ${status}`, error)
 }

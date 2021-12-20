@@ -1,11 +1,10 @@
 <script lang="ts">
-
   import Header from '../components/Header.svelte'
   import { page } from '$app/stores'
 </script>
 
 <svelte:head>
-	<title>404 - Not Found</title>
+  <title>404 - Not Found</title>
 </svelte:head>
 
 <Header>

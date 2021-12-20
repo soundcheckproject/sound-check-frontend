@@ -13,9 +13,9 @@
   let showMobileLangMenu: Boolean = false
 </script>
 
-
-<nav class="top-navigation flex py-8 flex-row justify-between items-center {$$props.class}">
-
+<nav
+  class="top-navigation flex py-8 flex-row justify-between items-center {$$props.class}"
+>
   {#if $labelStore}
     <a href="/" id="home" class="outline-none focus:scale-105">
       <h1 class="text-xl font-bold">{$labelStore.name}</h1></a
@@ -42,8 +42,6 @@
         >
           <NavigationLink href="/login">login</NavigationLink>
           <NavigationLink href="/register">register</NavigationLink>
-          <!-- <a href="/login">login</a>
-          <a href="/register">register</a> -->
         </div>
       </div>
     </button>
@@ -73,15 +71,14 @@
       <div
         class="gap-2 hidden pt-2 absolute hover:grid group-hover:grid group-focus:grid opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-all"
       >
-
         <div
           class="mshadow-md transition-all py-3 px-3 text-white backdrop-blur-2xl bg-gray-900/40 grid gap-2  rounded-md text-xs hover:bg-gray-900/50"
         >
           {#each Object.keys($translationsStore) as key}
             <div
               class="{`${$translationsStore[
-              key
-            ].language.toLowerCase()}-btn`} flex space-x-2 cursor-pointer hover:text-white/75"
+                key
+              ].language.toLowerCase()}-btn`} flex space-x-2 cursor-pointer hover:text-white/75"
               on:click={() => {
                 langStore.set(key)
               }}
@@ -91,16 +88,8 @@
             </div>
           {/each}
         </div>
-
       </div>
     </button>
-    <!-- Test data -->
-    <!-- {$languageStore.language}
-    {$languageStore.flag} -->
-    <!-- {$_.header.artists}
-    {$_.home.title}
-    {$_.home.description}
-    {$_.home.learnmore} -->
 
     <div class="grid sm:hidden">=</div>
   </div>
@@ -226,13 +215,3 @@
     </button>
   </aside>
 </nav>
-
-<!-- <style lang="postcss">
-  a {
-    @apply transition-all uppercase text-white text-opacity-75;
-  }
-  a:hover {
-    @apply text-opacity-100
-		/* text-shadow: 1px 0 rgba(255, 255, 255, 0.75); */;
-  }
-</style> -->

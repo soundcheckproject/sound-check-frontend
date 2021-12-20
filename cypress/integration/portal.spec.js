@@ -31,12 +31,12 @@ describe('portal', () => {
     cy.url().should('include', '/portal')
   })
 
-//   it('should show error message', () => {
-//     const fakeTrackId = 'qhfsqsfqs46546'
-//     cy.get('input[type=email').type(testUser_User.email)
-//     cy.get('input[type=password]').type(testUser_User.password)
-//     cy.get('.login-btn').click()
-//     cy.visit(`/portal/artist/demo/${fakeTrackId}`)
-//       .contains('Error while fetching')
-//   })
+  //   it('should show error message', () => {
+  //     const fakeTrackId = 'qhfsqsfqs46546'
+  //     cy.get('input[type=email').type(testUser_User.email)
+  //     cy.get('input[type=password]').type(testUser_User.password)
+  //     cy.get('.login-btn').click()
+  //     cy.visit(`/portal/artist/demo/${fakeTrackId}`)
+  //       .contains('Error while fetching')
+  //   })
 })

@@ -1,13 +1,12 @@
 import type { RoleType } from './Role.type'
-import type { TrackType } from './Track.type';
+
 export interface Link {
   type?: string
-  uuid?:string
+  uuid?: string
 }
 
 export interface UserLink {
-  
-  userId?:string
+  userId?: string
   link?: Link
   linkAddress?: string
 }
@@ -30,7 +29,7 @@ export interface UserType {
   city?: string
   address?: string
   logo?: string
-  birthdate?: string|Date
+  birthdate?: string | Date
   uid?: string
   biography?: string
   role?: RoleType
@@ -44,4 +43,3 @@ export interface ArtistType extends UserType {
   royaltySplit?: number
   uuid?: string
 }
-

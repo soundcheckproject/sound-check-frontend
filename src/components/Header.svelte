@@ -1,9 +1,5 @@
 <script lang="ts">
-  import _, {
-    languageStore,
-    langStore,
-    translationsStore,
-  } from '../stores/languageStore'
+  import _ from '../stores/languageStore'
 
   import Container from './Container.svelte'
   import Navigation from './Navigation.svelte'
@@ -22,7 +18,7 @@
         ? ' h-screen'
         : ''} items-center appHeaderGrid "
     >
-      <Navigation class="z-10"/>
+      <Navigation class="z-10" />
       <slot />
     </div>
   </Container>
