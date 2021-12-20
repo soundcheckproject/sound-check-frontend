@@ -68,7 +68,7 @@
         feedbacks = [...feedbacks, feedbackData]
         feedbackInput = ''
       } catch (e) {
-        console.log(e)
+        // console.log(e)
       }
     }
   }

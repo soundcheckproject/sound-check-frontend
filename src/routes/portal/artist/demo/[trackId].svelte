@@ -111,10 +111,14 @@
             </p>
             <p class="mt-4 font-semibold ">Description</p>
 
-            <p class="text-sm">{track.description}</p>
+            <p class="text-sm">
+              {track.description
+                ? track.description
+                : 'No description for this track.'}
+            </p>
             <p class="mt-4 font-semibold  ">Lyrics</p>
             <p class="text-sm">
-              {track.lyrics ? track.lyrics : 'No lyrics for this track yet.'}
+              {track.lyrics ? track.lyrics : 'No lyrics for this track.'}
             </p>
           </div>
         </div>

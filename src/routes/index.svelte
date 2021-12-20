@@ -23,6 +23,14 @@
 
   let fetchedPageData = false
 
+  let email: {
+    topic: string
+    question: string
+  } = {
+    topic: '',
+    question: '',
+  }
+
   const getReleasesData = async () => {
     try {
       const releases: TrackType[] = await query(
@@ -63,7 +71,7 @@
             new Date(b.prefferdReleaseDate).getTime() -
             new Date(a.prefferdReleaseDate).getTime(),
         )
-        console.log({ latestReleases })
+
         spotlightTrack = latestReleases[0]
       }
       fetchedPageData = true
@@ -348,9 +356,18 @@
     <div
       class="absolute -bottom-16  sm:-bottom-24 left-0 w-screen overflow-hidden leading-[0] text-teal-custom-dark"
     >
-      <svg class="rotate-180 h-16 sm:h-24 w-full" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-current"></path></svg>
+      <svg
+        class="rotate-180 h-16 sm:h-24 w-full"
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+        ><path
+          d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+          class="fill-current"
+        /></svg
+      >
     </div>
-
   </div>
   <div bind:this={refs['contact']} id="contact" class="py-16 md:py-40">
     <Container>
@@ -364,18 +381,25 @@
               <label
                 >{$_.contact.form.topic}<input
                   class="input"
+                  bind:value={email.topic}
                   placeholder={$_.contact.form.topic_placeholder}
                 /></label
               >
               <label
                 >{$_.contact.form.question}<textarea
                   class="input "
+                  bind:value={email.question}
                   placeholder={$_.contact.form.question_placeholder}
                 /></label
               >
 
-              <Button color="bg-teal-700" size="md"
-                >{$_.contact.form.submit}</Button
+              <Button
+                onClick={() =>
+                  goto(
+                    `mailto:info@ethereal.be?subject=${email.topic}&body=${email.question}`,
+                  )}
+                color="bg-teal-700"
+                size="md">{$_.contact.form.submit}</Button
               >
             </form>
           </article>

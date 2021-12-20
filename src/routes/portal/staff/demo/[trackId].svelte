@@ -152,12 +152,12 @@
               <p class="mt-4 font-semibold  ">Description</p>
 
               <p class="text-sm max-h-48 overflow-y-auto">
-                {track.description}
+                {track.description ? track.lyrics : 'No description for this track.'}
               </p>
               <p class="mt-4 font-semibold ">Lyrics</p>
 
               <p class="text-sm  max-h-48 overflow-y-auto">
-                {track.lyrics ? track.lyrics : 'No lyrics for this track yet.'}
+                {track.lyrics ? track.lyrics : 'No lyrics for this track.'}
               </p>
             </div>
           </div>

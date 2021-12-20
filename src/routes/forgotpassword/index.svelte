@@ -132,6 +132,7 @@
         name="email"
         id="email"
       />
+
       {#if error}
         <p class="text-red-600">{error}</p>
       {/if}
@@ -140,34 +141,10 @@
         size="md"
         color="bg-teal-700"
         class="mb-6"
-        on:click={submitHandler}
+        onClick={() => submitHandler()}
       >
         {$_.forgot.form.submit}
       </Button>
-      <!-- <button
-        class="bg-teal-700 p-2 rounded-sm text-white font-bold mb-6 transition-colors hover:bg-opacity-80 mshadow-md"
-        type="submit"
-        on:click={submitHandler}
-        >{#if sending}
-          <div class="flex space-x-2 justify-center items-center">
-            <svg
-              class="animate-spin"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M21 12a9 9 0 11-6.219-8.56" />
-            </svg>
-            <p>Sending...</p>
-          </div>
-        {:else}{/if}</button
-      > -->
     {:else}
       <div class="flex flex-col items-center">
         {#if LottiePlayer}
