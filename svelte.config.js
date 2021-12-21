@@ -26,7 +26,6 @@ const config = {
     }),
     // ! static files setup
     // adapter: adapter({
-
     //   pages: 'build',
     //   assets: 'build',
     //   fallback: null,
