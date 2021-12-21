@@ -1,10 +1,10 @@
 name: Tests - unit & e2e
 
 on:
-  # push:
-  #   branches: [ develop ]
-  pull_request:
-    branches: [ main ]
+  push:
+    branches: [ develop ]
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
 
